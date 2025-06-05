@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Work on Elysium-Seeker</title>
+        <link>https://Elysium-Seeker.github.io/categories/work/</link>
+        <description>Recent content in Work on Elysium-Seeker</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Elysium-Seeker</copyright><atom:link href="https://Elysium-Seeker.github.io/categories/work/index.xml" rel="self" type="application/rss+xml" />
+    </channel>
+</rss>

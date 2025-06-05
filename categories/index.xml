@@ -7,12 +7,28 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright><atom:link href="https://Elysium-Seeker.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Life</title>
+        <link>https://Elysium-Seeker.github.io/categories/life/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/categories/life/</guid>
+        <description>&lt;img src="https://Elysium-Seeker.github.io/rosycloud.jpg" alt="Featured image of post Life" /&gt;</description>
+        </item>
+        <item>
         <title>Test</title>
         <link>https://Elysium-Seeker.github.io/categories/test/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://Elysium-Seeker.github.io/categories/test/</guid>
         <description>&lt;img src="https://Elysium-Seeker.github.io/categories/test/hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg" alt="Featured image of post Test" /&gt;</description>
+        </item>
+        <item>
+        <title>Work</title>
+        <link>https://Elysium-Seeker.github.io/categories/work/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/categories/work/</guid>
+        <description></description>
         </item>
         
     </channel>
