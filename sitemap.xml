@@ -2,80 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://Elysium-Seeker.github.io/categories/</loc>
+    <lastmod>2025-06-05T20:56:11+08:00</lastmod>
+  </url><url>
     <loc>https://Elysium-Seeker.github.io/post/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
+    <lastmod>2025-06-05T20:56:11+08:00</lastmod>
+  </url><url>
+    <loc>https://Elysium-Seeker.github.io/categories/test/</loc>
+    <lastmod>2025-06-05T20:56:11+08:00</lastmod>
   </url><url>
     <loc>https://Elysium-Seeker.github.io/p/%E4%BD%95%E4%BB%A5%E9%80%BB%E8%BE%91%E8%87%AA%E6%B4%BD%E7%9A%84%E7%94%9F%E6%B4%BB/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/categories/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/p/test-chinese/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/categories/%E6%B5%8B%E8%AF%95/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
+    <lastmod>2025-06-05T20:56:11+08:00</lastmod>
   </url><url>
     <loc>https://Elysium-Seeker.github.io/page/</loc>
     <lastmod>2025-06-05T20:22:11+08:00</lastmod>
   </url><url>
     <loc>https://Elysium-Seeker.github.io/archives/</loc>
     <lastmod>2025-06-04T00:40:03+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/tags/css/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/tags/html/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/tags/markdown/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/p/markdown-syntax-guide/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/categories/syntax/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/tags/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/categories/themes/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/tags/themes/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/tags/privacy/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/p/rich-content/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/tags/shortcodes/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/p/placeholder-text/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/tags/tag-with-whitespaces/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/categories/test-with-whitespaces/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/tags/text/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/p/math-typesetting/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/tags/emoji/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
-  </url><url>
-    <loc>https://Elysium-Seeker.github.io/p/emoji-support/</loc>
-    <lastmod>2025-06-05T20:22:11+08:00</lastmod>
   </url><url>
     <loc>https://Elysium-Seeker.github.io/</loc>
     <lastmod>2025-06-04T00:40:03+08:00</lastmod>
@@ -86,8 +29,7 @@
     <loc>https://Elysium-Seeker.github.io/categories/life/</loc>
     <lastmod>2025-06-05T11:39:49+08:00</lastmod>
   </url><url>
-    <loc>https://Elysium-Seeker.github.io/categories/test/</loc>
-    <lastmod>2025-06-04T00:40:03+08:00</lastmod>
+    <loc>https://Elysium-Seeker.github.io/tags/</loc>
   </url><url>
     <loc>https://Elysium-Seeker.github.io/categories/work/</loc>
     <lastmod>2025-06-05T11:39:49+08:00</lastmod>
