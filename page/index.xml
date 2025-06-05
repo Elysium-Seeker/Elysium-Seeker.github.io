@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Thu, 05 Jun 2025 20:22:11 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/page/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 05 Jun 2025 23:15:10 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/page/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>归档</title>
         <link>https://Elysium-Seeker.github.io/archives/</link>
         <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
@@ -16,11 +16,11 @@
         <description></description>
         </item>
         <item>
-        <title>About me</title>
-        <link>https://Elysium-Seeker.github.io/about-me/</link>
+        <title>关于</title>
+        <link>https://Elysium-Seeker.github.io/%E5%85%B3%E4%BA%8E/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Elysium-Seeker.github.io/about-me/</guid>
+        <guid>https://Elysium-Seeker.github.io/%E5%85%B3%E4%BA%8E/</guid>
         <description>&lt;p&gt;UCAS 24级ai本科生，前oier&lt;/p&gt;
 &lt;p&gt;长期爱好是音乐和阅读，目前对哲学，台词和编曲比较感兴趣，在学，但进度缓慢&lt;/p&gt;
 &lt;p&gt;INFJ，线下比线上更社恐，但非常希望能交到朋友。&lt;/p&gt;
