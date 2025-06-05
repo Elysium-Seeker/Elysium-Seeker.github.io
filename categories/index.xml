@@ -6,13 +6,46 @@
         <description>Recent content in Categories on Elysium-Seeker</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <copyright>Elysium-Seeker</copyright><atom:link href="https://Elysium-Seeker.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <copyright>Elysium-Seeker</copyright>
+        <lastBuildDate>Thu, 05 Jun 2025 20:22:11 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>测试</title>
+        <link>https://Elysium-Seeker.github.io/categories/%E6%B5%8B%E8%AF%95/</link>
+        <pubDate>Wed, 09 Sep 2020 00:00:00 +0000</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/categories/%E6%B5%8B%E8%AF%95/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Syntax</title>
+        <link>https://Elysium-Seeker.github.io/categories/syntax/</link>
+        <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/categories/syntax/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Themes</title>
+        <link>https://Elysium-Seeker.github.io/categories/themes/</link>
+        <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/categories/themes/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Test With Whitespaces</title>
+        <link>https://Elysium-Seeker.github.io/categories/test-with-whitespaces/</link>
+        <pubDate>Sat, 09 Mar 2019 00:00:00 +0000</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/categories/test-with-whitespaces/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>Life</title>
         <link>https://Elysium-Seeker.github.io/categories/life/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://Elysium-Seeker.github.io/categories/life/</guid>
-        <description>&lt;img src="https://Elysium-Seeker.github.io/rosycloud.jpg" alt="Featured image of post Life" /&gt;</description>
+        <description>&lt;img src="https://Elysium-Seeker.github.io/categories/life/rosy%20clouds.jpg" alt="Featured image of post Life" /&gt;</description>
         </item>
         <item>
         <title>Test</title>
@@ -28,7 +61,7 @@
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://Elysium-Seeker.github.io/categories/work/</guid>
-        <description></description>
+        <description>&lt;img src="https://Elysium-Seeker.github.io/categories/work/image.png" alt="Featured image of post Work" /&gt;</description>
         </item>
         
     </channel>
