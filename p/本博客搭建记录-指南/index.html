@@ -6,11 +6,11 @@
 
 <link rel='canonical' href='https://Elysium-Seeker.github.io/p/%E6%9C%AC%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95-%E6%8C%87%E5%8D%97/'>
 
-<link rel="stylesheet" href="/scss/style.min.605cb100119a0f84993d893fa81a3d8dcf418df7431bb241a8e8ae16d26cab3f.css"><meta property='og:title' content="本博客搭建记录 & 指南">
+<link rel="stylesheet" href="/scss/style.min.fecac5db33e08e03a4eccb9a558911fd977a36becfd7372a3d2c5850717b763d.css"><meta property='og:title' content="本博客搭建记录 & 指南">
 <meta property='og:description' content="使用 Hugo + GitHub Page 搭建">
 <meta property='og:url' content='https://Elysium-Seeker.github.io/p/%E6%9C%AC%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95-%E6%8C%87%E5%8D%97/'>
 <meta property='og:site_name' content='Elysium-Seeker'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-06-06T23:44:50&#43;08:00'/><meta property='article:modified_time' content='2025-06-07T01:20:57&#43;08:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-06-06T23:44:50&#43;08:00'/><meta property='article:modified_time' content='2025-06-07T01:31:48&#43;08:00'/>
 <meta name="twitter:title" content="本博客搭建记录 & 指南">
 <meta name="twitter:description" content="使用 Hugo + GitHub Page 搭建">
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -389,7 +389,7 @@
 &lt;/script&gt;
 </code></pre>
 <p>但是有个问题，根据官方文档给出的全局CSS变量，我无法在这里修改标题和副标题字号，我自己的解决方法是直接去Stack主题的源代码中进行修改。（其实这里也可以改正文字号等参数）</p>
-<p>在<code>themes\hugo-theme-stack-master\assets\scss\variables.scss</code>中即可修改正文字体大小及行间距等参数，具体是在如下的部分。注意两个<code>--article-font-size</code>应用场合不同，响应式字体大小（就<code>respond(md)</code>内的）适用于中等及更大的屏幕（比如PC），另一个则适用于移动端。</p>
+<p>在<code>themes\hugo-theme-stack-master\assets\scss\variables.scss</code>中即可修改正文字体大小及行间距等参数，具体是在如下的部分。注意两个<code>--article-font-size</code>应用场合不同，响应式字体大小（就<code>respond(md)</code>内的）适用于中等及更大的屏幕（比如PC），另一个则适用于移动端。(上面改的地方优先级更高)</p>
 <pre><code>/**
 *   Article content font settings
 */
@@ -410,7 +410,7 @@
     font-weight: 600;
     margin: 0;
     color: var(--card-text-color-main);
-    font-size: 2.1rem;
+    font-size: 2.3rem;
 
     @include respond(xl) {
         font-size: 3rem;
@@ -430,7 +430,7 @@
     color: var(--card-text-color-secondary);
     line-height: 1.5;
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.9rem;
     @include respond(xl) {
         font-size: 2rem;
     }

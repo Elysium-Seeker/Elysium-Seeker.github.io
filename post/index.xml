@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Sat, 07 Jun 2025 01:20:57 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 07 Jun 2025 01:31:48 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>本博客搭建记录 &amp; 指南</title>
         <link>https://Elysium-Seeker.github.io/p/%E6%9C%AC%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95-%E6%8C%87%E5%8D%97/</link>
         <pubDate>Fri, 06 Jun 2025 23:44:50 +0800</pubDate>
@@ -59,7 +59,7 @@
 &amp;lt;/script&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;但是有个问题，根据官方文档给出的全局CSS变量，我无法在这里修改标题和副标题字号，我自己的解决方法是直接去Stack主题的源代码中进行修改。（其实这里也可以改正文字号等参数）&lt;/p&gt;
-&lt;p&gt;在&lt;code&gt;themes\hugo-theme-stack-master\assets\scss\variables.scss&lt;/code&gt;中即可修改正文字体大小及行间距等参数，具体是在如下的部分。注意两个&lt;code&gt;--article-font-size&lt;/code&gt;应用场合不同，响应式字体大小（就&lt;code&gt;respond(md)&lt;/code&gt;内的）适用于中等及更大的屏幕（比如PC），另一个则适用于移动端。&lt;/p&gt;
+&lt;p&gt;在&lt;code&gt;themes\hugo-theme-stack-master\assets\scss\variables.scss&lt;/code&gt;中即可修改正文字体大小及行间距等参数，具体是在如下的部分。注意两个&lt;code&gt;--article-font-size&lt;/code&gt;应用场合不同，响应式字体大小（就&lt;code&gt;respond(md)&lt;/code&gt;内的）适用于中等及更大的屏幕（比如PC），另一个则适用于移动端。(上面改的地方优先级更高)&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;/**
 *   Article content font settings
 */
@@ -80,7 +80,7 @@
     font-weight: 600;
     margin: 0;
     color: var(--card-text-color-main);
-    font-size: 2.1rem;
+    font-size: 2.3rem;
 
     @include respond(xl) {
         font-size: 3rem;
@@ -100,7 +100,7 @@
     color: var(--card-text-color-secondary);
     line-height: 1.5;
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.9rem;
     @include respond(xl) {
         font-size: 2rem;
     }

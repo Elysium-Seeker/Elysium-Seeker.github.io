@@ -58,7 +58,7 @@
 &amp;lt;/script&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;但是有个问题，根据官方文档给出的全局CSS变量，我无法在这里修改标题和副标题字号，我自己的解决方法是直接去Stack主题的源代码中进行修改。（其实这里也可以改正文字号等参数）&lt;/p&gt;
-&lt;p&gt;在&lt;code&gt;themes\hugo-theme-stack-master\assets\scss\variables.scss&lt;/code&gt;中即可修改正文字体大小及行间距等参数，具体是在如下的部分。注意两个&lt;code&gt;--article-font-size&lt;/code&gt;应用场合不同，响应式字体大小（就&lt;code&gt;respond(md)&lt;/code&gt;内的）适用于中等及更大的屏幕（比如PC），另一个则适用于移动端。&lt;/p&gt;
+&lt;p&gt;在&lt;code&gt;themes\hugo-theme-stack-master\assets\scss\variables.scss&lt;/code&gt;中即可修改正文字体大小及行间距等参数，具体是在如下的部分。注意两个&lt;code&gt;--article-font-size&lt;/code&gt;应用场合不同，响应式字体大小（就&lt;code&gt;respond(md)&lt;/code&gt;内的）适用于中等及更大的屏幕（比如PC），另一个则适用于移动端。(上面改的地方优先级更高)&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;/**
 *   Article content font settings
 */
@@ -79,7 +79,7 @@
     font-weight: 600;
     margin: 0;
     color: var(--card-text-color-main);
-    font-size: 2.1rem;
+    font-size: 2.3rem;
 
     @include respond(xl) {
         font-size: 3rem;
@@ -99,7 +99,7 @@
     color: var(--card-text-color-secondary);
     line-height: 1.5;
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.9rem;
     @include respond(xl) {
         font-size: 2rem;
     }
