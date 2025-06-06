@@ -6,6 +6,133 @@
         <description>Recent content in Work on Elysium-Seeker</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <copyright>Elysium-Seeker</copyright><atom:link href="https://Elysium-Seeker.github.io/categories/work/index.xml" rel="self" type="application/rss+xml" />
+        <copyright>Elysium-Seeker</copyright><atom:link href="https://Elysium-Seeker.github.io/categories/work/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>本博客搭建记录 &amp; 指南</title>
+        <link>https://Elysium-Seeker.github.io/p/%E6%9C%AC%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95-%E6%8C%87%E5%8D%97/</link>
+        <pubDate>Fri, 06 Jun 2025 23:44:50 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/%E6%9C%AC%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95-%E6%8C%87%E5%8D%97/</guid>
+        <description>&lt;p&gt;简单记录一下博客搭建过程以及踩过的坑，方便后来者避雷。&lt;/p&gt;
+&lt;h2 id=&#34;基础搭建&#34;&gt;基础搭建
+&lt;/h2&gt;&lt;p&gt;首先主要内容可以先看这个博客，这位老师还在B站录制了视频，照做即可。&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://letere-gzj.github.io/hugo-stack/p/hugo/custom-blog/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;搭建教程&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.bilibili.com/video/BV1bovfeaEtQ&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;B站视频&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;本博客做出的个性化调整大概就是把亮色模式删了只留暗色模式，其他都没怎么动过。&lt;/p&gt;
+&lt;h2 id=&#34;stack主题特殊配置&#34;&gt;Stack主题特殊配置
+&lt;/h2&gt;&lt;p&gt;依旧是参考的这位老师的博客&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://letere-gzj.github.io/hugo-stack/p/hugo/custom-stack-theme/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;博客地址&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;我这边进行的调整有字体的修改（这个待会说，我用的方法不一样），更新时间的显示，目录折叠&amp;amp;展开，“返回顶部”按钮的添加，以及代码块的折叠&amp;amp;展开。&lt;/p&gt;
+&lt;p&gt;在我测试的内容中出问题的主要是把更新时间显示在开头这一操作，注意请修改&lt;code&gt;themes\hugo-theme-stack-master\layouts\partials\article\components\details.html&lt;/code&gt;，不要直接在文章中给的文件地址新建&lt;code&gt;details.html&lt;/code&gt;并复制粘贴，否则你的文章的各个参数都无法在页面内正常显示。&lt;/p&gt;
+&lt;h2 id=&#34;背景设置&#34;&gt;背景设置
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://letere-gzj.github.io/hugo-stack/p/hugo/custom-background/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;参考博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;本博客使用的是其中的点线漂浮背景。&lt;/p&gt;
+&lt;p&gt;这边顺便提供一下本人用的 &lt;a class=&#34;link&#34; href=&#34;particlesjs-config.json&#34; &gt;particlesjs-config.json&lt;/a&gt; 。（Ctrl + S 直接保存即可）&lt;/p&gt;
+&lt;h2 id=&#34;字体及字号的调整&#34;&gt;字体及字号的调整
+&lt;/h2&gt;&lt;p&gt;（这个问题折磨了笔者一个多小时）&lt;/p&gt;
+&lt;p&gt;如果想使用外界字体可以参考上面博客中的方法，也可以参考&lt;a class=&#34;link&#34; href=&#34;https://stack-docs.netlify.app/zh/modify-theme/example-custom-font-family&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Stack官方文档&lt;/a&gt;的方法。&lt;/p&gt;
+&lt;p&gt;我目前使用的就是官方文档中提供的思源宋体。&lt;/p&gt;
+&lt;p&gt;然后如果需要调整字号的话可以直接在&lt;code&gt;layouts/partials/head/custom.html&lt;/code&gt;中进行修改，这里也提供一下本博客使用的&lt;code&gt;custom.html&lt;/code&gt;，我调整了文章的正文字体大小和行间距（即&lt;code&gt;--article-font-size&lt;/code&gt;和&lt;code&gt;--article-line-height&lt;/code&gt;）&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;style&amp;gt;
+    :root {
+        --article-font-family: &amp;quot;Noto Serif SC&amp;quot;, var(--base-font-family);
+        --article-font-size: 1.7rem;
+        --article-line-height: 1.8;
+    }
+&amp;lt;/style&amp;gt;
+
+&amp;lt;script&amp;gt;
+        (function () {
+            const customFont = document.createElement(&#39;link&#39;);
+            customFont.href = &amp;quot;https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&amp;amp;display=swap&amp;quot;;
+        
+            customFont.type = &amp;quot;text/css&amp;quot;;
+            customFont.rel = &amp;quot;stylesheet&amp;quot;;
+        
+            document.head.appendChild(customFont);
+        }());
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但是有个问题，根据官方文档给出的全局CSS变量，我无法在这里修改标题和副标题字号，我自己的解决方法是直接去Stack主题的源代码中进行修改。（其实这里也可以改正文字号等参数）&lt;/p&gt;
+&lt;p&gt;在&lt;code&gt;themes\hugo-theme-stack-master\assets\scss\variables.scss&lt;/code&gt;中即可修改正文字体大小及行间距等参数，具体是在如下的部分。注意两个&lt;code&gt;--article-font-size&lt;/code&gt;应用场合不同，响应式字体大小（就&lt;code&gt;respond(md)&lt;/code&gt;内的）适用于中等及更大的屏幕（比如PC），另一个则适用于移动端。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;/**
+*   Article content font settings
+*/
+:root {
+    --article-font-family: var(--base-font-family);
+    --article-font-size: 1.6rem;
+
+    @include respond(md) {
+        --article-font-size: 2.0rem;
+    }
+
+    --article-line-height: 1.85;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;而标题&amp;amp;副标题的相关参数则在&lt;code&gt;themes\hugo-theme-stack-master\assets\scss\partials\article.scss&lt;/code&gt;中进行修改，具体在如下部分。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;.article-title {
+    font-family: var(--article-font-family);
+    font-weight: 600;
+    margin: 0;
+    color: var(--card-text-color-main);
+    font-size: 2.1rem;
+
+    @include respond(xl) {
+        font-size: 3rem;
+    }
+
+    a {
+        color: var(--card-text-color-main);
+
+        &amp;amp;:hover {
+            color: var(--card-text-color-main);
+        }
+    }
+}
+
+.article-subtitle {
+    font-weight: normal;
+    color: var(--card-text-color-secondary);
+    line-height: 1.5;
+    margin: 0;
+    font-size: 1.5rem;
+    @include respond(xl) {
+        font-size: 2rem;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;补充说明一个问题，本地调试时对主题源文件的修改似乎不会即使生效，建议每次修改后关闭网站重新进行&lt;code&gt;hugo server -D&lt;/code&gt;构建网站。（笔者似乎就是因为这个问题以为起初的修改没能成功，于是浪费了许多时间&amp;hellip;）&lt;/p&gt;
+&lt;h2 id=&#34;关于博客内容&#34;&gt;关于博客内容
+&lt;/h2&gt;&lt;p&gt;博客所有的内容都在&lt;code&gt;content&lt;/code&gt;文件夹中，包括分类（&lt;code&gt;categories&lt;/code&gt;），侧边栏的几个页面（&lt;code&gt;page&lt;/code&gt;），以及文章本身（&lt;code&gt;post&lt;/code&gt;）。&lt;/p&gt;
+&lt;p&gt;在相关的文件夹修改&lt;code&gt;index.zh-cn.md&lt;/code&gt;(“关于”和“友链”和“搜索”是直接修改&lt;code&gt;index.md&lt;/code&gt;)即可。&lt;/p&gt;
+&lt;p&gt;然后给个文章配置的示例吧：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;---
+
+date : 2025-06-06T23:44:50+08:00
+draft : false
+author : &amp;quot;Elysium-Seeker&amp;quot;
+title : &amp;quot;本博客搭建记录&amp;quot;
+description : &amp;quot;使用 Hugo + GitHub Page 搭建&amp;quot;
+image : xxx.jpg
+categories:
+    - Work
+
+---
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;一些补充&#34;&gt;一些补充
+&lt;/h2&gt;&lt;p&gt;提供两个好用的网页，对你的配置应该会有帮助：&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://markdown.com.cn/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Markdown教程&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://stack-docs.netlify.app/zh/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Stack中文指南&lt;/a&gt;（孩子一开始只找到英文的极其痛苦，后来机缘巧合下终于找到中文的了）&lt;/p&gt;
+&lt;p&gt;然后 GitHub 时不时会抽风传不上文件，不管有没有挂梯子都会出现这个问题，实在不行换个网络或者换个时间传都可行。&lt;/p&gt;
+&lt;p&gt;收工！有问题欢迎和笔者交流！（虽然笔者也不一定会就是啦。）&lt;/p&gt;
+</description>
+        </item>
+        
     </channel>
 </rss>
