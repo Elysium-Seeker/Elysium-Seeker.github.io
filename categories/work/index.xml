@@ -7,6 +7,42 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright><atom:link href="https://Elysium-Seeker.github.io/categories/work/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>计科导大作业记录</title>
+        <link>https://Elysium-Seeker.github.io/p/%E8%AE%A1%E7%A7%91%E5%AF%BC%E5%A4%A7%E4%BD%9C%E4%B8%9A%E8%AE%B0%E5%BD%95/</link>
+        <pubDate>Mon, 09 Jun 2025 09:00:50 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/%E8%AE%A1%E7%A7%91%E5%AF%BC%E5%A4%A7%E4%BD%9C%E4%B8%9A%E8%AE%B0%E5%BD%95/</guid>
+        <description>&lt;p&gt;本人是在极其崩溃的情况下开始写这篇博客的。&lt;/p&gt;
+&lt;h2 id=&#34;初次尝试dreamsilk丝缕绘梦&#34;&gt;初次尝试——DreamSilk丝缕绘梦
+&lt;/h2&gt;&lt;p&gt;一开始没什么点子想起了之前很喜欢的一个“绘画”网站&lt;a class=&#34;link&#34; href=&#34;http://weavesilk.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;weavesilk&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;于是打算写一个类似的网站，起名叫DreamSilk丝缕绘梦。&lt;/p&gt;
+&lt;p&gt;想着是整个和weavesilk差不多的笔刷再加点特效什么的。&lt;/p&gt;
+&lt;p&gt;但理想很美好，现实很骨感。&lt;/p&gt;
+&lt;p&gt;尝试了很久很久也做不出一个类似weavesilk的笔刷效果。&lt;/p&gt;
+&lt;p&gt;而且怎么搞都丑的要死。&lt;/p&gt;
+&lt;p&gt;于是被迫决定放弃。&lt;/p&gt;
+&lt;p&gt;没有艺术天赋的人真不适合碰美术相关的东西。&lt;/p&gt;
+&lt;h2 id=&#34;第二个点子arealme挑战&#34;&gt;第二个点子——Arealme挑战
+&lt;/h2&gt;&lt;p&gt;心态炸了，决定搞点简单的。&lt;/p&gt;
+&lt;p&gt;想起之前经常会刷到Arealme的挑战，决定做个类似的东西。&lt;/p&gt;
+&lt;p&gt;比如按序点击50个数什么的。&lt;/p&gt;
+&lt;p&gt;这种不涉及审美的东西应该简单吧&lt;/p&gt;
+&lt;p&gt;Update on 25.6.13&lt;/p&gt;
+&lt;p&gt;基本完成了网站的构建。&lt;/p&gt;
+&lt;p&gt;自己搭了个测APM的雏形然后尝试（让Copilot大人）增添各种效果以使其满足创新性。&lt;/p&gt;
+&lt;p&gt;当每次点击时增加了 “Perfect” ， “Great” 和 “Error” 特效时它就已经离APM测试渐行渐远了。&lt;/p&gt;
+&lt;p&gt;于是在一步步修改后他逐渐成了一个类音游竞速小游戏，我甚至给他加上了排行榜。&lt;/p&gt;
+&lt;p&gt;但是，还蛮好玩的，起码我是这么觉得的。&lt;/p&gt;
+&lt;p&gt;非常期待有人能达成 Perfect 全连，起码我自己做不到呢。&lt;/p&gt;
+&lt;h2 id=&#34;总结&#34;&gt;总结
+&lt;/h2&gt;&lt;p&gt;这次大作业给我的启发还蛮大的，一是AI的能力已经超乎我想象了，后面给网站添加功能的时候，基本上我只要进行大致的文字描述，尊贵的Copilot大人就能帮我美观又简洁的解决问题。哪怕是遇到了一些bug也可以让Copilot解决，他还会顺带讲解bug出现的原因和解决方案。（Copilot会给到改完的代码并提供一键应用功能，真的非常实用！！）&lt;/p&gt;
+&lt;p&gt;二是html，js这几个其实也没有&amp;hellip;想象的那么难，其实质和我之前学的C++ or Python也并没有太大差别（其实html更像积木块一点，或者说那个Scratch&amp;hellip;？），起码看懂问题不大，写网页也并没有我想象的那么神秘。（当然之前搭博客的过程对这个肯定是有助益滴，当时看了好多CSS文件，还顺带研究了yaml！）&lt;/p&gt;
+&lt;p&gt;但现在还没搞明白怎么部署到真正的网页上，感觉要买服务器，不过Github好像也可以实现，后续试试？&lt;/p&gt;
+&lt;p&gt;那就先留个坑啦！&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>本博客搭建记录 &amp; 指南</title>
         <link>https://Elysium-Seeker.github.io/p/%E6%9C%AC%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95-%E6%8C%87%E5%8D%97/</link>
         <pubDate>Fri, 06 Jun 2025 23:44:50 +0800</pubDate>
