@@ -7,6 +7,88 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright><atom:link href="https://Elysium-Seeker.github.io/categories/work/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>创智微课营记录&amp;AI-STOCK简介</title>
+        <link>https://Elysium-Seeker.github.io/p/%E5%88%9B%E6%99%BA%E5%BE%AE%E8%AF%BE%E8%90%A5%E8%AE%B0%E5%BD%95ai-stock%E7%AE%80%E4%BB%8B/</link>
+        <pubDate>Tue, 29 Jul 2025 12:34:21 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/%E5%88%9B%E6%99%BA%E5%BE%AE%E8%AF%BE%E8%90%A5%E8%AE%B0%E5%BD%95ai-stock%E7%AE%80%E4%BB%8B/</guid>
+        <description>&lt;p&gt;&lt;del&gt;周更是不可能周更的，尤其是期末周加社会实践这种阴间配置情况下。暑假也写不动，能更多少更多少吧。&lt;/del&gt;&lt;/p&gt;
+&lt;p&gt;前段时间白嫖了上海创智学院的“走进大模型”暑期微课营，并在其中做了个简单的项目，于是写篇文章记录一下。&lt;/p&gt;
+&lt;h2 id=&#34;day-1-3&#34;&gt;Day 1-3
+&lt;/h2&gt;&lt;p&gt;主要是上课，大模型基础知识什么的。&lt;/p&gt;
+&lt;p&gt;对这地方的第一印象是好有钱，免费的营甚至包饭还发衣服（放外面不得四位甚至五位数），而且教室也好大好新。&lt;/p&gt;
+&lt;p&gt;还非常幸运的发现有合唱团的学长准备在这里读研，并进行了一番深入的了解。&lt;/p&gt;
+&lt;p&gt;第一天下午有这里几个重点项目的介绍，对情境智能很感兴趣。毕竟AI拟人化是我一直以来的目标。&lt;/p&gt;
+&lt;p&gt;Actually有点点来这里读研的想法，不过好像很卷很难进&amp;hellip;&lt;/p&gt;
+&lt;p&gt;Anyway，有自所保底，也不是很慌，不急（确信）。&lt;/p&gt;
+&lt;p&gt;从上课的内容里面算是大致了解到了大模型的部分原理以及微调什么的，有很多是之前知道的甚至高中技术学到的，当然也有很多自己上学期看相关内容了解过的部分，不过还是受益良多的，起码现在算是大致明白了之前一直很好奇的Attention is all you need的大致内容，也了解了模型训练的一个流程什么的。（虽然其实没怎么听，边摸鱼边靠Gemini补课。）&lt;/p&gt;
+&lt;p&gt;感觉黑掉模型让它说脏话的部分最有意思了！（bushi）&lt;/p&gt;
+&lt;p&gt;（以及上课的时候看旁边华东理工老哥玩进阶20的Slay the Spire 也很有意思。）&lt;/p&gt;
+&lt;p&gt;趁着上课时间还摸鱼做了个动态世界模拟器，虽然也是很多bug没调完而且把自己的copilot用到限额了，但是确实很好玩，大模型结合数据库的思路感觉也是后面可以发展的方向。（好像现在Astrbot做的长期记忆就是这个方向搞的，用的milvus数据库）&lt;/p&gt;
+&lt;h2 id=&#34;day-4&#34;&gt;Day 4
+&lt;/h2&gt;&lt;p&gt;算是最忙的一天了。&lt;/p&gt;
+&lt;p&gt;和组里的同济队友合作做出了我们的AI-STOCK。&lt;/p&gt;
+&lt;p&gt;虽然现在仍然BUG颇多，而且我暂时也用不了它了（dify临时账号被停了）&lt;/p&gt;
+&lt;p&gt;从一开始的模拟人生到后来想到股票方面找到自己之前试用的ai-hedge-fund再到一步步优化调整成我们最后的产品以及画饼PPT和各种完善方向等等，都是非常有意思的过程。&lt;/p&gt;
+&lt;p&gt;比预想中的搭建Agent有趣，所学到的知识也远超预期。&lt;/p&gt;
+&lt;p&gt;以及上班必备的摸鱼和临时性加班也是让人哭笑不得。&lt;/p&gt;
+&lt;p&gt;下午四点就做完&amp;amp;提交了所需要的所有材料然后全组摸了一个小时鱼，结果5点下班的时候突然通知说要做海报要留一会儿才能走，再过了半小时重新询问又发现可以线上做&amp;hellip;&lt;/p&gt;
+&lt;p&gt;然后快7点才给到所有材料，又临时给了7点半的ddl。还好有靠谱的美工队友，卡着7点28分最终是发出了材料。&lt;/p&gt;
+&lt;p&gt;After all，过的很值得铭记呢。&lt;/p&gt;
+&lt;h2 id=&#34;day-5&#34;&gt;Day 5
+&lt;/h2&gt;&lt;p&gt;结营日&amp;amp;汇报日，主要流程就是看汇报&amp;amp;做汇报，以及最后的结营。&lt;/p&gt;
+&lt;p&gt;很有趣的是发现有两个小组做了和我们相似的内容，不过全部了解过后我坚定的认为我们是做的最完善的。&lt;del&gt;也是画饼画的最好看的。&lt;/del&gt;&lt;/p&gt;
+&lt;p&gt;本来不想汇报的本人在队友的推举下不得不一个人搞了全部的汇报，所幸还算顺利没出什么岔子。&lt;/p&gt;
+&lt;p&gt;以及从海报上能看出大学生真的都是班味十足，做的都是投资、面试之类的工具类Agent，反观高中生们的作品都是充满想象力的文字类游戏，什么凡人修仙传狼人杀都来了。（虽然相对没有技术含量但确实是大模型擅长的领域而且也确实很好玩呢）&lt;/p&gt;
+&lt;p&gt;最后结营的时候又被经费震撼了一下，这边是真有钱免费的营不仅发证书还有纪念品。&lt;/p&gt;
+&lt;p&gt;走之前和助教交流了一下这里怎么进，还是很感兴趣的，希望未来能有考到这里，做自己喜欢的项目的机会。&lt;/p&gt;
+&lt;h2 id=&#34;ai-stock介绍&#34;&gt;AI-STOCK介绍
+&lt;/h2&gt;&lt;p&gt;做都做了肯定要拿来水一水内容的啦！&lt;/p&gt;
+&lt;p&gt;把yml文件传到github上了，网址在&lt;a class=&#34;link&#34; href=&#34;https://github.com/Elysium-Seeker/AI-STOCK&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;这里&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;（不过readme是AI写的，画饼什么的都不太可能实现，事实是我现在因为手边没有GPT的API接口甚至无法调试它&amp;hellip;）&lt;/p&gt;
+&lt;p&gt;具体来说，这是一个“基于多Agent系统的下一代投资决策支持平台”。&lt;/p&gt;
+&lt;p&gt;本质在于让多个大模型从不同的角度给出投资建议并进行整合，以此达到全面和个性化的目的。&lt;/p&gt;
+&lt;p&gt;在做投资分析的同时额外还补充了图表生成，信息聚合和新闻等几个模块，勉强算是一站式投资信息门户平台了。&lt;/p&gt;
+&lt;p&gt;（其实我觉得很有商业价值啊，做到财经类APP里做个小插件应该很有前途的，就叫&amp;hellip;AI投资展望？）&lt;/p&gt;
+&lt;p&gt;关于这个Agent的具体内容大概如下：&lt;/p&gt;
+&lt;h3 id=&#34;-核心亮点-key-features&#34;&gt;✨ 核心亮点 (Key Features)
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;🤖 多Agent协同分析 (Multi-Agent Analysis):&lt;/strong&gt; 系统由十多个拥有不同“人格”和分析框架的AI Agent组成，并行工作，确保分析的广度和深度。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;🧠 传奇投资人视角 (Legendary Investor Personas):&lt;/strong&gt; 借助沃伦·巴菲特的价值洞察、凯茜·伍德的创新远见、彼得·林奇的成长嗅觉，从经过时间检验的投资哲学中获得智慧。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;📄 综合策略报告 (Comprehensive Reporting):&lt;/strong&gt; 最终输出一份详尽的“投资委员会会议纪要”，清晰呈现每位专家的观点、分歧与共识，以及最终的综合策略建议。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;💬 智能查询与交互 (Intelligent Query &amp;amp; Interaction):&lt;/strong&gt; 不仅能进行深度分析，还能理解用户的日常查询，如“苹果公司最近有什么新闻？”或“给我看一下特斯拉近一年的股价图”。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;🌐 动态数据聚合 (Dynamic Data Aggregation):&lt;/strong&gt; 自动从网页、API等多种渠道获取最新的财务报表、新闻和市场数据，确保分析的时效性。&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;-系统架构与工作流程-architecture--how-it-works&#34;&gt;🏛️ 系统架构与工作流程 (Architecture &amp;amp; How It Works)
+&lt;/h3&gt;&lt;p&gt;AI-STOCK 的工作流程旨在模拟一个高效的投研团队从接收任务到提交报告的全过程。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;用户输入 (User Query):&lt;/strong&gt; 用户通过自然语言提出需求（例如：“帮我分析一下英伟达”）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;智能识别与数据获取 (NLU &amp;amp; Data Aggregation):&lt;/strong&gt; 系统精准识别目标公司，并启动数据爬虫和API调用程序，从全网抓取最新的公司财报、新闻、股价等信息。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;任务分发至Agent核心 (Task Distribution):&lt;/strong&gt; 干净、结构化的数据被分发给所有AI Agent。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;并行分析 (Parallel Analysis):&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;传奇投资人Agent (Investor Legends):&lt;/strong&gt; 从各自的投资哲学出发，进行定性与定量分析。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;功能性Agent (Functional Agents):&lt;/strong&gt; 对估值、风险、技术面、基本面等进行专项量化分析。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;整合与生成 (Synthesis &amp;amp; Generation):&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;AI首席投资官 (Chief Investment Strategist):&lt;/strong&gt; 收集所有Agent的分析报告，主持一场“虚拟投委会”，提炼共识、聚焦分歧，并撰写最终的综合报告。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;输出详实报告 (Report Delivery):&lt;/strong&gt; 一份结构清晰、内容详实的“投资委员会会议纪要”被呈现给用户。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;其实主体部分是从ai-hedge-fund那边借鉴的，但是整理成大模型Agent的形式我认为是更加便于操作一些的，以及我们所做的图表和最后生成pdf整理所有Analyses的部分都是为了提高用户体验（&lt;del&gt;更适合中国ai萌新宝宝体质&lt;/del&gt;）&lt;/p&gt;
+&lt;p&gt;以后有机会的话说不定会好好优化一下，毕竟是自己正儿八经的第一个作品，现在还是一堆bug的状态呢。&lt;/p&gt;
+&lt;p&gt;(不过就像上文说的，账号权限被关闭后我连调试资格都没有www&amp;hellip;)&lt;/p&gt;
+&lt;h2 id=&#34;总结&#34;&gt;总结
+&lt;/h2&gt;&lt;p&gt;一个很开心也很有收获的“夏令营”，要有还来！&lt;/p&gt;
+&lt;p&gt;希望之后有机会来这里深造，做自己喜欢的东西！&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>计科导大作业记录</title>
         <link>https://Elysium-Seeker.github.io/p/%E8%AE%A1%E7%A7%91%E5%AF%BC%E5%A4%A7%E4%BD%9C%E4%B8%9A%E8%AE%B0%E5%BD%95/</link>
         <pubDate>Mon, 09 Jun 2025 09:00:50 +0800</pubDate>
