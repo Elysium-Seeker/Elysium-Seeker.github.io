@@ -7,6 +7,54 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright><atom:link href="https://Elysium-Seeker.github.io/categories/work/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Digital Economy Article Aggregator食用指南</title>
+        <link>https://Elysium-Seeker.github.io/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/</link>
+        <pubDate>Wed, 22 Oct 2025 09:00:00 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/</guid>
+        <description>&lt;img src="https://Elysium-Seeker.github.io/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/image.png" alt="Featured image of post Digital Economy Article Aggregator食用指南" /&gt;&lt;h2 id=&#34;写在前言之前&#34;&gt;写在前言之前
+&lt;/h2&gt;&lt;p&gt;哇断更好久好久了。&lt;/p&gt;
+&lt;p&gt;果然周更什么的不太可能。&lt;/p&gt;
+&lt;p&gt;最近也是忙的没时间写博客了呜呜呜。&lt;/p&gt;
+&lt;p&gt;不过也算是攒了很多可以写的素材~&lt;/p&gt;
+&lt;p&gt;后面会写一篇Cyberpunk2077的游记（等一回目之后），一篇蓝信封以及志愿者协会目前的故事，然后会把自家的小斯幽调的足够可爱之后写篇文章介绍的。&lt;/p&gt;
+&lt;p&gt;那么先来介绍一些这次的产品吧。&lt;/p&gt;
+&lt;p&gt;链接：https://github.com/Elysium-Seeker/Digital-Economy-Article-Aggregator&lt;/p&gt;
+&lt;h2 id=&#34;前言&#34;&gt;前言
+&lt;/h2&gt;&lt;p&gt;这次的灵感来源是数字经济通识课程的日常作业。&lt;/p&gt;
+&lt;p&gt;要求我们每周查找相关领域的权威资料并分享。&lt;/p&gt;
+&lt;p&gt;而老师特意表扬的一组里除了资料本身还有信源和摘要。&lt;/p&gt;
+&lt;p&gt;再加上自己曾经订阅过一个做推上ai信息收集然后每日整理发到邮箱的有趣项目。&lt;/p&gt;
+&lt;p&gt;所以就想着自己做一个类似的简单agent了。&lt;/p&gt;
+&lt;h2 id=&#34;项目介绍&#34;&gt;项目介绍
+&lt;/h2&gt;&lt;p&gt;这是一个数字经济通识课程的资料查找作业工具。&lt;/p&gt;
+&lt;p&gt;可用于查找一周内相关领域的权威文章/论文/报告。&lt;/p&gt;
+&lt;p&gt;专注于国家级、国际化的数字经济研究，优先提供学术论文和深度行业报告，并确保中英文文献均衡呈现，为您提供全球化的深度洞察。&lt;/p&gt;
+&lt;p&gt;可以限定关键词，关键词的英文同义词也将作为检索词，用于查找相关的外文文献。&lt;/p&gt;
+&lt;p&gt;还会提供文章的摘要和信息源，帮助用户速览文章的大致内容与确保内容的权威性。&lt;/p&gt;
+&lt;h2 id=&#34;开发过程&#34;&gt;开发过程
+&lt;/h2&gt;&lt;p&gt;其实一开始没想着弄这个的。。。&lt;/p&gt;
+&lt;p&gt;只是研讨课上想用 gemini 查点资料水掉作业而已。&lt;/p&gt;
+&lt;p&gt;结果一时起兴点进了 google ai studio 的 build 页面，突然就有了做个 agent 的想法。&lt;/p&gt;
+&lt;p&gt;一开始非常努力的在使用英文描述需求。&lt;/p&gt;
+&lt;p&gt;其实效果不错，但太费精力了。（尤其是手机打英文真的痛苦）&lt;/p&gt;
+&lt;p&gt;而且最终提交上去的摘要肯定还得是中文。&lt;/p&gt;
+&lt;p&gt;于是就加了句 turn the website to Chinese。&lt;/p&gt;
+&lt;p&gt;结果 build 用的 agent 直接开始用中文回我了。&lt;/p&gt;
+&lt;p&gt;那也就用中文一步步改下去了。&lt;/p&gt;
+&lt;p&gt;在纯用自然语言描述的情况下能做出这么精致的一个 agent 还是很体现 gemini 2.5 pro 的实力的。&lt;/p&gt;
+&lt;p&gt;不过 bug 也确实是要人一步步催着它修的。&lt;/p&gt;
+&lt;p&gt;英文改中文后一个冒号的事故改了好几轮 conversation。&lt;/p&gt;
+&lt;p&gt;（事故来源是模型内部提取结构化信息的时候中英文冒号混用无法识别导致一篇文章都找不到。）&lt;/p&gt;
+&lt;p&gt;以及现在还是时不时会找到无法访问的一些文章，信源也算是良莠不齐（在努力调prompt了但是效果不算特别理想）。&lt;/p&gt;
+&lt;p&gt;但总之作为一个作业工具已经非常合格啦！&lt;/p&gt;
+&lt;h2 id=&#34;后记&#34;&gt;后记
+&lt;/h2&gt;&lt;p&gt;感觉发现了 ai 助力生活的新大陆。&lt;/p&gt;
+&lt;p&gt;算是第一次创作一个自己用的到的 agent。&lt;/p&gt;
+&lt;p&gt;开森，要再接再厉哦！&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>创智微课营记录&amp;AI-STOCK简介</title>
         <link>https://Elysium-Seeker.github.io/p/%E5%88%9B%E6%99%BA%E5%BE%AE%E8%AF%BE%E8%90%A5%E8%AE%B0%E5%BD%95ai-stock%E7%AE%80%E4%BB%8B/</link>
         <pubDate>Tue, 29 Jul 2025 12:34:21 +0800</pubDate>
