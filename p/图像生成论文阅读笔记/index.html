@@ -10,7 +10,7 @@
 <meta property='og:description' content="近期图像生成领域论文阅读与心得记录">
 <meta property='og:url' content='https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
 <meta property='og:site_name' content='Elysium-Seeker'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='图像生成' /><meta property='article:tag' content='论文阅读' /><meta property='article:published_time' content='2025-12-03T09:00:00&#43;08:00'/><meta property='article:modified_time' content='2025-12-06T01:23:12&#43;08:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='图像生成' /><meta property='article:tag' content='论文阅读' /><meta property='article:published_time' content='2025-12-03T09:00:00&#43;08:00'/><meta property='article:modified_time' content='2025-12-06T01:50:58&#43;08:00'/>
 <meta name="twitter:title" content="图像生成论文阅读笔记">
 <meta name="twitter:description" content="近期图像生成领域论文阅读与心得记录">
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -245,7 +245,7 @@
   <ol>
     <li><a href="#vae-auto-encoding-variational-bayes-2013">[VAE] Auto-Encoding Variational Bayes (2013)</a></li>
     <li><a href="#gan-generative-adversarial-nets-2014">[GAN] Generative Adversarial Nets (2014)</a></li>
-    <li><a href="#unsupervised-representation-learning-with-deep-convolutional-generative-adversarial-networks">Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks</a></li>
+    <li><a href="#dcgan-unsupervised-representation-learning-with-deep-convolutional-generative-adversarial-networks">[DCGAN] Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks</a></li>
   </ol>
 </nav>
         </div>
@@ -382,9 +382,9 @@ $$z=\mu+\epsilon \times \sigma$$<p>此时 $z$ 由随机值变为带随机常数�
 <p>尽管 $D$ 只能输出对于图片真假的判断，但是内部参数的梯度（ $Loss$ 对每个权重的偏导数 ）在反向传播的过程中可以通过调整权重矩阵/卷积核使 $G$ 明白假图和真图的差异（ 即怎么改图可以让 $D$ 认为这个图更像真图 ），也使 $D$ 明白怎么更好的判断图是真是假（ 此时一部分卷积核对真图的特征有强烈的正向激活，另一部分卷积核对假图的特征有强烈的负向激活。）</p>
 <p>（其实卷积这一块我还是没完全搞懂，准确来说是神经网络的训练我不是很清晰，后面可以加点补习内容然后更新一下。）</p>
 <p>然后说一下这篇论文最为酷炫的 $minimax$ 公式，就是在训练神经网络中要使其最优的 $Value\ Function $：</p>
-$$\min_G \max_D V(D, G) = \mathbb{E}_{x \sim p_{data}(x)}[\log D(x)] + \mathbb{E}_{z \sim p_z(z)}[\log(1 - D(G(z)))]$$<p>对 $D$ 来说，目标是让 $\mathbb{E}<em>{x \sim p</em>{data}(x)}[\log D(x)]$ 尽量大，让 $\mathbb{E}_{z \sim p_z(z)}[\log(D(G(z)))]$ 尽量小。也就是对真假的判断尽量准确，而对 $G$ 来说则正相反，二者动态平衡，从而在达到纳什均衡时得到理想的训练效果。</p>
+$$\min_G \max_D V(D, G) = \mathbb{E}_{x \sim p_{data}(x)}[\log D(x)] + \mathbb{E}_{z \sim p_z(z)}[\log(1 - D(G(z)))]$$<p>对 $D$ 来说，目标是让 $\mathbb{E}<em>{x \sim p</em>{data}(x)}[\log D(x)] $ 尽量大，让 $ \mathbb{E}_{z \sim p_z(z)}[\log(D(G(z)))]$ 尽量小。也就是对真假的判断尽量准确，而对 $G$ 来说则正相反，二者动态平衡，从而在达到纳什均衡时得到理想的训练效果。</p>
 <p>当然实际上反复横跳的概率远比达到均衡要高。。。所以实际运用上效果没有理想情况那么好，但是这个思路后面发展出的 $DCGAN$ 以及 $StyleGAN$ 系列就能进行很好的工业运用了。</p>
-<h2 id="unsupervised-representation-learning-with-deep-convolutional-generative-adversarial-networks">Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks
+<h2 id="dcgan-unsupervised-representation-learning-with-deep-convolutional-generative-adversarial-networks">[DCGAN] Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks
 </h2><p>然后是把 $GAN$ 从理论转向工程的 $DCGAN$ 。</p>
 <p>$Deep\ Convolutional\ Generative\ Adversarial\ Networks$，深度卷积生成对抗网络。</p>
 <p>原本的 $GAN$ ，正如上文所受，使用的是 $MLP$ ，效果一般，训练不稳定且出图模糊。</p>
