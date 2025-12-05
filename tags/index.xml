@@ -6,6 +6,23 @@
         <description>Recent content in Tags on Elysium-Seeker</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <copyright>Elysium-Seeker</copyright><atom:link href="https://Elysium-Seeker.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+        <copyright>Elysium-Seeker</copyright>
+        <lastBuildDate>Sat, 06 Dec 2025 01:23:12 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>论文阅读</title>
+        <link>https://Elysium-Seeker.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</link>
+        <pubDate>Wed, 03 Dec 2025 09:00:00 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>图像生成</title>
+        <link>https://Elysium-Seeker.github.io/tags/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90/</link>
+        <pubDate>Wed, 03 Dec 2025 09:00:00 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/tags/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90/</guid>
+        <description></description>
+        </item>
+        
     </channel>
 </rss>

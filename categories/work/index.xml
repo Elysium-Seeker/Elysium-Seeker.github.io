@@ -7,6 +7,101 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright><atom:link href="https://Elysium-Seeker.github.io/categories/work/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>图像生成论文阅读笔记</title>
+        <link>https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+        <pubDate>Wed, 03 Dec 2025 09:00:00 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+        <description>&lt;p&gt;被研讨课老师赏识于是派发任务了（？）&lt;/p&gt;
+&lt;p&gt;写篇博客记录下阅读心得吧，后面做综述也方便点。&lt;/p&gt;
+&lt;p&gt;说是看了不少实际上完全没有阅读全文的能力，都只能对着AI一点点学核心内容。。但应该算大致理解他在干什么了。&lt;/p&gt;
+&lt;h2 id=&#34;vae-auto-encoding-variational-bayes-2013&#34;&gt;[VAE] Auto-Encoding Variational Bayes (2013)
+&lt;/h2&gt;&lt;p&gt;首先是万物之源 $VAE$。&lt;/p&gt;
+&lt;p&gt;$VAE$ ，全称 $Variational\ Autoencoder$ ，中文叫&lt;strong&gt;变分自编码器&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;主要解决的问题是在数据量巨大且潜变量的后验分布复杂不可解的情况下，用正态分布逼近的方法得到一个变分下界，并在对变分下界重参数化后使其可通过标准梯度变化方法求解。&lt;/p&gt;
+&lt;p&gt;具体而言，文章搭建了 $Encoder——Decoder$ 的编码/解码器架构双神经网络架构。$Encoder$ 主要负责提取图片特征并得到对应潜变量分布，$Decoder$ 则负责在 $Encoder$ 得到的潜变量分布中采样并转成图片。&lt;/p&gt;
+&lt;p&gt;此方法面对的主要问题有：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;潜变量的原始后验分布复杂且不可计算。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$Encoder$ 得到的是潜变量分布的均值和方差，而传统 $Decoder$ 的方式是在对应范围内随机采样，这会导致神经网络反向传播训练更新参数的工作无法进行（没有有意义的梯度）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;而文章采用的解决办法是：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;设计了新的 $Loss\ Function$ : &lt;/p&gt;
+$$ Total\ Loss = Reconstrction\ Loss + KL\ Divergence$$&lt;p&gt; $Reconstrction\ Loss$ （ 重构误差 ）依据生成图片与原图的像素差计算，目的是保证两者的相似程度。而 $KL\ Divergence$ （ KL散度 ）则解决了上面的第一个问题，它衡量的是 $Encoder$ 预测的潜变量分布与标准正态分布 $N(0,1)$ 的相似程度。从而控制了潜变量的分布，强制的把它拉到了一个近似的&lt;strong&gt;标准正态分布&lt;/strong&gt;上。&lt;/p&gt;
+&lt;p&gt;另外的，数学上证明了： &lt;/p&gt;
+$$log\ P(X)=ELBO+KL(后验||近似)$$&lt;p&gt; $log\ P(X)$是数据出现的概率，我们的目的是使其尽量大，而此处的 $KL$ 散度一定是正的，所以只要让 $ELBO$ （ 变分下界，即上面的 $Loss Function$ 的相反数 ）越大就能让 $log\ P(X)$ 尽量大&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;发明了一种新的采样方法：&lt;strong&gt;重参数化&lt;/strong&gt;。通过引入一个独立的，不依赖于任何参数的标准噪音 $\epsilon$ ，并将采样方法从潜变量分布内随机抽样改为采 &lt;/p&gt;
+$$z=\mu+\epsilon \times \sigma$$&lt;p&gt;此时 $z$ 由随机值变为带随机常数项的带参确定性算式。且注意到在统计学意义上标准噪音的均值为 $0$，故此时在保证鲁棒性和潜变量分布连贯性的同时使梯度变得有意义，可用于训练时的反向传播。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;于是最后得到了一组可解码图片并将噪音生成对应图片的模型，也是图像生成领域的基石。&lt;/p&gt;
+&lt;h2 id=&#34;gan-generative-adversarial-nets-2014&#34;&gt;[GAN] Generative Adversarial Nets (2014)
+&lt;/h2&gt;&lt;p&gt;接下来是 $GAN$&lt;/p&gt;
+&lt;p&gt;$GAN$，全称 $Generative\ Adversarial\ Nets$ ，&lt;strong&gt;生成对抗网络&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;本质是一种酷炫的思想，相对来讲少一些数学。&lt;/p&gt;
+&lt;p&gt;与 $VAE$ 不同，这次我们设计的两个神经网络从相互合作变为了相互对立的关系。&lt;/p&gt;
+&lt;p&gt;生成器 $Generator$ （ 后简称 $G$ ）负责用随机的噪音生成图片，而判别器 $Discriminator$ （ 后简称 $D$ ）负责判断给到的图片是真图（ 即来自数据集 ）还是假图（ 即由 $G$ 生成 ）。&lt;/p&gt;
+&lt;p&gt;而在训练过程中，依靠梯度反向传播， $G$ 的生图能力和 $D$ 的判别能力将同步提高，在理想情况下最后将达到&lt;strong&gt;纳什均衡&lt;/strong&gt;，即 $G$ 生成的图与真图的分布完全相同，此时 $D$ 只能对所有输入的图都以各二分之一的概率判断是真/假图（否则都有可能降低判断的准确率）且 $D$ 和 $G$ 均不再改变。&lt;/p&gt;
+&lt;p&gt;此时的论文中，$G$ 使用的是多层感知机 $MLP$ ( 在后续将被优化成反卷积网络 $CNN$ )，而 $D$ 是个单纯的二分类神经网络。&lt;/p&gt;
+&lt;p&gt;尽管 $D$ 只能输出对于图片真假的判断，但是内部参数的梯度（ $Loss$ 对每个权重的偏导数 ）在反向传播的过程中可以通过调整权重矩阵/卷积核使 $G$ 明白假图和真图的差异（ 即怎么改图可以让 $D$ 认为这个图更像真图 ），也使 $D$ 明白怎么更好的判断图是真是假（ 此时一部分卷积核对真图的特征有强烈的正向激活，另一部分卷积核对假图的特征有强烈的负向激活。）&lt;/p&gt;
+&lt;p&gt;（其实卷积这一块我还是没完全搞懂，准确来说是神经网络的训练我不是很清晰，后面可以加点补习内容然后更新一下。）&lt;/p&gt;
+&lt;p&gt;然后说一下这篇论文最为酷炫的 $minimax$ 公式，就是在训练神经网络中要使其最优的 $Value\ Function $：&lt;/p&gt;
+$$\min_G \max_D V(D, G) = \mathbb{E}_{x \sim p_{data}(x)}[\log D(x)] + \mathbb{E}_{z \sim p_z(z)}[\log(1 - D(G(z)))]$$&lt;p&gt;对 $D$ 来说，目标是让 $\mathbb{E}&lt;em&gt;{x \sim p&lt;/em&gt;{data}(x)}[\log D(x)]$ 尽量大，让 $\mathbb{E}_{z \sim p_z(z)}[\log(D(G(z)))]$ 尽量小。也就是对真假的判断尽量准确，而对 $G$ 来说则正相反，二者动态平衡，从而在达到纳什均衡时得到理想的训练效果。&lt;/p&gt;
+&lt;p&gt;当然实际上反复横跳的概率远比达到均衡要高。。。所以实际运用上效果没有理想情况那么好，但是这个思路后面发展出的 $DCGAN$ 以及 $StyleGAN$ 系列就能进行很好的工业运用了。&lt;/p&gt;
+&lt;h2 id=&#34;unsupervised-representation-learning-with-deep-convolutional-generative-adversarial-networks&#34;&gt;Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks
+&lt;/h2&gt;&lt;p&gt;然后是把 $GAN$ 从理论转向工程的 $DCGAN$ 。&lt;/p&gt;
+&lt;p&gt;$Deep\ Convolutional\ Generative\ Adversarial\ Networks$，深度卷积生成对抗网络。&lt;/p&gt;
+&lt;p&gt;原本的 $GAN$ ，正如上文所受，使用的是 $MLP$ ，效果一般，训练不稳定且出图模糊。&lt;/p&gt;
+&lt;p&gt;而 $DCGAN$ 则选择用 $CNN$ 代替 $GAN$，并给出了一套有效可复现可扩展的架构框架，具体而言：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;使用带步长的卷积进行 $CNN$ 的训练（原来是池化的），尽可能保证图片不丢失关键细节且修炼效果更好。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在 $G$ 和 $D$ 的神经网络大部分层中采用批量归一化（即为避免网络层数过深导致的梯度爆炸或消失问题将参数分布强行拉到标准正态分布的级别，并允许模型自身根据需要微调），极大的稳定了训练效果。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;移除网络顶部的全连接层，让整个网络几乎全部由卷积层构成（当然 $D$ 的最后一步判别还得是 $MLP$ ），从而有效增强了模型的“空间感知”能力。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;给 $G$ 和 $D$ 选取了合适的激活函数（神经网络中的必要部分，在每次线性变换后对参数进行非线性扭曲从而提高模型普适性）。在 $G$ 中输出层选取的是 $Tanh$，生成层选取的是 $Relu$ 。而 $D$ 中选择的是 $LeakyRelu$。&lt;/p&gt;
+&lt;p&gt;简单说下这几个激活函数是什么：&lt;/p&gt;
+&lt;p&gt;（1） $Tanh$ 是双曲正切函数，数学定义是 &lt;/p&gt;
+$$Tanh(x)=\frac{e^x-e^{-x}}{e^x+e^{-x}}$$&lt;p&gt;能把输入值归一化到 $[-1,1]$ 之间，且具有对称性。具体的图像如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh.png&#34;
+	width=&#34;633&#34;
+	height=&#34;464&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh_hu_8e5d98f0c4f1df27.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh_hu_91754b0fabfc981a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;$tanh$ 的图像&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;136&#34;
+		data-flex-basis=&#34;327px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;（2） $Relu$ 的公式是&lt;/p&gt;
+$$f(x)=max(x,0)$$&lt;p&gt;可以有效的缓解梯度消失，是 $CNN$ 的标配，但可能会导致 $Relu\ Dying$ 的问题：当一个神经元一直输出负数的时候，它就再也学不会了。&lt;/p&gt;
+&lt;p&gt;(3) $LeakyRelu$ 和 $Relu$ 十分相似，公式为&lt;/p&gt;
+$$f(x)=\begin{cases}x\quad if\ x\ge0 \\ \alpha \cdot x\quad if\ x&lt;0\end{cases}$$&lt;p&gt; $\alpha$ 是非常小的常数（ 一定小于1 ）。这种方法有效赋予了梯度在负数区域的流动性，这对需要持续提供梯度以优化 $G$ 和 $D$ 效果的 $D$ 十分必要。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;而在 $GAN$ 得到这些增强变身为 $DCGAN$ 后，文章发现训练后的 $D$ 在无监督特征学习上表现出色，且第一次在视觉上展示了 $z$ 空间（ 潜变量空间 ）的语义。实验得到：&lt;/p&gt;
+$$z_{man\ with\ glasses}-z_{man\ without\ glasses}+z_{woman\ without\ glasses}=z_{woman\ with\ glasses}$$&lt;p&gt;这体现了 $GAN$ 的潜变量空间是连续的，结构化的，可被计算，理解与操作的。同时通过可视化分析 $D$ 的卷积核和 $G$ 的记忆，发现 $D$ 在第一层卷积核就学会了检测非常基础的边缘和角落，这证明了 $D$ 确实在学习有意义的底层视觉模式；同时 $G$ 生成的图片往往是训练集中多个样本的平滑混合与重组，这证明了 $G$ 具有泛化能力，它通过解构和重组学会了创造，而不是简单的复制。&lt;/p&gt;
+&lt;p&gt;在文章的最后，作者为今后音视频方向的 $GAN$ 发展和潜空间的进一步研究指明了方向，音视频方向暂且按下不表，潜空间则涉及到下一篇论文：&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Digital Economy Article Aggregator食用指南</title>
         <link>https://Elysium-Seeker.github.io/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/</link>
         <pubDate>Wed, 22 Oct 2025 09:00:00 +0800</pubDate>

@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="使用 Hugo + GitHub Page 搭建">
-<title>本博客搭建记录 &amp; 指南</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="近期图像生成领域论文阅读与心得记录">
+<title>图像生成论文阅读笔记</title>
 
-<link rel='canonical' href='https://Elysium-Seeker.github.io/p/%E6%9C%AC%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95-%E6%8C%87%E5%8D%97/'>
+<link rel='canonical' href='https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
 
-<link rel="stylesheet" href="/scss/style.min.829fb4d762832054bf4ccfcc6906b7eb8df8a3d45b00b64b6fc4c539dc19645c.css"><meta property='og:title' content="本博客搭建记录 & 指南">
-<meta property='og:description' content="使用 Hugo + GitHub Page 搭建">
-<meta property='og:url' content='https://Elysium-Seeker.github.io/p/%E6%9C%AC%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95-%E6%8C%87%E5%8D%97/'>
+<link rel="stylesheet" href="/scss/style.min.829fb4d762832054bf4ccfcc6906b7eb8df8a3d45b00b64b6fc4c539dc19645c.css"><meta property='og:title' content="图像生成论文阅读笔记">
+<meta property='og:description' content="近期图像生成领域论文阅读与心得记录">
+<meta property='og:url' content='https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
 <meta property='og:site_name' content='Elysium-Seeker'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-06-06T23:44:50&#43;08:00'/><meta property='article:modified_time' content='2025-06-07T01:31:48&#43;08:00'/>
-<meta name="twitter:title" content="本博客搭建记录 & 指南">
-<meta name="twitter:description" content="使用 Hugo + GitHub Page 搭建">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='图像生成' /><meta property='article:tag' content='论文阅读' /><meta property='article:published_time' content='2025-12-03T09:00:00&#43;08:00'/><meta property='article:modified_time' content='2025-12-06T01:23:12&#43;08:00'/>
+<meta name="twitter:title" content="图像生成论文阅读笔记">
+<meta name="twitter:description" content="近期图像生成领域论文阅读与心得记录">
     <link rel="shortcut icon" href="/favicon.ico" />
 <style>
     :root {
@@ -243,12 +243,9 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#基础搭建">基础搭建</a></li>
-    <li><a href="#stack主题特殊配置">Stack主题特殊配置</a></li>
-    <li><a href="#背景设置">背景设置</a></li>
-    <li><a href="#字体及字号的调整">字体及字号的调整</a></li>
-    <li><a href="#关于博客内容">关于博客内容</a></li>
-    <li><a href="#一些补充">一些补充</a></li>
+    <li><a href="#vae-auto-encoding-variational-bayes-2013">[VAE] Auto-Encoding Variational Bayes (2013)</a></li>
+    <li><a href="#gan-generative-adversarial-nets-2014">[GAN] Generative Adversarial Nets (2014)</a></li>
+    <li><a href="#unsupervised-representation-learning-with-deep-convolutional-generative-adversarial-networks">Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks</a></li>
   </ol>
 </nav>
         </div>
@@ -276,12 +273,12 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/%E6%9C%AC%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95-%E6%8C%87%E5%8D%97/">本博客搭建记录 &amp; 指南</a>
+            <a href="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">图像生成论文阅读笔记</a>
         </h2>
     
         
         <h3 class="article-subtitle">
-            使用 Hugo &#43; GitHub Page 搭建
+            近期图像生成领域论文阅读与心得记录
         </h3>
         
     </div>
@@ -302,7 +299,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">2025-06-06</time>
+                <time class="article-time--published">2025-12-03</time>
             </div>
         
 
@@ -317,7 +314,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 4 分钟
+                    阅读时长: 6 分钟
                 </time>
             </div>
         <div class="article-lastmod">
@@ -330,7 +327,7 @@
 
 
                 <time>
-                    2025-06-07
+                    2025-12-06
                 </time>
             </div></footer>
     
@@ -343,131 +340,107 @@
     <section class="article-content">
     
     
-    <p>简单记录一下博客搭建过程以及踩过的坑，方便后来者避雷。</p>
-<h2 id="基础搭建">基础搭建
-</h2><p>首先主要内容可以先看这个博客，这位老师还在B站录制了视频，照做即可。</p>
-<p><a class="link" href="https://letere-gzj.github.io/hugo-stack/p/hugo/custom-blog/"  target="_blank" rel="noopener"
-    >搭建教程</a></p>
-<p><a class="link" href="https://www.bilibili.com/video/BV1bovfeaEtQ"  target="_blank" rel="noopener"
-    >B站视频</a></p>
-<p>本博客做出的个性化调整大概就是把亮色模式删了只留暗色模式，其他都没怎么动过。</p>
-<h2 id="stack主题特殊配置">Stack主题特殊配置
-</h2><p>依旧是参考的这位老师的博客</p>
-<p><a class="link" href="https://letere-gzj.github.io/hugo-stack/p/hugo/custom-stack-theme/"  target="_blank" rel="noopener"
-    >博客地址</a></p>
-<p>我这边进行的调整有字体的修改（这个待会说，我用的方法不一样），更新时间的显示，目录折叠&amp;展开，“返回顶部”按钮的添加，以及代码块的折叠&amp;展开。</p>
-<p>在我测试的内容中出问题的主要是把更新时间显示在开头这一操作，注意请修改<code>themes\hugo-theme-stack-master\layouts\partials\article\components\details.html</code>，不要直接在文章中给的文件地址新建<code>details.html</code>并复制粘贴，否则你的文章的各个参数都无法在页面内正常显示。</p>
-<h2 id="背景设置">背景设置
-</h2><p><a class="link" href="https://letere-gzj.github.io/hugo-stack/p/hugo/custom-background/"  target="_blank" rel="noopener"
-    >参考博客</a></p>
-<p>本博客使用的是其中的点线漂浮背景。</p>
-<p>这边顺便提供一下本人用的 <a class="link" href="particlesjs-config.json" >particlesjs-config.json</a> 。（Ctrl + S 直接保存即可）</p>
-<h2 id="字体及字号的调整">字体及字号的调整
-</h2><p>（这个问题折磨了笔者一个多小时）</p>
-<p>如果想使用外界字体可以参考上面博客中的方法，也可以参考<a class="link" href="https://stack-docs.netlify.app/zh/modify-theme/example-custom-font-family"  target="_blank" rel="noopener"
-    >Stack官方文档</a>的方法。</p>
-<p>我目前使用的就是官方文档中提供的思源宋体。</p>
-<p>然后如果需要调整字号的话可以直接在<code>layouts/partials/head/custom.html</code>中进行修改，这里也提供一下本博客使用的<code>custom.html</code>，我调整了文章的正文字体大小和行间距（即<code>--article-font-size</code>和<code>--article-line-height</code>）</p>
-<pre><code>&lt;style&gt;
-    :root {
-        --article-font-family: &quot;Noto Serif SC&quot;, var(--base-font-family);
-        --article-font-size: 1.7rem;
-        --article-line-height: 1.8;
-    }
-&lt;/style&gt;
-
-&lt;script&gt;
-        (function () {
-            const customFont = document.createElement('link');
-            customFont.href = &quot;https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&amp;display=swap&quot;;
-        
-            customFont.type = &quot;text/css&quot;;
-            customFont.rel = &quot;stylesheet&quot;;
-        
-            document.head.appendChild(customFont);
-        }());
-&lt;/script&gt;
-</code></pre>
-<p>但是有个问题，根据官方文档给出的全局CSS变量，我无法在这里修改标题和副标题字号，我自己的解决方法是直接去Stack主题的源代码中进行修改。（其实这里也可以改正文字号等参数）</p>
-<p>在<code>themes\hugo-theme-stack-master\assets\scss\variables.scss</code>中即可修改正文字体大小及行间距等参数，具体是在如下的部分。注意两个<code>--article-font-size</code>应用场合不同，响应式字体大小（就<code>respond(md)</code>内的）适用于中等及更大的屏幕（比如PC），另一个则适用于移动端。(上面改的地方优先级更高)</p>
-<pre><code>/**
-*   Article content font settings
-*/
-:root {
-    --article-font-family: var(--base-font-family);
-    --article-font-size: 1.6rem;
-
-    @include respond(md) {
-        --article-font-size: 2.0rem;
-    }
-
-    --article-line-height: 1.85;
-}
-</code></pre>
-<p>而标题&amp;副标题的相关参数则在<code>themes\hugo-theme-stack-master\assets\scss\partials\article.scss</code>中进行修改，具体在如下部分。</p>
-<pre><code>.article-title {
-    font-family: var(--article-font-family);
-    font-weight: 600;
-    margin: 0;
-    color: var(--card-text-color-main);
-    font-size: 2.3rem;
-
-    @include respond(xl) {
-        font-size: 3rem;
-    }
-
-    a {
-        color: var(--card-text-color-main);
-
-        &amp;:hover {
-            color: var(--card-text-color-main);
-        }
-    }
-}
-
-.article-subtitle {
-    font-weight: normal;
-    color: var(--card-text-color-secondary);
-    line-height: 1.5;
-    margin: 0;
-    font-size: 1.9rem;
-    @include respond(xl) {
-        font-size: 2rem;
-    }
-}
-</code></pre>
-<p>补充说明一个问题，本地调试时对主题源文件的修改似乎不会即使生效，建议每次修改后关闭网站重新进行<code>hugo server -D</code>构建网站。（笔者似乎就是因为这个问题以为起初的修改没能成功，于是浪费了许多时间&hellip;）</p>
-<h2 id="关于博客内容">关于博客内容
-</h2><p>博客所有的内容都在<code>content</code>文件夹中，包括分类（<code>categories</code>），侧边栏的几个页面（<code>page</code>），以及文章本身（<code>post</code>）。</p>
-<p>在相关的文件夹修改<code>index.zh-cn.md</code>(“关于”和“友链”和“搜索”是直接修改<code>index.md</code>)即可。</p>
-<p>然后给个文章配置的示例吧：</p>
-<pre><code>---
-
-date : 2025-06-06T23:44:50+08:00
-draft : false
-author : &quot;Elysium-Seeker&quot;
-title : &quot;本博客搭建记录&quot;
-description : &quot;使用 Hugo + GitHub Page 搭建&quot;
-image : xxx.jpg
-categories:
-    - Work
-
----
-</code></pre>
-<h2 id="一些补充">一些补充
-</h2><p>提供两个好用的网页，对你的配置应该会有帮助：</p>
-<p><a class="link" href="https://markdown.com.cn/"  target="_blank" rel="noopener"
-    >Markdown教程</a></p>
-<p><a class="link" href="https://stack-docs.netlify.app/zh/"  target="_blank" rel="noopener"
-    >Stack中文指南</a>（孩子一开始只找到英文的极其痛苦，后来机缘巧合下终于找到中文的了）</p>
-<p>然后 GitHub 时不时会抽风传不上文件，不管有没有挂梯子都会出现这个问题，实在不行换个网络或者换个时间传都可行。</p>
-<p>收工！有问题欢迎和笔者交流！（虽然笔者也不一定会就是啦。）</p>
+    <p>被研讨课老师赏识于是派发任务了（？）</p>
+<p>写篇博客记录下阅读心得吧，后面做综述也方便点。</p>
+<p>说是看了不少实际上完全没有阅读全文的能力，都只能对着AI一点点学核心内容。。但应该算大致理解他在干什么了。</p>
+<h2 id="vae-auto-encoding-variational-bayes-2013">[VAE] Auto-Encoding Variational Bayes (2013)
+</h2><p>首先是万物之源 $VAE$。</p>
+<p>$VAE$ ，全称 $Variational\ Autoencoder$ ，中文叫<strong>变分自编码器</strong>。</p>
+<p>主要解决的问题是在数据量巨大且潜变量的后验分布复杂不可解的情况下，用正态分布逼近的方法得到一个变分下界，并在对变分下界重参数化后使其可通过标准梯度变化方法求解。</p>
+<p>具体而言，文章搭建了 $Encoder——Decoder$ 的编码/解码器架构双神经网络架构。$Encoder$ 主要负责提取图片特征并得到对应潜变量分布，$Decoder$ 则负责在 $Encoder$ 得到的潜变量分布中采样并转成图片。</p>
+<p>此方法面对的主要问题有：</p>
+<ol>
+<li>
+<p>潜变量的原始后验分布复杂且不可计算。</p>
+</li>
+<li>
+<p>$Encoder$ 得到的是潜变量分布的均值和方差，而传统 $Decoder$ 的方式是在对应范围内随机采样，这会导致神经网络反向传播训练更新参数的工作无法进行（没有有意义的梯度）。</p>
+</li>
+</ol>
+<p>而文章采用的解决办法是：</p>
+<ol>
+<li>
+<p>设计了新的 $Loss\ Function$ : </p>
+$$ Total\ Loss = Reconstrction\ Loss + KL\ Divergence$$<p> $Reconstrction\ Loss$ （ 重构误差 ）依据生成图片与原图的像素差计算，目的是保证两者的相似程度。而 $KL\ Divergence$ （ KL散度 ）则解决了上面的第一个问题，它衡量的是 $Encoder$ 预测的潜变量分布与标准正态分布 $N(0,1)$ 的相似程度。从而控制了潜变量的分布，强制的把它拉到了一个近似的<strong>标准正态分布</strong>上。</p>
+<p>另外的，数学上证明了： </p>
+$$log\ P(X)=ELBO+KL(后验||近似)$$<p> $log\ P(X)$是数据出现的概率，我们的目的是使其尽量大，而此处的 $KL$ 散度一定是正的，所以只要让 $ELBO$ （ 变分下界，即上面的 $Loss Function$ 的相反数 ）越大就能让 $log\ P(X)$ 尽量大</p>
+</li>
+<li>
+<p>发明了一种新的采样方法：<strong>重参数化</strong>。通过引入一个独立的，不依赖于任何参数的标准噪音 $\epsilon$ ，并将采样方法从潜变量分布内随机抽样改为采 </p>
+$$z=\mu+\epsilon \times \sigma$$<p>此时 $z$ 由随机值变为带随机常数项的带参确定性算式。且注意到在统计学意义上标准噪音的均值为 $0$，故此时在保证鲁棒性和潜变量分布连贯性的同时使梯度变得有意义，可用于训练时的反向传播。</p>
+</li>
+</ol>
+<p>于是最后得到了一组可解码图片并将噪音生成对应图片的模型，也是图像生成领域的基石。</p>
+<h2 id="gan-generative-adversarial-nets-2014">[GAN] Generative Adversarial Nets (2014)
+</h2><p>接下来是 $GAN$</p>
+<p>$GAN$，全称 $Generative\ Adversarial\ Nets$ ，<strong>生成对抗网络</strong>。</p>
+<p>本质是一种酷炫的思想，相对来讲少一些数学。</p>
+<p>与 $VAE$ 不同，这次我们设计的两个神经网络从相互合作变为了相互对立的关系。</p>
+<p>生成器 $Generator$ （ 后简称 $G$ ）负责用随机的噪音生成图片，而判别器 $Discriminator$ （ 后简称 $D$ ）负责判断给到的图片是真图（ 即来自数据集 ）还是假图（ 即由 $G$ 生成 ）。</p>
+<p>而在训练过程中，依靠梯度反向传播， $G$ 的生图能力和 $D$ 的判别能力将同步提高，在理想情况下最后将达到<strong>纳什均衡</strong>，即 $G$ 生成的图与真图的分布完全相同，此时 $D$ 只能对所有输入的图都以各二分之一的概率判断是真/假图（否则都有可能降低判断的准确率）且 $D$ 和 $G$ 均不再改变。</p>
+<p>此时的论文中，$G$ 使用的是多层感知机 $MLP$ ( 在后续将被优化成反卷积网络 $CNN$ )，而 $D$ 是个单纯的二分类神经网络。</p>
+<p>尽管 $D$ 只能输出对于图片真假的判断，但是内部参数的梯度（ $Loss$ 对每个权重的偏导数 ）在反向传播的过程中可以通过调整权重矩阵/卷积核使 $G$ 明白假图和真图的差异（ 即怎么改图可以让 $D$ 认为这个图更像真图 ），也使 $D$ 明白怎么更好的判断图是真是假（ 此时一部分卷积核对真图的特征有强烈的正向激活，另一部分卷积核对假图的特征有强烈的负向激活。）</p>
+<p>（其实卷积这一块我还是没完全搞懂，准确来说是神经网络的训练我不是很清晰，后面可以加点补习内容然后更新一下。）</p>
+<p>然后说一下这篇论文最为酷炫的 $minimax$ 公式，就是在训练神经网络中要使其最优的 $Value\ Function $：</p>
+$$\min_G \max_D V(D, G) = \mathbb{E}_{x \sim p_{data}(x)}[\log D(x)] + \mathbb{E}_{z \sim p_z(z)}[\log(1 - D(G(z)))]$$<p>对 $D$ 来说，目标是让 $\mathbb{E}<em>{x \sim p</em>{data}(x)}[\log D(x)]$ 尽量大，让 $\mathbb{E}_{z \sim p_z(z)}[\log(D(G(z)))]$ 尽量小。也就是对真假的判断尽量准确，而对 $G$ 来说则正相反，二者动态平衡，从而在达到纳什均衡时得到理想的训练效果。</p>
+<p>当然实际上反复横跳的概率远比达到均衡要高。。。所以实际运用上效果没有理想情况那么好，但是这个思路后面发展出的 $DCGAN$ 以及 $StyleGAN$ 系列就能进行很好的工业运用了。</p>
+<h2 id="unsupervised-representation-learning-with-deep-convolutional-generative-adversarial-networks">Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks
+</h2><p>然后是把 $GAN$ 从理论转向工程的 $DCGAN$ 。</p>
+<p>$Deep\ Convolutional\ Generative\ Adversarial\ Networks$，深度卷积生成对抗网络。</p>
+<p>原本的 $GAN$ ，正如上文所受，使用的是 $MLP$ ，效果一般，训练不稳定且出图模糊。</p>
+<p>而 $DCGAN$ 则选择用 $CNN$ 代替 $GAN$，并给出了一套有效可复现可扩展的架构框架，具体而言：</p>
+<ol>
+<li>
+<p>使用带步长的卷积进行 $CNN$ 的训练（原来是池化的），尽可能保证图片不丢失关键细节且修炼效果更好。</p>
+</li>
+<li>
+<p>在 $G$ 和 $D$ 的神经网络大部分层中采用批量归一化（即为避免网络层数过深导致的梯度爆炸或消失问题将参数分布强行拉到标准正态分布的级别，并允许模型自身根据需要微调），极大的稳定了训练效果。</p>
+</li>
+<li>
+<p>移除网络顶部的全连接层，让整个网络几乎全部由卷积层构成（当然 $D$ 的最后一步判别还得是 $MLP$ ），从而有效增强了模型的“空间感知”能力。</p>
+</li>
+<li>
+<p>给 $G$ 和 $D$ 选取了合适的激活函数（神经网络中的必要部分，在每次线性变换后对参数进行非线性扭曲从而提高模型普适性）。在 $G$ 中输出层选取的是 $Tanh$，生成层选取的是 $Relu$ 。而 $D$ 中选择的是 $LeakyRelu$。</p>
+<p>简单说下这几个激活函数是什么：</p>
+<p>（1） $Tanh$ 是双曲正切函数，数学定义是 </p>
+$$Tanh(x)=\frac{e^x-e^{-x}}{e^x+e^{-x}}$$<p>能把输入值归一化到 $[-1,1]$ 之间，且具有对称性。具体的图像如下：</p>
+<p><img src="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh.png"
+	width="633"
+	height="464"
+	srcset="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh_hu_8e5d98f0c4f1df27.png 480w, /p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh_hu_91754b0fabfc981a.png 1024w"
+	loading="lazy"
+	
+		alt="$tanh$ 的图像"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="136"
+		data-flex-basis="327px"
+	
+></p>
+<p>（2） $Relu$ 的公式是</p>
+$$f(x)=max(x,0)$$<p>可以有效的缓解梯度消失，是 $CNN$ 的标配，但可能会导致 $Relu\ Dying$ 的问题：当一个神经元一直输出负数的时候，它就再也学不会了。</p>
+<p>(3) $LeakyRelu$ 和 $Relu$ 十分相似，公式为</p>
+$$f(x)=\begin{cases}x\quad if\ x\ge0 \\ \alpha \cdot x\quad if\ x<0\end{cases}$$<p> $\alpha$ 是非常小的常数（ 一定小于1 ）。这种方法有效赋予了梯度在负数区域的流动性，这对需要持续提供梯度以优化 $G$ 和 $D$ 效果的 $D$ 十分必要。</p>
+</li>
+</ol>
+<p>而在 $GAN$ 得到这些增强变身为 $DCGAN$ 后，文章发现训练后的 $D$ 在无监督特征学习上表现出色，且第一次在视觉上展示了 $z$ 空间（ 潜变量空间 ）的语义。实验得到：</p>
+$$z_{man\ with\ glasses}-z_{man\ without\ glasses}+z_{woman\ without\ glasses}=z_{woman\ with\ glasses}$$<p>这体现了 $GAN$ 的潜变量空间是连续的，结构化的，可被计算，理解与操作的。同时通过可视化分析 $D$ 的卷积核和 $G$ 的记忆，发现 $D$ 在第一层卷积核就学会了检测非常基础的边缘和角落，这证明了 $D$ 确实在学习有意义的底层视觉模式；同时 $G$ 生成的图片往往是训练集中多个样本的平滑混合与重组，这证明了 $G$ 具有泛化能力，它通过解构和重组学会了创造，而不是简单的复制。</p>
+<p>在文章的最后，作者为今后音视频方向的 $GAN$ 发展和潜空间的进一步研究指明了方向，音视频方向暂且按下不表，潜空间则涉及到下一篇论文：</p>
 
 </section>
 
 
     <footer class="article-footer">
     
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90/">图像生成</a>
+        
+            <a href="/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a>
+        
+    </section>
+
 
     
     <section class="article-copyright">
@@ -491,7 +464,7 @@ categories:
 
 
         <span>
-            最后更新于 2025-06-07
+            最后更新于 2025-12-06
         </span>
     </section></footer>
 
@@ -533,19 +506,6 @@ categories:
     <h2 class="section-title">相关文章</h2>
     <div class="related-content">
         <div class="flex article-list--tile">
-            
-                
-<article class="">
-    <a href="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">图像生成论文阅读笔记</h2>
-        </div>
-    </a>
-</article>
-
             
                 
 <article class="has-image">
@@ -592,6 +552,19 @@ categories:
 
         <div class="article-details">
             <h2 class="article-title">计科导大作业记录</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/%E6%9C%AC%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95-%E6%8C%87%E5%8D%97/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">本博客搭建记录 &amp; 指南</h2>
         </div>
     </a>
 </article>
