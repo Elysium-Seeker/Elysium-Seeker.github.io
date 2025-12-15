@@ -10,7 +10,7 @@
 <meta property='og:description' content="近期图像生成领域论文阅读与心得记录">
 <meta property='og:url' content='https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
 <meta property='og:site_name' content='Elysium-Seeker'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='图像生成' /><meta property='article:tag' content='论文阅读' /><meta property='article:published_time' content='2025-12-03T09:00:00&#43;08:00'/><meta property='article:modified_time' content='2025-12-06T01:50:58&#43;08:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='图像生成' /><meta property='article:tag' content='论文阅读' /><meta property='article:published_time' content='2025-12-03T09:00:00&#43;08:00'/><meta property='article:modified_time' content='2025-12-15T13:10:23&#43;08:00'/>
 <meta name="twitter:title" content="图像生成论文阅读笔记">
 <meta name="twitter:description" content="近期图像生成领域论文阅读与心得记录">
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -246,6 +246,7 @@
     <li><a href="#vae-auto-encoding-variational-bayes-2013">[VAE] Auto-Encoding Variational Bayes (2013)</a></li>
     <li><a href="#gan-generative-adversarial-nets-2014">[GAN] Generative Adversarial Nets (2014)</a></li>
     <li><a href="#dcgan-unsupervised-representation-learning-with-deep-convolutional-generative-adversarial-networks">[DCGAN] Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks</a></li>
+    <li><a href="#stylegan">[StyleGAN]</a></li>
   </ol>
 </nav>
         </div>
@@ -327,7 +328,7 @@
 
 
                 <time>
-                    2025-12-06
+                    2025-12-15
                 </time>
             </div></footer>
     
@@ -427,7 +428,8 @@ $$f(x)=\begin{cases}x\quad if\ x\ge0 \\ \alpha \cdot x\quad if\ x<0\end{cases}$$
 <p>而在 $GAN$ 得到这些增强变身为 $DCGAN$ 后，文章发现训练后的 $D$ 在无监督特征学习上表现出色，且第一次在视觉上展示了 $z$ 空间（ 潜变量空间 ）的语义。实验得到：</p>
 $$z_{man\ with\ glasses}-z_{man\ without\ glasses}+z_{woman\ without\ glasses}=z_{woman\ with\ glasses}$$<p>这体现了 $GAN$ 的潜变量空间是连续的，结构化的，可被计算，理解与操作的。同时通过可视化分析 $D$ 的卷积核和 $G$ 的记忆，发现 $D$ 在第一层卷积核就学会了检测非常基础的边缘和角落，这证明了 $D$ 确实在学习有意义的底层视觉模式；同时 $G$ 生成的图片往往是训练集中多个样本的平滑混合与重组，这证明了 $G$ 具有泛化能力，它通过解构和重组学会了创造，而不是简单的复制。</p>
 <p>在文章的最后，作者为今后音视频方向的 $GAN$ 发展和潜空间的进一步研究指明了方向，音视频方向暂且按下不表，潜空间则涉及到下一篇论文：</p>
-
+<h2 id="stylegan">[StyleGAN]
+</h2>
 </section>
 
 
@@ -464,7 +466,7 @@ $$z_{man\ with\ glasses}-z_{man\ without\ glasses}+z_{woman\ without\ glasses}=z
 
 
         <span>
-            最后更新于 2025-12-06
+            最后更新于 2025-12-15
         </span>
     </section></footer>
 
