@@ -337,8 +337,8 @@ $$
 $$x_t = \sqrt{\alpha_t} x_{t-1} + \sqrt{1 - \alpha_t} \epsilon_{t-1}$$&lt;p&gt;
 其中 $\epsilon_{t-1} \sim \mathcal{N}(0, I)$ 是当步加入的随机高斯噪音。&lt;/p&gt;
 &lt;p&gt;我们的目标是推导出 $x_t$ 和 $x_0$ 的直接关系。&lt;/p&gt;
-&lt;h3 id=&#34;第一步展开-x_t-1&#34;&gt;第一步：展开 $x_{t-1}$
-&lt;/h3&gt;&lt;p&gt;我们知道 $x_{t-1}$ 是由 $x_{t-2}$ 生成的：
+&lt;p&gt;&lt;strong&gt;第一步：展开 $x_{t-1}$&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;我们知道 $x_{t-1}$ 是由 $x_{t-2}$ 生成的：
 &lt;/p&gt;
 $$
 x_{t-1} = \sqrt{\alpha_{t-1}} x_{t-2} + \sqrt{1 - \alpha_{t-1}} \epsilon_{t-2}
@@ -348,8 +348,8 @@ $$
 x_t &amp;= \sqrt{\alpha_t} (\underbrace{\sqrt{\alpha_{t-1}} x_{t-2} + \sqrt{1 - \alpha_{t-1}} \epsilon_{t-2}}_{x_{t-1}}) + \sqrt{1 - \alpha_t} \epsilon_{t-1} \\
 &amp;= \sqrt{\alpha_t \alpha_{t-1}} x_{t-2} + \sqrt{\alpha_t (1 - \alpha_{t-1})} \epsilon_{t-2} + \sqrt{1 - \alpha_t} \epsilon_{t-1}
 \end{aligned}
-$$&lt;h3 id=&#34;第二步合并噪音-关键步骤&#34;&gt;第二步：合并噪音 (关键步骤)
-&lt;/h3&gt;&lt;p&gt;现在式子后面有两项噪音：&lt;/p&gt;
+$$&lt;p&gt;&lt;strong&gt;第二步：合并噪音 (关键步骤)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;现在式子后面有两项噪音：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;$\sqrt{\alpha_t (1 - \alpha_{t-1})} \epsilon_{t-2}$&lt;/li&gt;
 &lt;li&gt;$\sqrt{1 - \alpha_t} \epsilon_{t-1}$&lt;/li&gt;
@@ -366,8 +366,8 @@ $$\begin{aligned}
 &lt;/p&gt;
 $$\text{合并噪音} = \sqrt{1 - \alpha_t \alpha_{t-1}} \bar{\epsilon} \quad (\text{其中 } \bar{\epsilon} \sim \mathcal{N}(0, I))$$&lt;p&gt;此时公式变为：
 &lt;/p&gt;
-$$x_t = \sqrt{\alpha_t \alpha_{t-1}} x_{t-2} + \sqrt{1 - \alpha_t \alpha_{t-1}} \bar{\epsilon}$$&lt;h3 id=&#34;第三步继续展开-递归&#34;&gt;第三步：继续展开 (递归)
-&lt;/h3&gt;&lt;p&gt;如果我们继续展开 $x_{t-2}$，以此类推&amp;hellip;&lt;/p&gt;
+$$x_t = \sqrt{\alpha_t \alpha_{t-1}} x_{t-2} + \sqrt{1 - \alpha_t \alpha_{t-1}} \bar{\epsilon}$$&lt;p&gt;&lt;strong&gt;第三步：继续展开 (递归)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;如果我们继续展开 $x_{t-2}$，以此类推&amp;hellip;&lt;/p&gt;
 &lt;p&gt;我们会发现规律：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;$x_0$ 前面的系数是所有 $\alpha$ 的乘积的平方根。&lt;/li&gt;

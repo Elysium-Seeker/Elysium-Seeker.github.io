@@ -10,7 +10,7 @@
 <meta property='og:description' content="近期图像生成领域论文阅读与心得记录">
 <meta property='og:url' content='https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
 <meta property='og:site_name' content='Elysium-Seeker'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='图像生成' /><meta property='article:tag' content='论文阅读' /><meta property='article:published_time' content='2025-12-03T09:00:00&#43;08:00'/><meta property='article:modified_time' content='2025-12-16T23:49:23&#43;08:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='图像生成' /><meta property='article:tag' content='论文阅读' /><meta property='article:published_time' content='2025-12-03T09:00:00&#43;08:00'/><meta property='article:modified_time' content='2025-12-16T23:55:10&#43;08:00'/>
 <meta name="twitter:title" content="图像生成论文阅读笔记">
 <meta name="twitter:description" content="近期图像生成领域论文阅读与心得记录">
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -250,13 +250,7 @@
     <li><a href="#stylegan2-analyzing-and-improving-the-image-quality-of-stylegan">[StyleGAN2] Analyzing and Improving the Image Quality of StyleGAN</a></li>
     <li><a href="#stylegan3-alias-free-generative-adversarial-networks">[StyleGAN3] Alias-Free Generative Adversarial Networks</a></li>
     <li><a href="#singan-singan-learning-a-generative-model-from-a-single-natural-image">[SinGAN] SinGAN: Learning a Generative Model from a Single Natural Image</a></li>
-    <li><a href="#ddpm-denoising-diffusion-probabilistic-models">[DDPM] Denoising Diffusion Probabilistic Models</a>
-      <ol>
-        <li><a href="#第一步展开-x_t-1">第一步：展开 $x_{t-1}$</a></li>
-        <li><a href="#第二步合并噪音-关键步骤">第二步：合并噪音 (关键步骤)</a></li>
-        <li><a href="#第三步继续展开-递归">第三步：继续展开 (递归)</a></li>
-      </ol>
-    </li>
+    <li><a href="#ddpm-denoising-diffusion-probabilistic-models">[DDPM] Denoising Diffusion Probabilistic Models</a></li>
     <li><a href="#ddim-denoising-diffusion-implicit-models">[DDIM] Denoising Diffusion Implicit Models</a></li>
     <li><a href="#guided-diffusion-diffusion-models-beat-gans-on-image-synthesis">[Guided Diffusion] Diffusion Models Beat GANs on Image Synthesis</a></li>
     <li><a href="#cfg-classifier-free-diffusion-guidance">[CFG] Classifier-Free Diffusion Guidance</a></li>
@@ -680,8 +674,8 @@ $$
 $$x_t = \sqrt{\alpha_t} x_{t-1} + \sqrt{1 - \alpha_t} \epsilon_{t-1}$$<p>
 其中 $\epsilon_{t-1} \sim \mathcal{N}(0, I)$ 是当步加入的随机高斯噪音。</p>
 <p>我们的目标是推导出 $x_t$ 和 $x_0$ 的直接关系。</p>
-<h3 id="第一步展开-x_t-1">第一步：展开 $x_{t-1}$
-</h3><p>我们知道 $x_{t-1}$ 是由 $x_{t-2}$ 生成的：
+<p><strong>第一步：展开 $x_{t-1}$</strong></p>
+<p>我们知道 $x_{t-1}$ 是由 $x_{t-2}$ 生成的：
 </p>
 $$
 x_{t-1} = \sqrt{\alpha_{t-1}} x_{t-2} + \sqrt{1 - \alpha_{t-1}} \epsilon_{t-2}
@@ -691,8 +685,8 @@ $$
 x_t &= \sqrt{\alpha_t} (\underbrace{\sqrt{\alpha_{t-1}} x_{t-2} + \sqrt{1 - \alpha_{t-1}} \epsilon_{t-2}}_{x_{t-1}}) + \sqrt{1 - \alpha_t} \epsilon_{t-1} \\
 &= \sqrt{\alpha_t \alpha_{t-1}} x_{t-2} + \sqrt{\alpha_t (1 - \alpha_{t-1})} \epsilon_{t-2} + \sqrt{1 - \alpha_t} \epsilon_{t-1}
 \end{aligned}
-$$<h3 id="第二步合并噪音-关键步骤">第二步：合并噪音 (关键步骤)
-</h3><p>现在式子后面有两项噪音：</p>
+$$<p><strong>第二步：合并噪音 (关键步骤)</strong></p>
+<p>现在式子后面有两项噪音：</p>
 <ol>
 <li>$\sqrt{\alpha_t (1 - \alpha_{t-1})} \epsilon_{t-2}$</li>
 <li>$\sqrt{1 - \alpha_t} \epsilon_{t-1}$</li>
@@ -709,8 +703,8 @@ $$\begin{aligned}
 </p>
 $$\text{合并噪音} = \sqrt{1 - \alpha_t \alpha_{t-1}} \bar{\epsilon} \quad (\text{其中 } \bar{\epsilon} \sim \mathcal{N}(0, I))$$<p>此时公式变为：
 </p>
-$$x_t = \sqrt{\alpha_t \alpha_{t-1}} x_{t-2} + \sqrt{1 - \alpha_t \alpha_{t-1}} \bar{\epsilon}$$<h3 id="第三步继续展开-递归">第三步：继续展开 (递归)
-</h3><p>如果我们继续展开 $x_{t-2}$，以此类推&hellip;</p>
+$$x_t = \sqrt{\alpha_t \alpha_{t-1}} x_{t-2} + \sqrt{1 - \alpha_t \alpha_{t-1}} \bar{\epsilon}$$<p><strong>第三步：继续展开 (递归)</strong></p>
+<p>如果我们继续展开 $x_{t-2}$，以此类推&hellip;</p>
 <p>我们会发现规律：</p>
 <ul>
 <li>$x_0$ 前面的系数是所有 $\alpha$ 的乘积的平方根。</li>
