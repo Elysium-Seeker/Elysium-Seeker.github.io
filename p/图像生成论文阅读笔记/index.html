@@ -10,7 +10,7 @@
 <meta property='og:description' content="近期图像生成领域论文阅读与心得记录">
 <meta property='og:url' content='https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
 <meta property='og:site_name' content='Elysium-Seeker'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='图像生成' /><meta property='article:tag' content='论文阅读' /><meta property='article:published_time' content='2025-12-03T09:00:00&#43;08:00'/><meta property='article:modified_time' content='2025-12-15T13:10:23&#43;08:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='图像生成' /><meta property='article:tag' content='论文阅读' /><meta property='article:published_time' content='2025-12-03T09:00:00&#43;08:00'/><meta property='article:modified_time' content='2025-12-16T23:49:23&#43;08:00'/>
 <meta name="twitter:title" content="图像生成论文阅读笔记">
 <meta name="twitter:description" content="近期图像生成领域论文阅读与心得记录">
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -246,7 +246,21 @@
     <li><a href="#vae-auto-encoding-variational-bayes-2013">[VAE] Auto-Encoding Variational Bayes (2013)</a></li>
     <li><a href="#gan-generative-adversarial-nets-2014">[GAN] Generative Adversarial Nets (2014)</a></li>
     <li><a href="#dcgan-unsupervised-representation-learning-with-deep-convolutional-generative-adversarial-networks">[DCGAN] Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks</a></li>
-    <li><a href="#stylegan">[StyleGAN]</a></li>
+    <li><a href="#stylegan-a-style-based-generator-architecture-for-generative-adversarial-networks">[StyleGAN] A Style-Based Generator Architecture for Generative Adversarial Networks</a></li>
+    <li><a href="#stylegan2-analyzing-and-improving-the-image-quality-of-stylegan">[StyleGAN2] Analyzing and Improving the Image Quality of StyleGAN</a></li>
+    <li><a href="#stylegan3-alias-free-generative-adversarial-networks">[StyleGAN3] Alias-Free Generative Adversarial Networks</a></li>
+    <li><a href="#singan-singan-learning-a-generative-model-from-a-single-natural-image">[SinGAN] SinGAN: Learning a Generative Model from a Single Natural Image</a></li>
+    <li><a href="#ddpm-denoising-diffusion-probabilistic-models">[DDPM] Denoising Diffusion Probabilistic Models</a>
+      <ol>
+        <li><a href="#第一步展开-x_t-1">第一步：展开 $x_{t-1}$</a></li>
+        <li><a href="#第二步合并噪音-关键步骤">第二步：合并噪音 (关键步骤)</a></li>
+        <li><a href="#第三步继续展开-递归">第三步：继续展开 (递归)</a></li>
+      </ol>
+    </li>
+    <li><a href="#ddim-denoising-diffusion-implicit-models">[DDIM] Denoising Diffusion Implicit Models</a></li>
+    <li><a href="#guided-diffusion-diffusion-models-beat-gans-on-image-synthesis">[Guided Diffusion] Diffusion Models Beat GANs on Image Synthesis</a></li>
+    <li><a href="#cfg-classifier-free-diffusion-guidance">[CFG] Classifier-Free Diffusion Guidance</a></li>
+    <li><a href="#stable-diffusion-high-resolution-image-synthesis-with-latent-diffusion-models">[Stable Diffusion] High-Resolution Image Synthesis with Latent Diffusion Models</a></li>
   </ol>
 </nav>
         </div>
@@ -315,7 +329,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 6 分钟
+                    阅读时长: 20 分钟
                 </time>
             </div>
         <div class="article-lastmod">
@@ -328,7 +342,7 @@
 
 
                 <time>
-                    2025-12-15
+                    2025-12-16
                 </time>
             </div></footer>
     
@@ -428,8 +442,436 @@ $$f(x)=\begin{cases}x\quad if\ x\ge0 \\ \alpha \cdot x\quad if\ x<0\end{cases}$$
 <p>而在 $GAN$ 得到这些增强变身为 $DCGAN$ 后，文章发现训练后的 $D$ 在无监督特征学习上表现出色，且第一次在视觉上展示了 $z$ 空间（ 潜变量空间 ）的语义。实验得到：</p>
 $$z_{man\ with\ glasses}-z_{man\ without\ glasses}+z_{woman\ without\ glasses}=z_{woman\ with\ glasses}$$<p>这体现了 $GAN$ 的潜变量空间是连续的，结构化的，可被计算，理解与操作的。同时通过可视化分析 $D$ 的卷积核和 $G$ 的记忆，发现 $D$ 在第一层卷积核就学会了检测非常基础的边缘和角落，这证明了 $D$ 确实在学习有意义的底层视觉模式；同时 $G$ 生成的图片往往是训练集中多个样本的平滑混合与重组，这证明了 $G$ 具有泛化能力，它通过解构和重组学会了创造，而不是简单的复制。</p>
 <p>在文章的最后，作者为今后音视频方向的 $GAN$ 发展和潜空间的进一步研究指明了方向，音视频方向暂且按下不表，潜空间则涉及到下一篇论文：</p>
-<h2 id="stylegan">[StyleGAN]
-</h2>
+<h2 id="stylegan-a-style-based-generator-architecture-for-generative-adversarial-networks">[StyleGAN] A Style-Based Generator Architecture for Generative Adversarial Networks
+</h2><p>$StyleGAN$ 重新定义了高质量图像生存的标准，并且至今仍然是许多后续研究的基石（包括待会讲的 $StyleGAN2$ 和 $StyleGAN3$ 。</p>
+<p>原本的 $GAN$ 系列模型虽然已经能应用于生成较清晰的图片，但普遍存在一个巨大的问题：**潜变量空间 $z$ 是纠缠的$。换言之，由于我们把所有数据集拉到了一个标准正态分布里，它们的排列方式和疏密程度很不优雅，从而导致一个参数控制了多个相互独立的视觉特征。</p>
+<p>于是 $StyleGAN$ 重置了原本的 $G$ ，引入了三大核心组件来解决这个问题：</p>
+<ol>
+<li>
+<p>**映射网络（Mapping Network）：**这是一个独立的 $MLP$ 网络，它不再让原始的噪音向量 $z$ 直接进入生成网络，而是先把它变换成用于解纠缠的潜变量 $w$。这样操作的好处在于我们不再强制地把所有的数据集挤到一个标准正态分布里，而是可以以更适配原来的数据分布的形式表示训练集，从而使得纠缠的 $z$ 变成了更容易线性分离的 $w$。（此后所有工作均在 $w$ 空间上进行，这个空间和真实图像空间相通。）为了让 $w$ 空间更加优美，避免突变， $StyleGAN$ 额外引入了 “感知路径长度” 正则化（ Perceptual Path Length Regularization ，PPL ），使得引入的 $w$ 空间更为平滑，不再有突变。</p>
+</li>
+<li>
+<p><strong>自适应实例归一化（AdaIN）：</strong></p>
+$$
+\text{AdaIN}(x, w) = \sigma(w) \left( \frac{x - \mu(x)}{\sigma(x)} \right) + \beta(w)$$<p> 公式如上，具体可以分为两个步骤，第一步为： </p>
+$$( \frac{x - \mu(x)}{\sigma(x)} )$$<p> 对这张特征图进行实例归一化，保留空间结构信息但是删去风格，第二步是：</p>
+$$\sigma(w) \left( ... \right) + \beta(w)$$<p> 赋予其由当前层 $w$ 指定的全新风格。（这个操作并非只进行一次，而是分层（见下面第三点）进行，每层进行两次 “卷积 + AdaIN” 的操作。）</p>
+</li>
+<li>
+<p>分层控制（Hierarchical Control）：生成器从小分辨率逐渐放大到大分辨率，不同分辨率层控制的主要特征不同，且在 $AdaIN$ 的帮助下每层都可以独立控制。</p>
+</li>
+</ol>
+<p>$StyleGAN$ 的核心思想是<strong>分离</strong>。它把纠缠的潜变量 $z$ 分离成了更纯净的 $w$ ，然后又把 $w$ 蕴含的特征分层注入到生成过程中的每一层，从而实现了对视觉特征的解耦合和精细控制。</p>
+<p>额外的，它固定了生图的起点，原来生成器的起点是随机噪音，而现在是一张固定的低分辨率的图，从而使得潜变量只负责风格，不需负责初始空间布局，进一步加强了模型的解纠缠能力。</p>
+<h2 id="stylegan2-analyzing-and-improving-the-image-quality-of-stylegan">[StyleGAN2] Analyzing and Improving the Image Quality of StyleGAN
+</h2><p>$StyleGAN$ 的升级版，主要在修 Bug 。</p>
+<p>解决的两个主要问题是：<strong>水滴伪影</strong>和<strong>相位伪影</strong>。</p>
+<ol>
+<li>首先讲<strong>水滴伪影</strong>，图示是这样的：</li>
+</ol>
+<p><img src="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image.png"
+	width="1024"
+	height="1024"
+	srcset="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image_hu_b24140f0025c5b08.png 480w, /p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image_hu_892824a0b50807f1.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="100"
+		data-flex-basis="240px"
+	
+><img src="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-1.png"
+	width="1024"
+	height="1024"
+	srcset="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-1_hu_929a46e249c30895.png 480w, /p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-1_hu_6f4c407f855d104a.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="100"
+		data-flex-basis="240px"
+	
+></p>
+<p>可以明显观察到有一颗巨大的深色水滴状伪影在图上。</p>
+<p>它出现的原因是 $StyleGAN$ 最标志性的 <strong>$AdaIN$</strong> &hellip;</p>
+<p>$AdaIN$ 的第一步是归一化，在抹去风格的同时还破坏了特征图之间的相对强度信息，生成器为了保留某些重要的强信号，在训练中学会了在无关紧要的地方放一个极强的信号，来保留原来的弱小的有用信号们。</p>
+<p>改进方法是放弃归一化，转而直接根据风格（即进来的 $w$ ）调整卷积核。</p>
+<ol start="2">
+<li>然后是<strong>相位伪影</strong>：</li>
+</ol>
+<p><img src="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-4.png"
+	width="1024"
+	height="1024"
+	srcset="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-4_hu_d78a8a13782c9904.png 480w, /p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-4_hu_d75badeefe52a0b2.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="100"
+		data-flex-basis="240px"
+	
+><img src="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-5.png"
+	width="1024"
+	height="1024"
+	srcset="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-5_hu_d185936e7163e389.png 480w, /p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-5_hu_77e22a970f90e6f9.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="100"
+		data-flex-basis="240px"
+	
+><img src="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-6.png"
+	width="1024"
+	height="1024"
+	srcset="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-6_hu_e4c5aafd5823eda2.png 480w, /p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-6_hu_7e5c5140104ffb3e.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="100"
+		data-flex-basis="240px"
+	
+></p>
+<p>可以观察到这三张图片里的人物脸转动了，但是牙齿什么的都没动。</p>
+<p>它出现的原因是 $DCGAN$ 中我们采用的分层控制，或者说来自 $ProGAN$ 的 **“ 渐进式增长 ” (Progressive Growing) **。</p>
+<p>这种方法先练低分辨率 （ 4 * 4 ）， 再逐渐往高分辨率训练，每一层都倾向于过早锁定特征。比如低分辨率时模型为了最小化 $Loss Funtion$ 强行把牙齿这种高频细节画出来，在高分辨率的时候就没法改了。</p>
+<p>改进方法是采取新的类似 <strong>ResNet（残差网络）</strong> 的架构，使用 <strong>Skip Connections（跳跃连接）</strong>。由每一层练好再练下一层改为输出时把每一层上采样叠加。（换言之，就是原来是一层层训练最后只用最大分辨率的模型，现在是直接每层分开训练不同频特征并在最后把每层图片叠加起来。）</p>
+<p>除了这两个问题之外还有一些别的优化：</p>
+<ol>
+<li><strong>惰性正则化 (Lazy Regularization) :</strong></li>
+</ol>
+<p>这是针对 $StyleGAN$ 里的 PPL 的优化， 作者发现没有必要每一步都算正则化，容易爆显存，每16步算一次就很不错。大大提升了训练效率。</p>
+<ol start="2">
+<li><strong>路径长度正则化 (Path Length Regularization) 的增强:</strong></li>
+</ol>
+<p>作者进一步强调了 $PPL$ 的重要性。并提出了能通过 $PPL$ 判断图像好坏。（ $PPL$ 低的图通常质量高）而且 $PPL$ 还让生成器的逆向操作变得十分容易，把真实照片映射回潜变量空间边的非常可靠。（从而成了 P 图神器）</p>
+<h2 id="stylegan3-alias-free-generative-adversarial-networks">[StyleGAN3] Alias-Free Generative Adversarial Networks
+</h2><p>目前为止的最新 $StyleGAN$ 了。（后面全转向 $Diffusion$ 了）</p>
+<p>主要解决了<strong>纹理粘连</strong>的问题：</p>
+<p>即当尝试用 $StyleGAN2$ 生成动画时，图片中大的部分（如人脸，五官）的变动没有问题，但是皮肤上的毛孔，发丝等细节没有跟着大的部分一起动。</p>
+<p>而 $StyleGAN3$ 能彻底消灭这种粘连，让 $GAN$ 生成的图像具有 <strong>平移/旋转等变性(Equivariance)</strong>。</p>
+<p>纹理粘连的原因是整个图像生成体系习以为常的像素网格，和不完美的数学操作。</p>
+<p>在深度学习里，我们默认图像是由一个个离散的像素点组成的矩阵。</p>
+<p>但在物理世界里，光信号是连续的波。</p>
+<p>所以我们的操作会导致<strong>混叠</strong>现象的出现。</p>
+<ol>
+<li>
+<p>激活函数（比如前文提到过的 $Relu$ ）或上/下采样操作由于产生了许多数值上的突变，会产生非常多<strong>高频</strong>的信息。</p>
+</li>
+<li>
+<p>而我们的像素网格数是固定的，所以采样数是固定的，根据 <strong>香农采样定理</strong> ，如果信号变化的频率太快， 超过了像素网格采样频率的二分之一，信号就没法正确记录。</p>
+</li>
+<li>
+<p>于是这些高频信号就被伪装成低频信号出现在图像里，产生混叠，从而导致了粘连的发生。</p>
+</li>
+</ol>
+<p>作者的解决方法是几乎直接推翻了 $StyleGAN2$ 的全部底层逻辑。</p>
+<p>$StyleGAN3$ 的核心思想是：我们要假装神经网络处理的不是“离散的像素”，而是“连续的信号”。</p>
+<p>具体的，有如下三个改动：</p>
+<ol>
+<li>
+<p><strong>去除“坐标暗示”</strong> ：神经网络一旦得到关于“绝对坐标”的暗示就会把纹理固定上去，所以作者废除了 $Padding$ （边缘填充），从而使神经网络不知道边缘位置。作者还废除了 $Noise Injection$（随机噪声图）（前面好像忘记讲了，这个是指 $StyleGAN$ 里专门引入了一个随机噪声用来生成头发丝什么的细节，从而使成图更真实，但它是直接加在像素上的，会直接导致纹理固定。）</p>
+</li>
+<li>
+<p><strong>换“理想低通滤波器”</strong>：引入 <strong>Sinc 滤波器</strong>，在每一层卷积，上采样，激活函数后都过一遍低通滤波器，把高频信号全部切掉。</p>
+</li>
+<li>
+<p><strong>重新设计层级结构</strong> 把所有建立在离散基础上的操作写成了<strong>连续域</strong>上的数学公式，再近似到离散网络上。</p>
+</li>
+</ol>
+<p>于是改动后得到一个拥有丝滑的 <strong>“等变性”（Equivariance）</strong> 的模型，解决了纹理粘连而且可以随便平移，内部世界模型效果更强的模型。</p>
+<p>除此之外，$StyleGAN3$ 还提供了一些数据增强的具体实现方法，比如大量平移旋转训练集什么的，可以更好的做到等变性。</p>
+<h2 id="singan-singan-learning-a-generative-model-from-a-single-natural-image">[SinGAN] SinGAN: Learning a Generative Model from a Single Natural Image
+</h2><p>$ICCV 2019 Best Paper Award$ ，$GAN$ 路子上的邪修。</p>
+<p>主要实现的问题是如何用小样本（比如一张图）生成类似的图片。</p>
+<p><img src="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-7.png"
+	width="951"
+	height="230"
+	srcset="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-7_hu_17e2f7f3543ac3c4.png 480w, /p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-7_hu_750233bf9cdfad89.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="413"
+		data-flex-basis="992px"
+	
+></p>
+<p>它只用一张图片作为训练数据，学会这张图片内部的 <strong>“补丁分布”（Internal Patch Distribution）</strong> ，并借此可生成无线多张相似但布局不同的新图片。</p>
+<p>具体的实现上，它运用了 <strong>“分形”和“局部性”</strong> 的思想，用一个<strong>11*11</strong>的小窗口在图片中采样，从而得到海量的训练数据。</p>
+<p>$SinGAN$ 不学“宏观语义”，它学“微观纹理”和“宏观布局”。为了同时学到宏观和微观，它还设计了一个多尺度的分层形式，训练了多个分辨率的 $GAN$ ，从低分辨率开始训练，并以低分辨率的成图上放大后作为输入放到更高分辨率的 $GAN$ 中训练，利用残差学习（类似前面提到的残差网络）逐层添加特征。</p>
+<p>而它的判别器也比较特殊，判别器不看整张图，而是看图中的一个个小方块，判断这些子图是否在原图中出现过，从而保证了生成的图片在细节上真实，而整体布局不与原图完全一样。</p>
+<p>除此之外，为了保证生成的稳定性，作者还额外强制加了一个<strong>重建损失 (Reconstruction Loss)</strong>，确保在以某组特定输入下模型能生成原图。</p>
+<h2 id="ddpm-denoising-diffusion-probabilistic-models">[DDPM] Denoising Diffusion Probabilistic Models
+</h2><p>终于到 $diffusion$ 了。。</p>
+<p>从这里开始就是生图的另一个路子了。</p>
+<p>$DDPM$ 的核心思想在与，它定义了两个过程，都是 $T$ 步：</p>
+<ul>
+<li>
+<p><strong>前向过程 (加噪):</strong> $q(x_t|x_{t-1})$</p>
+<ul>
+<li>这是一个<strong>固定的</strong>过程，没有任何参数需要学习。</li>
+<li>每一次，都在上一时刻的图片上，叠加一点点<strong>高斯噪音</strong>。</li>
+<li>到了 $x_{T}$，图片就彻底变成了标准正态分布的噪音 $N(0, I)$。</li>
+</ul>
+</li>
+<li>
+<p><strong>反向过程 (去噪):</strong> $p_{\theta}(x_{t-1}|x_t)$</p>
+<ul>
+<li>这是我们要<strong>训练</strong>的神经网络。</li>
+<li>它的任务是：<strong>给定一张稍微有点噪的图 $x_t$，预测出它的上一时刻 $x_{t-1}$ 长什么样。</strong></li>
+<li>也就是：<strong>学会“去噪”</strong>。</li>
+</ul>
+</li>
+</ul>
+<p>而通过 $DDPM$ ，我们让模型学会预测我们一开始叠加的高斯噪音。</p>
+<p>这里的 $Loss Function$ 也相当简单，只是一个<strong>均方误差(MSE)</strong>：</p>
+$$
+\text{Loss} = || \epsilon_{\text{真实}} - \epsilon_{\text{预测}}(x_t, t) ||^2$$<p>而我们的训练过程从原来的生图判别演变成了：</p>
+<ol>
+<li>
+<p>从数据集拿一张真图 $x_0$。</p>
+</li>
+<li>
+<p>随机选一个步数 $t$（比如第 500 步）。</p>
+</li>
+<li>
+<p>随机生成一个噪音 $\epsilon$。</p>
+</li>
+<li>
+<p>根据公式，把噪音加到真图上，得到 $x_t$（这一步有闭式解，不用循环 500 次）。</p>
+</li>
+<li>
+<p>把 $x_t$ 扔给 U-Net 模型，让它猜：“刚才加的那个 $\epsilon$ 是多少？”</p>
+</li>
+<li>
+<p>算 MSE，反向传播。</p>
+</li>
+</ol>
+<p>接下来补充一些细节：</p>
+<ol>
+<li>
+<p>训练使用的网络是 $U-Net$ ，因为输入输出都是图片且尺寸相同，$U-Net$ 非常适配。</p>
+</li>
+<li>
+<p>当前时间通过 $embedding$ 转化成向量传入网络。</p>
+</li>
+<li>
+<p>（论文核心内容）关于一步实现所有前向过程的方法和推导：
+明白了！你是想要图片中提到的 <strong>“通过数学迭代（把 $x_{t-1}$ 展开，再把 $x_{t-2}$ 展开&hellip;）”</strong> 这一步的具体<strong>数学推导过程</strong>。</p>
+</li>
+</ol>
+<p>图片中省略了中间的计算步骤，直接给出了结论。实际上这利用了 <strong>高斯分布的可加性</strong>（重参数化技巧）。</p>
+<p>以下是完整的推导过程：</p>
+<p>根据 DDPM 的定义，每一步的前向加噪公式为：
+</p>
+$$x_t = \sqrt{\alpha_t} x_{t-1} + \sqrt{1 - \alpha_t} \epsilon_{t-1}$$<p>
+其中 $\epsilon_{t-1} \sim \mathcal{N}(0, I)$ 是当步加入的随机高斯噪音。</p>
+<p>我们的目标是推导出 $x_t$ 和 $x_0$ 的直接关系。</p>
+<h3 id="第一步展开-x_t-1">第一步：展开 $x_{t-1}$
+</h3><p>我们知道 $x_{t-1}$ 是由 $x_{t-2}$ 生成的：
+</p>
+$$
+x_{t-1} = \sqrt{\alpha_{t-1}} x_{t-2} + \sqrt{1 - \alpha_{t-1}} \epsilon_{t-2}
+$$<p>将这个式子代入到 $x_t$ 的公式中：</p>
+$$
+\begin{aligned}
+x_t &= \sqrt{\alpha_t} (\underbrace{\sqrt{\alpha_{t-1}} x_{t-2} + \sqrt{1 - \alpha_{t-1}} \epsilon_{t-2}}_{x_{t-1}}) + \sqrt{1 - \alpha_t} \epsilon_{t-1} \\
+&= \sqrt{\alpha_t \alpha_{t-1}} x_{t-2} + \sqrt{\alpha_t (1 - \alpha_{t-1})} \epsilon_{t-2} + \sqrt{1 - \alpha_t} \epsilon_{t-1}
+\end{aligned}
+$$<h3 id="第二步合并噪音-关键步骤">第二步：合并噪音 (关键步骤)
+</h3><p>现在式子后面有两项噪音：</p>
+<ol>
+<li>$\sqrt{\alpha_t (1 - \alpha_{t-1})} \epsilon_{t-2}$</li>
+<li>$\sqrt{1 - \alpha_t} \epsilon_{t-1}$</li>
+</ol>
+<p>根据高斯分布的性质：<strong>两个独立的高斯分布相加，依然是高斯分布，且方差相加。</strong>
+即：若 $X \sim \mathcal{N}(0, \sigma_1^2)$，$Y \sim \mathcal{N}(0, \sigma_2^2)$，则 $X+Y \sim \mathcal{N}(0, \sigma_1^2 + \sigma_2^2)$。</p>
+<p>我们计算这两项噪音合并后的<strong>总方差</strong>：</p>
+$$\begin{aligned}
+\text{总方差} &= (\sqrt{\alpha_t (1 - \alpha_{t-1})})^2 + (\sqrt{1 - \alpha_t})^2 \\
+&= \alpha_t (1 - \alpha_{t-1}) + (1 - \alpha_t) \\
+&= \alpha_t - \alpha_t \alpha_{t-1} + 1 - \alpha_t \\
+&= 1 - \alpha_t \alpha_{t-1}
+\end{aligned}$$<p>所以，这两项噪音可以合并为一个新的噪音项：
+</p>
+$$\text{合并噪音} = \sqrt{1 - \alpha_t \alpha_{t-1}} \bar{\epsilon} \quad (\text{其中 } \bar{\epsilon} \sim \mathcal{N}(0, I))$$<p>此时公式变为：
+</p>
+$$x_t = \sqrt{\alpha_t \alpha_{t-1}} x_{t-2} + \sqrt{1 - \alpha_t \alpha_{t-1}} \bar{\epsilon}$$<h3 id="第三步继续展开-递归">第三步：继续展开 (递归)
+</h3><p>如果我们继续展开 $x_{t-2}$，以此类推&hellip;</p>
+<p>我们会发现规律：</p>
+<ul>
+<li>$x_0$ 前面的系数是所有 $\alpha$ 的乘积的平方根。</li>
+<li>噪音前面的系数始终是 $\sqrt{1 - (\text{所有 } \alpha \text{ 的乘积})}$。</li>
+</ul>
+<p>定义累乘系数 $\bar{\alpha}<em>t = \prod</em>{i=1}^t \alpha_i = \alpha_t \times \alpha_{t-1} \times \dots \times \alpha_1$。</p>
+<p>经过 $t$ 次迭代展开后：</p>
+$$\begin{aligned}
+x_t &= \sqrt{\alpha_t \alpha_{t-1} \dots \alpha_1} x_0 + \sqrt{1 - (\alpha_t \alpha_{t-1} \dots \alpha_1)} \epsilon \\
+&= \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon
+\end{aligned}$$<p>这就是为什么我们不需要写一个 <code>for</code> 循环迭代 500 次，而是可以直接用闭式解（Closed-form solution）一步算出任意时刻 $t$ 的图像 $x_t$：</p>
+$$x_t = \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon$$<ol start="4">
+<li>基于随机微分方程有结论：当加噪步长足够小时，逆过程也可近似于高斯分布，所以反向过程中只要预测上一张图高斯分布的均值和方差。实验发现方差固定即可，只要算均值就行。然后通过类似VAE的思想再进行一些数学操作就可以得到我们需要的 $Loss Function$。且容易由上面的推导发现算出噪声就可以算出原图。</li>
+</ol>
+<h2 id="ddim-denoising-diffusion-implicit-models">[DDIM] Denoising Diffusion Implicit Models
+</h2><p>一个对 DDPM 的优化。</p>
+<p>我之所以要花大篇幅讲上面的推导就是因为这里要用。</p>
+<p>DDPM的设计有个限制在于：为了保证逆向过程也是高斯分布，前向过程必须是马尔可夫链（一步一步加噪）。虽然我们在推导后实际上一步解决了前向，但逆向的过程还是得一步步来。</p>
+<p>而正由于我们用的是一步解决的式子 </p>
+$$x_t = \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon$$<p> 所以只要 $x_t$ 符合这个分布，Loss就能算，U-Net就能练，中间的加噪过程不重要。</p>
+<p>于是 DDIM 用数学技巧编了个符合边缘分布的过程从而加速了训练，具体如下。</p>
+<p>在 DDPM 的反向采样公式里，有一项是<strong>随机噪音</strong>：</p>
+$$
+x_{t-1} = \text{预测的均值} + \sigma_t \cdot z
+$$<p>这个 $z$ 是随机的高斯噪音。正是因为有这个 $z$，每次生成的路径都乱七八糟。</p>
+<p>DDIM 作者推导出了一通用反向公式，其中包含一个可以调节的参数 $\sigma$：</p>
+<ul>
+<li><strong>当 $\sigma = \eta$ (特定值) 时：</strong> 即<strong>DDPM</strong> （随机游走）。</li>
+<li><strong>当 $\sigma = 0$ 时：</strong> 随机项消失了，即 <strong>DDIM</strong> ，此时从 $x_t$ 到 $x_{t-1}$ 的过程变成了<strong>完全确定性 (Deterministic)</strong> 的。</li>
+</ul>
+<p>虽然数学推导很复杂，但 DDIM 最终落地的采样公式非常直观。它把“计算 $x_{t-1}$”拆解成了三个逻辑步骤：</p>
+<p>假设我们现在在第 $t$ 步，手拿着 $x_t$，U-Net 预测出了噪音 $\epsilon_\theta$。</p>
+<p><strong>第一步：预测“原本的真图” ($x_0$)</strong></p>
+<p>已知 $x_t$，和大致的噪音 $\epsilon_\theta$，可预测 $x_0$ 为：</p>
+$$
+\text{预测的 } x_0 = \frac{x_t - \sqrt{1 - \bar{\alpha}_t}\epsilon_\theta}{\sqrt{\bar{\alpha}_t}}
+$$<p><strong>第二步：指向“下一步的噪音”</strong></p>
+<p>我们要去的下一站是 $x_{t-1}$ （或者跨步到 $x_{t-\Delta}$）。
+我们需要计算下一站应该保留多少噪音：</p>
+$$
+\text{指向噪音的方向} = \sqrt{1 - \bar{\alpha}_{t-1}} \cdot \epsilon_\theta
+$$<p><strong>第三步：组合 (Vector Addition)</strong></p>
+<p>把“预测的真图”和“指向噪音的方向”按比例拼起来：</p>
+$$
+x_{t-1} = \sqrt{\bar{\alpha}_{t-1}} \cdot (\text{预测的 } x_0) + (\text{指向噪音的方向})
+$$<p>于是反向过程也可以加速了，且在训练足够完备（预测的噪音够准）的情况下也可以随便加速。</p>
+<p>最后同样的补充一些 DDIM 的特性</p>
+<ol>
+<li><strong>语义插值 (Semantic Interpolation)</strong></li>
+</ol>
+<p>因为采样过程是确定的，<strong>一个噪音 $x_T$ 唯一对应一张图 $x_0$</strong>，所以可以取两个噪音 $z_1$ (生成狗) 和 $z_2$ (生成猫)，做球面线性插值 (Slerp)，中间的噪音生成的图，就是一只“像猫又像狗”的生物，DDPM 做不到这一点，因为随机性太大，插值出来的图通常是崩坏的。。</p>
+<ol start="2">
+<li><strong>图像重建/逆向 (Inversion)</strong></li>
+</ol>
+<p>这和 StyleGAN 的 Inversion 很像。可以把真图得到一个特定的噪音，并通过这个噪音还原图片。</p>
+<h2 id="guided-diffusion-diffusion-models-beat-gans-on-image-synthesis">[Guided Diffusion] Diffusion Models Beat GANs on Image Synthesis
+</h2><p>到此之前，Diffusion系的模型还是只能做到随机抽卡。（其实 GAN 那边也没有具体讲怎么对应标签，但是可以实现潜空间变量算数的话怎么做标签对应和指定内容生成应该还算显然。）</p>
+<p>那么如何引导去噪过程，让它朝着我们想要的方向去噪生成呢？</p>
+<p>OpenAI 提出了 Classifier Guidance（分类器引导）的方案，具体的：</p>
+<ol>
+<li>
+<p><strong>准备工作：</strong></p>
+<ul>
+<li>训练一个<strong>图像分类器 (Classifier)</strong>，比如 ResNet。</li>
+<li><strong>关键点：</strong> 这个分类器必须在<strong>带噪的图片</strong>上训练过（能看懂充满雪花点的图）。</li>
+</ul>
+</li>
+<li>
+<p><strong>生成过程：</strong></p>
+<ul>
+<li>U-Net 说：“我觉得这一步应该往左走 （去噪）。”</li>
+<li><strong>分类器介入：</strong> 它看一眼当前的图，计算一下梯度的方向——<strong>“往哪个方向改像素，能让这张图更像‘狗’？”</strong></li>
+<li><strong>合力：</strong> 最终的移动方向 = U-Net 的去噪方向 + <strong>分类器的梯度方向</strong>。</li>
+</ul>
+</li>
+</ol>
+<p><strong>数学原理：为什么要加分类器的梯度？</strong></p>
+<p>我们的目标是生成符合标签 $y$ 的图像 $x_t$，即从条件概率 $p(x_t|y)$ 中采样。
+根据贝叶斯公式 $\log p(x|y) = \log p(x) + \log p(y|x) + C$，两边同时对 $x_t$ 求梯度：</p>
+$$
+\underbrace{\nabla_{x_t} \log p(x_t|y)}_{\text{我们需要的目标方向}} = \underbrace{\nabla_{x_t} \log p(x_t)}_{\text{U-Net 的去噪方向}} + \underbrace{\nabla_{x_t} \log p(y|x_t)}_{\text{分类器的梯度方向}}
+$$<p><strong>公式详解：</strong></p>
+<ol>
+<li>
+<p><strong>$\nabla_{x_t} \log p(x_t)$ (U-Net 的去噪方向)：</strong></p>
+<ul>
+<li>这是原始 Diffusion 模型学到的东西。</li>
+<li>它的作用是：<strong>“不管是什么物体，先让这张噪点图变得像一张‘真实的图片’再说。”</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>$\nabla_{x_t} \log p(y|x_t)$ (分类器的梯度方向)：</strong></p>
+<ul>
+<li>这是分类器提供的指引。</li>
+<li>它的作用是：<strong>“不管图真不真，先让像素朝着‘更像狗’（标签 $y$）的方向移动。”</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>相加 (合力)：</strong></p>
+<ul>
+<li>通常我们会引入一个 <strong>Guidance Scale (引导刻度 $s$)</strong> 来控制分类器的权重。</li>
+<li>最终公式：<strong>新方向 = 原方向 + $s \times$ 分类器梯度</strong>。</li>
+</ul>
+</li>
+</ol>
+<p>这玩意儿的痛点在于分类器训练极其麻烦，而且同时跑两个模型很占显存，于是在谷歌的天才们几个月后提出 CFG 之后这玩意儿基本没什么用了，但它是后续几乎一切的思路基础。</p>
+<h2 id="cfg-classifier-free-diffusion-guidance">[CFG] Classifier-Free Diffusion Guidance
+</h2><p>正如前文所说，CG 的弊端不少：训练麻烦，算力消耗大&hellip;</p>
+<p>于是在此基础上有了 CFG 。</p>
+<p>具体的，它不再需要额外挂载和训练一个专门的分类器，而是在训练时有一定概率丢掉标签，从而让 U-Net 学会了有提示词生成和无提示词生成时的噪音。于是通过如下的采样公式得到最后应有的目标方向：
+</p>
+$$
+\tilde{\epsilon}_\theta(x_t, c) = \epsilon_\theta(x_t, \emptyset) + w \cdot (\epsilon_\theta(x_t, c) - \epsilon_\theta(x_t, \emptyset))
+$$<p><strong>符号说明：</strong></p>
+<ul>
+<li>$\tilde{\epsilon}_\theta$：最终用于去噪的预测噪音。</li>
+<li>$\epsilon_\theta(x_t, c)$：<strong>有条件预测</strong>（Conditional）。</li>
+<li>$\epsilon_\theta(x_t, \emptyset)$：<strong>无条件预测</strong>（Unconditional）。</li>
+<li>$w$：<strong>引导刻度 (Guidance Scale)</strong>，控制模型对提示词的遵从程度。</li>
+</ul>
+<p>补充一些 $w$ 的取值影响：</p>
+<ul>
+<li><strong>$w = 1$</strong>：相当于没有使用 CFG 增强。模型就按标准的条件概率生成。</li>
+<li><strong>$w &gt; 1$ (比如 7.0 - 10.0)</strong>：<strong>这是常用区间。</strong>
+<ul>
+<li>模型会严格遵守提示词。</li>
+<li>图像的语义更清晰，但多样性会降低。</li>
+</ul>
+</li>
+<li><strong>$w$ 过大 (比如 &gt; 20)</strong>：
+<ul>
+<li><strong>“过拟合”现象</strong>：图像会出现颜色过饱和、怪异的伪影、线条崩坏。特征向量被拉得太长，超出了自然图像的流形分布（Manifold）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="stable-diffusion-high-resolution-image-synthesis-with-latent-diffusion-models">[Stable Diffusion] High-Resolution Image Synthesis with Latent Diffusion Models
+</h2><p>终于到 Stable Diffusion 了，这是目前的 Diffusion 模型集大成者。</p>
+<p>我们前面讲的以 DDPM 为基础的 Diffusion 模型，计算量十分恐怖，因为它每个像素都要跑，而且训练时还要迭代数百步，每一步都要算梯度和噪音。且最后的成图中把大量的算力浪费在了不重要的细节上，而对语义相关的重点却没有多加关注。</p>
+<p>为了解决这一问题，Stable Diffusion 采取的做法是：去一个压缩空间中进行扩散。</p>
+<p>作者发现图像生成可以拆成两步：</p>
+<ol>
+<li><strong>感知压缩 (Perceptual Compression)</strong>： 负责处理像素级的细节（清晰度、纹理）。这部分不需要太精细的计算，清晰即可。</li>
+<li><strong>语义生成 (Semantic Generation)</strong>： 负责处理内容（构图、物体关系）。这部分对算力和理解的需求较高。</li>
+</ol>
+<p>于是 SD 采取了先把图片压缩，让 Diffusion 在小图上工作，最后解压的办法。</p>
+<p>第一步和第三部都是传统 VAE，第一步通过 Encoder 把图片压缩并保留核心语义信息，第三步把抽象的 Latent 转成原图。</p>
+<p>第二步则是 Diffusion ， 但与常规的 Diffusion 不同 ， 我们复原的是 VAE 压缩出的 Latent 。（但具体过程也没什么差别）</p>
+<p>那么在处理好画图问题之后，剩下的就是语义理解问题了。</p>
+<p>为此， SD 引入了 Cross-Attention 机制：</p>
+<p>即语言模型（在原论文中是CLIP，专用的图像对齐模型，现在则是各家的先进LLM）将输入的文本转为一串向量，并将其注入 UNet 。UNet 则通过 Cross-Attention 机制实现在生成时同时接收 Latent 和输入的向量（与 CFG 相似的做法）从而生成指定图片。</p>
+<hr>
+<p>受不了了汇报内容先截止到这里了，感觉完全够讲20分钟了。</p>
+<p>后续要看的内容还有</p>
+<ol>
+<li>Neural ODEs (神经常微分方程)（把 ResNet 的离散变成连续，从而实现材料演化的相关功能）</li>
+<li>NCA (Neural Cellular Automata)（像生物细胞一样无指挥“长”出图片）</li>
+<li>VQGAN (Taming Transformers for High-Resolution Image Synthesis, 2021) （Stable Diffusion 的前置科技。）</li>
+<li>ControlNet（给 Diffusion 加“骨架”。）</li>
+<li>LoRA（微调神器） （快速让模型学会一种新的“材料质感”（比如生锈金属），只需几十张图。）</li>
+</ol>
+
 </section>
 
 
@@ -466,7 +908,7 @@ $$z_{man\ with\ glasses}-z_{man\ without\ glasses}+z_{woman\ without\ glasses}=z
 
 
         <span>
-            最后更新于 2025-12-15
+            最后更新于 2025-12-16
         </span>
     </section></footer>
 
