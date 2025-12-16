@@ -326,12 +326,9 @@ $$
 &lt;p&gt;当前时间通过 $embedding$ 转化成向量传入网络。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;（论文核心内容）关于一步实现所有前向过程的方法和推导：
-明白了！你是想要图片中提到的 &lt;strong&gt;“通过数学迭代（把 $x_{t-1}$ 展开，再把 $x_{t-2}$ 展开&amp;hellip;）”&lt;/strong&gt; 这一步的具体&lt;strong&gt;数学推导过程&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;（论文核心内容）关于一步实现所有前向过程的方法和推导：&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;图片中省略了中间的计算步骤，直接给出了结论。实际上这利用了 &lt;strong&gt;高斯分布的可加性&lt;/strong&gt;（重参数化技巧）。&lt;/p&gt;
-&lt;p&gt;以下是完整的推导过程：&lt;/p&gt;
 &lt;p&gt;根据 DDPM 的定义，每一步的前向加噪公式为：
 &lt;/p&gt;
 $$x_t = \sqrt{\alpha_t} x_{t-1} + \sqrt{1 - \alpha_t} \epsilon_{t-1}$$&lt;p&gt;
