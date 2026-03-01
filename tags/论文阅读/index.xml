@@ -80,7 +80,7 @@ $$Tanh(x)=\frac{e^x-e^{-x}}{e^x+e^{-x}}$$&lt;p&gt;能把输入值归一化到 $[
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh.png&#34;
 	width=&#34;633&#34;
 	height=&#34;464&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh_hu_8e5d98f0c4f1df27.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh_hu_91754b0fabfc981a.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh_hu_3aa00b2459ee8adf.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh_hu_443bdbbcf6d0e8e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;$tanh$ 的图像&#34;
@@ -130,7 +130,7 @@ $$\sigma(w) \left( ... \right) + \beta(w)$$&lt;p&gt; 赋予其由当前层 $w$ �
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image.png&#34;
 	width=&#34;1024&#34;
 	height=&#34;1024&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image_hu_b24140f0025c5b08.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image_hu_892824a0b50807f1.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image_hu_e7f423b9df7b53ed.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image_hu_43a8f6f162c0e647.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;alt text&#34;
@@ -143,7 +143,7 @@ $$\sigma(w) \left( ... \right) + \beta(w)$$&lt;p&gt; 赋予其由当前层 $w$ �
 &gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-1.png&#34;
 	width=&#34;1024&#34;
 	height=&#34;1024&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-1_hu_929a46e249c30895.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-1_hu_6f4c407f855d104a.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-1_hu_babac5d76014eb6f.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-1_hu_83c5fcddd197aec5.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;alt text&#34;
@@ -164,7 +164,7 @@ $$\sigma(w) \left( ... \right) + \beta(w)$$&lt;p&gt; 赋予其由当前层 $w$ �
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-4.png&#34;
 	width=&#34;1024&#34;
 	height=&#34;1024&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-4_hu_d78a8a13782c9904.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-4_hu_d75badeefe52a0b2.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-4_hu_de424c1bef12030f.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-4_hu_b70a5904e43ca934.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;alt text&#34;
@@ -177,7 +177,7 @@ $$\sigma(w) \left( ... \right) + \beta(w)$$&lt;p&gt; 赋予其由当前层 $w$ �
 &gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-5.png&#34;
 	width=&#34;1024&#34;
 	height=&#34;1024&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-5_hu_d185936e7163e389.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-5_hu_77e22a970f90e6f9.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-5_hu_1d1cb0ea17641b81.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-5_hu_d13248a81bcf97e0.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;alt text&#34;
@@ -190,7 +190,7 @@ $$\sigma(w) \left( ... \right) + \beta(w)$$&lt;p&gt; 赋予其由当前层 $w$ �
 &gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-6.png&#34;
 	width=&#34;1024&#34;
 	height=&#34;1024&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-6_hu_e4c5aafd5823eda2.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-6_hu_7e5c5140104ffb3e.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-6_hu_57c86d33480ccaa9.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-6_hu_7f4499a81dcf1229.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;alt text&#34;
@@ -256,7 +256,7 @@ $$\sigma(w) \left( ... \right) + \beta(w)$$&lt;p&gt; 赋予其由当前层 $w$ �
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-7.png&#34;
 	width=&#34;951&#34;
 	height=&#34;230&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-7_hu_17e2f7f3543ac3c4.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-7_hu_750233bf9cdfad89.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-7_hu_6985c5671b71cda5.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-7_hu_6a4b1628e9c56f38.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;alt text&#34;

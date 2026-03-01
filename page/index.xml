@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Fri, 06 Jun 2025 01:15:57 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/page/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 01 Mar 2026 23:50:21 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/page/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>归档</title>
         <link>https://Elysium-Seeker.github.io/archives/</link>
         <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
@@ -16,17 +16,39 @@
         <description></description>
         </item>
         <item>
+        <title>博客更新助手</title>
+        <link>https://Elysium-Seeker.github.io/blog-editor/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/blog-editor/</guid>
+        <description>&lt;p&gt;用这个前端页面快速写/改博客文章：&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/post-editor/&#34; &gt;打开博客更新助手&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;如果你在本地用 &lt;code&gt;hugo server&lt;/code&gt; 预览，也可以直接打开 &lt;code&gt;http://localhost:1313/post-editor/&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;页面支持：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;顶部只填标题 / 副标题 / 分类，其他默认自动补全&lt;/li&gt;
+&lt;li&gt;左侧编辑、右侧实时预览&lt;/li&gt;
+&lt;li&gt;上传图片后自动插入 Markdown 引用&lt;/li&gt;
+&lt;li&gt;支持导入 Markdown，以及加载已有文章继续编辑&lt;/li&gt;
+&lt;li&gt;支持切换到“其他内容文件”模式（例如 &lt;code&gt;content/page/about/index.zh-cn.md&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;支持删除已选择文章（本地 + GitHub）&lt;/li&gt;
+&lt;li&gt;直接写入本地 &lt;code&gt;content/post/...&lt;/code&gt; 目录（浏览器支持时）&lt;/li&gt;
+&lt;li&gt;GitHub API 一键提交到仓库（文章与图片一起上传）&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>关于</title>
         <link>https://Elysium-Seeker.github.io/%E5%85%B3%E4%BA%8E/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://Elysium-Seeker.github.io/%E5%85%B3%E4%BA%8E/</guid>
-        <description>&lt;p&gt;UCAS 24级ai本科生，前oier&lt;/p&gt;
-&lt;p&gt;长期爱好是音乐和阅读，目前对哲学，台词和编曲比较感兴趣，在学，但进度缓慢&lt;/p&gt;
+        <description>&lt;p&gt;UCAS 24级ai本科生，前oier，现acmer，EC-FINAL银牌&lt;/p&gt;
+&lt;p&gt;长期爱好是音乐和阅读&lt;/p&gt;
 &lt;p&gt;INFJ，线下比线上更社恐，但非常希望能交到朋友。&lt;/p&gt;
-&lt;p&gt;入过很多坑，目前在的坑是LPL，Reverse：1999，阴阳师，龙族和恶之环&lt;/p&gt;
-&lt;p&gt;推叶橙&amp;amp;楚夏&amp;amp;塞梅尔维斯&amp;amp;斯奈德&amp;amp;裴星火&lt;/p&gt;
-&lt;p&gt;想在这里记录生活和学习感想（希望毕业前能写出100篇文章吧）&lt;/p&gt;
+&lt;p&gt;入过很多坑，目前在的坑是LPL，Reverse：1999，阴阳师，龙族&lt;/p&gt;
+&lt;p&gt;推叶橙&amp;amp;楚夏&amp;amp;斯奈德&lt;/p&gt;
+&lt;p&gt;想在这里记录生活和学习感想&lt;/p&gt;
 &lt;p&gt;欢迎扩列，QQ：3111596423&lt;/p&gt;
 </description>
         </item>

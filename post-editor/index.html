@@ -1,0 +1,1716 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>博客更新控制台</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --panel-soft: #f8f9fc;
+      --line: #dfe4ee;
+      --text: #1f2533;
+      --muted: #667085;
+      --primary: #4a7dff;
+      --primary-hover: #3a6cf0;
+      --ok: #1e9e66;
+      --warn: #b07a00;
+      --err: #d64545;
+      --pane-h: calc(100vh - 255px);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: "Inter", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    .wrap {
+      width: min(1680px, 99vw);
+      margin: 0 auto;
+      padding: 8px;
+    }
+
+    .hero,
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    .hero {
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    .hero h1 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .hero p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .top-fields {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr .75fr;
+      gap: 8px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel-soft);
+      color: var(--text);
+      font-size: 14px;
+      padding: 9px 10px;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(74, 125, 255, 0.16);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 10px;
+    }
+
+    .line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .line h2 {
+      font-size: 15px;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: var(--primary);
+      margin-right: 6px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    button {
+      border: 1px solid #ccd5e4;
+      border-radius: 8px;
+      background: #f5f8ff;
+      color: #1f2b44;
+      padding: 8px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: .15s ease;
+    }
+
+    button:hover {
+      background: #ebf1ff;
+    }
+
+    button.primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      font-weight: 600;
+    }
+
+    button.primary:hover {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+    }
+
+    .editor {
+      height: var(--pane-h);
+      overflow: auto;
+      resize: vertical;
+      line-height: 1.65;
+      font-family: Consolas, "Cascadia Code", monospace;
+    }
+
+    .upload-list {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #344054;
+    }
+
+    .upload-item {
+      background: #f2f5fb;
+      border: 1px solid #e1e8f4;
+      border-radius: 6px;
+      padding: 4px 7px;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    details {
+      margin-top: 8px;
+      border: 1px dashed #d4dbe9;
+      border-radius: 8px;
+      padding: 8px;
+      background: #fbfcff;
+    }
+
+    summary {
+      cursor: pointer;
+      font-size: 12px;
+      color: #4f5f7a;
+      user-select: none;
+    }
+
+    .adv-grid {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .status {
+      margin-top: 8px;
+      min-height: 18px;
+      font-size: 12px;
+    }
+
+    .ok { color: var(--ok); }
+    .warn { color: var(--warn); }
+    .error { color: var(--err); }
+
+    .target {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #44557a;
+      word-break: break-all;
+    }
+
+    .preview-head {
+      border: 1px solid #e1e7f2;
+      border-radius: 8px;
+      padding: 10px;
+      background: #fafcff;
+      margin-bottom: 8px;
+    }
+
+    .preview-head h3 {
+      font-size: 22px;
+      margin-bottom: 4px;
+      color: #1f2f4d;
+    }
+
+    .preview-head p {
+      color: #5a6b88;
+      font-size: 14px;
+    }
+
+    .meta {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #4b5f85;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .preview-body {
+      border: 1px solid #e1e7f2;
+      border-radius: 8px;
+      background: #fff;
+      padding: 12px;
+      line-height: 1.75;
+      height: var(--pane-h);
+      overflow: auto;
+    }
+
+    .md-block { margin: 0 0 12px; }
+    .md-block:last-child { margin-bottom: 0; }
+
+    .preview-body img {
+      max-width: 100%;
+      border-radius: 7px;
+    }
+
+    .preview-body pre {
+      border: 1px solid #dbe3f2;
+      border-radius: 8px;
+      background: #f6f8fd;
+      padding: 10px;
+      overflow: auto;
+    }
+
+    .mini {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    @media (max-width: 1080px) {
+      .top-fields,
+      .adv-grid,
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      :root { --pane-h: 55vh; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <h1>博客更新控制台</h1>
+      <p>极简模式：只填标题 / 副标题 / 分类。支持导入 Markdown 与加载旧文章进行编辑，再一键写入本地并上传。</p>
+      <div class="top-fields">
+        <div>
+          <label for="title">标题（必填）</label>
+          <input id="title" type="text" placeholder="比如：本周学习记录" />
+        </div>
+        <div>
+          <label for="subtitle">副标题 / 描述</label>
+          <input id="subtitle" type="text" placeholder="一句话简介" />
+        </div>
+        <div>
+          <label for="category">分类</label>
+          <input id="category" type="text" placeholder="Life" />
+        </div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <section class="panel">
+        <div class="line">
+          <h2><span class="dot"></span>左侧填写</h2>
+          <div class="actions">
+            <button id="btnUpload" type="button">上传图片并插入</button>
+            <button id="btnPublish" class="primary" type="button">写入本地并上传</button>
+          </div>
+        </div>
+
+        <label for="body">正文（Markdown）</label>
+        <textarea id="body" class="editor" placeholder="在这里写正文...\n\n上传图片后会自动插入：![文件名](文件名)"></textarea>
+
+        <input id="imageInput" type="file" accept="image/*" multiple style="display:none" />
+        <input id="mdInput" type="file" accept=".md,.markdown,.txt" style="display:none" />
+        <div id="uploadList" class="upload-list"></div>
+
+        <details>
+          <summary>高级配置（目录名 / 发布时间 / slug / GitHub 配置）</summary>
+          <div class="adv-grid">
+            <div>
+              <label for="editMode">编辑目标</label>
+              <select id="editMode">
+                <option value="post">文章（content/post/...）</option>
+                <option value="content">其他内容文件</option>
+              </select>
+            </div>
+            <div>
+              <label for="contentPath">内容路径（仅“其他内容文件”生效）</label>
+              <input id="contentPath" type="text" placeholder="content/page/about/index.zh-cn.md" />
+            </div>
+            <div></div>
+          </div>
+          <div class="adv-grid">
+            <div>
+              <label>&nbsp;</label>
+              <button id="btnImportMd" type="button">导入 Markdown</button>
+            </div>
+            <div>
+              <label>&nbsp;</label>
+              <button id="btnLoadPostList" type="button">读取本地列表</button>
+            </div>
+            <div>
+              <label for="postSelect">本地文件</label>
+              <select id="postSelect">
+                <option value="">（先读取本地列表）</option>
+              </select>
+            </div>
+          </div>
+          <div class="adv-grid">
+            <div>
+              <label>&nbsp;</label>
+              <button id="btnOpenPost" type="button">加载选中文章</button>
+            </div>
+            <div>
+              <label>&nbsp;</label>
+              <button id="btnDeletePost" type="button">删除选中文章</button>
+            </div>
+          </div>
+
+          <div class="adv-grid">
+            <div>
+              <label for="folder">目录名（可留空自动）</label>
+              <input id="folder" type="text" />
+            </div>
+            <div>
+              <label for="date">发布时间（默认当前）</label>
+              <input id="date" type="datetime-local" />
+            </div>
+            <div>
+              <label for="slug">slug（可空）</label>
+              <input id="slug" type="text" />
+            </div>
+          </div>
+          <div class="adv-grid">
+            <div>
+              <label for="author">作者</label>
+              <input id="author" type="text" />
+            </div>
+            <div>
+              <label for="draft">draft</label>
+              <select id="draft">
+                <option value="false">false</option>
+                <option value="true">true</option>
+              </select>
+            </div>
+            <div>
+              <label for="commitMsg">提交信息（可空）</label>
+              <input id="commitMsg" type="text" placeholder="留空自动生成" />
+            </div>
+          </div>
+          <div class="adv-grid">
+            <div>
+              <label for="owner">Owner</label>
+              <input id="owner" type="text" />
+            </div>
+            <div>
+              <label for="repo">Repo</label>
+              <input id="repo" type="text" />
+            </div>
+            <div>
+              <label for="branch">Branch</label>
+              <input id="branch" type="text" />
+            </div>
+          </div>
+          <div class="adv-grid">
+            <div>
+              <label for="token">Token</label>
+              <input id="token" type="password" />
+            </div>
+            <div>
+              <label>&nbsp;</label>
+              <button id="btnToggleToken" type="button">显示/隐藏 Token</button>
+            </div>
+          </div>
+        </details>
+
+        <p id="target" class="target"></p>
+        <p id="leftStatus" class="status"></p>
+      </section>
+
+      <section class="panel">
+        <div class="line">
+          <h2><span class="dot"></span>右侧预览</h2>
+        </div>
+
+        <div class="preview-head">
+          <h3 id="pTitle">（标题预览）</h3>
+          <p id="pSubtitle">（副标题预览）</p>
+          <div class="meta">
+            <span id="pCategory">分类：-</span>
+            <span id="pDate">时间：-</span>
+            <span id="pPath">路径：-</span>
+          </div>
+        </div>
+
+        <article id="preview" class="preview-body"></article>
+        <p id="rightStatus" class="status"></p>
+        <p class="mini">备注：写入本地并上传会先尝试保存到本地，再上传图片和 md 到 GitHub。</p>
+      </section>
+    </section>
+  </main>
+
+  <script src="/post-editor/local-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    (function () {
+      const conf = window.__POST_EDITOR_CONFIG__ || {};
+      const KEY = "post-editor-v4";
+      const FILE_NAME = "index.zh-cn.md";
+
+      const DEFAULTS = {
+        owner: conf.owner || "Elysium-Seeker",
+        repo: conf.repo || "hugo-main",
+        branch: conf.branch || "main",
+        author: conf.author || "Elysium-Seeker",
+        category: conf.category || "Life",
+        draft: conf.draft === true ? "true" : "false",
+        token: conf.token || ""
+      };
+
+      const $ = (id) => document.getElementById(id);
+      const el = {
+        title: $("title"),
+        subtitle: $("subtitle"),
+        category: $("category"),
+        body: $("body"),
+        imageInput: $("imageInput"),
+        mdInput: $("mdInput"),
+        uploadList: $("uploadList"),
+
+        folder: $("folder"),
+        date: $("date"),
+        slug: $("slug"),
+        editMode: $("editMode"),
+        contentPath: $("contentPath"),
+        author: $("author"),
+        draft: $("draft"),
+        commitMsg: $("commitMsg"),
+
+        owner: $("owner"),
+        repo: $("repo"),
+        branch: $("branch"),
+        token: $("token"),
+
+        btnUpload: $("btnUpload"),
+        btnPublish: $("btnPublish"),
+        btnToggleToken: $("btnToggleToken"),
+        btnImportMd: $("btnImportMd"),
+        btnLoadPostList: $("btnLoadPostList"),
+        postSelect: $("postSelect"),
+        btnOpenPost: $("btnOpenPost"),
+        btnDeletePost: $("btnDeletePost"),
+
+        pTitle: $("pTitle"),
+        pSubtitle: $("pSubtitle"),
+        pCategory: $("pCategory"),
+        pDate: $("pDate"),
+        pPath: $("pPath"),
+        preview: $("preview"),
+
+        target: $("target"),
+        leftStatus: $("leftStatus"),
+        rightStatus: $("rightStatus")
+      };
+
+      let rootHandle = null;
+      const imageQueue = [];
+      const postEntries = [];
+      const previewImageMap = new Map();
+      let manualFolder = false;
+      let syncingFromEditor = false;
+      let syncingFromPreview = false;
+
+      function pad(num) { return String(num).padStart(2, "0"); }
+
+      function nowInput() {
+        const d = new Date();
+        return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes());
+      }
+
+      function toISO(input) {
+        const d = input ? new Date(input) : new Date();
+        if (Number.isNaN(d.getTime())) return toISO(nowInput());
+        const offset = -d.getTimezoneOffset();
+        const sign = offset >= 0 ? "+" : "-";
+        const abs = Math.abs(offset);
+        return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds()) + sign + pad(Math.floor(abs / 60)) + ":" + pad(abs % 60);
+      }
+
+      function safeName(text) {
+        return String(text || "")
+          .trim()
+          .replace(/[<>:"/\\|?*\x00-\x1F]/g, "")
+          .replace(/\s+/g, "-")
+          .replace(/\.+$/g, "")
+          .slice(0, 90);
+      }
+
+      function folderFromTitle(title) {
+        return safeName(title) || "new-post";
+      }
+
+      function getFolder() {
+        return safeName(el.folder.value) || folderFromTitle(el.title.value.trim());
+      }
+
+      function getDate() {
+        return el.date.value || nowInput();
+      }
+
+      function normalizeContentPath(path) {
+        let val = String(path || "").trim().replace(/\\/g, "/");
+        if (!val) val = "content/page/about/index.zh-cn.md";
+        val = val.replace(/^\.\//, "");
+        if (!val.startsWith("content/")) val = "content/" + val;
+        if (!/\.md$/i.test(val)) val = val.replace(/\/$/, "") + "/index.zh-cn.md";
+        return val;
+      }
+
+      function getTargetPath() {
+        if (el.editMode.value === "content") {
+          return normalizeContentPath(el.contentPath.value);
+        }
+        return "content/post/" + getFolder() + "/" + FILE_NAME;
+      }
+
+      function dirname(path) {
+        const parts = String(path || "").split("/");
+        parts.pop();
+        return parts.join("/");
+      }
+
+      function clearPreviewImageMap() {
+        previewImageMap.forEach(function (url) {
+          try { URL.revokeObjectURL(url); } catch (_) {}
+        });
+        previewImageMap.clear();
+      }
+
+      function normalizeImageRef(ref) {
+        let s = String(ref || "").trim();
+        if (!s) return "";
+        if (s.startsWith("<") && s.endsWith(">")) s = s.slice(1, -1);
+        const hashIdx = s.indexOf("#");
+        if (hashIdx >= 0) s = s.slice(0, hashIdx);
+        const qIdx = s.indexOf("?");
+        if (qIdx >= 0) s = s.slice(0, qIdx);
+        s = s.replace(/^\.\//, "");
+        return s;
+      }
+
+      function isRelativeImageRef(ref) {
+        const s = normalizeImageRef(ref);
+        if (!s) return false;
+        if (s.startsWith("/")) return false;
+        if (/^(https?:|data:|blob:|mailto:)/i.test(s)) return false;
+        return true;
+      }
+
+      function parseImageRefsFromMarkdown(md) {
+        const refs = [];
+        const regex = /!\[[^\]]*\]\(([^)]+)\)/g;
+        let match;
+        while ((match = regex.exec(md || "")) !== null) {
+          let raw = (match[1] || "").trim();
+          if (!raw) continue;
+          if (raw.includes(" ")) raw = raw.split(/\s+/)[0];
+          raw = normalizeImageRef(raw);
+          if (isRelativeImageRef(raw)) refs.push(raw);
+        }
+        return Array.from(new Set(refs));
+      }
+
+      function setPreviewImage(name, file) {
+        const key = normalizeImageRef(name);
+        if (!key || !file) return;
+        if (previewImageMap.has(key)) return;
+        const url = URL.createObjectURL(file);
+        previewImageMap.set(key, url);
+      }
+
+      function splitMarkdownBlocks(markdown) {
+        const lines = String(markdown || "").replace(/\r\n/g, "\n").split("\n");
+        const blocks = [];
+        let buffer = [];
+        let startLine = 1;
+
+        lines.forEach(function (line, idx) {
+          const lineNo = idx + 1;
+          if (line.trim() === "") {
+            if (buffer.length > 0) {
+              blocks.push({ startLine: startLine, text: buffer.join("\n") });
+              buffer = [];
+            }
+            return;
+          }
+          if (buffer.length === 0) startLine = lineNo;
+          buffer.push(line);
+        });
+
+        if (buffer.length > 0) {
+          blocks.push({ startLine: startLine, text: buffer.join("\n") });
+        }
+
+        if (blocks.length === 0) {
+          blocks.push({ startLine: 1, text: "" });
+        }
+        return blocks;
+      }
+
+      function getEditorLineHeight() {
+        const raw = window.getComputedStyle(el.body).lineHeight;
+        const n = parseFloat(raw);
+        return Number.isFinite(n) ? n : 24;
+      }
+
+      function getLineFromEditorScroll() {
+        const lh = getEditorLineHeight();
+        return Math.max(1, Math.floor(el.body.scrollTop / lh) + 1);
+      }
+
+      function getPreviewBlocks() {
+        return Array.from(el.preview.querySelectorAll(".md-block[data-start-line]"));
+      }
+
+      function findPreviewTopByLine(lineNo) {
+        const blocks = getPreviewBlocks();
+        if (blocks.length === 0) {
+          const max = Math.max(0, el.preview.scrollHeight - el.preview.clientHeight);
+          const editorMax = Math.max(1, el.body.scrollHeight - el.body.clientHeight);
+          return Math.min(max, Math.max(0, (el.body.scrollTop / editorMax) * max));
+        }
+
+        let prev = blocks[0];
+        for (let i = 0; i < blocks.length; i += 1) {
+          const ln = Number(blocks[i].dataset.startLine || "1");
+          if (ln <= lineNo) prev = blocks[i];
+        }
+        return prev.offsetTop;
+      }
+
+      function syncPreviewToLine(lineNo) {
+        if (syncingFromPreview) return;
+        syncingFromEditor = true;
+        el.preview.scrollTop = findPreviewTopByLine(lineNo);
+        requestAnimationFrame(function () { syncingFromEditor = false; });
+      }
+
+      function syncPreviewToEditorScroll() {
+        syncPreviewToLine(getLineFromEditorScroll());
+      }
+
+      function findLineByPreviewScroll() {
+        const blocks = getPreviewBlocks();
+        if (blocks.length === 0) return getLineFromEditorScroll();
+
+        const top = el.preview.scrollTop;
+        let prev = blocks[0];
+        for (let i = 0; i < blocks.length; i += 1) {
+          if (blocks[i].offsetTop <= top) prev = blocks[i];
+        }
+        return Number(prev.dataset.startLine || "1");
+      }
+
+      function syncEditorToPreviewScroll() {
+        if (syncingFromEditor) return;
+        syncingFromPreview = true;
+        const line = findLineByPreviewScroll();
+        el.body.scrollTop = Math.max(0, (line - 1) * getEditorLineHeight());
+        requestAnimationFrame(function () { syncingFromPreview = false; });
+      }
+
+      function escapeYaml(val) {
+        return String(val).replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
+      }
+
+      function parseFrontMatter(content) {
+        const text = String(content || "").replace(/\r\n/g, "\n");
+        const match = text.match(/^\uFEFF?---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
+        if (!match) return null;
+
+        const lines = match[1].split("\n");
+        const body = match[2] || "";
+        const data = {};
+        let arrayKey = "";
+
+        lines.forEach(function (line) {
+          if (!line.trim()) return;
+
+          const arrayItem = line.match(/^\s*-\s*(.+)$/);
+          if (arrayItem && arrayKey) {
+            if (!Array.isArray(data[arrayKey])) data[arrayKey] = [];
+            data[arrayKey].push(unquoteYaml(arrayItem[1].trim()));
+            return;
+          }
+
+          const kv = line.match(/^([A-Za-z0-9_]+)\s*:\s*(.*)$/);
+          if (!kv) {
+            arrayKey = "";
+            return;
+          }
+
+          const key = kv[1];
+          const val = kv[2].trim();
+          if (val === "") {
+            data[key] = [];
+            arrayKey = key;
+          } else {
+            data[key] = unquoteYaml(val);
+            arrayKey = "";
+          }
+        });
+
+        return { data: data, body: body };
+      }
+
+      function unquoteYaml(value) {
+        if (value === "true") return "true";
+        if (value === "false") return "false";
+        const isDouble = value.startsWith("\"") && value.endsWith("\"");
+        const isSingle = value.startsWith("'") && value.endsWith("'");
+        if (!isDouble && !isSingle) return value;
+        return value.slice(1, -1).replace(/\\"/g, "\"").replace(/\\\\/g, "\\");
+      }
+
+      function datetimeInputFrom(dateText) {
+        const d = new Date(dateText);
+        if (Number.isNaN(d.getTime())) return nowInput();
+        return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes());
+      }
+
+      function applyParsedPost(parsed, folderHint, targetPathHint) {
+        if (!parsed) return;
+        const data = parsed.data || {};
+
+        if (typeof data.title === "string") el.title.value = data.title;
+        if (typeof data.description === "string") el.subtitle.value = data.description;
+        if (Array.isArray(data.categories) && data.categories.length > 0) {
+          el.category.value = data.categories.join(", ");
+        }
+        if (typeof data.slug === "string") el.slug.value = data.slug;
+        if (typeof data.author === "string") el.author.value = data.author;
+        if (typeof data.draft === "string" && (data.draft === "true" || data.draft === "false")) {
+          el.draft.value = data.draft;
+        }
+        if (typeof data.date === "string") {
+          el.date.value = datetimeInputFrom(data.date);
+        }
+
+        el.body.value = parsed.body || "";
+
+        if (targetPathHint && targetPathHint.startsWith("content/post/")) {
+          el.editMode.value = "post";
+        } else if (targetPathHint) {
+          el.editMode.value = "content";
+          el.contentPath.value = targetPathHint;
+        }
+
+        if (el.editMode.value === "post") {
+          if (folderHint) {
+            el.folder.value = folderHint;
+            manualFolder = true;
+          } else if (!manualFolder) {
+            el.folder.value = folderFromTitle(el.title.value.trim());
+          }
+        }
+
+        imageQueue.length = 0;
+      }
+
+      async function getFileHandleByRelativePath(dirHandle, relPath) {
+        const normalized = normalizeImageRef(relPath);
+        if (!normalized) throw new Error("empty path");
+        const parts = normalized.split("/").filter(Boolean);
+        let current = dirHandle;
+        for (let i = 0; i < parts.length - 1; i += 1) {
+          current = await current.getDirectoryHandle(parts[i]);
+        }
+        return await current.getFileHandle(parts[parts.length - 1]);
+      }
+
+      async function hydratePreviewImagesFromDir(bodyMarkdown, dirHandle) {
+        if (!dirHandle) return;
+        const refs = parseImageRefsFromMarkdown(bodyMarkdown);
+        for (const ref of refs) {
+          if (previewImageMap.has(ref)) continue;
+          try {
+            const handle = await getFileHandleByRelativePath(dirHandle, ref);
+            const file = await handle.getFile();
+            setPreviewImage(ref, file);
+          } catch (_) {}
+        }
+      }
+
+      function splitList(val) {
+        return String(val || "").split(/[,，]/).map(s => s.trim()).filter(Boolean);
+      }
+
+      function setLeftStatus(msg, type) {
+        el.leftStatus.textContent = msg || "";
+        el.leftStatus.className = "status " + (type || "");
+      }
+
+      function setRightStatus(msg, type) {
+        el.rightStatus.textContent = msg || "";
+        el.rightStatus.className = "status " + (type || "");
+      }
+
+      function autoGrow(textarea) {
+        // Keep independent scroll areas for source/preview sync.
+        return textarea;
+      }
+
+      function insertAtCursor(textarea, text) {
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const before = textarea.value.slice(0, start);
+        const after = textarea.value.slice(end);
+        textarea.value = before + text + after;
+        const pos = start + text.length;
+        textarea.focus();
+        textarea.setSelectionRange(pos, pos);
+        autoGrow(textarea);
+      }
+
+      function buildMarkdown() {
+        const title = el.title.value.trim();
+        const subtitle = el.subtitle.value.trim();
+        const category = el.category.value.trim() || DEFAULTS.category;
+        const slug = el.slug.value.trim();
+        const author = el.author.value.trim() || DEFAULTS.author;
+        const draft = el.draft.value;
+
+        const lines = [
+          "---",
+          "",
+          "date : " + toISO(getDate()),
+          "draft : " + draft,
+          "author : \"" + escapeYaml(author) + "\"",
+          "title : \"" + escapeYaml(title) + "\""
+        ];
+
+        if (subtitle) lines.push("description : \"" + escapeYaml(subtitle) + "\"");
+        if (slug) lines.push("slug : \"" + escapeYaml(slug) + "\"");
+
+        lines.push("categories:");
+        splitList(category).forEach(function (c) {
+          lines.push("    - " + c);
+        });
+
+        lines.push("", "---", "", el.body.value || "");
+        return lines.join("\n");
+      }
+
+      function renderUploadList() {
+        if (imageQueue.length === 0) {
+          el.uploadList.innerHTML = "";
+          return;
+        }
+
+        el.uploadList.innerHTML = imageQueue.map(function (it) {
+          const state = it.uploadedLocal && it.uploadedRemote ? "本地+远端" : it.uploadedLocal ? "本地" : it.uploadedRemote ? "远端" : "待上传";
+          return "<div class=\"upload-item\"><span>" + it.name + "</span><span>" + state + "</span></div>";
+        }).join("");
+      }
+
+      function renderPreview() {
+        const title = el.title.value.trim() || "（标题预览）";
+        const subtitle = el.subtitle.value.trim() || "（副标题预览）";
+        const category = el.category.value.trim() || DEFAULTS.category;
+        const publishDate = toISO(getDate());
+        const target = getTargetPath();
+
+        el.pTitle.textContent = title;
+        el.pSubtitle.textContent = subtitle || "（副标题预览）";
+        el.pCategory.textContent = "分类：" + category;
+        el.pDate.textContent = "时间：" + publishDate;
+        el.pPath.textContent = "路径：" + target;
+
+        if (window.marked && typeof window.marked.parse === "function") {
+          const blocks = splitMarkdownBlocks(el.body.value || "");
+          const box = document.createElement("div");
+          box.innerHTML = blocks.map(function (block) {
+            const inner = window.marked.parse(block.text || "", { breaks: true, gfm: true });
+            return "<section class=\"md-block\" data-start-line=\"" + block.startLine + "\">" + inner + "</section>";
+          }).join("");
+
+          box.querySelectorAll("img").forEach(function (img) {
+            const raw = img.getAttribute("src") || "";
+            const key = normalizeImageRef(raw);
+            if (previewImageMap.has(key)) {
+              img.setAttribute("src", previewImageMap.get(key));
+            }
+            img.addEventListener("load", function () {
+              syncPreviewToEditorScroll();
+            }, { once: true });
+          });
+          el.preview.innerHTML = box.innerHTML;
+        } else {
+          el.preview.textContent = el.body.value || "";
+        }
+
+        syncPreviewToEditorScroll();
+      }
+
+      function collectState() {
+        return {
+          title: el.title.value,
+          subtitle: el.subtitle.value,
+          category: el.category.value,
+          body: el.body.value,
+
+          folder: el.folder.value,
+          date: el.date.value,
+          slug: el.slug.value,
+          editMode: el.editMode.value,
+          contentPath: el.contentPath.value,
+          author: el.author.value,
+          draft: el.draft.value,
+          commitMsg: el.commitMsg.value,
+
+          owner: el.owner.value,
+          repo: el.repo.value,
+          branch: el.branch.value,
+          token: el.token.value,
+
+          manualFolder: manualFolder
+        };
+      }
+
+      function applyState(state) {
+        if (!state) return;
+
+        el.title.value = state.title || "";
+        el.subtitle.value = state.subtitle || "";
+        el.category.value = state.category || DEFAULTS.category;
+        el.body.value = state.body || "";
+
+        el.folder.value = state.folder || "";
+        el.date.value = state.date || nowInput();
+        el.slug.value = state.slug || "";
+        el.editMode.value = state.editMode || "post";
+        el.contentPath.value = state.contentPath || "content/page/about/index.zh-cn.md";
+        el.author.value = state.author || DEFAULTS.author;
+        el.draft.value = state.draft || DEFAULTS.draft;
+        el.commitMsg.value = state.commitMsg || "";
+
+        el.owner.value = state.owner || DEFAULTS.owner;
+        el.repo.value = state.repo || DEFAULTS.repo;
+        el.branch.value = state.branch || DEFAULTS.branch;
+        el.token.value = state.token || DEFAULTS.token;
+
+        manualFolder = Boolean(state.manualFolder);
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(KEY, JSON.stringify(collectState()));
+        } catch (err) {
+          setLeftStatus("保存草稿失败：" + err.message, "error");
+        }
+      }
+
+      function loadState() {
+        const raw = localStorage.getItem(KEY);
+        if (!raw) {
+          applyState({
+            category: DEFAULTS.category,
+            date: nowInput(),
+            editMode: "post",
+            contentPath: "content/page/about/index.zh-cn.md",
+            author: DEFAULTS.author,
+            draft: DEFAULTS.draft,
+            owner: DEFAULTS.owner,
+            repo: DEFAULTS.repo,
+            branch: DEFAULTS.branch,
+            token: DEFAULTS.token
+          });
+          return;
+        }
+
+        try {
+          applyState(JSON.parse(raw));
+          if (!el.token.value && DEFAULTS.token) {
+            el.token.value = DEFAULTS.token;
+          }
+        } catch (_) {
+          applyState({
+            category: DEFAULTS.category,
+            date: nowInput(),
+            editMode: "post",
+            contentPath: "content/page/about/index.zh-cn.md",
+            author: DEFAULTS.author,
+            draft: DEFAULTS.draft,
+            owner: DEFAULTS.owner,
+            repo: DEFAULTS.repo,
+            branch: DEFAULTS.branch,
+            token: DEFAULTS.token
+          });
+        }
+      }
+
+      function updateAll() {
+        if (el.editMode.value === "post" && !manualFolder) {
+          el.folder.value = folderFromTitle(el.title.value.trim());
+        } else if (el.editMode.value === "content") {
+          el.contentPath.value = normalizeContentPath(el.contentPath.value);
+        }
+
+        autoGrow(el.body);
+        renderPreview();
+        renderUploadList();
+        el.target.textContent = "目标文件：" + getTargetPath();
+        saveState();
+      }
+
+      function sanitizeImageName(fileName) {
+        const dot = fileName.lastIndexOf(".");
+        const ext = dot >= 0 ? fileName.slice(dot).toLowerCase() : "";
+        const base = dot >= 0 ? fileName.slice(0, dot) : fileName;
+        return safeName(base).slice(0, 60) + ext;
+      }
+
+      function uniqueImageName(name) {
+        let candidate = name;
+        let idx = 1;
+        const dot = name.lastIndexOf(".");
+        const ext = dot >= 0 ? name.slice(dot) : "";
+        const base = dot >= 0 ? name.slice(0, dot) : name;
+
+        while (imageQueue.some(function (it) { return it.name === candidate; })) {
+          candidate = base + "-" + (idx++) + ext;
+        }
+        return candidate;
+      }
+
+      async function addImages(files) {
+        if (!files || files.length === 0) return;
+
+        const markdownLines = [];
+        Array.from(files).forEach(function (file) {
+          const safe = uniqueImageName(sanitizeImageName(file.name));
+          imageQueue.push({ name: safe, file: file, uploadedLocal: false, uploadedRemote: false });
+          setPreviewImage(safe, file);
+          markdownLines.push("![" + safe + "](" + safe + ")");
+        });
+
+        insertAtCursor(el.body, "\n\n" + markdownLines.join("\n\n") + "\n");
+        updateAll();
+        setLeftStatus("已插入 " + markdownLines.length + " 张图片引用。", "ok");
+      }
+
+      async function importMarkdownFile(file) {
+        if (!file) return;
+        try {
+          clearPreviewImageMap();
+          const text = await file.text();
+          const parsed = parseFrontMatter(text);
+          if (parsed) {
+            applyParsedPost(parsed, "", el.editMode.value === "content" ? normalizeContentPath(el.contentPath.value) : "");
+            setLeftStatus("Markdown 已导入。", "ok");
+          } else {
+            el.body.value = text;
+            setLeftStatus("未识别 Front Matter，已导入正文。", "warn");
+          }
+          updateAll();
+        } catch (err) {
+          setLeftStatus("导入失败：" + err.message, "error");
+        } finally {
+          el.mdInput.value = "";
+        }
+      }
+
+      function renderPostOptions() {
+        const options = ["<option value=\"\">（选择一个本地文件）</option>"];
+        postEntries.forEach(function (item, idx) {
+          options.push("<option value=\"" + idx + "\">" + item.label + "</option>");
+        });
+        el.postSelect.innerHTML = options.join("");
+      }
+
+      function getSelectedEntry() {
+        const raw = el.postSelect.value;
+        if (raw === "") return null;
+        const index = parseInt(raw, 10);
+        if (!Number.isInteger(index) || index < 0 || index >= postEntries.length) return null;
+        return { index: index, entry: postEntries[index] };
+      }
+
+      async function loadPostList() {
+        if (!rootHandle) {
+          const ok = await pickRoot();
+          if (!ok) return;
+        }
+
+        try {
+          postEntries.length = 0;
+          if (el.editMode.value === "post") {
+            const postDir = await resolvePostDir(rootHandle, false);
+
+            for await (const [folderName, handle] of postDir.entries()) {
+              if (handle.kind !== "directory") continue;
+
+              let fileName = "";
+              try {
+                await handle.getFileHandle("index.zh-cn.md");
+                fileName = "index.zh-cn.md";
+              } catch (_) {
+                try {
+                  await handle.getFileHandle("index.md");
+                  fileName = "index.md";
+                } catch (_) {}
+              }
+
+              if (fileName) {
+                postEntries.push({
+                  type: "post",
+                  folder: folderName,
+                  fileName: fileName,
+                  targetPath: "content/post/" + folderName + "/" + fileName,
+                  label: folderName + " / " + fileName
+                });
+              }
+            }
+          } else {
+            const contentDir = await resolveContentDir(rootHandle);
+            await collectContentMarkdownFiles(contentDir, "", postEntries);
+          }
+
+          postEntries.sort(function (a, b) {
+            return a.label.localeCompare(b.label, "zh-CN");
+          });
+
+          renderPostOptions();
+
+          if (postEntries.length === 0) {
+            setLeftStatus("读取成功，但没有找到可编辑文件。", "warn");
+          } else {
+            setLeftStatus("已读取 " + postEntries.length + " 个本地文件。", "ok");
+          }
+        } catch (err) {
+          rootHandle = null;
+          setLeftStatus("读取文章列表失败：" + err.message + "。请重试并重新选目录。", "error");
+        }
+      }
+
+      async function openSelectedPost() {
+        const selectedInfo = getSelectedEntry();
+        if (!selectedInfo) {
+          setLeftStatus("请先选择一篇文章。", "warn");
+          return;
+        }
+
+        if (!rootHandle) {
+          const ok = await pickRoot();
+          if (!ok) return;
+        }
+
+        const selected = selectedInfo.entry;
+        try {
+          const resolved = await resolveTargetPathHandles(rootHandle, selected.targetPath, false);
+          const fileHandle = await resolved.dirHandle.getFileHandle(resolved.fileName);
+          const file = await fileHandle.getFile();
+          const text = await file.text();
+
+          const parsed = parseFrontMatter(text);
+          if (!parsed) {
+            setLeftStatus("该文章不含 Front Matter，无法自动填充。", "error");
+            return;
+          }
+
+          clearPreviewImageMap();
+          await hydratePreviewImagesFromDir(parsed.body || "", resolved.dirHandle);
+          applyParsedPost(parsed, selected.type === "post" ? selected.folder : "", selected.targetPath);
+          updateAll();
+          setLeftStatus("已加载：" + selected.label, "ok");
+        } catch (err) {
+          setLeftStatus("加载文章失败：" + err.message, "error");
+        }
+      }
+
+      function uint8ToBase64(bytes) {
+        let binary = "";
+        bytes.forEach(function (b) { binary += String.fromCharCode(b); });
+        return btoa(binary);
+      }
+
+      async function fileToBase64(file) {
+        const buffer = await file.arrayBuffer();
+        return uint8ToBase64(new Uint8Array(buffer));
+      }
+
+      async function pickRoot() {
+        if (!window.showDirectoryPicker) {
+          setLeftStatus("浏览器不支持本地目录写入。", "warn");
+          return false;
+        }
+
+        try {
+          rootHandle = await window.showDirectoryPicker({ mode: "readwrite" });
+          setLeftStatus("已选择目录：" + rootHandle.name + "（支持选项目根目录/content/post）", "ok");
+          return true;
+        } catch (err) {
+          if (err && err.name === "AbortError") return false;
+          setLeftStatus("选择目录失败：" + err.message, "error");
+          return false;
+        }
+      }
+
+      async function resolvePostDir(baseHandle, createWhenMissing) {
+        if (!baseHandle) throw new Error("未选择目录");
+
+        try {
+          const contentDir = await baseHandle.getDirectoryHandle("content");
+          return await contentDir.getDirectoryHandle("post", { create: createWhenMissing });
+        } catch (_) {}
+
+        try {
+          return await baseHandle.getDirectoryHandle("post", { create: createWhenMissing });
+        } catch (_) {}
+
+        if (baseHandle.name === "post") {
+          return baseHandle;
+        }
+
+        throw new Error("所选目录中未找到 post 目录");
+      }
+
+      async function resolveContentDir(baseHandle) {
+        if (!baseHandle) throw new Error("未选择目录");
+
+        try {
+          return await baseHandle.getDirectoryHandle("content");
+        } catch (_) {}
+
+        if (baseHandle.name === "content") return baseHandle;
+
+        throw new Error("所选目录中未找到 content 目录");
+      }
+
+      async function walkDir(startHandle, segments, createWhenMissing) {
+        let current = startHandle;
+        for (const seg of segments) {
+          current = await current.getDirectoryHandle(seg, { create: createWhenMissing });
+        }
+        return current;
+      }
+
+      async function resolveTargetPathHandles(baseHandle, targetPath, createWhenMissing) {
+        const normalized = normalizeContentPath(targetPath);
+        const parts = normalized.split("/").filter(Boolean);
+        if (parts.length < 2) throw new Error("目标路径无效: " + normalized);
+        const relParts = parts.slice(1); // remove "content"
+        const dirParts = relParts.slice(0, -1);
+        const fileName = relParts[relParts.length - 1];
+
+        // Try as project root.
+        try {
+          const contentDir = await resolveContentDir(baseHandle);
+          const dirHandle = await walkDir(contentDir, dirParts, createWhenMissing);
+          return { dirHandle, fileName, targetPath: normalized };
+        } catch (_) {}
+
+        // Try as "content" directory.
+        try {
+          if (baseHandle.name === "content") {
+            const dirHandle = await walkDir(baseHandle, dirParts, createWhenMissing);
+            return { dirHandle, fileName, targetPath: normalized };
+          }
+        } catch (_) {}
+
+        // Try as sub directory (e.g. selected "post").
+        try {
+          if (dirParts.length > 0 && baseHandle.name === dirParts[0]) {
+            const dirHandle = await walkDir(baseHandle, dirParts.slice(1), createWhenMissing);
+            return { dirHandle, fileName, targetPath: normalized };
+          }
+        } catch (_) {}
+
+        throw new Error("无法解析目标路径，请重新选择目录（建议选项目根目录）");
+      }
+
+      async function collectContentMarkdownFiles(dirHandle, relPrefix, out) {
+        for await (const [name, handle] of dirHandle.entries()) {
+          if (handle.kind === "directory") {
+            if (!relPrefix && name === "post") continue;
+            const next = relPrefix ? (relPrefix + "/" + name) : name;
+            await collectContentMarkdownFiles(handle, next, out);
+            continue;
+          }
+
+          const lower = name.toLowerCase();
+          if (!(lower.endsWith(".md") || lower.endsWith(".markdown"))) continue;
+
+          const rel = relPrefix ? (relPrefix + "/" + name) : name;
+          const targetPath = "content/" + rel;
+          out.push({
+            type: "content",
+            folder: "",
+            fileName: name,
+            targetPath: targetPath,
+            label: rel
+          });
+        }
+      }
+
+      async function saveLocal() {
+        if (!window.showDirectoryPicker) {
+          setLeftStatus("浏览器不支持本地目录写入。", "warn");
+          return false;
+        }
+
+        if (!rootHandle) {
+          const ok = await pickRoot();
+          if (!ok) return false;
+        }
+
+        const targetPath = getTargetPath();
+
+        try {
+          const resolved = await resolveTargetPathHandles(rootHandle, targetPath, true);
+          const articleDir = resolved.dirHandle;
+          const mdFile = await articleDir.getFileHandle(resolved.fileName, { create: true });
+          const writable = await mdFile.createWritable();
+          await writable.write(buildMarkdown());
+          await writable.close();
+
+          for (const img of imageQueue) {
+            const imgFile = await articleDir.getFileHandle(img.name, { create: true });
+            const imgWritable = await imgFile.createWritable();
+            await imgWritable.write(await img.file.arrayBuffer());
+            await imgWritable.close();
+            img.uploadedLocal = true;
+          }
+
+          return true;
+        } catch (err) {
+          const msg = "本地写入失败：" + err.message;
+          setLeftStatus(msg, "error");
+          return false;
+        }
+      }
+
+      async function ghRequest(url, options, token) {
+        const headers = {
+          "Accept": "application/vnd.github+json",
+          "Authorization": "Bearer " + token,
+          "X-GitHub-Api-Version": "2022-11-28"
+        };
+        return fetch(url, Object.assign({}, options || {}, {
+          headers: Object.assign(headers, (options && options.headers) || {})
+        }));
+      }
+
+      async function safeJson(resp) {
+        try { return await resp.json(); } catch (_) { return null; }
+      }
+
+      function errMessage(data) {
+        if (!data) return "未知错误";
+        return data.message || JSON.stringify(data);
+      }
+
+      async function putContent(owner, repo, branch, token, path, contentBase64, message) {
+        const api = "https://api.github.com/repos/" + encodeURIComponent(owner) + "/" + encodeURIComponent(repo) + "/contents/" + path.split("/").map(encodeURIComponent).join("/");
+
+        let sha;
+        const getResp = await ghRequest(api + "?ref=" + encodeURIComponent(branch), { method: "GET" }, token);
+        if (getResp.status === 200) {
+          sha = (await getResp.json()).sha;
+        } else if (getResp.status !== 404) {
+          throw new Error("读取远端文件失败(" + getResp.status + ")：" + errMessage(await safeJson(getResp)));
+        }
+
+        const payload = {
+          message: message,
+          content: contentBase64,
+          branch: branch
+        };
+        if (sha) payload.sha = sha;
+
+        const putResp = await ghRequest(api, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }, token);
+
+        if (putResp.status !== 200 && putResp.status !== 201) {
+          throw new Error("提交失败(" + putResp.status + ")：" + errMessage(await safeJson(putResp)));
+        }
+
+        return await putResp.json();
+      }
+
+      async function deleteContentBySha(owner, repo, branch, token, path, sha, message) {
+        const api = "https://api.github.com/repos/" + encodeURIComponent(owner) + "/" + encodeURIComponent(repo) + "/contents/" + path.split("/").map(encodeURIComponent).join("/");
+        const resp = await ghRequest(api, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: message,
+            sha: sha,
+            branch: branch
+          })
+        }, token);
+
+        if (resp.status !== 200) {
+          throw new Error("远端删除失败(" + resp.status + ")：" + errMessage(await safeJson(resp)));
+        }
+      }
+
+      async function deleteRemoteTree(owner, repo, branch, token, path, message) {
+        const api = "https://api.github.com/repos/" + encodeURIComponent(owner) + "/" + encodeURIComponent(repo) + "/contents/" + path.split("/").map(encodeURIComponent).join("/");
+        const listResp = await ghRequest(api + "?ref=" + encodeURIComponent(branch), { method: "GET" }, token);
+        if (listResp.status === 404) return 0;
+        if (listResp.status !== 200) {
+          throw new Error("读取远端目录失败(" + listResp.status + ")：" + errMessage(await safeJson(listResp)));
+        }
+
+        const data = await listResp.json();
+        let count = 0;
+
+        if (Array.isArray(data)) {
+          for (const item of data) {
+            if (item.type === "file") {
+              await deleteContentBySha(owner, repo, branch, token, item.path, item.sha, message + " [delete:" + item.path + "]");
+              count += 1;
+            } else if (item.type === "dir") {
+              count += await deleteRemoteTree(owner, repo, branch, token, item.path, message);
+            }
+          }
+          return count;
+        }
+
+        if (data.type === "file") {
+          await deleteContentBySha(owner, repo, branch, token, data.path, data.sha, message + " [delete:" + data.path + "]");
+          return 1;
+        }
+
+        return 0;
+      }
+
+      async function deleteSelectedLocal(selected) {
+        if (!rootHandle) {
+          const ok = await pickRoot();
+          if (!ok) return false;
+        }
+
+        if (selected.type === "post") {
+          const postDir = await resolvePostDir(rootHandle, false);
+          await postDir.removeEntry(selected.folder, { recursive: true });
+          return true;
+        }
+
+        const resolved = await resolveTargetPathHandles(rootHandle, selected.targetPath, false);
+        await resolved.dirHandle.removeEntry(resolved.fileName);
+        return true;
+      }
+
+      async function deleteSelectedRemote(selected) {
+        const owner = el.owner.value.trim();
+        const repo = el.repo.value.trim();
+        const branch = el.branch.value.trim() || DEFAULTS.branch;
+        const token = el.token.value.trim();
+        if (!owner || !repo || !token) {
+          throw new Error("远端删除需要 Owner / Repo / Token。");
+        }
+
+        const title = el.title.value.trim() || selected.label;
+        const commitMsg = (el.commitMsg.value || "chore(content): 删除《" + title + "》").trim();
+        el.commitMsg.value = commitMsg;
+
+        if (selected.type === "post") {
+          const folderPath = dirname(selected.targetPath);
+          return await deleteRemoteTree(owner, repo, branch, token, folderPath, commitMsg);
+        }
+
+        return await deleteRemoteTree(owner, repo, branch, token, selected.targetPath, commitMsg);
+      }
+
+      async function deleteSelectedPost() {
+        const selectedInfo = getSelectedEntry();
+        if (!selectedInfo) {
+          setLeftStatus("请先选择要删除的文件。", "warn");
+          return;
+        }
+
+        const selected = selectedInfo.entry;
+        const confirmed = window.confirm("确认删除：\n" + selected.label + "\n\n将尝试删除本地与 GitHub 远端文件。");
+        if (!confirmed) return;
+
+        setLeftStatus("", "");
+        setRightStatus("正在删除...", "warn");
+
+        let localOk = false;
+        let remoteCount = 0;
+        let remoteErr = "";
+
+        try {
+          localOk = await deleteSelectedLocal(selected);
+        } catch (err) {
+          setLeftStatus("本地删除失败：" + err.message, "error");
+        }
+
+        try {
+          remoteCount = await deleteSelectedRemote(selected);
+        } catch (err) {
+          remoteErr = err.message || String(err);
+        }
+
+        if (localOk) {
+          postEntries.splice(selectedInfo.index, 1);
+          renderPostOptions();
+          if (selected.targetPath === getTargetPath() || (selected.type === "post" && dirname(selected.targetPath) === dirname(getTargetPath()))) {
+            clearPreviewImageMap();
+            imageQueue.length = 0;
+            el.body.value = "";
+            updateAll();
+          }
+          setLeftStatus("本地删除成功：" + selected.label, "ok");
+        }
+
+        if (remoteErr) {
+          setRightStatus("远端删除失败：" + remoteErr, "error");
+        } else {
+          setRightStatus("远端删除成功，删除 " + remoteCount + " 个文件。", "ok");
+        }
+      }
+
+      async function submitRemote() {
+        const owner = el.owner.value.trim();
+        const repo = el.repo.value.trim();
+        const branch = el.branch.value.trim() || DEFAULTS.branch;
+        const token = el.token.value.trim();
+        const title = el.title.value.trim();
+
+        if (!owner || !repo || !token) {
+          throw new Error("Owner / Repo / Token 不能为空。");
+        }
+        if (!title) {
+          throw new Error("请先填写标题。");
+        }
+
+        const targetMd = getTargetPath();
+        const targetDir = dirname(targetMd);
+        const commitMsg = (el.commitMsg.value || "feat(post): 更新《" + title + "》").trim();
+        el.commitMsg.value = commitMsg;
+
+        for (const img of imageQueue) {
+          if (img.uploadedRemote) continue;
+          const imgPath = targetDir + "/" + img.name;
+          const imgMessage = commitMsg + " [image:" + img.name + "]";
+          const base64 = await fileToBase64(img.file);
+          await putContent(owner, repo, branch, token, imgPath, base64, imgMessage);
+          img.uploadedRemote = true;
+        }
+
+        const bytes = new TextEncoder().encode(buildMarkdown());
+        const result = await putContent(owner, repo, branch, token, targetMd, uint8ToBase64(bytes), commitMsg);
+        return result;
+      }
+
+      async function publish() {
+        setLeftStatus("", "");
+        setRightStatus("", "");
+
+        try {
+          setRightStatus("正在写入本地...", "warn");
+          const localOK = await saveLocal();
+          if (localOK) {
+            setLeftStatus("本地写入成功。", "ok");
+          }
+
+          setRightStatus("正在上传到 GitHub...", "warn");
+          const result = await submitRemote();
+          renderUploadList();
+          const commitUrl = result && result.commit && result.commit.html_url ? result.commit.html_url : "";
+          setRightStatus("上传成功。" + (commitUrl ? (" Commit: " + commitUrl) : ""), "ok");
+        } catch (err) {
+          setRightStatus(err.message || String(err), "error");
+        }
+      }
+
+      function bind() {
+        [
+          el.title,
+          el.subtitle,
+          el.category,
+          el.body,
+          el.editMode,
+          el.contentPath,
+          el.date,
+          el.slug,
+          el.author,
+          el.draft,
+          el.commitMsg,
+          el.owner,
+          el.repo,
+          el.branch,
+          el.token
+        ].forEach(function (node) {
+          node.addEventListener("input", updateAll);
+        });
+
+        el.folder.addEventListener("input", function () {
+          manualFolder = Boolean(el.folder.value.trim());
+          updateAll();
+        });
+
+        el.body.addEventListener("input", function () {
+          autoGrow(el.body);
+          syncPreviewToEditorScroll();
+        });
+
+        el.body.addEventListener("scroll", syncPreviewToEditorScroll);
+        el.body.addEventListener("click", syncPreviewToEditorScroll);
+        el.body.addEventListener("keyup", syncPreviewToEditorScroll);
+        el.preview.addEventListener("scroll", syncEditorToPreviewScroll);
+
+        el.btnUpload.addEventListener("click", function () {
+          el.imageInput.click();
+        });
+
+        el.imageInput.addEventListener("change", function () {
+          addImages(el.imageInput.files);
+          el.imageInput.value = "";
+        });
+
+        el.btnImportMd.addEventListener("click", function () {
+          el.mdInput.click();
+        });
+
+        el.mdInput.addEventListener("change", function () {
+          importMarkdownFile(el.mdInput.files && el.mdInput.files[0]);
+        });
+
+        el.btnLoadPostList.addEventListener("click", loadPostList);
+        el.btnOpenPost.addEventListener("click", openSelectedPost);
+        el.btnDeletePost.addEventListener("click", deleteSelectedPost);
+
+        el.btnPublish.addEventListener("click", publish);
+
+        el.btnToggleToken.addEventListener("click", function () {
+          el.token.type = el.token.type === "password" ? "text" : "password";
+        });
+      }
+
+      loadState();
+      if (!el.folder.value.trim()) {
+        el.folder.value = folderFromTitle(el.title.value.trim());
+      }
+      bind();
+      updateAll();
+    }());
+  </script>
+</body>
+</html>
