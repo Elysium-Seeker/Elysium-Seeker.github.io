@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Coordinate-Aware Texture Field Reconstruction via Implicit Neural Fields with Drifting Priors">
+<title>基于隐式神经场与漂移先验的坐标感知纹理场重建</title>
+
+<link rel='canonical' href='https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/'>
+
+<link rel="stylesheet" href="/scss/style.min.829fb4d762832054bf4ccfcc6906b7eb8df8a3d45b00b64b6fc4c539dc19645c.css"><meta property='og:title' content="基于隐式神经场与漂移先验的坐标感知纹理场重建">
+<meta property='og:description' content="Coordinate-Aware Texture Field Reconstruction via Implicit Neural Fields with Drifting Priors">
+<meta property='og:url' content='https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/'>
+<meta property='og:site_name' content='Elysium-Seeker'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-02-28T08:00:00&#43;08:00'/><meta property='article:modified_time' content='2026-03-02T21:24:17&#43;08:00'/>
+<meta name="twitter:title" content="基于隐式神经场与漂移先验的坐标感知纹理场重建">
+<meta name="twitter:description" content="Coordinate-Aware Texture Field Reconstruction via Implicit Neural Fields with Drifting Priors">
+    <link rel="shortcut icon" href="/favicon.ico" />
+<style>
+    :root {
+        --article-font-family: "Noto Serif SC", var(--base-font-family);
+		--article-font-size: 1.7rem;
+		--article-line-height: 1.8;
+    }
+</style>
+
+<script>
+		(function () {
+		    const customFont = document.createElement('link');
+		    customFont.href = "https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap";
+		
+		    customFont.type = "text/css";
+		    customFont.rel = "stylesheet";
+		
+		    document.head.appendChild(customFont);
+		}());
+</script>
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/b_bafc54ed2304790292888aa8183afddb_hu_25b25cb3ac2ccae0.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">⭐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Elysium-Seeker</a></h1>
+            <h2 class="site-description">请用一支玫瑰纪念我</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Elysium-Seeker'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E9%93%BE/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友链</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/blog-editor/' >
+                
+                
+                
+                <span>博客更新助手</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#摘要">摘要</a></li>
+    <li><a href="#1-引言">1. 引言</a></li>
+    <li><a href="#2-相关工作">2. 相关工作</a></li>
+    <li><a href="#3-问题定义与符号">3. 问题定义与符号</a></li>
+    <li><a href="#4-方法">4. 方法</a>
+      <ol>
+        <li><a href="#41-坐标感知隐式生成">4.1 坐标感知隐式生成</a></li>
+        <li><a href="#42-坐标编码与特征融合">4.2 坐标编码与特征融合</a></li>
+        <li><a href="#43-指数-gamma-参数化">4.3 指数 $\gamma$ 参数化</a></li>
+        <li><a href="#44-drifting-漂移先验">4.4 Drifting 漂移先验</a></li>
+        <li><a href="#45-blueprint-宏观结构先验">4.5 Blueprint 宏观结构先验</a></li>
+        <li><a href="#46-稀疏重建与-z-inversion">4.6 稀疏重建与 z-Inversion</a></li>
+      </ol>
+    </li>
+    <li><a href="#5-实验设置">5. 实验设置</a>
+      <ol>
+        <li><a href="#51-数据与采样">5.1 数据与采样</a></li>
+        <li><a href="#52-模型与重建配置">5.2 模型与重建配置</a></li>
+        <li><a href="#53-评测指标">5.3 评测指标</a></li>
+        <li><a href="#54-评测协议">5.4 评测协议</a></li>
+      </ol>
+    </li>
+    <li><a href="#6-实验结果与分析">6. 实验结果与分析</a>
+      <ol>
+        <li><a href="#61-采样曲线与临界采样率">6.1 采样曲线与临界采样率</a></li>
+        <li><a href="#62-laplacian-与-multi-scale-s_2">6.2 Laplacian 与 Multi-scale $S_2$</a></li>
+        <li><a href="#63-overlap-mae按-k">6.3 Overlap MAE（按 K）</a></li>
+        <li><a href="#64-非均匀采样鲁棒性k24">6.4 非均匀采样鲁棒性（K=24）</a></li>
+        <li><a href="#65-leave-region-out中心区域留出">6.5 Leave-Region-Out（中心区域留出）</a></li>
+        <li><a href="#66-overlap-ablation不同-stride">6.6 Overlap Ablation（不同 stride）</a></li>
+        <li><a href="#67-分辨率外推与频谱稳定性">6.7 分辨率外推与频谱稳定性</a></li>
+        <li><a href="#68-理论指标估计">6.8 理论指标估计</a></li>
+        <li><a href="#69-频谱与-s_2-对齐">6.9 频谱与 $S_2$ 对齐</a></li>
+        <li><a href="#610-额外实验随机性噪声与-z-inversion-敏感性">6.10 额外实验：随机性、噪声与 z-inversion 敏感性</a></li>
+      </ol>
+    </li>
+    <li><a href="#7-讨论">7. 讨论</a></li>
+    <li><a href="#8-结论与展望">8. 结论与展望</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/work/" style="background-color: #708090; color: #fff;">
+                Work
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/">基于隐式神经场与漂移先验的坐标感知纹理场重建</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            Coordinate-Aware Texture Field Reconstruction via Implicit Neural Fields with Drifting Priors
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-02-28</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 11 分钟
+                </time>
+            </div>
+        <div class="article-lastmod">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time>
+                    2026-03-02
+                </time>
+            </div></footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="摘要">摘要
+</h2><p>稀疏观测下的非平稳纹理场重建是材料微观结构分析中的关键问题。本文提出一种坐标感知的隐式神经场（Implicit Neural Field, INF）重建框架，将像素值建模为连续坐标函数 $G(z,x,y)$，结合 Drifting 漂移先验与 Blueprint 宏观结构引导，以结构性方式保证重叠区域一致性，并通过指数 $\gamma$ 参数化增强潜变量调制能力。该框架在稀疏观测条件下实现高质量重建，并保持统计物理指标与频谱分布的一致性。</p>
+<p>在 fBm 合成纹理数据（2048×2048，1849 patches）上，系统性评测覆盖 0.1%–10% 采样率、非均匀采样、Leave-Region-Out、Overlap Ablation、分辨率外推与理论指标估计，并补充了直方图一致性、谱熵差异与频带能量差等统计指标。实验显示：在 1.3% 采样率（K=24）下即可达到 PSNR 31.302 dB、SSIM 0.9477、grad_err 0.0069、$S_2$ 误差 $6.62\times10^{-4}$、方向谱误差 $7.99\times10^{-7}$，与 10% 采样相比 $\Delta$PSNR 仅 0.030 dB；Overlap MAE 约为 0.0025，重叠拼接稳定。非均匀采样与留出区域评测进一步验证了稀疏重建的鲁棒性与空间外推能力。补充的随机种子与噪声实验显示结果波动很小，说明方法对采样随机性和轻度观测噪声具有稳定性。相关结果支持临界采样率 $r_c\approx1.3%$ 的结论，并与频谱带宽与相关长度估计相一致。</p>
+<p><strong>关键词：</strong> 隐式神经场；坐标感知；漂移先验；稀疏重建；纹理建模</p>
+<hr>
+<h2 id="1-引言">1. 引言
+</h2><p>材料微观纹理在空间上往往呈现显著的坐标依赖与非均匀性，传统通用生成模型难以保证跨 patch 的结构一致与统计稳定 [4]–[6]。在稀疏观测条件下，单纯依赖局部 patch 的重建策略容易导致拼接缝隙或统计偏移，而这类问题对材料表征、虚拟检测与尺度外推具有明显不利影响。</p>
+<p>隐式神经表示将像素值视为连续坐标函数，为坐标驱动的纹理场重建提供了结构性优势 [1]。本文结合 Drifting 漂移先验 [8]，提出坐标感知的 INF 框架，并系统评估不同采样率与采样策略下的重建能力，重点分析临界采样率 $r_c$ 的可解释性与鲁棒性。</p>
+<p>本文的主要贡献包括：</p>
+<ol>
+<li>以坐标隐式场实现结构性无缝拼接，并通过指数 $\gamma$ 参数化增强潜变量调制；</li>
+<li>引入 Drifting 先验与 Blueprint 宏观结构引导，提升稀疏重建稳定性；</li>
+<li>系统补全采样曲线、非均匀采样、Leave-Region-Out、Overlap Ablation、分辨率外推与理论指标估计，并给出一致的量化分析。</li>
+</ol>
+<hr>
+<h2 id="2-相关工作">2. 相关工作
+</h2><p>隐式神经表示通过连续函数刻画信号，在坐标驱动建模中具有显著优势。SIREN 使用周期激活函数提升高频表达能力 [1]，FiLM 通过条件调制实现坐标与潜变量的融合 [2]，Fourier Features 则增强了低维坐标到高频纹理的映射能力 [3]。这些方法为坐标条件的纹理重建提供了关键基础。</p>
+<p>另一方面，StyleGAN3、扩散模型与 LoRA 等通用生成范式在自然图像领域表现突出 [4]–[6]，但其生成过程并不以像素坐标为基本建模变量，难以保证跨 patch 的一致性与可控性。本文关注坐标驱动的纹理场重建，强调在稀疏观测下对结构连续性与统计一致性的统一约束。</p>
+<hr>
+<h2 id="3-问题定义与符号">3. 问题定义与符号
+</h2><p>给定稀疏观测集 ${(y_i, c_i)}_{i=1}^K$（$y_i$ 为局部纹理 patch，$c_i$ 为其坐标），目标是在全局坐标域内重建连续纹理场：</p>
+$$
+\hat{I}(x,y) = G(z, x, y), \quad z^* = \arg\min_{z} \sum_{i=1}^K \lVert G(z, c_i) - y_i \rVert^2
+$$<p>其中 $G(\cdot)$ 为隐式神经场生成器，$z$ 为全局潜变量。该目标要求同时满足：</p>
+<ol>
+<li><strong>连续性</strong>：重叠区域输出一致；</li>
+<li><strong>统计一致性</strong>：与真实纹理的 $S_2$ 与频谱分布相符；</li>
+<li><strong>可控性</strong>：坐标变化引起可解释的纹理变化。</li>
+</ol>
+<hr>
+<h2 id="4-方法">4. 方法
+</h2><h3 id="41-坐标感知隐式生成">4.1 坐标感知隐式生成
+</h3><p>采用 FiLM-SIREN 架构将像素值建模为坐标的连续函数：</p>
+$$
+G(z, x, y) \to \text{pixel value} \in [0,1]
+$$<p>具体地，坐标 $c=(x,y)$ 经编码后输入到 SIREN 主干，最终输出为灰度值：</p>
+$$
+h_0 = \phi(c), \quad h_{l+1} = \sin(\gamma_l \odot (W_l h_l) + \beta_l), \quad \hat{y} = \sigma(W_o h_L)
+$$<p>其中 $\phi(\cdot)$ 为坐标编码，$\gamma_l,\beta_l$ 为 FiLM 调制参数，$\sigma(\cdot)$ 为 Sigmoid 压缩到 $[0,1]$。相同坐标对应唯一输出，因此重叠区域的一致性由结构性保证，不依赖显式连续性损失 [1], [2]。</p>
+<h3 id="42-坐标编码与特征融合">4.2 坐标编码与特征融合
+</h3><p>坐标编码采用 Gaussian Fourier Features 与多尺度正余弦组合，提升高频纹理表达能力 [3]。常用形式为：</p>
+$$
+\phi(c) = [\sin(2\pi Bc), \cos(2\pi Bc), c], \quad B \sim \mathcal{N}(0, \sigma^2)
+$$<p>在实际实现中，坐标编码维度为 546D，由 Fourier 特征、原始坐标与可学习 Spatial Embedding 组成，用于增强局部空间先验。空间嵌入 $e(c)$ 通过可学习网格或 MLP 提供局部结构提示，并与 Fourier 特征拼接后输入主干网络。</p>
+<h3 id="43-指数-gamma-参数化">4.3 指数 $\gamma$ 参数化
+</h3><p>为强化潜变量调制，引入指数参数化：</p>
+$$
+\gamma = e^{f \cdot 0.5} \cdot \omega_0
+$$<p>其中 $f$ 为由映射网络输出的调制因子，$\omega_0$ 为 SIREN 基频。该设计缓解潜变量信号被固定基频淹没的问题，提升重建稳定性与多样性 [9]。在实现中，$\gamma_l,\beta_l$ 由 $(z,b)$ 映射得到：</p>
+$$
+[\gamma_l,\beta_l]_{l=1}^L = M(z, b)
+$$<p>其中 $b$ 为 Blueprint 提供的全局结构特征。</p>
+<h3 id="44-drifting-漂移先验">4.4 Drifting 漂移先验
+</h3><p>在特征空间构建漂移场，使生成样本沿近邻真实样本方向被引导：</p>
+$$
+V(\hat{f}) = \sum_i w_i (f_i - \hat{f}), \quad w_i = \frac{\exp(-\lVert \hat{f}-f_i \rVert^2 / 2\sigma_f^2)}{\sum_j \exp(-\lVert \hat{f}-f_j \rVert^2 / 2\sigma_f^2)}
+$$<p>其中 $\hat{f}$ 为生成 patch 的特征表示，$f_i$ 为真实样本特征。漂移场在特征空间提供“朝向真实分布”的引导方向，作为先验约束增强局部统计一致性与稀疏重建稳定性 [8]。</p>
+<h3 id="45-blueprint-宏观结构先验">4.5 Blueprint 宏观结构先验
+</h3><p>Blueprint 提供低分辨率全场结构摘要，并通过 FiLM 调制方式注入生成器，从而在不增加坐标输入维度的情况下引入全局结构约束 [9]。设低分辨率 Blueprint 为 $B$，在坐标 $c$ 处抽取局部结构块：</p>
+$$
+b(c) = P(B, c), \quad b = E_{bp}(b(c))
+$$<p>其中 $P(\cdot)$ 为局部裁剪算子，$E_{bp}$ 为 Blueprint 编码器。得到的 $b$ 与潜变量 $z$ 共同驱动 FiLM 参数，形成全局结构的可控约束。</p>
+<h3 id="46-稀疏重建与-z-inversion">4.6 稀疏重建与 z-Inversion
+</h3><p>给定观测 patch，优化潜变量以匹配观测：</p>
+$$
+z^* = \arg\min_{z} \sum_{i=1}^{K} \|G(z, c_i) - y_i\|^2
+$$<p>本文采用 Adam 优化（lr=0.01，500 iters）求解 $z^*$，并在全场坐标上重建连续纹理场。优化过程可写为：</p>
+$$
+z_{t+1} = z_t - \eta \nabla_z \mathcal{L}(z_t), \quad \mathcal{L}(z) = \sum_{i=1}^{K} \|G(z, c_i) - y_i\|^2
+$$<p>实际实现中 $z_0$ 初始化为零向量，以保证重建过程的确定性与可复现性。</p>
+<hr>
+<h2 id="5-实验设置">5. 实验设置
+</h2><h3 id="51-数据与采样">5.1 数据与采样
+</h3><ul>
+<li>数据：fBm 合成纹理 $2048\times2048$。</li>
+<li>Patch：$64\times64$，stride=48（overlap=16）。</li>
+<li>Patch 总数：1849（$43\times43$ 网格）。</li>
+<li>坐标：像素中心归一化至 $[-1,1]$。</li>
+</ul>
+<h3 id="52-模型与重建配置">5.2 模型与重建配置
+</h3><ul>
+<li>生成器：SIREN 8×512，$\omega_0=30$；全局潜变量 $z\in\mathbb{R}^{256}$。</li>
+<li>稀疏重建：Adam 优化 $z$（lr=0.01，500 iters），批大小 64。</li>
+<li>采样比例：0.1%, 0.3%, 0.5%, 1%, 1.3%, 2%, 5%, 10%。</li>
+</ul>
+<h3 id="53-评测指标">5.3 评测指标
+</h3><ul>
+<li><strong>PSNR / SSIM / MSE</strong>：像素级重建质量；</li>
+<li><strong>grad_err / lap_err</strong>：梯度与 Laplacian 一致性误差；</li>
+<li><strong>$S_2$ / multiscale $S_2$</strong>：两点相关函数一致性；</li>
+<li><strong>dir_spec_err</strong>：FFT → 极坐标 → 角向能量分布的 L2 差异；</li>
+<li><strong>Overlap MAE</strong>：重叠区域拼接误差；</li>
+<li><strong>$r_c$</strong>：误差阈值下的临界采样率。</li>
+<li><strong>hist_l1</strong>：像素强度直方图的 L1 差异，反映灰度分布一致性；</li>
+<li><strong>spec_entropy_diff</strong>：谱熵差异，衡量纹理频谱能量分布的复杂度偏移；</li>
+<li><strong>freq_ratio_l2 / high_freq_diff</strong>：低/中/高频能量占比差异与高频能量偏差，反映频带结构的一致性。</li>
+</ul>
+<h3 id="54-评测协议">5.4 评测协议
+</h3><ol>
+<li>固定训练好的 INF 生成器；</li>
+<li>在不同采样率下随机选择观测 patch（固定随机种子保证可复现）；</li>
+<li>通过 z-inversion 优化 $z^*$；</li>
+<li>在全场坐标重建并评测；</li>
+<li>非均匀采样、Leave-Region-Out 与 Overlap Ablation 采用相同重建流程。</li>
+<li>额外实验在 $r=1.3%$（K=24）下进行，分别评估随机种子、观测噪声、z-inversion 迭代次数与学习率的敏感性 [12]。</li>
+</ol>
+<hr>
+<h2 id="6-实验结果与分析">6. 实验结果与分析
+</h2><h3 id="61-采样曲线与临界采样率">6.1 采样曲线与临界采样率
+</h3><p>采样曲线覆盖 0.1%–10% patch ratio，评测 PSNR / SSIM / grad_err / $S_2$ / dir_spec_err。结果如下：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: right">采样率</th>
+          <th style="text-align: right">K</th>
+          <th style="text-align: right">PSNR (dB)</th>
+          <th style="text-align: right">SSIM</th>
+          <th style="text-align: right">grad_err</th>
+          <th style="text-align: right">s2_err</th>
+          <th style="text-align: right">dir_spec_err</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: right">0.1%</td>
+          <td style="text-align: right">2</td>
+          <td style="text-align: right">30.787</td>
+          <td style="text-align: right">0.9303</td>
+          <td style="text-align: right">0.0095</td>
+          <td style="text-align: right">0.000855</td>
+          <td style="text-align: right">1.06e-06</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">0.3%</td>
+          <td style="text-align: right">6</td>
+          <td style="text-align: right">31.163</td>
+          <td style="text-align: right">0.9434</td>
+          <td style="text-align: right">0.0076</td>
+          <td style="text-align: right">0.000724</td>
+          <td style="text-align: right">8.62e-07</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">0.5%</td>
+          <td style="text-align: right">9</td>
+          <td style="text-align: right">31.225</td>
+          <td style="text-align: right">0.9449</td>
+          <td style="text-align: right">0.0073</td>
+          <td style="text-align: right">0.000790</td>
+          <td style="text-align: right">7.93e-07</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">1.0%</td>
+          <td style="text-align: right">18</td>
+          <td style="text-align: right">30.573</td>
+          <td style="text-align: right">0.9362</td>
+          <td style="text-align: right">0.0085</td>
+          <td style="text-align: right">0.000895</td>
+          <td style="text-align: right">1.05e-06</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">1.3%</td>
+          <td style="text-align: right">24</td>
+          <td style="text-align: right">31.302</td>
+          <td style="text-align: right">0.9477</td>
+          <td style="text-align: right">0.0069</td>
+          <td style="text-align: right">0.000662</td>
+          <td style="text-align: right">7.99e-07</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">2.0%</td>
+          <td style="text-align: right">37</td>
+          <td style="text-align: right">31.432</td>
+          <td style="text-align: right">0.9507</td>
+          <td style="text-align: right">0.0065</td>
+          <td style="text-align: right">0.000665</td>
+          <td style="text-align: right">7.08e-07</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">5.0%</td>
+          <td style="text-align: right">92</td>
+          <td style="text-align: right">31.287</td>
+          <td style="text-align: right">0.9467</td>
+          <td style="text-align: right">0.0071</td>
+          <td style="text-align: right">0.000735</td>
+          <td style="text-align: right">7.76e-07</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">10.0%</td>
+          <td style="text-align: right">185</td>
+          <td style="text-align: right">31.331</td>
+          <td style="text-align: right">0.9480</td>
+          <td style="text-align: right">0.0069</td>
+          <td style="text-align: right">0.000707</td>
+          <td style="text-align: right">7.59e-07</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>PSNR 在 1.3% 采样率已接近高采样率平台，10% 采样的 PSNR 为 31.331 dB，1.3% 对应 31.302 dB，$\Delta$PSNR = 0.030 dB。该结果支持临界采样率 $r_c\approx1.3%$ 的判断，表明纹理场具有较低的有效自由度与有限带宽特性。</p>
+<p><img src="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/sampling_curve.png"
+	width="2140"
+	height="1412"
+	srcset="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/sampling_curve_hu_b2314ee48d6aefa2.png 480w, /p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/sampling_curve_hu_b65b21b37c381345.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="151"
+		data-flex-basis="363px"
+	
+></p>
+<h3 id="62-laplacian-与-multi-scale-s_2">6.2 Laplacian 与 Multi-scale $S_2$
+</h3><p>为了更全面评估纹理的结构一致性，进一步补充 Laplacian 与多尺度 $S_2$ 误差：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: right">采样率</th>
+          <th style="text-align: right">K</th>
+          <th style="text-align: right">lap_err</th>
+          <th style="text-align: right">s2_ms_err</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: right">0.1%</td>
+          <td style="text-align: right">2</td>
+          <td style="text-align: right">0.0154</td>
+          <td style="text-align: right">0.001159</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">0.3%</td>
+          <td style="text-align: right">6</td>
+          <td style="text-align: right">0.0113</td>
+          <td style="text-align: right">0.000960</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">0.5%</td>
+          <td style="text-align: right">9</td>
+          <td style="text-align: right">0.0108</td>
+          <td style="text-align: right">0.001022</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">1.0%</td>
+          <td style="text-align: right">18</td>
+          <td style="text-align: right">0.0130</td>
+          <td style="text-align: right">0.001422</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">1.3%</td>
+          <td style="text-align: right">24</td>
+          <td style="text-align: right">0.0098</td>
+          <td style="text-align: right">0.000868</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">2.0%</td>
+          <td style="text-align: right">37</td>
+          <td style="text-align: right">0.0088</td>
+          <td style="text-align: right">0.000854</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">5.0%</td>
+          <td style="text-align: right">92</td>
+          <td style="text-align: right">0.0102</td>
+          <td style="text-align: right">0.000951</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">10.0%</td>
+          <td style="text-align: right">185</td>
+          <td style="text-align: right">0.0097</td>
+          <td style="text-align: right">0.000914</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>在 1.3% 采样率下 lap_err 与 s2_ms_err 同步下降，说明重建不仅在像素层面逼近真实纹理，而且在多尺度结构统计上趋于稳定。</p>
+<h3 id="63-overlap-mae按-k">6.3 Overlap MAE（按 K）
+</h3><p>Overlap MAE 通过比较相邻 patch 重叠区域的像素差异计算，反映拼接一致性：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: right">采样率</th>
+          <th style="text-align: right">K</th>
+          <th style="text-align: right">overlap_v</th>
+          <th style="text-align: right">overlap_h</th>
+          <th style="text-align: right">overlap_mae</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: right">0.1%</td>
+          <td style="text-align: right">2</td>
+          <td style="text-align: right">0.0037</td>
+          <td style="text-align: right">0.0037</td>
+          <td style="text-align: right">0.0037</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">0.3%</td>
+          <td style="text-align: right">6</td>
+          <td style="text-align: right">0.0028</td>
+          <td style="text-align: right">0.0028</td>
+          <td style="text-align: right">0.0028</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">0.5%</td>
+          <td style="text-align: right">9</td>
+          <td style="text-align: right">0.0027</td>
+          <td style="text-align: right">0.0027</td>
+          <td style="text-align: right">0.0027</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">1.0%</td>
+          <td style="text-align: right">18</td>
+          <td style="text-align: right">0.0032</td>
+          <td style="text-align: right">0.0032</td>
+          <td style="text-align: right">0.0032</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">1.3%</td>
+          <td style="text-align: right">24</td>
+          <td style="text-align: right">0.0025</td>
+          <td style="text-align: right">0.0025</td>
+          <td style="text-align: right">0.0025</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">2.0%</td>
+          <td style="text-align: right">37</td>
+          <td style="text-align: right">0.0023</td>
+          <td style="text-align: right">0.0023</td>
+          <td style="text-align: right">0.0023</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">5.0%</td>
+          <td style="text-align: right">92</td>
+          <td style="text-align: right">0.0026</td>
+          <td style="text-align: right">0.0026</td>
+          <td style="text-align: right">0.0026</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">10.0%</td>
+          <td style="text-align: right">185</td>
+          <td style="text-align: right">0.0025</td>
+          <td style="text-align: right">0.0025</td>
+          <td style="text-align: right">0.0025</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>Overlap MAE 在不同采样率下保持在 $2.3\times10^{-3}$ 到 $3.7\times10^{-3}$ 区间，说明坐标隐式场对拼接一致性具有结构性保障。</p>
+<h3 id="64-非均匀采样鲁棒性k24">6.4 非均匀采样鲁棒性（K=24）
+</h3><p>对比三种采样策略：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>采样策略</th>
+          <th style="text-align: right">PSNR (dB)</th>
+          <th style="text-align: right">SSIM</th>
+          <th style="text-align: right">grad_err</th>
+          <th style="text-align: right">s2_err</th>
+          <th style="text-align: right">dir_spec_err</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Uniform</td>
+          <td style="text-align: right">31.018</td>
+          <td style="text-align: right">0.9377</td>
+          <td style="text-align: right">0.0084</td>
+          <td style="text-align: right">0.000885</td>
+          <td style="text-align: right">9.14e-07</td>
+      </tr>
+      <tr>
+          <td>Stratified</td>
+          <td style="text-align: right">31.142</td>
+          <td style="text-align: right">0.9423</td>
+          <td style="text-align: right">0.0077</td>
+          <td style="text-align: right">0.000851</td>
+          <td style="text-align: right">8.30e-07</td>
+      </tr>
+      <tr>
+          <td>Half-region</td>
+          <td style="text-align: right">31.360</td>
+          <td style="text-align: right">0.9490</td>
+          <td style="text-align: right">0.0067</td>
+          <td style="text-align: right">0.000714</td>
+          <td style="text-align: right">7.23e-07</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>三种策略在 PSNR 上的差异小于 0.35 dB，说明在相同观测数量下，采样分布对整体重建质量影响有限；Half-region 略优，表明稠密局部观测对重建有一定正向作用。</p>
+<p><img src="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/non_uniform_sampling.png"
+	width="2140"
+	height="714"
+	srcset="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/non_uniform_sampling_hu_c882ae9bfb336d34.png 480w, /p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/non_uniform_sampling_hu_1c2ec769491a95c1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="299"
+		data-flex-basis="719px"
+	
+></p>
+<h3 id="65-leave-region-out中心区域留出">6.5 Leave-Region-Out（中心区域留出）
+</h3><p>留出中心区域（约 615×615 px）完全不参与采样，使用 K=24 观测进行稀疏重建。评测结果：</p>
+<ul>
+<li>Full：PSNR 31.120 / SSIM 0.9431 / $S_2$ err $8.69\times10^{-4}$ / dir spec err $8.12\times10^{-7}$</li>
+<li>Holdout：PSNR 30.122 / SSIM 0.9416 / $S_2$ err $8.69\times10^{-4}$ / dir spec err $8.12\times10^{-7}$</li>
+</ul>
+<p>Holdout 区域 PSNR 仅比全图低约 1 dB，且统计指标保持一致，表明模型具备一定空间外推能力而非仅依赖观测插值。</p>
+<p>\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\linewidth]{leave_region_out.png}
+\end{figure}</p>
+<h3 id="66-overlap-ablation不同-stride">6.6 Overlap Ablation（不同 stride）
+</h3><p>为验证重叠密度对临界采样率的影响，设置 stride=64/48/32 的对比实验：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: right">Stride</th>
+          <th style="text-align: right">N</th>
+          <th style="text-align: right">$r_c$ avg</th>
+          <th style="text-align: right">$r_c$ grad</th>
+          <th style="text-align: right">$r_c$ $S_2$</th>
+          <th style="text-align: right">$r_c$ dir</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: right">64</td>
+          <td style="text-align: right">1024</td>
+          <td style="text-align: right">1.0%</td>
+          <td style="text-align: right">1.0%</td>
+          <td style="text-align: right">1.3%</td>
+          <td style="text-align: right">1.3%</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">48</td>
+          <td style="text-align: right">1849</td>
+          <td style="text-align: right">1.0%</td>
+          <td style="text-align: right">1.0%</td>
+          <td style="text-align: right">1.0%</td>
+          <td style="text-align: right">1.0%</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">32</td>
+          <td style="text-align: right">3969</td>
+          <td style="text-align: right">1.0%</td>
+          <td style="text-align: right">1.0%</td>
+          <td style="text-align: right">1.0%</td>
+          <td style="text-align: right">1.0%</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>结果显示 $r_c$ 在不同 stride 下保持稳定，说明临界采样率主要由纹理带宽与有效自由度决定，而非仅由重叠密度主导。以 stride=48、K=24 的重建为例，Overlap MAE = 0.0025（seam_v=0.0025，seam_h=0.0025）[11]。</p>
+<p><img src="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/overlap_ablation.png"
+	width="1059"
+	height="699"
+	srcset="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/overlap_ablation_hu_92726db5bb33f082.png 480w, /p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/overlap_ablation_hu_5b821612ca123f67.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="151"
+		data-flex-basis="363px"
+	
+></p>
+<h3 id="67-分辨率外推与频谱稳定性">6.7 分辨率外推与频谱稳定性
+</h3><p>在 2048 训练设置下，外推至 4096 与 8192 分辨率，频谱高频能量占比为：</p>
+<ul>
+<li>2048：$1.88\times10^{-5}$</li>
+<li>4096：$9.26\times10^{-5}$</li>
+<li>8192：$1.58\times10^{-4}$</li>
+</ul>
+<p>高频能量随分辨率提升而增加，但频谱形状稳定，未出现明显高频爆炸或周期伪影，说明模型具备一定尺度外推稳定性。</p>
+<p><img src="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_crops.png"
+	width="2064"
+	height="714"
+	srcset="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_crops_hu_aee98249d8c5991.png 480w, /p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_crops_hu_e50e68cd850b2252.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="289"
+		data-flex-basis="693px"
+	
+>
+<img src="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_spectrum.png"
+	width="1059"
+	height="696"
+	srcset="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_spectrum_hu_3693b77175d3ff83.png 480w, /p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_spectrum_hu_840380011eba18b8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="152"
+		data-flex-basis="365px"
+	
+></p>
+<h3 id="68-理论指标估计">6.8 理论指标估计
+</h3><p>基于频谱与两点相关函数估计理论指标：</p>
+<ul>
+<li>频谱 95% 能量半径：$k_c \approx 6$</li>
+<li>Nyquist 采样间隔：$\Delta x \approx 170.7$ px</li>
+<li>相关长度：$L \approx 52$ px（$S_2=0.85$）</li>
+<li>有效自由度：$\text{DoF} \approx 1.55\times10^3$</li>
+</ul>
+<p>上述指标与经验 $r_c$ 在量级上吻合，且 $L$ 与 stride=48 接近，为临界采样率提供了理论解释基础。</p>
+<p><img src="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/theory_metrics.png"
+	width="1780"
+	height="701"
+	srcset="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/theory_metrics_hu_dd57a0b9f9d613dc.png 480w, /p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/theory_metrics_hu_bed9e72ad37e4a8b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="253"
+		data-flex-basis="609px"
+	
+></p>
+<h3 id="69-频谱与-s_2-对齐">6.9 频谱与 $S_2$ 对齐
+</h3><p>频谱分布与 $S_2$ 曲线在多尺度上保持一致，说明统计物理约束在稀疏重建下仍成立，支持“临界采样率可由带宽与相关长度解释”的结论。</p>
+<p><img src="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/fig8_s2_spectrum.png"
+	width="2776"
+	height="986"
+	srcset="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/fig8_s2_spectrum_hu_a44e622f128b7535.png 480w, /p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/fig8_s2_spectrum_hu_60e95d92dee7b0db.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="281"
+		data-flex-basis="675px"
+	
+></p>
+<p>上述新作实验与测量结果来自内部评测记录 [10]。</p>
+<hr>
+<h3 id="610-额外实验随机性噪声与-z-inversion-敏感性">6.10 额外实验：随机性、噪声与 z-inversion 敏感性
+</h3><p>在 $r=1.3%$（K=24）下补充随机种子、观测噪声与 z-inversion 超参数的敏感性评测 [12]。不同随机采样（seed=0/1/2）的结果波动极小，说明重建对采样随机性较稳健。</p>
+<p><strong>随机种子敏感性（mean ± std）</strong></p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>指标</th>
+          <th style="text-align: right">结果</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>PSNR (dB)</td>
+          <td style="text-align: right">32.189 ± 0.005</td>
+      </tr>
+      <tr>
+          <td>SSIM</td>
+          <td style="text-align: right">0.9647 ± 0.0003</td>
+      </tr>
+      <tr>
+          <td>grad_err</td>
+          <td style="text-align: right">0.004685 ± 0.000027</td>
+      </tr>
+      <tr>
+          <td>$S_2$ err</td>
+          <td style="text-align: right">0.000374 ± 0.000016</td>
+      </tr>
+      <tr>
+          <td>Overlap MAE</td>
+          <td style="text-align: right">0.001288 ± 0.000018</td>
+      </tr>
+  </tbody>
+</table></div>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>指标</th>
+          <th style="text-align: right">结果</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>hist_l1</td>
+          <td style="text-align: right">15.307 ± 0.080</td>
+      </tr>
+      <tr>
+          <td>spec_entropy_diff</td>
+          <td style="text-align: right">0.02335 ± 0.00048</td>
+      </tr>
+      <tr>
+          <td>freq_ratio_l2</td>
+          <td style="text-align: right">$1.80\times10^{-5}$ ± $3.99\times10^{-6}$</td>
+      </tr>
+  </tbody>
+</table></div>
+<p><strong>观测噪声鲁棒性（seed=42）</strong></p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: right">$\sigma$</th>
+          <th style="text-align: right">PSNR</th>
+          <th style="text-align: right">SSIM</th>
+          <th style="text-align: right">grad_err</th>
+          <th style="text-align: right">$S_2$ err</th>
+          <th style="text-align: right">Overlap MAE</th>
+          <th style="text-align: right">hist_l1</th>
+          <th style="text-align: right">spec_entropy_diff</th>
+          <th style="text-align: right">freq_ratio_l2</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: right">0.00</td>
+          <td style="text-align: right">32.078</td>
+          <td style="text-align: right">0.9631</td>
+          <td style="text-align: right">0.004844</td>
+          <td style="text-align: right">0.000310</td>
+          <td style="text-align: right">0.001368</td>
+          <td style="text-align: right">14.912</td>
+          <td style="text-align: right">0.02043</td>
+          <td style="text-align: right">$3.61\times10^{-5}$</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">0.01</td>
+          <td style="text-align: right">32.079</td>
+          <td style="text-align: right">0.9631</td>
+          <td style="text-align: right">0.004842</td>
+          <td style="text-align: right">0.000310</td>
+          <td style="text-align: right">0.001367</td>
+          <td style="text-align: right">14.917</td>
+          <td style="text-align: right">0.02047</td>
+          <td style="text-align: right">$3.59\times10^{-5}$</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">0.02</td>
+          <td style="text-align: right">32.070</td>
+          <td style="text-align: right">0.9630</td>
+          <td style="text-align: right">0.004853</td>
+          <td style="text-align: right">0.000309</td>
+          <td style="text-align: right">0.001373</td>
+          <td style="text-align: right">14.887</td>
+          <td style="text-align: right">0.02025</td>
+          <td style="text-align: right">$3.71\times10^{-5}$</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>噪声在 $\sigma\le0.02$ 时对重建影响极小，像素误差与频谱/直方图一致性基本保持不变。</p>
+<p><strong>z-inversion 迭代次数敏感性（seed=42）</strong></p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: right">iters</th>
+          <th style="text-align: right">PSNR</th>
+          <th style="text-align: right">SSIM</th>
+          <th style="text-align: right">grad_err</th>
+          <th style="text-align: right">$S_2$ err</th>
+          <th style="text-align: right">Overlap MAE</th>
+          <th style="text-align: right">hist_l1</th>
+          <th style="text-align: right">spec_entropy_diff</th>
+          <th style="text-align: right">freq_ratio_l2</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: right">200</td>
+          <td style="text-align: right">31.601</td>
+          <td style="text-align: right">0.9554</td>
+          <td style="text-align: right">0.005789</td>
+          <td style="text-align: right">0.000472</td>
+          <td style="text-align: right">0.001870</td>
+          <td style="text-align: right">15.476</td>
+          <td style="text-align: right">0.00872</td>
+          <td style="text-align: right">$1.46\times10^{-4}$</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">500</td>
+          <td style="text-align: right">32.078</td>
+          <td style="text-align: right">0.9631</td>
+          <td style="text-align: right">0.004844</td>
+          <td style="text-align: right">0.000310</td>
+          <td style="text-align: right">0.001368</td>
+          <td style="text-align: right">14.912</td>
+          <td style="text-align: right">0.02043</td>
+          <td style="text-align: right">$3.61\times10^{-5}$</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">800</td>
+          <td style="text-align: right">32.111</td>
+          <td style="text-align: right">0.9640</td>
+          <td style="text-align: right">0.004754</td>
+          <td style="text-align: right">0.000312</td>
+          <td style="text-align: right">0.001328</td>
+          <td style="text-align: right">15.274</td>
+          <td style="text-align: right">0.02240</td>
+          <td style="text-align: right">$2.70\times10^{-5}$</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>迭代次数从 200 提升到 500 后指标明显改善，继续提升到 800 后收益趋于饱和。</p>
+<p><strong>z-inversion 学习率敏感性（seed=42）</strong></p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: right">lr</th>
+          <th style="text-align: right">PSNR</th>
+          <th style="text-align: right">SSIM</th>
+          <th style="text-align: right">grad_err</th>
+          <th style="text-align: right">$S_2$ err</th>
+          <th style="text-align: right">Overlap MAE</th>
+          <th style="text-align: right">hist_l1</th>
+          <th style="text-align: right">spec_entropy_diff</th>
+          <th style="text-align: right">freq_ratio_l2</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: right">0.005</td>
+          <td style="text-align: right">31.711</td>
+          <td style="text-align: right">0.9574</td>
+          <td style="text-align: right">0.005513</td>
+          <td style="text-align: right">0.000421</td>
+          <td style="text-align: right">0.001713</td>
+          <td style="text-align: right">15.587</td>
+          <td style="text-align: right">0.01090</td>
+          <td style="text-align: right">$1.10\times10^{-4}$</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">0.01</td>
+          <td style="text-align: right">32.078</td>
+          <td style="text-align: right">0.9631</td>
+          <td style="text-align: right">0.004844</td>
+          <td style="text-align: right">0.000310</td>
+          <td style="text-align: right">0.001368</td>
+          <td style="text-align: right">14.912</td>
+          <td style="text-align: right">0.02043</td>
+          <td style="text-align: right">$3.61\times10^{-5}$</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">0.02</td>
+          <td style="text-align: right">32.112</td>
+          <td style="text-align: right">0.9640</td>
+          <td style="text-align: right">0.004754</td>
+          <td style="text-align: right">0.000312</td>
+          <td style="text-align: right">0.001323</td>
+          <td style="text-align: right">15.274</td>
+          <td style="text-align: right">0.02240</td>
+          <td style="text-align: right">$2.70\times10^{-5}$</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>学习率 0.01–0.02 给出更稳定的像素与频谱一致性，过小学习率会导致 z-inversion 收敛不足。</p>
+<hr>
+<h2 id="7-讨论">7. 讨论
+</h2><p>实验结果表明，临界采样率 $r_c\approx1.3%$ 在多项指标下保持一致，体现出纹理场的低有效自由度与有限带宽特性。非均匀采样与留出区域评测的稳定结果进一步说明坐标隐式场在稀疏条件下具备较强的结构性约束能力，而并非仅依赖局部插值。</p>
+<p>从理论与实证的对应关系来看，频谱带宽与相关长度估计能够在数量级上解释 $r_c$，这为稀疏采样设计提供了可解释依据。该现象同时提示：在更大尺度材料纹理场中，合理的坐标归一化与层级建模将成为保持可控性与稳定性的关键。</p>
+<hr>
+<h2 id="8-结论与展望">8. 结论与展望
+</h2><p>本文提出并评估了基于坐标隐式场的纹理重建框架，结合 Drifting 先验与指数 $\gamma$ 参数化，在极稀疏观测下实现稳定的高质量重建。系统评测显示：在 1.3% 采样率下已接近高采样率上限，且在非均匀采样、留出区域与分辨率外推场景下保持统计一致性。未来工作可进一步探索分层隐式场、局部坐标归一化与分块潜变量机制，以支持更大尺度材料纹理场的可扩展建模。</p>
+<hr>
+<h2 id="参考文献">参考文献
+</h2><ul>
+<li>[1] V. Sitzmann, J. N. P. Martel, A. W. Bergman, D. B. Lindell, and G. Wetzstein, &ldquo;Implicit Neural Representations with Periodic Activation Functions,&rdquo; in Proc. NeurIPS, 2020.</li>
+<li>[2] E. Perez, F. Strub, H. de Vries, V. Dumoulin, and A. Courville, &ldquo;FiLM: Visual Reasoning with a General Conditioning Layer,&rdquo; in Proc. AAAI, 2018.</li>
+<li>[3] M. Tancik, P. P. Srinivasan, B. Mildenhall, et al., &ldquo;Fourier Features Let Networks Learn High Frequency Functions in Low Dimensional Domains,&rdquo; in Proc. NeurIPS, 2020.</li>
+<li>[4] T. Karras, M. Aittala, S. Laine, et al., &ldquo;Alias-Free Generative Adversarial Networks,&rdquo; in Proc. NeurIPS, 2021.</li>
+<li>[5] R. Rombach, A. Blattmann, D. Lorenz, P. Esser, and B. Ommer, &ldquo;High-Resolution Image Synthesis with Latent Diffusion Models,&rdquo; in Proc. CVPR, 2022.</li>
+<li>[6] E. J. Hu, Y. Shen, P. Wallis, et al., &ldquo;LoRA: Low-Rank Adaptation of Large Language Models,&rdquo; arXiv:2106.09685, 2021.</li>
+<li>[8] Elysium Research Lab, &ldquo;Improved Diffusion Models for Texture Reconstruction using Drifting,&rdquo; manuscript, 2026.</li>
+<li>[9] Elysium Research Lab, &ldquo;EVALUATION_AND_SUMMARY (v9.2) experiment log,&rdquo; internal report, 2026.</li>
+<li>[10] Elysium Research Lab, &ldquo;inf_sampling_requirements results_summary.json,&rdquo; internal report, 2026.</li>
+<li>[11] Elysium Research Lab, &ldquo;overlap_mae_by_k.json,&rdquo; internal report, 2026.</li>
+<li>[12] Elysium Research Lab, &ldquo;inf_additional_experiments additional_experiments.json,&rdquo; internal report, 2026.</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-03-02
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+	const mainArticleElement = document.querySelector(".main-article");
+        renderMathInElement(mainArticleElement, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">图像生成论文阅读笔记</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/">
+        
+        
+            <div class="article-image">
+                <img src="/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/image.ffd526f926416fef5972147c4f7fcba5_hu_d3794725f3ac288e.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post Digital Economy Article Aggregator食用指南"
+                        
+                        data-hash="md5-/9Um&#43;SZBb&#43;9ZchR8T3/LpQ==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Digital Economy Article Aggregator食用指南</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/%E5%88%9B%E6%99%BA%E5%BE%AE%E8%AF%BE%E8%90%A5%E8%AE%B0%E5%BD%95ai-stock%E7%AE%80%E4%BB%8B/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">创智微课营记录&amp;AI-STOCK简介</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/%E8%AE%A1%E7%A7%91%E5%AF%BC%E5%A4%A7%E4%BD%9C%E4%B8%9A%E8%AE%B0%E5%BD%95/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">计科导大作业记录</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/%E6%9C%AC%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95-%E6%8C%87%E5%8D%97/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">本博客搭建记录 &amp; 指南</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 Elysium-Seeker
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+    #TableOfContents > ul, ol {
+        ul, ol {
+            display: none;
+        }
+        .open {
+            display: block;
+        }
+    }
+</style>
+
+<script>
+    function initTocHide() {
+        
+        let toc = document.querySelector(".widget--toc");
+        if (!toc) {
+            return;
+        }
+        
+        window.addEventListener('scroll', function() {
+            
+            let openUl = document.querySelectorAll(".open");
+            if (openUl.length > 0) {
+              openUl.forEach((ul) => {
+                ul.classList.remove("open")
+              })
+            }
+            
+            let currentLi = document.querySelector(".active-class");
+            if (!currentLi) {
+                return
+            }
+            
+            if (currentLi.children.length > 1) {
+                currentLi.children[1].classList.add("open")
+            }
+            
+            let ul = currentLi.parentElement;
+            do {
+                ul.classList.add("open");
+                ul = ul.parentElement.parentElement
+            } while (ul !== undefined && (ul.localName === 'ul' || ul.localName === 'ol'))
+        });
+    }
+    initTocHide()
+</script>
+
+<style>
+    .highlight {
+         
+        max-height: 400px;
+        overflow: hidden;
+    }
+
+    .code-show {
+        max-height: none !important;
+    }
+
+    .code-more-box {
+        width: 100%;
+        padding-top: 78px;
+        background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(#fff));
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+    }
+
+    .code-more-btn {
+        display: block;
+        margin: auto;
+        width: 44px;
+        height: 22px;
+        background: #f0f0f5;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        padding-top: 6px;
+        cursor: pointer;
+    }
+
+    .code-more-img {
+        cursor: pointer !important;
+        display: block;
+        margin: auto;
+        width: 22px;
+        height: 16px;
+    }
+</style>
+
+<script>
+  function initCodeMoreBox() {
+    let codeBlocks = document.querySelectorAll(".highlight");
+    if (!codeBlocks) {
+      return;
+    }
+    codeBlocks.forEach(codeBlock => {
+      
+      if (codeBlock.scrollHeight <= codeBlock.clientHeight) {
+        return;
+      }
+      
+      
+      let codeMoreBox = document.createElement('div');
+      codeMoreBox.classList.add('code-more-box');
+      
+      let codeMoreBtn = document.createElement('span');
+      codeMoreBtn.classList.add('code-more-btn');
+      codeMoreBtn.addEventListener('click', () => {
+        codeBlock.classList.add('code-show');
+        codeMoreBox.style.display = 'none';
+        
+        window.dispatchEvent(new Event('resize'))
+      })
+      
+      let img = document.createElement('img');
+      img.classList.add('code-more-img');
+      img.src = "https://Elysium-Seeker.github.io/icons/codeMore.png"
+      
+      codeMoreBtn.appendChild(img);
+      codeMoreBox.appendChild(codeMoreBtn);
+      codeBlock.appendChild(codeMoreBox)
+    })
+  }
+  
+  initCodeMoreBox();
+</script>
+
+<style>
+    #backTopBtn {
+        display: none;
+        position: fixed;
+        bottom: 30px;
+        z-index: 99;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        background-image: url(https://Elysium-Seeker.github.io/icons/backTop.svg);
+    }
+</style>
+
+<script>
+    
+
+    function initScrollTop() {
+        let rightSideBar = document.querySelector(".right-sidebar");
+        if (!rightSideBar) {
+            return;
+        }
+        
+        let btn = document.createElement("div");
+        btn.id = "backTopBtn";
+        btn.onclick = backToTop
+        rightSideBar.appendChild(btn)
+        
+        window.onscroll = function() {
+            
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+    }
+
+    
+
+    function backToTop(){
+        window.scrollTo({ top: 0, behavior: "smooth" })
+    }
+
+    initScrollTop();
+</script>
+
+<div id="particles-js"></div>
+
+<script src=https://Elysium-Seeker.github.io/background/particles.min.js></script>
+<script>
+  particlesJS.load('particles-js', "https://Elysium-Seeker.github.io/background/particlesjs-config.json", function() {
+    console.log('particles.js loaded - callback');
+  });
+</script>
+
+<style>
+  #particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+  }
+</style>
+
+    </body>
+</html>

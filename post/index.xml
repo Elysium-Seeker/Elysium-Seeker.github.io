@@ -7,7 +7,779 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Tue, 16 Dec 2025 23:56:58 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 02 Mar 2026 21:24:17 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>基于隐式神经场与漂移先验的坐标感知纹理场重建</title>
+        <link>https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/</link>
+        <pubDate>Sat, 28 Feb 2026 08:00:00 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/</guid>
+        <description>&lt;h2 id=&#34;摘要&#34;&gt;摘要
+&lt;/h2&gt;&lt;p&gt;稀疏观测下的非平稳纹理场重建是材料微观结构分析中的关键问题。本文提出一种坐标感知的隐式神经场（Implicit Neural Field, INF）重建框架，将像素值建模为连续坐标函数 $G(z,x,y)$，结合 Drifting 漂移先验与 Blueprint 宏观结构引导，以结构性方式保证重叠区域一致性，并通过指数 $\gamma$ 参数化增强潜变量调制能力。该框架在稀疏观测条件下实现高质量重建，并保持统计物理指标与频谱分布的一致性。&lt;/p&gt;
+&lt;p&gt;在 fBm 合成纹理数据（2048×2048，1849 patches）上，系统性评测覆盖 0.1%–10% 采样率、非均匀采样、Leave-Region-Out、Overlap Ablation、分辨率外推与理论指标估计，并补充了直方图一致性、谱熵差异与频带能量差等统计指标。实验显示：在 1.3% 采样率（K=24）下即可达到 PSNR 31.302 dB、SSIM 0.9477、grad_err 0.0069、$S_2$ 误差 $6.62\times10^{-4}$、方向谱误差 $7.99\times10^{-7}$，与 10% 采样相比 $\Delta$PSNR 仅 0.030 dB；Overlap MAE 约为 0.0025，重叠拼接稳定。非均匀采样与留出区域评测进一步验证了稀疏重建的鲁棒性与空间外推能力。补充的随机种子与噪声实验显示结果波动很小，说明方法对采样随机性和轻度观测噪声具有稳定性。相关结果支持临界采样率 $r_c\approx1.3%$ 的结论，并与频谱带宽与相关长度估计相一致。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;关键词：&lt;/strong&gt; 隐式神经场；坐标感知；漂移先验；稀疏重建；纹理建模&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1-引言&#34;&gt;1. 引言
+&lt;/h2&gt;&lt;p&gt;材料微观纹理在空间上往往呈现显著的坐标依赖与非均匀性，传统通用生成模型难以保证跨 patch 的结构一致与统计稳定 [4]–[6]。在稀疏观测条件下，单纯依赖局部 patch 的重建策略容易导致拼接缝隙或统计偏移，而这类问题对材料表征、虚拟检测与尺度外推具有明显不利影响。&lt;/p&gt;
+&lt;p&gt;隐式神经表示将像素值视为连续坐标函数，为坐标驱动的纹理场重建提供了结构性优势 [1]。本文结合 Drifting 漂移先验 [8]，提出坐标感知的 INF 框架，并系统评估不同采样率与采样策略下的重建能力，重点分析临界采样率 $r_c$ 的可解释性与鲁棒性。&lt;/p&gt;
+&lt;p&gt;本文的主要贡献包括：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;以坐标隐式场实现结构性无缝拼接，并通过指数 $\gamma$ 参数化增强潜变量调制；&lt;/li&gt;
+&lt;li&gt;引入 Drifting 先验与 Blueprint 宏观结构引导，提升稀疏重建稳定性；&lt;/li&gt;
+&lt;li&gt;系统补全采样曲线、非均匀采样、Leave-Region-Out、Overlap Ablation、分辨率外推与理论指标估计，并给出一致的量化分析。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2-相关工作&#34;&gt;2. 相关工作
+&lt;/h2&gt;&lt;p&gt;隐式神经表示通过连续函数刻画信号，在坐标驱动建模中具有显著优势。SIREN 使用周期激活函数提升高频表达能力 [1]，FiLM 通过条件调制实现坐标与潜变量的融合 [2]，Fourier Features 则增强了低维坐标到高频纹理的映射能力 [3]。这些方法为坐标条件的纹理重建提供了关键基础。&lt;/p&gt;
+&lt;p&gt;另一方面，StyleGAN3、扩散模型与 LoRA 等通用生成范式在自然图像领域表现突出 [4]–[6]，但其生成过程并不以像素坐标为基本建模变量，难以保证跨 patch 的一致性与可控性。本文关注坐标驱动的纹理场重建，强调在稀疏观测下对结构连续性与统计一致性的统一约束。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;3-问题定义与符号&#34;&gt;3. 问题定义与符号
+&lt;/h2&gt;&lt;p&gt;给定稀疏观测集 ${(y_i, c_i)}_{i=1}^K$（$y_i$ 为局部纹理 patch，$c_i$ 为其坐标），目标是在全局坐标域内重建连续纹理场：&lt;/p&gt;
+$$
+\hat{I}(x,y) = G(z, x, y), \quad z^* = \arg\min_{z} \sum_{i=1}^K \lVert G(z, c_i) - y_i \rVert^2
+$$&lt;p&gt;其中 $G(\cdot)$ 为隐式神经场生成器，$z$ 为全局潜变量。该目标要求同时满足：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;连续性&lt;/strong&gt;：重叠区域输出一致；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;统计一致性&lt;/strong&gt;：与真实纹理的 $S_2$ 与频谱分布相符；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;可控性&lt;/strong&gt;：坐标变化引起可解释的纹理变化。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;4-方法&#34;&gt;4. 方法
+&lt;/h2&gt;&lt;h3 id=&#34;41-坐标感知隐式生成&#34;&gt;4.1 坐标感知隐式生成
+&lt;/h3&gt;&lt;p&gt;采用 FiLM-SIREN 架构将像素值建模为坐标的连续函数：&lt;/p&gt;
+$$
+G(z, x, y) \to \text{pixel value} \in [0,1]
+$$&lt;p&gt;具体地，坐标 $c=(x,y)$ 经编码后输入到 SIREN 主干，最终输出为灰度值：&lt;/p&gt;
+$$
+h_0 = \phi(c), \quad h_{l+1} = \sin(\gamma_l \odot (W_l h_l) + \beta_l), \quad \hat{y} = \sigma(W_o h_L)
+$$&lt;p&gt;其中 $\phi(\cdot)$ 为坐标编码，$\gamma_l,\beta_l$ 为 FiLM 调制参数，$\sigma(\cdot)$ 为 Sigmoid 压缩到 $[0,1]$。相同坐标对应唯一输出，因此重叠区域的一致性由结构性保证，不依赖显式连续性损失 [1], [2]。&lt;/p&gt;
+&lt;h3 id=&#34;42-坐标编码与特征融合&#34;&gt;4.2 坐标编码与特征融合
+&lt;/h3&gt;&lt;p&gt;坐标编码采用 Gaussian Fourier Features 与多尺度正余弦组合，提升高频纹理表达能力 [3]。常用形式为：&lt;/p&gt;
+$$
+\phi(c) = [\sin(2\pi Bc), \cos(2\pi Bc), c], \quad B \sim \mathcal{N}(0, \sigma^2)
+$$&lt;p&gt;在实际实现中，坐标编码维度为 546D，由 Fourier 特征、原始坐标与可学习 Spatial Embedding 组成，用于增强局部空间先验。空间嵌入 $e(c)$ 通过可学习网格或 MLP 提供局部结构提示，并与 Fourier 特征拼接后输入主干网络。&lt;/p&gt;
+&lt;h3 id=&#34;43-指数-gamma-参数化&#34;&gt;4.3 指数 $\gamma$ 参数化
+&lt;/h3&gt;&lt;p&gt;为强化潜变量调制，引入指数参数化：&lt;/p&gt;
+$$
+\gamma = e^{f \cdot 0.5} \cdot \omega_0
+$$&lt;p&gt;其中 $f$ 为由映射网络输出的调制因子，$\omega_0$ 为 SIREN 基频。该设计缓解潜变量信号被固定基频淹没的问题，提升重建稳定性与多样性 [9]。在实现中，$\gamma_l,\beta_l$ 由 $(z,b)$ 映射得到：&lt;/p&gt;
+$$
+[\gamma_l,\beta_l]_{l=1}^L = M(z, b)
+$$&lt;p&gt;其中 $b$ 为 Blueprint 提供的全局结构特征。&lt;/p&gt;
+&lt;h3 id=&#34;44-drifting-漂移先验&#34;&gt;4.4 Drifting 漂移先验
+&lt;/h3&gt;&lt;p&gt;在特征空间构建漂移场，使生成样本沿近邻真实样本方向被引导：&lt;/p&gt;
+$$
+V(\hat{f}) = \sum_i w_i (f_i - \hat{f}), \quad w_i = \frac{\exp(-\lVert \hat{f}-f_i \rVert^2 / 2\sigma_f^2)}{\sum_j \exp(-\lVert \hat{f}-f_j \rVert^2 / 2\sigma_f^2)}
+$$&lt;p&gt;其中 $\hat{f}$ 为生成 patch 的特征表示，$f_i$ 为真实样本特征。漂移场在特征空间提供“朝向真实分布”的引导方向，作为先验约束增强局部统计一致性与稀疏重建稳定性 [8]。&lt;/p&gt;
+&lt;h3 id=&#34;45-blueprint-宏观结构先验&#34;&gt;4.5 Blueprint 宏观结构先验
+&lt;/h3&gt;&lt;p&gt;Blueprint 提供低分辨率全场结构摘要，并通过 FiLM 调制方式注入生成器，从而在不增加坐标输入维度的情况下引入全局结构约束 [9]。设低分辨率 Blueprint 为 $B$，在坐标 $c$ 处抽取局部结构块：&lt;/p&gt;
+$$
+b(c) = P(B, c), \quad b = E_{bp}(b(c))
+$$&lt;p&gt;其中 $P(\cdot)$ 为局部裁剪算子，$E_{bp}$ 为 Blueprint 编码器。得到的 $b$ 与潜变量 $z$ 共同驱动 FiLM 参数，形成全局结构的可控约束。&lt;/p&gt;
+&lt;h3 id=&#34;46-稀疏重建与-z-inversion&#34;&gt;4.6 稀疏重建与 z-Inversion
+&lt;/h3&gt;&lt;p&gt;给定观测 patch，优化潜变量以匹配观测：&lt;/p&gt;
+$$
+z^* = \arg\min_{z} \sum_{i=1}^{K} \|G(z, c_i) - y_i\|^2
+$$&lt;p&gt;本文采用 Adam 优化（lr=0.01，500 iters）求解 $z^*$，并在全场坐标上重建连续纹理场。优化过程可写为：&lt;/p&gt;
+$$
+z_{t+1} = z_t - \eta \nabla_z \mathcal{L}(z_t), \quad \mathcal{L}(z) = \sum_{i=1}^{K} \|G(z, c_i) - y_i\|^2
+$$&lt;p&gt;实际实现中 $z_0$ 初始化为零向量，以保证重建过程的确定性与可复现性。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;5-实验设置&#34;&gt;5. 实验设置
+&lt;/h2&gt;&lt;h3 id=&#34;51-数据与采样&#34;&gt;5.1 数据与采样
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;数据：fBm 合成纹理 $2048\times2048$。&lt;/li&gt;
+&lt;li&gt;Patch：$64\times64$，stride=48（overlap=16）。&lt;/li&gt;
+&lt;li&gt;Patch 总数：1849（$43\times43$ 网格）。&lt;/li&gt;
+&lt;li&gt;坐标：像素中心归一化至 $[-1,1]$。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;52-模型与重建配置&#34;&gt;5.2 模型与重建配置
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;生成器：SIREN 8×512，$\omega_0=30$；全局潜变量 $z\in\mathbb{R}^{256}$。&lt;/li&gt;
+&lt;li&gt;稀疏重建：Adam 优化 $z$（lr=0.01，500 iters），批大小 64。&lt;/li&gt;
+&lt;li&gt;采样比例：0.1%, 0.3%, 0.5%, 1%, 1.3%, 2%, 5%, 10%。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;53-评测指标&#34;&gt;5.3 评测指标
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;PSNR / SSIM / MSE&lt;/strong&gt;：像素级重建质量；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;grad_err / lap_err&lt;/strong&gt;：梯度与 Laplacian 一致性误差；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;$S_2$ / multiscale $S_2$&lt;/strong&gt;：两点相关函数一致性；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;dir_spec_err&lt;/strong&gt;：FFT → 极坐标 → 角向能量分布的 L2 差异；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Overlap MAE&lt;/strong&gt;：重叠区域拼接误差；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;$r_c$&lt;/strong&gt;：误差阈值下的临界采样率。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;hist_l1&lt;/strong&gt;：像素强度直方图的 L1 差异，反映灰度分布一致性；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;spec_entropy_diff&lt;/strong&gt;：谱熵差异，衡量纹理频谱能量分布的复杂度偏移；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;freq_ratio_l2 / high_freq_diff&lt;/strong&gt;：低/中/高频能量占比差异与高频能量偏差，反映频带结构的一致性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;54-评测协议&#34;&gt;5.4 评测协议
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;固定训练好的 INF 生成器；&lt;/li&gt;
+&lt;li&gt;在不同采样率下随机选择观测 patch（固定随机种子保证可复现）；&lt;/li&gt;
+&lt;li&gt;通过 z-inversion 优化 $z^*$；&lt;/li&gt;
+&lt;li&gt;在全场坐标重建并评测；&lt;/li&gt;
+&lt;li&gt;非均匀采样、Leave-Region-Out 与 Overlap Ablation 采用相同重建流程。&lt;/li&gt;
+&lt;li&gt;额外实验在 $r=1.3%$（K=24）下进行，分别评估随机种子、观测噪声、z-inversion 迭代次数与学习率的敏感性 [12]。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;6-实验结果与分析&#34;&gt;6. 实验结果与分析
+&lt;/h2&gt;&lt;h3 id=&#34;61-采样曲线与临界采样率&#34;&gt;6.1 采样曲线与临界采样率
+&lt;/h3&gt;&lt;p&gt;采样曲线覆盖 0.1%–10% patch ratio，评测 PSNR / SSIM / grad_err / $S_2$ / dir_spec_err。结果如下：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;采样率&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;K&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;PSNR (dB)&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;SSIM&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;grad_err&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;s2_err&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;dir_spec_err&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.1%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;2&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;30.787&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9303&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0095&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000855&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.06e-06&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.3%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;6&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;31.163&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9434&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0076&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000724&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;8.62e-07&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.5%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;9&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;31.225&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9449&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0073&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000790&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;7.93e-07&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;18&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;30.573&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9362&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0085&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000895&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.05e-06&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.3%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;24&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;31.302&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9477&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0069&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000662&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;7.99e-07&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;2.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;37&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;31.432&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9507&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0065&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000665&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;7.08e-07&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;5.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;92&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;31.287&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9467&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0071&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000735&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;7.76e-07&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;10.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;185&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;31.331&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9480&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0069&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000707&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;7.59e-07&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;PSNR 在 1.3% 采样率已接近高采样率平台，10% 采样的 PSNR 为 31.331 dB，1.3% 对应 31.302 dB，$\Delta$PSNR = 0.030 dB。该结果支持临界采样率 $r_c\approx1.3%$ 的判断，表明纹理场具有较低的有效自由度与有限带宽特性。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/sampling_curve.png&#34;
+	width=&#34;2140&#34;
+	height=&#34;1412&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/sampling_curve_hu_b2314ee48d6aefa2.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/sampling_curve_hu_b65b21b37c381345.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;151&#34;
+		data-flex-basis=&#34;363px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;62-laplacian-与-multi-scale-s_2&#34;&gt;6.2 Laplacian 与 Multi-scale $S_2$
+&lt;/h3&gt;&lt;p&gt;为了更全面评估纹理的结构一致性，进一步补充 Laplacian 与多尺度 $S_2$ 误差：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;采样率&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;K&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;lap_err&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;s2_ms_err&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.1%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;2&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0154&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.001159&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.3%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;6&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0113&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000960&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.5%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;9&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0108&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.001022&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;18&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0130&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.001422&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.3%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;24&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0098&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000868&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;2.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;37&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0088&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000854&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;5.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;92&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0102&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000951&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;10.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;185&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0097&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000914&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;在 1.3% 采样率下 lap_err 与 s2_ms_err 同步下降，说明重建不仅在像素层面逼近真实纹理，而且在多尺度结构统计上趋于稳定。&lt;/p&gt;
+&lt;h3 id=&#34;63-overlap-mae按-k&#34;&gt;6.3 Overlap MAE（按 K）
+&lt;/h3&gt;&lt;p&gt;Overlap MAE 通过比较相邻 patch 重叠区域的像素差异计算，反映拼接一致性：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;采样率&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;K&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;overlap_v&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;overlap_h&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;overlap_mae&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.1%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;2&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0037&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0037&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0037&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.3%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;6&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0028&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0028&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0028&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.5%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;9&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0027&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0027&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0027&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;18&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0032&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0032&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0032&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.3%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;24&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0025&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0025&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0025&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;2.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;37&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0023&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0023&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0023&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;5.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;92&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0026&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0026&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0026&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;10.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;185&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0025&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0025&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0025&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Overlap MAE 在不同采样率下保持在 $2.3\times10^{-3}$ 到 $3.7\times10^{-3}$ 区间，说明坐标隐式场对拼接一致性具有结构性保障。&lt;/p&gt;
+&lt;h3 id=&#34;64-非均匀采样鲁棒性k24&#34;&gt;6.4 非均匀采样鲁棒性（K=24）
+&lt;/h3&gt;&lt;p&gt;对比三种采样策略：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;采样策略&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;PSNR (dB)&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;SSIM&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;grad_err&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;s2_err&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;dir_spec_err&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Uniform&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;31.018&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9377&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0084&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000885&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;9.14e-07&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Stratified&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;31.142&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9423&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0077&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000851&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;8.30e-07&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Half-region&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;31.360&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9490&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.0067&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000714&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;7.23e-07&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;三种策略在 PSNR 上的差异小于 0.35 dB，说明在相同观测数量下，采样分布对整体重建质量影响有限；Half-region 略优，表明稠密局部观测对重建有一定正向作用。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/non_uniform_sampling.png&#34;
+	width=&#34;2140&#34;
+	height=&#34;714&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/non_uniform_sampling_hu_c882ae9bfb336d34.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/non_uniform_sampling_hu_1c2ec769491a95c1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;299&#34;
+		data-flex-basis=&#34;719px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;65-leave-region-out中心区域留出&#34;&gt;6.5 Leave-Region-Out（中心区域留出）
+&lt;/h3&gt;&lt;p&gt;留出中心区域（约 615×615 px）完全不参与采样，使用 K=24 观测进行稀疏重建。评测结果：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Full：PSNR 31.120 / SSIM 0.9431 / $S_2$ err $8.69\times10^{-4}$ / dir spec err $8.12\times10^{-7}$&lt;/li&gt;
+&lt;li&gt;Holdout：PSNR 30.122 / SSIM 0.9416 / $S_2$ err $8.69\times10^{-4}$ / dir spec err $8.12\times10^{-7}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Holdout 区域 PSNR 仅比全图低约 1 dB，且统计指标保持一致，表明模型具备一定空间外推能力而非仅依赖观测插值。&lt;/p&gt;
+&lt;p&gt;\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\linewidth]{leave_region_out.png}
+\end{figure}&lt;/p&gt;
+&lt;h3 id=&#34;66-overlap-ablation不同-stride&#34;&gt;6.6 Overlap Ablation（不同 stride）
+&lt;/h3&gt;&lt;p&gt;为验证重叠密度对临界采样率的影响，设置 stride=64/48/32 的对比实验：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;Stride&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;N&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;$r_c$ avg&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;$r_c$ grad&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;$r_c$ $S_2$&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;$r_c$ dir&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;64&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1024&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.3%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.3%&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;48&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1849&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.0%&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;32&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;3969&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;1.0%&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;结果显示 $r_c$ 在不同 stride 下保持稳定，说明临界采样率主要由纹理带宽与有效自由度决定，而非仅由重叠密度主导。以 stride=48、K=24 的重建为例，Overlap MAE = 0.0025（seam_v=0.0025，seam_h=0.0025）[11]。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/overlap_ablation.png&#34;
+	width=&#34;1059&#34;
+	height=&#34;699&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/overlap_ablation_hu_92726db5bb33f082.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/overlap_ablation_hu_5b821612ca123f67.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;151&#34;
+		data-flex-basis=&#34;363px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;67-分辨率外推与频谱稳定性&#34;&gt;6.7 分辨率外推与频谱稳定性
+&lt;/h3&gt;&lt;p&gt;在 2048 训练设置下，外推至 4096 与 8192 分辨率，频谱高频能量占比为：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;2048：$1.88\times10^{-5}$&lt;/li&gt;
+&lt;li&gt;4096：$9.26\times10^{-5}$&lt;/li&gt;
+&lt;li&gt;8192：$1.58\times10^{-4}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;高频能量随分辨率提升而增加，但频谱形状稳定，未出现明显高频爆炸或周期伪影，说明模型具备一定尺度外推稳定性。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_crops.png&#34;
+	width=&#34;2064&#34;
+	height=&#34;714&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_crops_hu_aee98249d8c5991.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_crops_hu_e50e68cd850b2252.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;289&#34;
+		data-flex-basis=&#34;693px&#34;
+	
+&gt;
+&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_spectrum.png&#34;
+	width=&#34;1059&#34;
+	height=&#34;696&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_spectrum_hu_3693b77175d3ff83.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_spectrum_hu_840380011eba18b8.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;152&#34;
+		data-flex-basis=&#34;365px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;68-理论指标估计&#34;&gt;6.8 理论指标估计
+&lt;/h3&gt;&lt;p&gt;基于频谱与两点相关函数估计理论指标：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;频谱 95% 能量半径：$k_c \approx 6$&lt;/li&gt;
+&lt;li&gt;Nyquist 采样间隔：$\Delta x \approx 170.7$ px&lt;/li&gt;
+&lt;li&gt;相关长度：$L \approx 52$ px（$S_2=0.85$）&lt;/li&gt;
+&lt;li&gt;有效自由度：$\text{DoF} \approx 1.55\times10^3$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;上述指标与经验 $r_c$ 在量级上吻合，且 $L$ 与 stride=48 接近，为临界采样率提供了理论解释基础。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/theory_metrics.png&#34;
+	width=&#34;1780&#34;
+	height=&#34;701&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/theory_metrics_hu_dd57a0b9f9d613dc.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/theory_metrics_hu_bed9e72ad37e4a8b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;253&#34;
+		data-flex-basis=&#34;609px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;69-频谱与-s_2-对齐&#34;&gt;6.9 频谱与 $S_2$ 对齐
+&lt;/h3&gt;&lt;p&gt;频谱分布与 $S_2$ 曲线在多尺度上保持一致，说明统计物理约束在稀疏重建下仍成立，支持“临界采样率可由带宽与相关长度解释”的结论。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/fig8_s2_spectrum.png&#34;
+	width=&#34;2776&#34;
+	height=&#34;986&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/fig8_s2_spectrum_hu_a44e622f128b7535.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/fig8_s2_spectrum_hu_60e95d92dee7b0db.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;281&#34;
+		data-flex-basis=&#34;675px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;上述新作实验与测量结果来自内部评测记录 [10]。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;610-额外实验随机性噪声与-z-inversion-敏感性&#34;&gt;6.10 额外实验：随机性、噪声与 z-inversion 敏感性
+&lt;/h3&gt;&lt;p&gt;在 $r=1.3%$（K=24）下补充随机种子、观测噪声与 z-inversion 超参数的敏感性评测 [12]。不同随机采样（seed=0/1/2）的结果波动极小，说明重建对采样随机性较稳健。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;随机种子敏感性（mean ± std）&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;指标&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;结果&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;PSNR (dB)&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;32.189 ± 0.005&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;SSIM&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9647 ± 0.0003&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;grad_err&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.004685 ± 0.000027&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;$S_2$ err&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000374 ± 0.000016&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Overlap MAE&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.001288 ± 0.000018&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;指标&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;结果&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;hist_l1&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;15.307 ± 0.080&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;spec_entropy_diff&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.02335 ± 0.00048&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;freq_ratio_l2&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;$1.80\times10^{-5}$ ± $3.99\times10^{-6}$&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;观测噪声鲁棒性（seed=42）&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;$\sigma$&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;PSNR&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;SSIM&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;grad_err&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;$S_2$ err&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;Overlap MAE&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;hist_l1&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;spec_entropy_diff&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;freq_ratio_l2&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.00&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;32.078&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9631&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.004844&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000310&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.001368&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;14.912&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.02043&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;$3.61\times10^{-5}$&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.01&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;32.079&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9631&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.004842&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000310&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.001367&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;14.917&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.02047&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;$3.59\times10^{-5}$&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.02&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;32.070&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9630&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.004853&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000309&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.001373&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;14.887&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.02025&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;$3.71\times10^{-5}$&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;噪声在 $\sigma\le0.02$ 时对重建影响极小，像素误差与频谱/直方图一致性基本保持不变。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;z-inversion 迭代次数敏感性（seed=42）&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;iters&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;PSNR&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;SSIM&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;grad_err&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;$S_2$ err&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;Overlap MAE&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;hist_l1&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;spec_entropy_diff&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;freq_ratio_l2&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;200&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;31.601&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9554&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.005789&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000472&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.001870&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;15.476&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.00872&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;$1.46\times10^{-4}$&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;500&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;32.078&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9631&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.004844&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000310&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.001368&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;14.912&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.02043&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;$3.61\times10^{-5}$&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;800&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;32.111&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9640&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.004754&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000312&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.001328&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;15.274&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.02240&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;$2.70\times10^{-5}$&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;迭代次数从 200 提升到 500 后指标明显改善，继续提升到 800 后收益趋于饱和。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;z-inversion 学习率敏感性（seed=42）&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;lr&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;PSNR&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;SSIM&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;grad_err&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;$S_2$ err&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;Overlap MAE&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;hist_l1&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;spec_entropy_diff&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;freq_ratio_l2&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.005&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;31.711&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9574&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.005513&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000421&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.001713&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;15.587&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.01090&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;$1.10\times10^{-4}$&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.01&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;32.078&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9631&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.004844&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000310&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.001368&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;14.912&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.02043&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;$3.61\times10^{-5}$&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.02&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;32.112&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.9640&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.004754&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.000312&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.001323&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;15.274&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;0.02240&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;$2.70\times10^{-5}$&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;学习率 0.01–0.02 给出更稳定的像素与频谱一致性，过小学习率会导致 z-inversion 收敛不足。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;7-讨论&#34;&gt;7. 讨论
+&lt;/h2&gt;&lt;p&gt;实验结果表明，临界采样率 $r_c\approx1.3%$ 在多项指标下保持一致，体现出纹理场的低有效自由度与有限带宽特性。非均匀采样与留出区域评测的稳定结果进一步说明坐标隐式场在稀疏条件下具备较强的结构性约束能力，而并非仅依赖局部插值。&lt;/p&gt;
+&lt;p&gt;从理论与实证的对应关系来看，频谱带宽与相关长度估计能够在数量级上解释 $r_c$，这为稀疏采样设计提供了可解释依据。该现象同时提示：在更大尺度材料纹理场中，合理的坐标归一化与层级建模将成为保持可控性与稳定性的关键。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;8-结论与展望&#34;&gt;8. 结论与展望
+&lt;/h2&gt;&lt;p&gt;本文提出并评估了基于坐标隐式场的纹理重建框架，结合 Drifting 先验与指数 $\gamma$ 参数化，在极稀疏观测下实现稳定的高质量重建。系统评测显示：在 1.3% 采样率下已接近高采样率上限，且在非均匀采样、留出区域与分辨率外推场景下保持统计一致性。未来工作可进一步探索分层隐式场、局部坐标归一化与分块潜变量机制，以支持更大尺度材料纹理场的可扩展建模。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;参考文献&#34;&gt;参考文献
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;[1] V. Sitzmann, J. N. P. Martel, A. W. Bergman, D. B. Lindell, and G. Wetzstein, &amp;ldquo;Implicit Neural Representations with Periodic Activation Functions,&amp;rdquo; in Proc. NeurIPS, 2020.&lt;/li&gt;
+&lt;li&gt;[2] E. Perez, F. Strub, H. de Vries, V. Dumoulin, and A. Courville, &amp;ldquo;FiLM: Visual Reasoning with a General Conditioning Layer,&amp;rdquo; in Proc. AAAI, 2018.&lt;/li&gt;
+&lt;li&gt;[3] M. Tancik, P. P. Srinivasan, B. Mildenhall, et al., &amp;ldquo;Fourier Features Let Networks Learn High Frequency Functions in Low Dimensional Domains,&amp;rdquo; in Proc. NeurIPS, 2020.&lt;/li&gt;
+&lt;li&gt;[4] T. Karras, M. Aittala, S. Laine, et al., &amp;ldquo;Alias-Free Generative Adversarial Networks,&amp;rdquo; in Proc. NeurIPS, 2021.&lt;/li&gt;
+&lt;li&gt;[5] R. Rombach, A. Blattmann, D. Lorenz, P. Esser, and B. Ommer, &amp;ldquo;High-Resolution Image Synthesis with Latent Diffusion Models,&amp;rdquo; in Proc. CVPR, 2022.&lt;/li&gt;
+&lt;li&gt;[6] E. J. Hu, Y. Shen, P. Wallis, et al., &amp;ldquo;LoRA: Low-Rank Adaptation of Large Language Models,&amp;rdquo; arXiv:2106.09685, 2021.&lt;/li&gt;
+&lt;li&gt;[8] Elysium Research Lab, &amp;ldquo;Improved Diffusion Models for Texture Reconstruction using Drifting,&amp;rdquo; manuscript, 2026.&lt;/li&gt;
+&lt;li&gt;[9] Elysium Research Lab, &amp;ldquo;EVALUATION_AND_SUMMARY (v9.2) experiment log,&amp;rdquo; internal report, 2026.&lt;/li&gt;
+&lt;li&gt;[10] Elysium Research Lab, &amp;ldquo;inf_sampling_requirements results_summary.json,&amp;rdquo; internal report, 2026.&lt;/li&gt;
+&lt;li&gt;[11] Elysium Research Lab, &amp;ldquo;overlap_mae_by_k.json,&amp;rdquo; internal report, 2026.&lt;/li&gt;
+&lt;li&gt;[12] Elysium Research Lab, &amp;ldquo;inf_additional_experiments additional_experiments.json,&amp;rdquo; internal report, 2026.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>图像生成论文阅读笔记</title>
         <link>https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
         <pubDate>Wed, 03 Dec 2025 09:00:00 +0800</pubDate>
