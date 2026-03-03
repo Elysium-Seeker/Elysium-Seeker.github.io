@@ -1736,6 +1736,17 @@
         return data.message || JSON.stringify(data);
       }
 
+      function sleep(ms) {
+        return new Promise(function (resolve) {
+          setTimeout(resolve, ms);
+        });
+      }
+
+      function extractShaHint(message) {
+        const m = String(message || "").match(/\b([0-9a-f]{40})\b/i);
+        return m ? m[1] : "";
+      }
+
       function normalizeRepoPath(path) {
         return String(path || "")
           .replace(/\\/g, "/")
@@ -1798,27 +1809,38 @@
         };
 
         let sha = await fetchRemoteSha(api, branch, token);
-        let putResp = await ghRequest(api, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(makePayload(sha))
-        }, token);
+        const maxAttempts = 5;
 
-        if (putResp.status === 409) {
-          // Branch moved between read/write; refresh SHA and retry once.
-          sha = await fetchRemoteSha(api, branch, token);
-          putResp = await ghRequest(api, {
+        for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+          const putResp = await ghRequest(api, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(makePayload(sha))
           }, token);
+
+          if (putResp.status === 200 || putResp.status === 201) {
+            return await putResp.json();
+          }
+
+          const data = await safeJson(putResp);
+          const messageText = errMessage(data);
+
+          if (putResp.status === 409 && attempt < maxAttempts) {
+            // Concurrent writes on the same path can race; refresh SHA and retry.
+            const hintedSha = extractShaHint(messageText);
+            if (hintedSha) {
+              sha = hintedSha;
+            } else {
+              await sleep(120 * attempt);
+              sha = await fetchRemoteSha(api, branch, token);
+            }
+            continue;
+          }
+
+          throw new Error("提交失败(" + putResp.status + ")：" + messageText);
         }
 
-        if (putResp.status !== 200 && putResp.status !== 201) {
-          throw new Error("提交失败(" + putResp.status + ")：" + errMessage(await safeJson(putResp)));
-        }
-
-        return await putResp.json();
+        throw new Error("提交失败(409)：远端文件冲突，请稍后重试。");
       }
 
       async function deleteContentBySha(owner, repo, branch, token, path, sha, message) {
