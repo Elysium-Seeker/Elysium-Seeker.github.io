@@ -6,17 +6,17 @@
   <title>博客更新控制台</title>
   <style>
     :root {
-      --bg: #f5f7fb;
-      --panel: #ffffff;
-      --panel-soft: #f8f9fc;
-      --line: #dfe4ee;
-      --text: #1f2533;
-      --muted: #667085;
-      --primary: #4a7dff;
-      --primary-hover: #3a6cf0;
-      --ok: #1e9e66;
-      --warn: #b07a00;
-      --err: #d64545;
+      --bg: #2f3238;
+      --panel: rgba(67, 70, 77, 0.58);
+      --panel-soft: rgba(48, 51, 57, 0.14);
+      --line: rgba(219, 225, 238, 0.22);
+      --text: #e6e9ef;
+      --muted: #b5bcc9;
+      --primary: #93a4be;
+      --primary-hover: #aab9ce;
+      --ok: #79d6a4;
+      --warn: #f3c96f;
+      --err: #ff8f8f;
       --pane-h: calc(100vh - 255px);
     }
 
@@ -29,10 +29,32 @@
       font-family: "Inter", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
     }
 
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(34, 36, 41, 0.52), rgba(34, 36, 41, 0.52)),
+        radial-gradient(900px 360px at 0 -20%, rgba(138, 84, 84, 0.16), transparent 60%),
+        radial-gradient(700px 300px at 100% -15%, rgba(95, 109, 141, 0.12), transparent 65%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    #particles-js {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .96;
+    }
+
     .wrap {
       width: min(1680px, 99vw);
       margin: 0 auto;
       padding: 8px;
+      position: relative;
+      z-index: 1;
     }
 
     .hero,
@@ -40,6 +62,7 @@
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 10px;
+      backdrop-filter: blur(8px);
     }
 
     .hero {
@@ -91,7 +114,7 @@
     select:focus,
     textarea:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(74, 125, 255, 0.16);
+      box-shadow: 0 0 0 2px rgba(171, 187, 214, 0.24);
     }
 
     .layout {
@@ -135,10 +158,10 @@
     }
 
     button {
-      border: 1px solid #ccd5e4;
+      border: 1px solid rgba(181, 194, 219, 0.33);
       border-radius: 8px;
-      background: #f5f8ff;
-      color: #1f2b44;
+      background: rgba(132, 146, 170, 0.18);
+      color: #e6ebf5;
       padding: 8px 12px;
       font-size: 13px;
       cursor: pointer;
@@ -146,7 +169,7 @@
     }
 
     button:hover {
-      background: #ebf1ff;
+      background: rgba(160, 175, 200, 0.24);
     }
 
     button.primary {
@@ -167,17 +190,20 @@
       resize: vertical;
       line-height: 1.65;
       font-family: Consolas, "Cascadia Code", monospace;
+      position: relative;
+      z-index: 2;
+      background: rgba(41, 44, 50, 0.18);
     }
 
     .upload-list {
       margin-top: 8px;
       font-size: 12px;
-      color: #344054;
+      color: #d4daea;
     }
 
     .upload-item {
-      background: #f2f5fb;
-      border: 1px solid #e1e8f4;
+      background: rgba(48, 52, 59, 0.42);
+      border: 1px solid rgba(202, 212, 231, 0.18);
       border-radius: 6px;
       padding: 4px 7px;
       margin-bottom: 4px;
@@ -188,16 +214,17 @@
 
     details {
       margin-top: 8px;
-      border: 1px dashed #d4dbe9;
+      border: 1px dashed rgba(206, 215, 234, 0.36);
       border-radius: 8px;
       padding: 8px;
-      background: #fbfcff;
+      background: rgba(55, 58, 66, 0.34);
+      backdrop-filter: blur(6px);
     }
 
     summary {
       cursor: pointer;
       font-size: 12px;
-      color: #4f5f7a;
+      color: #c4ccdd;
       user-select: none;
     }
 
@@ -221,46 +248,50 @@
     .target {
       margin-top: 6px;
       font-size: 12px;
-      color: #44557a;
+      color: #bfcae4;
       word-break: break-all;
     }
 
     .preview-head {
-      border: 1px solid #e1e7f2;
+      border: 1px solid rgba(223, 231, 247, 0.22);
       border-radius: 8px;
       padding: 10px;
-      background: #fafcff;
+      background: rgba(62, 65, 73, 0.38);
+      backdrop-filter: blur(6px);
       margin-bottom: 8px;
     }
 
     .preview-head h3 {
       font-size: 22px;
       margin-bottom: 4px;
-      color: #1f2f4d;
+      color: #eef2fa;
     }
 
     .preview-head p {
-      color: #5a6b88;
+      color: #c7cfde;
       font-size: 14px;
     }
 
     .meta {
       margin-top: 8px;
       font-size: 12px;
-      color: #4b5f85;
+      color: #bdc7de;
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
     }
 
     .preview-body {
-      border: 1px solid #e1e7f2;
+      border: 1px solid rgba(224, 232, 248, 0.2);
       border-radius: 8px;
-      background: #fff;
+      background: rgba(42, 46, 53, 0.14);
       padding: 12px;
       line-height: 1.75;
       height: var(--pane-h);
       overflow: auto;
+      backdrop-filter: blur(7px);
+      position: relative;
+      z-index: 2;
     }
 
     .md-block { margin: 0 0 12px; }
@@ -272,11 +303,56 @@
     }
 
     .preview-body pre {
-      border: 1px solid #dbe3f2;
+      border: 1px solid rgba(218, 228, 247, 0.2);
       border-radius: 8px;
-      background: #f6f8fd;
+      background: rgba(38, 41, 48, 0.44);
       padding: 10px;
       overflow: auto;
+    }
+
+    .preview-body code {
+      color: #f2f4fa;
+    }
+
+    .pane-wrap {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .pane-particles {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.2;
+      transition: opacity .2s ease;
+    }
+
+    .pane-wrap:hover .pane-particles,
+    .pane-wrap:focus-within .pane-particles {
+      opacity: 0.66;
+    }
+
+    .pane-content {
+      background: rgba(40, 44, 50, 0.1);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(197, 205, 222, 0.7);
+    }
+
+    /* Keep local-file dropdown readable on Windows/Chrome native option panel */
+    #postSelect {
+      color: #1f2533;
+      background: rgba(255, 255, 255, 0.88);
+      border-color: rgba(223, 231, 246, 0.9);
+    }
+
+    #postSelect option {
+      color: #1f2533;
+      background: #f5f7fc;
     }
 
     .mini {
@@ -296,6 +372,7 @@
   </style>
 </head>
 <body>
+  <div id="particles-js"></div>
   <main class="wrap">
     <section class="hero">
       <h1>博客更新控制台</h1>
@@ -321,20 +398,24 @@
         <div class="line">
           <h2><span class="dot"></span>左侧填写</h2>
           <div class="actions">
+            <button id="btnNewPost" type="button">新建文章</button>
             <button id="btnUpload" type="button">上传图片并插入</button>
             <button id="btnPublish" class="primary" type="button">写入本地并上传</button>
           </div>
         </div>
 
         <label for="body">正文（Markdown）</label>
-        <textarea id="body" class="editor" placeholder="在这里写正文...\n\n上传图片后会自动插入：![文件名](文件名)"></textarea>
+        <div class="pane-wrap">
+          <div id="particles-editor" class="pane-particles"></div>
+          <textarea id="body" class="editor pane-content" placeholder="在这里写正文...\n\n上传图片后会自动插入：![文件名](文件名)"></textarea>
+        </div>
 
         <input id="imageInput" type="file" accept="image/*" multiple style="display:none" />
         <input id="mdInput" type="file" accept=".md,.markdown,.txt" style="display:none" />
         <div id="uploadList" class="upload-list"></div>
 
         <details>
-          <summary>高级配置（目录名 / 发布时间 / slug / GitHub 配置）</summary>
+          <summary>高级配置（目录名 / 发布时间 / slug / 密码 / GitHub 配置）</summary>
           <div class="adv-grid">
             <div>
               <label for="editMode">编辑目标</label>
@@ -347,6 +428,14 @@
               <label for="contentPath">内容路径（仅“其他内容文件”生效）</label>
               <input id="contentPath" type="text" placeholder="content/page/about/index.zh-cn.md" />
             </div>
+            <div></div>
+          </div>
+          <div class="adv-grid">
+            <div>
+              <label>&nbsp;</label>
+              <button id="btnPickRoot" type="button">选择/更换本地目录</button>
+            </div>
+            <div></div>
             <div></div>
           </div>
           <div class="adv-grid">
@@ -409,6 +498,17 @@
           </div>
           <div class="adv-grid">
             <div>
+              <label for="password">文章密码（可空）</label>
+              <input id="password" type="password" autocomplete="new-password" />
+            </div>
+            <div>
+              <label for="passwordHint">密码提示（可空）</label>
+              <input id="passwordHint" type="text" placeholder="例如：导师姓氏拼音" />
+            </div>
+            <div></div>
+          </div>
+          <div class="adv-grid">
+            <div>
               <label for="owner">Owner</label>
               <input id="owner" type="text" />
             </div>
@@ -433,6 +533,7 @@
           </div>
         </details>
 
+        <p id="rootInfo" class="target"></p>
         <p id="target" class="target"></p>
         <p id="leftStatus" class="status"></p>
       </section>
@@ -448,11 +549,15 @@
           <div class="meta">
             <span id="pCategory">分类：-</span>
             <span id="pDate">时间：-</span>
+            <span id="pLock">私密：否</span>
             <span id="pPath">路径：-</span>
           </div>
         </div>
 
-        <article id="preview" class="preview-body"></article>
+        <div class="pane-wrap">
+          <div id="particles-preview" class="pane-particles"></div>
+          <article id="preview" class="preview-body pane-content"></article>
+        </div>
         <p id="rightStatus" class="status"></p>
         <p class="mini">备注：写入本地并上传会先尝试保存到本地，再上传图片和 md 到 GitHub。</p>
       </section>
@@ -466,6 +571,8 @@
       const conf = window.__POST_EDITOR_CONFIG__ || {};
       const KEY = "post-editor-v4";
       const FILE_NAME = "index.zh-cn.md";
+      const IMAGE_DB_NAME = "post-editor-image-db";
+      const IMAGE_STORE_NAME = "images";
 
       const DEFAULTS = {
         owner: conf.owner || "Elysium-Seeker",
@@ -494,6 +601,8 @@
         contentPath: $("contentPath"),
         author: $("author"),
         draft: $("draft"),
+        password: $("password"),
+        passwordHint: $("passwordHint"),
         commitMsg: $("commitMsg"),
 
         owner: $("owner"),
@@ -503,8 +612,10 @@
 
         btnUpload: $("btnUpload"),
         btnPublish: $("btnPublish"),
+        btnNewPost: $("btnNewPost"),
         btnToggleToken: $("btnToggleToken"),
         btnImportMd: $("btnImportMd"),
+        btnPickRoot: $("btnPickRoot"),
         btnLoadPostList: $("btnLoadPostList"),
         postSelect: $("postSelect"),
         btnOpenPost: $("btnOpenPost"),
@@ -514,10 +625,12 @@
         pSubtitle: $("pSubtitle"),
         pCategory: $("pCategory"),
         pDate: $("pDate"),
+        pLock: $("pLock"),
         pPath: $("pPath"),
         preview: $("preview"),
 
         target: $("target"),
+        rootInfo: $("rootInfo"),
         leftStatus: $("leftStatus"),
         rightStatus: $("rightStatus")
       };
@@ -529,6 +642,10 @@
       let manualFolder = false;
       let syncingFromEditor = false;
       let syncingFromPreview = false;
+      let isPublishing = false;
+      let mathReady = false;
+      let mathLoadFailed = false;
+      let mathTypesetQueue = Promise.resolve();
 
       function pad(num) { return String(num).padStart(2, "0"); }
 
@@ -547,8 +664,9 @@
       }
 
       function safeName(text) {
-        return String(text || "")
-          .trim()
+        const raw = String(text || "").trim();
+        const normalized = typeof raw.normalize === "function" ? raw.normalize("NFC") : raw;
+        return normalized
           .replace(/[<>:"/\\|?*\x00-\x1F]/g, "")
           .replace(/\s+/g, "-")
           .replace(/\.+$/g, "")
@@ -569,6 +687,7 @@
 
       function normalizeContentPath(path) {
         let val = String(path || "").trim().replace(/\\/g, "/");
+        if (typeof val.normalize === "function") val = val.normalize("NFC");
         if (!val) val = "content/page/about/index.zh-cn.md";
         val = val.replace(/^\.\//, "");
         if (!val.startsWith("content/")) val = "content/" + val;
@@ -802,6 +921,15 @@
         if (typeof data.draft === "string" && (data.draft === "true" || data.draft === "false")) {
           el.draft.value = data.draft;
         }
+        if (typeof data.password === "string") el.password.value = data.password;
+        else el.password.value = "";
+        if (typeof data.password_hint === "string") {
+          el.passwordHint.value = data.password_hint;
+        } else if (typeof data.passwordHint === "string") {
+          el.passwordHint.value = data.passwordHint;
+        } else {
+          el.passwordHint.value = "";
+        }
         if (typeof data.date === "string") {
           el.date.value = datetimeInputFrom(data.date);
         }
@@ -824,7 +952,6 @@
           }
         }
 
-        imageQueue.length = 0;
       }
 
       async function getFileHandleByRelativePath(dirHandle, relPath) {
@@ -865,6 +992,128 @@
         el.rightStatus.className = "status " + (type || "");
       }
 
+      function updateRootInfo() {
+        if (!rootHandle) {
+          el.rootInfo.textContent = "本地目录：未选择";
+          return;
+        }
+        el.rootInfo.textContent = "本地目录：" + rootHandle.name;
+      }
+
+      function openImageDb() {
+        return new Promise(function (resolve, reject) {
+          if (!window.indexedDB) {
+            reject(new Error("indexedDB unavailable"));
+            return;
+          }
+          const req = window.indexedDB.open(IMAGE_DB_NAME, 1);
+          req.onupgradeneeded = function () {
+            const db = req.result;
+            if (!db.objectStoreNames.contains(IMAGE_STORE_NAME)) {
+              db.createObjectStore(IMAGE_STORE_NAME, { keyPath: "id" });
+            }
+          };
+          req.onsuccess = function () { resolve(req.result); };
+          req.onerror = function () { reject(req.error || new Error("open db failed")); };
+        });
+      }
+
+      async function imageDbPut(record) {
+        const db = await openImageDb();
+        await new Promise(function (resolve, reject) {
+          const tx = db.transaction(IMAGE_STORE_NAME, "readwrite");
+          tx.objectStore(IMAGE_STORE_NAME).put(record);
+          tx.oncomplete = function () { resolve(); };
+          tx.onerror = function () { reject(tx.error || new Error("db put failed")); };
+        });
+        db.close();
+      }
+
+      async function imageDbGet(id) {
+        const db = await openImageDb();
+        const result = await new Promise(function (resolve, reject) {
+          const tx = db.transaction(IMAGE_STORE_NAME, "readonly");
+          const req = tx.objectStore(IMAGE_STORE_NAME).get(id);
+          req.onsuccess = function () { resolve(req.result || null); };
+          req.onerror = function () { reject(req.error || new Error("db get failed")); };
+        });
+        db.close();
+        return result;
+      }
+
+      async function imageDbDelete(id) {
+        const db = await openImageDb();
+        await new Promise(function (resolve, reject) {
+          const tx = db.transaction(IMAGE_STORE_NAME, "readwrite");
+          tx.objectStore(IMAGE_STORE_NAME).delete(id);
+          tx.oncomplete = function () { resolve(); };
+          tx.onerror = function () { reject(tx.error || new Error("db delete failed")); };
+        });
+        db.close();
+      }
+
+      function makeImageId() {
+        return "img_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9);
+      }
+
+      function loadScriptWithFallback(urls, index) {
+        return new Promise(function (resolve, reject) {
+          if (!urls || index >= urls.length) {
+            reject(new Error("all script sources failed"));
+            return;
+          }
+          const script = document.createElement("script");
+          script.src = urls[index];
+          script.async = true;
+          script.onload = function () { resolve(); };
+          script.onerror = function () {
+            script.remove();
+            loadScriptWithFallback(urls, index + 1).then(resolve).catch(reject);
+          };
+          document.head.appendChild(script);
+        });
+      }
+
+      function initMathJax() {
+        window.MathJax = {
+          tex: {
+            inlineMath: [["$", "$"], ["\\(", "\\)"]],
+            displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+            processEscapes: true,
+            processEnvironments: true
+          },
+          options: {
+            skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+          }
+        };
+
+        const urls = [
+          "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js",
+          "https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"
+        ];
+
+        return loadScriptWithFallback(urls, 0).then(function () {
+          mathReady = true;
+          mathLoadFailed = false;
+          renderPreview();
+        }).catch(function () {
+          mathReady = false;
+          mathLoadFailed = true;
+          setRightStatus("LaTeX 引擎加载失败（可能网络问题），请稍后重试。", "warn");
+        });
+      }
+
+      function typesetMath(container) {
+        if (!mathReady || !window.MathJax || !window.MathJax.typesetPromise) return;
+        mathTypesetQueue = mathTypesetQueue.then(function () {
+          try {
+            if (window.MathJax.typesetClear) window.MathJax.typesetClear([container]);
+          } catch (_) {}
+          return window.MathJax.typesetPromise([container]);
+        }).catch(function () {});
+      }
+
       function autoGrow(textarea) {
         // Keep independent scroll areas for source/preview sync.
         return textarea;
@@ -889,6 +1138,8 @@
         const slug = el.slug.value.trim();
         const author = el.author.value.trim() || DEFAULTS.author;
         const draft = el.draft.value;
+        const password = el.password.value.trim();
+        const passwordHint = el.passwordHint.value.trim();
 
         const lines = [
           "---",
@@ -901,6 +1152,8 @@
 
         if (subtitle) lines.push("description : \"" + escapeYaml(subtitle) + "\"");
         if (slug) lines.push("slug : \"" + escapeYaml(slug) + "\"");
+        if (password) lines.push("password : \"" + escapeYaml(password) + "\"");
+        if (passwordHint) lines.push("password_hint : \"" + escapeYaml(passwordHint) + "\"");
 
         lines.push("categories:");
         splitList(category).forEach(function (c) {
@@ -923,17 +1176,53 @@
         }).join("");
       }
 
+      async function clearImageQueue(removeFromDb) {
+        const ids = imageQueue.map(function (it) { return it.id; }).filter(Boolean);
+        imageQueue.length = 0;
+        clearPreviewImageMap();
+        renderUploadList();
+        if (removeFromDb && ids.length > 0) {
+          for (const id of ids) {
+            try { await imageDbDelete(id); } catch (_) {}
+          }
+        }
+      }
+
+      async function restoreImageQueueFromState(items) {
+        await clearImageQueue(false);
+        if (!Array.isArray(items) || items.length === 0) return;
+
+        for (const meta of items) {
+          if (!meta || !meta.id || !meta.name) continue;
+          try {
+            const rec = await imageDbGet(meta.id);
+            if (!rec || !rec.blob) continue;
+            const file = new File([rec.blob], meta.name, { type: rec.blob.type || "application/octet-stream" });
+            imageQueue.push({
+              id: meta.id,
+              name: meta.name,
+              file: file,
+              uploadedLocal: Boolean(meta.uploadedLocal),
+              uploadedRemote: Boolean(meta.uploadedRemote)
+            });
+            setPreviewImage(meta.name, file);
+          } catch (_) {}
+        }
+      }
+
       function renderPreview() {
         const title = el.title.value.trim() || "（标题预览）";
         const subtitle = el.subtitle.value.trim() || "（副标题预览）";
         const category = el.category.value.trim() || DEFAULTS.category;
         const publishDate = toISO(getDate());
         const target = getTargetPath();
+        const lockEnabled = Boolean(el.password.value.trim());
 
         el.pTitle.textContent = title;
         el.pSubtitle.textContent = subtitle || "（副标题预览）";
         el.pCategory.textContent = "分类：" + category;
         el.pDate.textContent = "时间：" + publishDate;
+        el.pLock.textContent = lockEnabled ? ("私密：是（提示：" + (el.passwordHint.value.trim() || "无") + "）") : "私密：否";
         el.pPath.textContent = "路径：" + target;
 
         if (window.marked && typeof window.marked.parse === "function") {
@@ -955,6 +1244,7 @@
             }, { once: true });
           });
           el.preview.innerHTML = box.innerHTML;
+          typesetMath(el.preview);
         } else {
           el.preview.textContent = el.body.value || "";
         }
@@ -976,12 +1266,23 @@
           contentPath: el.contentPath.value,
           author: el.author.value,
           draft: el.draft.value,
+          password: el.password.value,
+          passwordHint: el.passwordHint.value,
           commitMsg: el.commitMsg.value,
 
           owner: el.owner.value,
           repo: el.repo.value,
           branch: el.branch.value,
           token: el.token.value,
+
+          imageQueue: imageQueue.map(function (it) {
+            return {
+              id: it.id || "",
+              name: it.name || "",
+              uploadedLocal: Boolean(it.uploadedLocal),
+              uploadedRemote: Boolean(it.uploadedRemote)
+            };
+          }),
 
           manualFolder: manualFolder
         };
@@ -1002,6 +1303,8 @@
         el.contentPath.value = state.contentPath || "content/page/about/index.zh-cn.md";
         el.author.value = state.author || DEFAULTS.author;
         el.draft.value = state.draft || DEFAULTS.draft;
+        el.password.value = state.password || "";
+        el.passwordHint.value = state.passwordHint || "";
         el.commitMsg.value = state.commitMsg || "";
 
         el.owner.value = state.owner || DEFAULTS.owner;
@@ -1023,7 +1326,7 @@
       function loadState() {
         const raw = localStorage.getItem(KEY);
         if (!raw) {
-          applyState({
+          const fallbackState = {
             category: DEFAULTS.category,
             date: nowInput(),
             editMode: "post",
@@ -1034,17 +1337,20 @@
             repo: DEFAULTS.repo,
             branch: DEFAULTS.branch,
             token: DEFAULTS.token
-          });
-          return;
+          };
+          applyState(fallbackState);
+          return fallbackState;
         }
 
         try {
-          applyState(JSON.parse(raw));
+          const parsed = JSON.parse(raw);
+          applyState(parsed);
           if (!el.token.value && DEFAULTS.token) {
             el.token.value = DEFAULTS.token;
           }
+          return parsed;
         } catch (_) {
-          applyState({
+          const fallbackState = {
             category: DEFAULTS.category,
             date: nowInput(),
             editMode: "post",
@@ -1055,7 +1361,9 @@
             repo: DEFAULTS.repo,
             branch: DEFAULTS.branch,
             token: DEFAULTS.token
-          });
+          };
+          applyState(fallbackState);
+          return fallbackState;
         }
       }
 
@@ -1097,12 +1405,16 @@
         if (!files || files.length === 0) return;
 
         const markdownLines = [];
-        Array.from(files).forEach(function (file) {
+        for (const file of Array.from(files)) {
           const safe = uniqueImageName(sanitizeImageName(file.name));
-          imageQueue.push({ name: safe, file: file, uploadedLocal: false, uploadedRemote: false });
+          const id = makeImageId();
+          imageQueue.push({ id: id, name: safe, file: file, uploadedLocal: false, uploadedRemote: false });
+          try {
+            await imageDbPut({ id: id, name: safe, blob: file });
+          } catch (_) {}
           setPreviewImage(safe, file);
           markdownLines.push("![" + safe + "](" + safe + ")");
-        });
+        }
 
         insertAtCursor(el.body, "\n\n" + markdownLines.join("\n\n") + "\n");
         updateAll();
@@ -1112,7 +1424,7 @@
       async function importMarkdownFile(file) {
         if (!file) return;
         try {
-          clearPreviewImageMap();
+          await clearImageQueue(true);
           const text = await file.text();
           const parsed = parseFrontMatter(text);
           if (parsed) {
@@ -1199,6 +1511,7 @@
           }
         } catch (err) {
           rootHandle = null;
+          updateRootInfo();
           setLeftStatus("读取文章列表失败：" + err.message + "。请重试并重新选目录。", "error");
         }
       }
@@ -1228,7 +1541,7 @@
             return;
           }
 
-          clearPreviewImageMap();
+          await clearImageQueue(true);
           await hydratePreviewImagesFromDir(parsed.body || "", resolved.dirHandle);
           applyParsedPost(parsed, selected.type === "post" ? selected.folder : "", selected.targetPath);
           updateAll();
@@ -1258,6 +1571,7 @@
         try {
           rootHandle = await window.showDirectoryPicker({ mode: "readwrite" });
           setLeftStatus("已选择目录：" + rootHandle.name + "（支持选项目根目录/content/post）", "ok");
+          updateRootInfo();
           return true;
         } catch (err) {
           if (err && err.name === "AbortError") return false;
@@ -1366,12 +1680,12 @@
       async function saveLocal() {
         if (!window.showDirectoryPicker) {
           setLeftStatus("浏览器不支持本地目录写入。", "warn");
-          return false;
+          return { ok: false, targetPath: getTargetPath(), error: "浏览器不支持本地目录写入。" };
         }
 
         if (!rootHandle) {
           const ok = await pickRoot();
-          if (!ok) return false;
+          if (!ok) return { ok: false, targetPath: getTargetPath(), error: "未选择目录" };
         }
 
         const targetPath = getTargetPath();
@@ -1391,12 +1705,14 @@
             await imgWritable.close();
             img.uploadedLocal = true;
           }
+          renderUploadList();
+          saveState();
 
-          return true;
+          return { ok: true, targetPath: targetPath };
         } catch (err) {
           const msg = "本地写入失败：" + err.message;
           setLeftStatus(msg, "error");
-          return false;
+          return { ok: false, targetPath: targetPath, error: err.message || String(err) };
         }
       }
 
@@ -1420,29 +1736,83 @@
         return data.message || JSON.stringify(data);
       }
 
-      async function putContent(owner, repo, branch, token, path, contentBase64, message) {
-        const api = "https://api.github.com/repos/" + encodeURIComponent(owner) + "/" + encodeURIComponent(repo) + "/contents/" + path.split("/").map(encodeURIComponent).join("/");
+      function normalizeRepoPath(path) {
+        return String(path || "")
+          .replace(/\\/g, "/")
+          .split("/")
+          .filter(Boolean)
+          .map(function (segment) {
+            return typeof segment.normalize === "function" ? segment.normalize("NFC") : segment;
+          })
+          .join("/");
+      }
 
-        let sha;
-        const getResp = await ghRequest(api + "?ref=" + encodeURIComponent(branch), { method: "GET" }, token);
-        if (getResp.status === 200) {
-          sha = (await getResp.json()).sha;
-        } else if (getResp.status !== 404) {
-          throw new Error("读取远端文件失败(" + getResp.status + ")：" + errMessage(await safeJson(getResp)));
+      function buildGitHubContentsApi(owner, repo, path) {
+        const safePath = normalizeRepoPath(path);
+        return "https://api.github.com/repos/" + encodeURIComponent(owner) + "/" + encodeURIComponent(repo) + "/contents/" + safePath.split("/").map(encodeURIComponent).join("/");
+      }
+
+      async function fetchRemoteSha(api, branch, token) {
+        const resp = await ghRequest(api + "?ref=" + encodeURIComponent(branch), { method: "GET" }, token);
+        if (resp.status === 200) {
+          const data = await resp.json();
+          return data.sha;
+        }
+        if (resp.status === 404) return "";
+        throw new Error("读取远端文件失败(" + resp.status + ")：" + errMessage(await safeJson(resp)));
+      }
+
+      async function ensureRepoAndBranch(owner, repo, branch, token) {
+        const repoApi = "https://api.github.com/repos/" + encodeURIComponent(owner) + "/" + encodeURIComponent(repo);
+        const repoResp = await ghRequest(repoApi, { method: "GET" }, token);
+        if (repoResp.status === 404) {
+          throw new Error("仓库不可访问：" + owner + "/" + repo + "（仓库名错误或 Token 无权限）");
+        }
+        if (repoResp.status === 401 || repoResp.status === 403) {
+          throw new Error("Token 无权限访问仓库：" + owner + "/" + repo);
+        }
+        if (repoResp.status !== 200) {
+          throw new Error("校验仓库失败(" + repoResp.status + ")：" + errMessage(await safeJson(repoResp)));
         }
 
-        const payload = {
-          message: message,
-          content: contentBase64,
-          branch: branch
-        };
-        if (sha) payload.sha = sha;
+        const branchApi = repoApi + "/branches/" + encodeURIComponent(branch);
+        const branchResp = await ghRequest(branchApi, { method: "GET" }, token);
+        if (branchResp.status === 404) {
+          throw new Error("分支不存在：" + owner + "/" + repo + "@" + branch);
+        }
+        if (branchResp.status !== 200) {
+          throw new Error("校验分支失败(" + branchResp.status + ")：" + errMessage(await safeJson(branchResp)));
+        }
+      }
 
-        const putResp = await ghRequest(api, {
+      async function putContent(owner, repo, branch, token, path, contentBase64, message) {
+        const api = buildGitHubContentsApi(owner, repo, path);
+        const makePayload = function (sha) {
+          const payload = {
+            message: message,
+            content: contentBase64,
+            branch: branch
+          };
+          if (sha) payload.sha = sha;
+          return payload;
+        };
+
+        let sha = await fetchRemoteSha(api, branch, token);
+        let putResp = await ghRequest(api, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(makePayload(sha))
         }, token);
+
+        if (putResp.status === 409) {
+          // Branch moved between read/write; refresh SHA and retry once.
+          sha = await fetchRemoteSha(api, branch, token);
+          putResp = await ghRequest(api, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(makePayload(sha))
+          }, token);
+        }
 
         if (putResp.status !== 200 && putResp.status !== 201) {
           throw new Error("提交失败(" + putResp.status + ")：" + errMessage(await safeJson(putResp)));
@@ -1452,7 +1822,7 @@
       }
 
       async function deleteContentBySha(owner, repo, branch, token, path, sha, message) {
-        const api = "https://api.github.com/repos/" + encodeURIComponent(owner) + "/" + encodeURIComponent(repo) + "/contents/" + path.split("/").map(encodeURIComponent).join("/");
+        const api = buildGitHubContentsApi(owner, repo, path);
         const resp = await ghRequest(api, {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
@@ -1469,7 +1839,7 @@
       }
 
       async function deleteRemoteTree(owner, repo, branch, token, path, message) {
-        const api = "https://api.github.com/repos/" + encodeURIComponent(owner) + "/" + encodeURIComponent(repo) + "/contents/" + path.split("/").map(encodeURIComponent).join("/");
+        const api = buildGitHubContentsApi(owner, repo, path);
         const listResp = await ghRequest(api + "?ref=" + encodeURIComponent(branch), { method: "GET" }, token);
         if (listResp.status === 404) return 0;
         if (listResp.status !== 200) {
@@ -1571,8 +1941,7 @@
           postEntries.splice(selectedInfo.index, 1);
           renderPostOptions();
           if (selected.targetPath === getTargetPath() || (selected.type === "post" && dirname(selected.targetPath) === dirname(getTargetPath()))) {
-            clearPreviewImageMap();
-            imageQueue.length = 0;
+            await clearImageQueue(true);
             el.body.value = "";
             updateAll();
           }
@@ -1605,29 +1974,48 @@
         const commitMsg = (el.commitMsg.value || "feat(post): 更新《" + title + "》").trim();
         el.commitMsg.value = commitMsg;
 
+        await ensureRepoAndBranch(owner, repo, branch, token);
+
         for (const img of imageQueue) {
           if (img.uploadedRemote) continue;
           const imgPath = targetDir + "/" + img.name;
           const imgMessage = commitMsg + " [image:" + img.name + "]";
           const base64 = await fileToBase64(img.file);
-          await putContent(owner, repo, branch, token, imgPath, base64, imgMessage);
+          try {
+            await putContent(owner, repo, branch, token, imgPath, base64, imgMessage);
+          } catch (err) {
+            throw new Error("上传图片失败(" + img.name + "): " + (err.message || String(err)));
+          }
           img.uploadedRemote = true;
+          renderUploadList();
+          saveState();
         }
 
         const bytes = new TextEncoder().encode(buildMarkdown());
-        const result = await putContent(owner, repo, branch, token, targetMd, uint8ToBase64(bytes), commitMsg);
+        let result;
+        try {
+          result = await putContent(owner, repo, branch, token, targetMd, uint8ToBase64(bytes), commitMsg);
+        } catch (err) {
+          throw new Error("上传文章失败(" + targetMd + "): " + (err.message || String(err)));
+        }
+        saveState();
         return result;
       }
 
       async function publish() {
+        if (isPublishing) return;
+        isPublishing = true;
+        el.btnPublish.disabled = true;
         setLeftStatus("", "");
         setRightStatus("", "");
 
         try {
           setRightStatus("正在写入本地...", "warn");
-          const localOK = await saveLocal();
-          if (localOK) {
-            setLeftStatus("本地写入成功。", "ok");
+          const localResult = await saveLocal();
+          if (localResult.ok) {
+            setLeftStatus("本地写入成功：/" + localResult.targetPath, "ok");
+          } else {
+            setLeftStatus("本地写入未完成。", "warn");
           }
 
           setRightStatus("正在上传到 GitHub...", "warn");
@@ -1637,7 +2025,39 @@
           setRightStatus("上传成功。" + (commitUrl ? (" Commit: " + commitUrl) : ""), "ok");
         } catch (err) {
           setRightStatus(err.message || String(err), "error");
+        } finally {
+          isPublishing = false;
+          el.btnPublish.disabled = false;
         }
+      }
+
+      async function createNewPost() {
+        const ok = window.confirm("确认新建文章？当前编辑内容会被清空。");
+        if (!ok) return;
+
+        await clearImageQueue(true);
+        postEntries.length = 0;
+        renderPostOptions();
+        el.postSelect.value = "";
+
+        manualFolder = false;
+        el.editMode.value = "post";
+        el.title.value = "";
+        el.subtitle.value = "";
+        el.category.value = DEFAULTS.category;
+        el.body.value = "";
+        el.folder.value = "";
+        el.date.value = nowInput();
+        el.slug.value = "";
+        el.draft.value = DEFAULTS.draft;
+        el.password.value = "";
+        el.passwordHint.value = "";
+        el.commitMsg.value = "";
+
+        clearPreviewImageMap();
+        updateAll();
+        setLeftStatus("已切换到新建文章模式。", "ok");
+        setRightStatus("", "");
       }
 
       function bind() {
@@ -1652,6 +2072,8 @@
           el.slug,
           el.author,
           el.draft,
+          el.password,
+          el.passwordHint,
           el.commitMsg,
           el.owner,
           el.repo,
@@ -1677,6 +2099,7 @@
         el.preview.addEventListener("scroll", syncEditorToPreviewScroll);
 
         el.btnUpload.addEventListener("click", function () {
+          el.imageInput.value = "";
           el.imageInput.click();
         });
 
@@ -1686,6 +2109,7 @@
         });
 
         el.btnImportMd.addEventListener("click", function () {
+          el.mdInput.value = "";
           el.mdInput.click();
         });
 
@@ -1693,9 +2117,11 @@
           importMarkdownFile(el.mdInput.files && el.mdInput.files[0]);
         });
 
+        el.btnPickRoot.addEventListener("click", pickRoot);
         el.btnLoadPostList.addEventListener("click", loadPostList);
         el.btnOpenPost.addEventListener("click", openSelectedPost);
         el.btnDeletePost.addEventListener("click", deleteSelectedPost);
+        el.btnNewPost.addEventListener("click", createNewPost);
 
         el.btnPublish.addEventListener("click", publish);
 
@@ -1704,13 +2130,49 @@
         });
       }
 
-      loadState();
+      const loadedState = loadState();
       if (!el.folder.value.trim()) {
         el.folder.value = folderFromTitle(el.title.value.trim());
       }
       bind();
-      updateAll();
+      updateRootInfo();
+      restoreImageQueueFromState(loadedState && loadedState.imageQueue).then(function () {
+        updateAll();
+      }).catch(function () {
+        updateAll();
+      });
+      initMathJax();
     }());
+  </script>
+  <script src="/post-editor/shared/particles.min.js"></script>
+  <script>
+    if (window.particlesJS) {
+      window.particlesJS.load("particles-js", "/post-editor/shared/particlesjs-config.json");
+
+      const paneParticlesConfig = {
+        particles: {
+          number: { value: 85, density: { enable: true, value_area: 860 } },
+          color: { value: ["#cc6464", "#b95454", "#9f4a4a"] },
+          shape: { type: "circle", stroke: { width: 0, color: "#000000" } },
+          opacity: { value: 0.58, random: true, anim: { enable: true, speed: 0.9, opacity_min: 0.18, sync: false } },
+          size: { value: 2.4, random: true, anim: { enable: false, speed: 18, size_min: 0.4, sync: false } },
+          line_linked: { enable: true, distance: 180, color: "#a64747", opacity: 0.44, width: 1.2 },
+          move: { enable: true, speed: 2.7, direction: "none", random: true, straight: false, out_mode: "out", bounce: false }
+        },
+        interactivity: {
+          detect_on: "window",
+          events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true },
+          modes: { grab: { distance: 220, line_linked: { opacity: 0.92 } }, push: { particles_nb: 5 } }
+        },
+        retina_detect: true
+      };
+
+      ["particles-editor", "particles-preview"].forEach(function (id) {
+        if (!document.getElementById(id)) return;
+        const configCopy = JSON.parse(JSON.stringify(paneParticlesConfig));
+        window.particlesJS(id, configCopy);
+      });
+    }
   </script>
 </body>
 </html>

@@ -365,10 +365,75 @@
 
 </header>
 
-    <section class="article-content">
     
-    
-    <h2 id="part-0引言">Part 0.引言
+
+
+
+
+
+
+
+
+
+
+<section class="article-content article-content--locked">
+    <style>
+        .post-lock-card {
+            margin: 0 0 1.6rem;
+            padding: 1rem;
+            border: 1px solid var(--card-separator-color);
+            border-radius: var(--card-border-radius);
+            background: var(--card-background);
+        }
+        .post-lock-card h3 {
+            margin: 0 0 0.5rem;
+            font-size: 1.8rem;
+        }
+        .post-lock-card p {
+            margin: 0 0 0.8rem;
+            color: var(--card-text-color-secondary);
+        }
+        .post-lock-row {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+        }
+        .post-lock-row input {
+            flex: 1;
+            min-width: 0;
+            padding: 0.6rem 0.8rem;
+            border-radius: 0.6rem;
+            border: 1px solid var(--card-separator-color);
+            background: var(--card-background-selected);
+        }
+        .post-lock-row button {
+            padding: 0.6rem 0.95rem;
+            border: 1px solid var(--accent-color);
+            background: var(--accent-color);
+            color: #fff;
+            border-radius: 0.6rem;
+            cursor: pointer;
+        }
+        .post-lock-status {
+            margin: 0.7rem 0 0;
+            color: var(--accent-color);
+            min-height: 1.2em;
+        }
+    </style>
+    <div
+        data-post-lock-root
+        data-post-lock-password="0821">
+        <div class="post-lock-card" data-post-lock-gate>
+            <h3>该文章已加密</h3>
+            <p>该文章需要访问密码。</p>
+            <form class="post-lock-row" data-post-lock-form>
+                <input type="password" placeholder="请输入密码" autocomplete="current-password" data-post-lock-input />
+                <button type="submit">解锁</button>
+            </form>
+            <p class="post-lock-status" data-post-lock-status></p>
+        </div>
+        <div data-post-lock-content hidden>
+            <h2 id="part-0引言">Part 0.引言
 </h2><p>  这段时间一直处于一种很迷茫的阶段，感觉自己每天都在毫无意义的事上浪费时间，逐渐走向了无所事事却又一无所成的深渊。眼看着身边的高中同学，那些我曾经认为不如我的人，都一个个取得了令我感到羡慕的成就，而我却原地踏步，一无所成，心里不由得羡慕嫉妒恨，亦不由得反复叩问，我该怎么做，我能做什么？也尝试做了一些努力，也尝试着剖析了自己，可惜一直难有成效，甚至在自我剖析的过程中陷入了自怨自艾，乃至想自暴自弃的境地。<br>
 <br></p>
 <p><img src="/p/%E4%BD%95%E4%BB%A5%E9%80%BB%E8%BE%91%E8%87%AA%E6%B4%BD%E7%9A%84%E7%94%9F%E6%B4%BB/image.png"
@@ -629,7 +694,51 @@
 <p>  <strong>希望我能成为理想中的我自己。</strong></p>
 <p>  <strong>希望我能逻辑自洽的活下去。</strong></p>
 
+        </div>
+    </div>
+    <script>
+        (function () {
+            function unlock(root) {
+                const gate = root.querySelector("[data-post-lock-gate]");
+                const content = root.querySelector("[data-post-lock-content]");
+                if (gate) gate.hidden = true;
+                if (content) content.hidden = false;
+                window.dispatchEvent(new Event("resize"));
+            }
+
+            document.querySelectorAll("[data-post-lock-root]").forEach(function (root) {
+                const password = root.getAttribute("data-post-lock-password") || "";
+                if (!password) {
+                    unlock(root);
+                    return;
+                }
+
+                const form = root.querySelector("[data-post-lock-form]");
+                const input = root.querySelector("[data-post-lock-input]");
+                const status = root.querySelector("[data-post-lock-status]");
+                if (!form || !input || !status) return;
+
+                form.addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    const value = (input.value || "").trim();
+                    if (!value) {
+                        status.textContent = "请输入密码。";
+                        return;
+                    }
+                    if (value !== password) {
+                        status.textContent = "密码不正确。";
+                        input.select();
+                        return;
+                    }
+
+                    status.textContent = "";
+                    unlock(root);
+                });
+            });
+        }());
+    </script>
 </section>
+
 
 
     <footer class="article-footer">

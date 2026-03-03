@@ -2288,16 +2288,21 @@ categories:
         
         <guid>https://Elysium-Seeker.github.io/blog-editor/</guid>
         <description>&lt;p&gt;用这个前端页面快速写/改博客文章：&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/post-editor/&#34; &gt;打开博客更新助手&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/post-editor/&#34; &gt;打开博客更新助手&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;如果你在本地用 &lt;code&gt;hugo server&lt;/code&gt; 预览，也可以直接打开 &lt;code&gt;http://localhost:1313/post-editor/&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;页面支持：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;顶部只填标题 / 副标题 / 分类，其他默认自动补全&lt;/li&gt;
 &lt;li&gt;左侧编辑、右侧实时预览&lt;/li&gt;
+&lt;li&gt;支持 LaTeX 数学公式预览（&lt;code&gt;$...$&lt;/code&gt; / &lt;code&gt;$$...$$&lt;/code&gt;）&lt;/li&gt;
 &lt;li&gt;上传图片后自动插入 Markdown 引用&lt;/li&gt;
 &lt;li&gt;支持导入 Markdown，以及加载已有文章继续编辑&lt;/li&gt;
+&lt;li&gt;支持给文章设置访问密码与提示（用于私密文章入口）&lt;/li&gt;
 &lt;li&gt;支持切换到“其他内容文件”模式（例如 &lt;code&gt;content/page/about/index.zh-cn.md&lt;/code&gt;）&lt;/li&gt;
 &lt;li&gt;支持删除已选择文章（本地 + GitHub）&lt;/li&gt;
+&lt;li&gt;支持一键“新建文章”并清空当前编辑状态&lt;/li&gt;
 &lt;li&gt;直接写入本地 &lt;code&gt;content/post/...&lt;/code&gt; 目录（浏览器支持时）&lt;/li&gt;
 &lt;li&gt;GitHub API 一键提交到仓库（文章与图片一起上传）&lt;/li&gt;
 &lt;/ul&gt;
