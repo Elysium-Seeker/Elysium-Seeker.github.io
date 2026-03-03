@@ -338,6 +338,13 @@
       background: rgba(40, 44, 50, 0.1);
     }
 
+    .cover-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
     input::placeholder,
     textarea::placeholder {
       color: rgba(197, 205, 222, 0.7);
@@ -505,7 +512,14 @@
               <label for="passwordHint">密码提示（可空）</label>
               <input id="passwordHint" type="text" placeholder="例如：导师姓氏拼音" />
             </div>
-            <div></div>
+            <div>
+              <label for="coverImage">封面图（上传）</label>
+              <div class="cover-actions">
+                <button id="btnPickCover" type="button">上传封面图</button>
+              </div>
+              <input id="coverImage" type="text" placeholder="未设置封面图" readonly />
+              <input id="coverInput" type="file" accept="image/*" style="display:none" />
+            </div>
           </div>
           <div class="adv-grid">
             <div>
@@ -591,6 +605,7 @@
         category: $("category"),
         body: $("body"),
         imageInput: $("imageInput"),
+        coverInput: $("coverInput"),
         mdInput: $("mdInput"),
         uploadList: $("uploadList"),
 
@@ -603,6 +618,7 @@
         draft: $("draft"),
         password: $("password"),
         passwordHint: $("passwordHint"),
+        coverImage: $("coverImage"),
         commitMsg: $("commitMsg"),
 
         owner: $("owner"),
@@ -611,6 +627,7 @@
         token: $("token"),
 
         btnUpload: $("btnUpload"),
+        btnPickCover: $("btnPickCover"),
         btnPublish: $("btnPublish"),
         btnNewPost: $("btnNewPost"),
         btnToggleToken: $("btnToggleToken"),
@@ -683,6 +700,10 @@
 
       function getDate() {
         return el.date.value || nowInput();
+      }
+
+      function getCoverImage() {
+        return normalizeImageRef(el.coverImage.value || "");
       }
 
       function normalizeContentPath(path) {
@@ -930,6 +951,8 @@
         } else {
           el.passwordHint.value = "";
         }
+        if (typeof data.image === "string") el.coverImage.value = data.image;
+        else el.coverImage.value = "";
         if (typeof data.date === "string") {
           el.date.value = datetimeInputFrom(data.date);
         }
@@ -1140,6 +1163,7 @@
         const draft = el.draft.value;
         const password = el.password.value.trim();
         const passwordHint = el.passwordHint.value.trim();
+        const coverImage = getCoverImage();
 
         const lines = [
           "---",
@@ -1154,6 +1178,7 @@
         if (slug) lines.push("slug : \"" + escapeYaml(slug) + "\"");
         if (password) lines.push("password : \"" + escapeYaml(password) + "\"");
         if (passwordHint) lines.push("password_hint : \"" + escapeYaml(passwordHint) + "\"");
+        if (coverImage) lines.push("image : \"" + escapeYaml(coverImage) + "\"");
 
         lines.push("categories:");
         splitList(category).forEach(function (c) {
@@ -1268,6 +1293,7 @@
           draft: el.draft.value,
           password: el.password.value,
           passwordHint: el.passwordHint.value,
+          coverImage: el.coverImage.value,
           commitMsg: el.commitMsg.value,
 
           owner: el.owner.value,
@@ -1305,6 +1331,7 @@
         el.draft.value = state.draft || DEFAULTS.draft;
         el.password.value = state.password || "";
         el.passwordHint.value = state.passwordHint || "";
+        el.coverImage.value = state.coverImage || "";
         el.commitMsg.value = state.commitMsg || "";
 
         el.owner.value = state.owner || DEFAULTS.owner;
@@ -1419,6 +1446,20 @@
         insertAtCursor(el.body, "\n\n" + markdownLines.join("\n\n") + "\n");
         updateAll();
         setLeftStatus("已插入 " + markdownLines.length + " 张图片引用。", "ok");
+      }
+
+      async function setCoverImageFromFile(file) {
+        if (!file) return;
+        const safe = uniqueImageName(sanitizeImageName(file.name));
+        const id = makeImageId();
+        imageQueue.push({ id: id, name: safe, file: file, uploadedLocal: false, uploadedRemote: false });
+        try {
+          await imageDbPut({ id: id, name: safe, blob: file });
+        } catch (_) {}
+        setPreviewImage(safe, file);
+        el.coverImage.value = safe;
+        updateAll();
+        setLeftStatus("封面图已设置：" + safe, "ok");
       }
 
       async function importMarkdownFile(file) {
@@ -2074,6 +2115,7 @@
         el.draft.value = DEFAULTS.draft;
         el.password.value = "";
         el.passwordHint.value = "";
+        el.coverImage.value = "";
         el.commitMsg.value = "";
 
         clearPreviewImageMap();
@@ -2096,6 +2138,7 @@
           el.draft,
           el.password,
           el.passwordHint,
+          el.coverImage,
           el.commitMsg,
           el.owner,
           el.repo,
@@ -2128,6 +2171,16 @@
         el.imageInput.addEventListener("change", function () {
           addImages(el.imageInput.files);
           el.imageInput.value = "";
+        });
+
+        el.btnPickCover.addEventListener("click", function () {
+          el.coverInput.value = "";
+          el.coverInput.click();
+        });
+
+        el.coverInput.addEventListener("change", function () {
+          setCoverImageFromFile(el.coverInput.files && el.coverInput.files[0]);
+          el.coverInput.value = "";
         });
 
         el.btnImportMd.addEventListener("click", function () {
