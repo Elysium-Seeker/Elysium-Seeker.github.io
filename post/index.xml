@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Mon, 11 May 2026 21:03:07 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 11 May 2026 21:17:03 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>AI PPT 制作工具简析</title>
         <link>https://Elysium-Seeker.github.io/p/ai-ppt-review/</link>
         <pubDate>Mon, 11 May 2026 20:42:47 +0800</pubDate>
@@ -117,16 +117,6 @@
 &lt;p&gt;不过缺点也很明显：它用了太多莫名其妙的红蓝色块，看着还是有点悲伤。可能也是因为我没给模板，所以它只能自己乱抓一种视觉语言。&lt;/p&gt;
 &lt;p&gt;不多说了，看图看图。给到一个“夯”！&lt;/p&gt;
 &lt;p&gt;我真的觉得排版很好看啊啊啊啊。&lt;/p&gt;
-&lt;h2 id=&#34;简单总结&#34;&gt;简单总结
-&lt;/h2&gt;&lt;p&gt;非常粗暴地排一下：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Gamma&lt;/strong&gt;：最快、最精致，也最容易显得“不像人做的”。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;NotebookLM&lt;/strong&gt;：视觉很有意思，但偏玩具，正式场合谨慎使用。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Python / Codex&lt;/strong&gt;：逻辑最稳，适合科研汇报和结构化内容，但需要好大纲。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;ppt-master&lt;/strong&gt;：比纯代码路线更美观，但文字和格式误差会变多。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;gpt-image2-ppt-skill&lt;/strong&gt;：我个人最喜欢，视觉完成度高，但需要更好的模板约束。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;所以现在如果我真的要做 PPT，大概会先用大纲把内容打好，再根据用途选择工具：正式科研汇报偏 Python / Codex，快速出片偏 Gamma，想要赌一个好看的初版就试试 &lt;code&gt;gpt-image2-ppt-skill&lt;/code&gt;。&lt;/p&gt;
 </description>
         </item>
         <item>
