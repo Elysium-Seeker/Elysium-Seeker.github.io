@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="使用 Hugo + GitHub Page 搭建">
-<title>本博客搭建记录 &amp; 指南</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="对 Gamma、NotebookLM、Python/Codex、ppt-master 和 gpt-image2-ppt-skill 的一点主观测评">
+<title>AI PPT 制作工具简析</title>
 
-<link rel='canonical' href='https://Elysium-Seeker.github.io/p/%E6%9C%AC%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95-%E6%8C%87%E5%8D%97/'>
+<link rel='canonical' href='https://Elysium-Seeker.github.io/p/ai-ppt-review/'>
 
-<link rel="stylesheet" href="/scss/style.min.829fb4d762832054bf4ccfcc6906b7eb8df8a3d45b00b64b6fc4c539dc19645c.css"><meta property='og:title' content="本博客搭建记录 & 指南">
-<meta property='og:description' content="使用 Hugo + GitHub Page 搭建">
-<meta property='og:url' content='https://Elysium-Seeker.github.io/p/%E6%9C%AC%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95-%E6%8C%87%E5%8D%97/'>
+<link rel="stylesheet" href="/scss/style.min.829fb4d762832054bf4ccfcc6906b7eb8df8a3d45b00b64b6fc4c539dc19645c.css"><meta property='og:title' content="AI PPT 制作工具简析">
+<meta property='og:description' content="对 Gamma、NotebookLM、Python/Codex、ppt-master 和 gpt-image2-ppt-skill 的一点主观测评">
+<meta property='og:url' content='https://Elysium-Seeker.github.io/p/ai-ppt-review/'>
 <meta property='og:site_name' content='Elysium-Seeker'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-06-06T23:44:50&#43;08:00'/><meta property='article:modified_time' content='2025-06-07T01:31:48&#43;08:00'/>
-<meta name="twitter:title" content="本博客搭建记录 & 指南">
-<meta name="twitter:description" content="使用 Hugo + GitHub Page 搭建">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-05-11T20:42:47&#43;08:00'/><meta property='article:modified_time' content='2026-05-11T20:44:24&#43;08:00'/><meta property='og:image' content='https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill.png' />
+<meta name="twitter:title" content="AI PPT 制作工具简析">
+<meta name="twitter:description" content="对 Gamma、NotebookLM、Python/Codex、ppt-master 和 gpt-image2-ppt-skill 的一点主观测评"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill.png' />
     <link rel="shortcut icon" href="/favicon.ico" />
 <style>
     :root {
@@ -243,12 +244,12 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#基础搭建">基础搭建</a></li>
-    <li><a href="#stack主题特殊配置">Stack主题特殊配置</a></li>
-    <li><a href="#背景设置">背景设置</a></li>
-    <li><a href="#字体及字号的调整">字体及字号的调整</a></li>
-    <li><a href="#关于博客内容">关于博客内容</a></li>
-    <li><a href="#一些补充">一些补充</a></li>
+    <li><a href="#01-gamma">01 Gamma</a></li>
+    <li><a href="#02-notebooklm">02 NotebookLM</a></li>
+    <li><a href="#03-python--copilot--codex">03 Python / Copilot / Codex</a></li>
+    <li><a href="#04-各类神秘-skill">04 各类神秘 Skill</a></li>
+    <li><a href="#05-gpt-image2-ppt-skill">05 gpt-image2-ppt-skill</a></li>
+    <li><a href="#简单总结">简单总结</a></li>
   </ol>
 </nav>
         </div>
@@ -260,8 +261,20 @@
 
 
             <main class="main full-width">
-    <article class="main-article">
+    <article class="has-image main-article">
     <header class="article-header">
+        <div class="article-image">
+            <a href="/p/ai-ppt-review/">
+                <img src="/p/ai-ppt-review/gpt-image2-ppt-skill_hu_10184e013ffaa821.png"
+                        srcset="/p/ai-ppt-review/gpt-image2-ppt-skill_hu_10184e013ffaa821.png 800w, /p/ai-ppt-review/gpt-image2-ppt-skill_hu_abf63177e5c9f4c0.png 1600w"
+                        width="800" 
+                        height="450" 
+                        loading="lazy"
+                        alt="Featured image of post AI PPT 制作工具简析" />
+                
+            </a>
+        </div>
+    
 
     <div class="article-details">
     
@@ -276,12 +289,12 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/%E6%9C%AC%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95-%E6%8C%87%E5%8D%97/">本博客搭建记录 &amp; 指南</a>
+            <a href="/p/ai-ppt-review/">AI PPT 制作工具简析</a>
         </h2>
     
         
         <h3 class="article-subtitle">
-            使用 Hugo &#43; GitHub Page 搭建
+            对 Gamma、NotebookLM、Python/Codex、ppt-master 和 gpt-image2-ppt-skill 的一点主观测评
         </h3>
         
     </div>
@@ -302,7 +315,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">2025-06-06</time>
+                <time class="article-time--published">2026-05-11</time>
             </div>
         
 
@@ -330,7 +343,7 @@
 
 
                 <time>
-                    2025-06-07
+                    2026-05-11
                 </time>
             </div></footer>
     
@@ -352,125 +365,120 @@
 
 
 <section class="article-content">
-    <p>简单记录一下博客搭建过程以及踩过的坑，方便后来者避雷。</p>
-<h2 id="基础搭建">基础搭建
-</h2><p>首先主要内容可以先看这个博客，这位老师还在B站录制了视频，照做即可。</p>
-<p><a class="link" href="https://letere-gzj.github.io/hugo-stack/p/hugo/custom-blog/"  target="_blank" rel="noopener"
-    >搭建教程</a></p>
-<p><a class="link" href="https://www.bilibili.com/video/BV1bovfeaEtQ"  target="_blank" rel="noopener"
-    >B站视频</a></p>
-<p>本博客做出的个性化调整大概就是把亮色模式删了只留暗色模式，其他都没怎么动过。</p>
-<h2 id="stack主题特殊配置">Stack主题特殊配置
-</h2><p>依旧是参考的这位老师的博客</p>
-<p><a class="link" href="https://letere-gzj.github.io/hugo-stack/p/hugo/custom-stack-theme/"  target="_blank" rel="noopener"
-    >博客地址</a></p>
-<p>我这边进行的调整有字体的修改（这个待会说，我用的方法不一样），更新时间的显示，目录折叠&amp;展开，“返回顶部”按钮的添加，以及代码块的折叠&amp;展开。</p>
-<p>在我测试的内容中出问题的主要是把更新时间显示在开头这一操作，注意请修改<code>themes\hugo-theme-stack-master\layouts\partials\article\components\details.html</code>，不要直接在文章中给的文件地址新建<code>details.html</code>并复制粘贴，否则你的文章的各个参数都无法在页面内正常显示。</p>
-<h2 id="背景设置">背景设置
-</h2><p><a class="link" href="https://letere-gzj.github.io/hugo-stack/p/hugo/custom-background/"  target="_blank" rel="noopener"
-    >参考博客</a></p>
-<p>本博客使用的是其中的点线漂浮背景。</p>
-<p>这边顺便提供一下本人用的 <a class="link" href="particlesjs-config.json" >particlesjs-config.json</a> 。（Ctrl + S 直接保存即可）</p>
-<h2 id="字体及字号的调整">字体及字号的调整
-</h2><p>（这个问题折磨了笔者一个多小时）</p>
-<p>如果想使用外界字体可以参考上面博客中的方法，也可以参考<a class="link" href="https://stack-docs.netlify.app/zh/modify-theme/example-custom-font-family"  target="_blank" rel="noopener"
-    >Stack官方文档</a>的方法。</p>
-<p>我目前使用的就是官方文档中提供的思源宋体。</p>
-<p>然后如果需要调整字号的话可以直接在<code>layouts/partials/head/custom.html</code>中进行修改，这里也提供一下本博客使用的<code>custom.html</code>，我调整了文章的正文字体大小和行间距（即<code>--article-font-size</code>和<code>--article-line-height</code>）</p>
-<pre><code>&lt;style&gt;
-    :root {
-        --article-font-family: &quot;Noto Serif SC&quot;, var(--base-font-family);
-        --article-font-size: 1.7rem;
-        --article-line-height: 1.8;
-    }
-&lt;/style&gt;
-
-&lt;script&gt;
-        (function () {
-            const customFont = document.createElement('link');
-            customFont.href = &quot;https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&amp;display=swap&quot;;
-        
-            customFont.type = &quot;text/css&quot;;
-            customFont.rel = &quot;stylesheet&quot;;
-        
-            document.head.appendChild(customFont);
-        }());
-&lt;/script&gt;
-</code></pre>
-<p>但是有个问题，根据官方文档给出的全局CSS变量，我无法在这里修改标题和副标题字号，我自己的解决方法是直接去Stack主题的源代码中进行修改。（其实这里也可以改正文字号等参数）</p>
-<p>在<code>themes\hugo-theme-stack-master\assets\scss\variables.scss</code>中即可修改正文字体大小及行间距等参数，具体是在如下的部分。注意两个<code>--article-font-size</code>应用场合不同，响应式字体大小（就<code>respond(md)</code>内的）适用于中等及更大的屏幕（比如PC），另一个则适用于移动端。(上面改的地方优先级更高)</p>
-<pre><code>/**
-*   Article content font settings
-*/
-:root {
-    --article-font-family: var(--base-font-family);
-    --article-font-size: 1.6rem;
-
-    @include respond(md) {
-        --article-font-size: 2.0rem;
-    }
-
-    --article-line-height: 1.85;
-}
-</code></pre>
-<p>而标题&amp;副标题的相关参数则在<code>themes\hugo-theme-stack-master\assets\scss\partials\article.scss</code>中进行修改，具体在如下部分。</p>
-<pre><code>.article-title {
-    font-family: var(--article-font-family);
-    font-weight: 600;
-    margin: 0;
-    color: var(--card-text-color-main);
-    font-size: 2.3rem;
-
-    @include respond(xl) {
-        font-size: 3rem;
-    }
-
-    a {
-        color: var(--card-text-color-main);
-
-        &amp;:hover {
-            color: var(--card-text-color-main);
-        }
-    }
-}
-
-.article-subtitle {
-    font-weight: normal;
-    color: var(--card-text-color-secondary);
-    line-height: 1.5;
-    margin: 0;
-    font-size: 1.9rem;
-    @include respond(xl) {
-        font-size: 2rem;
-    }
-}
-</code></pre>
-<p>补充说明一个问题，本地调试时对主题源文件的修改似乎不会即使生效，建议每次修改后关闭网站重新进行<code>hugo server -D</code>构建网站。（笔者似乎就是因为这个问题以为起初的修改没能成功，于是浪费了许多时间&hellip;）</p>
-<h2 id="关于博客内容">关于博客内容
-</h2><p>博客所有的内容都在<code>content</code>文件夹中，包括分类（<code>categories</code>），侧边栏的几个页面（<code>page</code>），以及文章本身（<code>post</code>）。</p>
-<p>在相关的文件夹修改<code>index.zh-cn.md</code>(“关于”和“友链”和“搜索”是直接修改<code>index.md</code>)即可。</p>
-<p>然后给个文章配置的示例吧：</p>
-<pre><code>---
-
-date : 2025-06-06T23:44:50+08:00
-draft : false
-author : &quot;Elysium-Seeker&quot;
-title : &quot;本博客搭建记录&quot;
-description : &quot;使用 Hugo + GitHub Page 搭建&quot;
-image : xxx.jpg
-categories:
-    - Work
-
----
-</code></pre>
-<h2 id="一些补充">一些补充
-</h2><p>提供两个好用的网页，对你的配置应该会有帮助：</p>
-<p><a class="link" href="https://markdown.com.cn/"  target="_blank" rel="noopener"
-    >Markdown教程</a></p>
-<p><a class="link" href="https://stack-docs.netlify.app/zh/"  target="_blank" rel="noopener"
-    >Stack中文指南</a>（孩子一开始只找到英文的极其痛苦，后来机缘巧合下终于找到中文的了）</p>
-<p>然后 GitHub 时不时会抽风传不上文件，不管有没有挂梯子都会出现这个问题，实在不行换个网络或者换个时间传都可行。</p>
-<p>收工！有问题欢迎和笔者交流！（虽然笔者也不一定会就是啦。）</p>
+    <p>因为思政课的 PPT 折腾了一个上午加一个半夜，最后还是放弃了，由心善组员取走了这个任务。</p>
+<p>但总不能把这段时间浪费掉，所以简单写个现在的 AI PPT 制作测评。这里不追求严肃横评，更多是非常主观的使用体验记录：到底哪些东西适合快速出成品，哪些东西只是看着热闹，以及哪些工具在我眼里真的有点东西。</p>
+<h2 id="01-gamma">01 Gamma
+</h2><p>先来谈谈我以前最喜欢用的东西：Gamma。</p>
+<p>作为 AI 设计领域排名前列的工具，它可以一句话生成精美的 PPT：配图丰富、标识详实，一眼看上去极其精致。当然，它也可以基于文档生成内容。</p>
+<p><img src="/p/ai-ppt-review/gamma.png"
+	width="1600"
+	height="900"
+	srcset="/p/ai-ppt-review/gamma_hu_722e6950c29a4bdb.png 480w, /p/ai-ppt-review/gamma_hu_e7fe4767562575de.png 1024w"
+	loading="lazy"
+	
+		alt="Gamma 示例"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
+	
+></p>
+<p>但其实我现在不是很喜欢用 Gamma，用它的时候被批评过好些次。</p>
+<p>因为它做出来的东西太完美了，完美到一点都不像人类作品。</p>
+<p>而且为了视觉效果，Gamma 做的 PPT 往往会有一些和主题不那么强关联的配图与排版。某种意义上，这确实提升了阅读体验，但也会给人一种莫名其妙的观感，甚至分散观者的注意力。</p>
+<p>更麻烦的是，Gamma 有时候搞出来的东西需要比较大的修改。比如它经常使用小得离谱的字，还有莫名放大和不对齐的图片。</p>
+<p>总而言之，给到一个“人上人”。它适合快速搞出花里胡哨的成品 PPT，但是经不起精修。</p>
+<h2 id="02-notebooklm">02 NotebookLM
+</h2><p>然后是之前有段时间常用的 NotebookLM。</p>
+<p>这个其实比较难评。某些时候我非常喜欢它的视觉效果，但是整体更像是一个玩具。</p>
+<p><img src="/p/ai-ppt-review/notebooklm.png"
+	width="1600"
+	height="900"
+	srcset="/p/ai-ppt-review/notebooklm_hu_44a4e2735c904f75.png 480w, /p/ai-ppt-review/notebooklm_hu_c318d87251cdd4c1.png 1024w"
+	loading="lazy"
+	
+		alt="NotebookLM 示例"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
+	
+></p>
+<p>NotebookLM 做出来的东西会很适合哄小孩，但很少有正常人类会把它的作品拿去正式场合。可以看一下上面的视效，大致是 NPC 吧。</p>
+<p>每次看到这种 PPT，我就会想到热衷于在 PPT 里插 AI 插图解释算法的数据结构与算法老师，以及那一堆原神插图。</p>
+<p>真的有点好笑。</p>
+<h2 id="03-python--copilot--codex">03 Python / Copilot / Codex
+</h2><p>接下来是另一个以前经常用的东西：基于 Copilot / Codex 的 Python 生成 PPT。</p>
+<p>这种方式做出来的 PPT 非常简洁清晰，不会怎么花里胡哨，同时排版还算可以。</p>
+<p><img src="/p/ai-ppt-review/python.png"
+	width="1600"
+	height="900"
+	srcset="/p/ai-ppt-review/python_hu_261783d4c15a311.png 480w, /p/ai-ppt-review/python_hu_da043c85f705ad8e.png 1024w"
+	loading="lazy"
+	
+		alt="Python 示例"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
+	
+></p>
+<p>其实我还蛮喜欢这种路线，尤其是用来做科研 survey 的时候，能搞出来一个逻辑链很顺的东西。</p>
+<p>不过想用好这个，前提是先写好大纲；如果手里有一份比较完整的笔记，那效果会更好。否则它很容易只是把信息规整地摊开，而不是替你完成设计判断。</p>
+<p>视效大概长这样。和用 C++ 直接写其实也差不多？也是“人上人”。</p>
+<h2 id="04-各类神秘-skill">04 各类神秘 Skill
+</h2><p>接下来是各类神秘 skill。</p>
+<p>在 GPT 的推荐下，我试了 <code>ppt-master</code>。效果不如想象中好，初版有各种文字误差，而且做出来的东西太简洁了，不符合我的需求。即使我明确说了“想要字多些”，似乎也不是很有用。</p>
+<p><img src="/p/ai-ppt-review/ppt-master.png"
+	width="1600"
+	height="900"
+	srcset="/p/ai-ppt-review/ppt-master_hu_d833c4e8227f8b31.png 480w, /p/ai-ppt-review/ppt-master_hu_b8a97d075b085165.png 1024w"
+	loading="lazy"
+	
+		alt="ppt-master 示例"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
+	
+></p>
+<p>不过，做出来的东西还算是比 Python 搞的更美观一些。只是格式多了，错漏和要改的部分也变多了。</p>
+<p>我自己觉得其实不怎么样，顶多 NPC。但是朋友们好像都觉得它做出来的蛮好看的？</p>
+<h2 id="05-gpt-image2-ppt-skill">05 gpt-image2-ppt-skill
+</h2><p>最后试了一下 <code>gpt-image2-ppt-skill</code>。</p>
+<p>其实我很喜欢这个，但我的朋友们好像都觉得视效一般，呜呜呜。</p>
+<p><img src="/p/ai-ppt-review/gpt-image2-ppt-skill.png"
+	width="1600"
+	height="900"
+	srcset="/p/ai-ppt-review/gpt-image2-ppt-skill_hu_971eda15cc9c2984.png 480w, /p/ai-ppt-review/gpt-image2-ppt-skill_hu_ed085fce3a15b67d.png 1024w"
+	loading="lazy"
+	
+		alt="gpt-image2-ppt-skill 示例"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
+	
+></p>
+<p>起码我看到的第一眼真的有被惊艳到。字体大小、排版、配图什么的都很合适，整体完成度比我预期高不少。</p>
+<p>不过缺点也很明显：它用了太多莫名其妙的红蓝色块，看着还是有点悲伤。可能也是因为我没给模板，所以它只能自己乱抓一种视觉语言。</p>
+<p>不多说了，看图看图。给到一个“夯”！</p>
+<p>我真的觉得排版很好看啊啊啊啊。</p>
+<h2 id="简单总结">简单总结
+</h2><p>非常粗暴地排一下：</p>
+<ul>
+<li><strong>Gamma</strong>：最快、最精致，也最容易显得“不像人做的”。</li>
+<li><strong>NotebookLM</strong>：视觉很有意思，但偏玩具，正式场合谨慎使用。</li>
+<li><strong>Python / Codex</strong>：逻辑最稳，适合科研汇报和结构化内容，但需要好大纲。</li>
+<li><strong>ppt-master</strong>：比纯代码路线更美观，但文字和格式误差会变多。</li>
+<li><strong>gpt-image2-ppt-skill</strong>：我个人最喜欢，视觉完成度高，但需要更好的模板约束。</li>
+</ul>
+<p>所以现在如果我真的要做 PPT，大概会先用大纲把内容打好，再根据用途选择工具：正式科研汇报偏 Python / Codex，快速出片偏 Gamma，想要赌一个好看的初版就试试 <code>gpt-image2-ppt-skill</code>。</p>
 
 </section>
 
@@ -501,7 +509,7 @@ categories:
 
 
         <span>
-            最后更新于 2025-06-07
+            最后更新于 2026-05-11
         </span>
     </section></footer>
 
@@ -543,30 +551,6 @@ categories:
     <h2 class="section-title">相关文章</h2>
     <div class="related-content">
         <div class="flex article-list--tile">
-            
-                
-<article class="has-image">
-    <a href="/p/ai-ppt-review/">
-        
-        
-            <div class="article-image">
-                <img src="/p/ai-ppt-review/gpt-image2-ppt-skill.d08f4a00185f98ce530c4e408d124b8b_hu_7c7c90b4bed76fde.png" 
-                        width="250" 
-                        height="150" 
-                        loading="lazy"
-                        alt="Featured image of post AI PPT 制作工具简析"
-                        data-key="ai-ppt-review" 
-                        data-hash="md5-0I9KABhfmM5TDE5AjRJLiw==">
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">AI PPT 制作工具简析</h2>
-        </div>
-    </a>
-</article>
-
             
                 
 <article class="">
@@ -626,6 +610,19 @@ categories:
 
         <div class="article-details">
             <h2 class="article-title">计科导大作业记录</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/%E6%9C%AC%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95-%E6%8C%87%E5%8D%97/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">本博客搭建记录 &amp; 指南</h2>
         </div>
     </a>
 </article>

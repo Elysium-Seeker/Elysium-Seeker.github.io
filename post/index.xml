@@ -7,7 +7,129 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Sun, 10 May 2026 21:41:57 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 11 May 2026 20:44:24 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>AI PPT 制作工具简析</title>
+        <link>https://Elysium-Seeker.github.io/p/ai-ppt-review/</link>
+        <pubDate>Mon, 11 May 2026 20:42:47 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/ai-ppt-review/</guid>
+        <description>&lt;img src="https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill.png" alt="Featured image of post AI PPT 制作工具简析" /&gt;&lt;p&gt;因为思政课的 PPT 折腾了一个上午加一个半夜，最后还是放弃了，由心善组员取走了这个任务。&lt;/p&gt;
+&lt;p&gt;但总不能把这段时间浪费掉，所以简单写个现在的 AI PPT 制作测评。这里不追求严肃横评，更多是非常主观的使用体验记录：到底哪些东西适合快速出成品，哪些东西只是看着热闹，以及哪些工具在我眼里真的有点东西。&lt;/p&gt;
+&lt;h2 id=&#34;01-gamma&#34;&gt;01 Gamma
+&lt;/h2&gt;&lt;p&gt;先来谈谈我以前最喜欢用的东西：Gamma。&lt;/p&gt;
+&lt;p&gt;作为 AI 设计领域排名前列的工具，它可以一句话生成精美的 PPT：配图丰富、标识详实，一眼看上去极其精致。当然，它也可以基于文档生成内容。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gamma.png&#34;
+	width=&#34;1600&#34;
+	height=&#34;900&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gamma_hu_722e6950c29a4bdb.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/gamma_hu_e7fe4767562575de.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Gamma 示例&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;177&#34;
+		data-flex-basis=&#34;426px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;但其实我现在不是很喜欢用 Gamma，用它的时候被批评过好些次。&lt;/p&gt;
+&lt;p&gt;因为它做出来的东西太完美了，完美到一点都不像人类作品。&lt;/p&gt;
+&lt;p&gt;而且为了视觉效果，Gamma 做的 PPT 往往会有一些和主题不那么强关联的配图与排版。某种意义上，这确实提升了阅读体验，但也会给人一种莫名其妙的观感，甚至分散观者的注意力。&lt;/p&gt;
+&lt;p&gt;更麻烦的是，Gamma 有时候搞出来的东西需要比较大的修改。比如它经常使用小得离谱的字，还有莫名放大和不对齐的图片。&lt;/p&gt;
+&lt;p&gt;总而言之，给到一个“人上人”。它适合快速搞出花里胡哨的成品 PPT，但是经不起精修。&lt;/p&gt;
+&lt;h2 id=&#34;02-notebooklm&#34;&gt;02 NotebookLM
+&lt;/h2&gt;&lt;p&gt;然后是之前有段时间常用的 NotebookLM。&lt;/p&gt;
+&lt;p&gt;这个其实比较难评。某些时候我非常喜欢它的视觉效果，但是整体更像是一个玩具。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/notebooklm.png&#34;
+	width=&#34;1600&#34;
+	height=&#34;900&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/notebooklm_hu_44a4e2735c904f75.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/notebooklm_hu_c318d87251cdd4c1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;NotebookLM 示例&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;177&#34;
+		data-flex-basis=&#34;426px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;NotebookLM 做出来的东西会很适合哄小孩，但很少有正常人类会把它的作品拿去正式场合。可以看一下上面的视效，大致是 NPC 吧。&lt;/p&gt;
+&lt;p&gt;每次看到这种 PPT，我就会想到热衷于在 PPT 里插 AI 插图解释算法的数据结构与算法老师，以及那一堆原神插图。&lt;/p&gt;
+&lt;p&gt;真的有点好笑。&lt;/p&gt;
+&lt;h2 id=&#34;03-python--copilot--codex&#34;&gt;03 Python / Copilot / Codex
+&lt;/h2&gt;&lt;p&gt;接下来是另一个以前经常用的东西：基于 Copilot / Codex 的 Python 生成 PPT。&lt;/p&gt;
+&lt;p&gt;这种方式做出来的 PPT 非常简洁清晰，不会怎么花里胡哨，同时排版还算可以。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/python.png&#34;
+	width=&#34;1600&#34;
+	height=&#34;900&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/python_hu_261783d4c15a311.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/python_hu_da043c85f705ad8e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Python 示例&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;177&#34;
+		data-flex-basis=&#34;426px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;其实我还蛮喜欢这种路线，尤其是用来做科研 survey 的时候，能搞出来一个逻辑链很顺的东西。&lt;/p&gt;
+&lt;p&gt;不过想用好这个，前提是先写好大纲；如果手里有一份比较完整的笔记，那效果会更好。否则它很容易只是把信息规整地摊开，而不是替你完成设计判断。&lt;/p&gt;
+&lt;p&gt;视效大概长这样。和用 C++ 直接写其实也差不多？也是“人上人”。&lt;/p&gt;
+&lt;h2 id=&#34;04-各类神秘-skill&#34;&gt;04 各类神秘 Skill
+&lt;/h2&gt;&lt;p&gt;接下来是各类神秘 skill。&lt;/p&gt;
+&lt;p&gt;在 GPT 的推荐下，我试了 &lt;code&gt;ppt-master&lt;/code&gt;。效果不如想象中好，初版有各种文字误差，而且做出来的东西太简洁了，不符合我的需求。即使我明确说了“想要字多些”，似乎也不是很有用。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/ppt-master.png&#34;
+	width=&#34;1600&#34;
+	height=&#34;900&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/ppt-master_hu_d833c4e8227f8b31.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/ppt-master_hu_b8a97d075b085165.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;ppt-master 示例&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;177&#34;
+		data-flex-basis=&#34;426px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;不过，做出来的东西还算是比 Python 搞的更美观一些。只是格式多了，错漏和要改的部分也变多了。&lt;/p&gt;
+&lt;p&gt;我自己觉得其实不怎么样，顶多 NPC。但是朋友们好像都觉得它做出来的蛮好看的？&lt;/p&gt;
+&lt;h2 id=&#34;05-gpt-image2-ppt-skill&#34;&gt;05 gpt-image2-ppt-skill
+&lt;/h2&gt;&lt;p&gt;最后试了一下 &lt;code&gt;gpt-image2-ppt-skill&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;其实我很喜欢这个，但我的朋友们好像都觉得视效一般，呜呜呜。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill.png&#34;
+	width=&#34;1600&#34;
+	height=&#34;900&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill_hu_971eda15cc9c2984.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill_hu_ed085fce3a15b67d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;gpt-image2-ppt-skill 示例&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;177&#34;
+		data-flex-basis=&#34;426px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;起码我看到的第一眼真的有被惊艳到。字体大小、排版、配图什么的都很合适，整体完成度比我预期高不少。&lt;/p&gt;
+&lt;p&gt;不过缺点也很明显：它用了太多莫名其妙的红蓝色块，看着还是有点悲伤。可能也是因为我没给模板，所以它只能自己乱抓一种视觉语言。&lt;/p&gt;
+&lt;p&gt;不多说了，看图看图。给到一个“夯”！&lt;/p&gt;
+&lt;p&gt;我真的觉得排版很好看啊啊啊啊。&lt;/p&gt;
+&lt;h2 id=&#34;简单总结&#34;&gt;简单总结
+&lt;/h2&gt;&lt;p&gt;非常粗暴地排一下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Gamma&lt;/strong&gt;：最快、最精致，也最容易显得“不像人做的”。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NotebookLM&lt;/strong&gt;：视觉很有意思，但偏玩具，正式场合谨慎使用。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Python / Codex&lt;/strong&gt;：逻辑最稳，适合科研汇报和结构化内容，但需要好大纲。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ppt-master&lt;/strong&gt;：比纯代码路线更美观，但文字和格式误差会变多。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;gpt-image2-ppt-skill&lt;/strong&gt;：我个人最喜欢，视觉完成度高，但需要更好的模板约束。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以现在如果我真的要做 PPT，大概会先用大纲把内容打好，再根据用途选择工具：正式科研汇报偏 Python / Codex，快速出片偏 Gamma，想要赌一个好看的初版就试试 &lt;code&gt;gpt-image2-ppt-skill&lt;/code&gt;。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>2024年新高考零分作文</title>
         <link>https://Elysium-Seeker.github.io/p/2024%E5%B9%B4%E6%96%B0%E9%AB%98%E8%80%83%E9%9B%B6%E5%88%86%E4%BD%9C%E6%96%87/</link>
         <pubDate>Sun, 10 May 2026 21:23:06 +0800</pubDate>
