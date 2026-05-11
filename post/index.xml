@@ -7,13 +7,13 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Mon, 11 May 2026 20:44:24 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 11 May 2026 21:03:07 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>AI PPT 制作工具简析</title>
         <link>https://Elysium-Seeker.github.io/p/ai-ppt-review/</link>
         <pubDate>Mon, 11 May 2026 20:42:47 +0800</pubDate>
         
         <guid>https://Elysium-Seeker.github.io/p/ai-ppt-review/</guid>
-        <description>&lt;img src="https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill.png" alt="Featured image of post AI PPT 制作工具简析" /&gt;&lt;p&gt;因为思政课的 PPT 折腾了一个上午加一个半夜，最后还是放弃了，由心善组员取走了这个任务。&lt;/p&gt;
+        <description>&lt;img src="https://Elysium-Seeker.github.io/p/ai-ppt-review/cover.png" alt="Featured image of post AI PPT 制作工具简析" /&gt;&lt;p&gt;因为思政课的 PPT 折腾了一个上午加一个半夜，最后还是放弃了，由心善组员取走了这个任务。&lt;/p&gt;
 &lt;p&gt;但总不能把这段时间浪费掉，所以简单写个现在的 AI PPT 制作测评。这里不追求严肃横评，更多是非常主观的使用体验记录：到底哪些东西适合快速出成品，哪些东西只是看着热闹，以及哪些工具在我眼里真的有点东西。&lt;/p&gt;
 &lt;h2 id=&#34;01-gamma&#34;&gt;01 Gamma
 &lt;/h2&gt;&lt;p&gt;先来谈谈我以前最喜欢用的东西：Gamma。&lt;/p&gt;
@@ -21,7 +21,7 @@
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gamma.png&#34;
 	width=&#34;1600&#34;
 	height=&#34;900&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gamma_hu_722e6950c29a4bdb.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/gamma_hu_e7fe4767562575de.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gamma_hu_30583f611d10805b.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/gamma_hu_35c669400f885468.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;Gamma 示例&#34;
@@ -43,7 +43,7 @@
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/notebooklm.png&#34;
 	width=&#34;1600&#34;
 	height=&#34;900&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/notebooklm_hu_44a4e2735c904f75.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/notebooklm_hu_c318d87251cdd4c1.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/notebooklm_hu_b4a404ef128aba48.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/notebooklm_hu_51fab4a412b924ea.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;NotebookLM 示例&#34;
@@ -63,7 +63,7 @@
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/python.png&#34;
 	width=&#34;1600&#34;
 	height=&#34;900&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/python_hu_261783d4c15a311.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/python_hu_da043c85f705ad8e.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/python_hu_7505fc7b81e46ec7.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/python_hu_783e33a14882ac2e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;Python 示例&#34;
@@ -83,7 +83,7 @@
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/ppt-master.png&#34;
 	width=&#34;1600&#34;
 	height=&#34;900&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/ppt-master_hu_d833c4e8227f8b31.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/ppt-master_hu_b8a97d075b085165.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/ppt-master_hu_617a4f59dfc8271e.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/ppt-master_hu_a6ea7fad30192082.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;ppt-master 示例&#34;
@@ -102,7 +102,7 @@
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill.png&#34;
 	width=&#34;1600&#34;
 	height=&#34;900&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill_hu_971eda15cc9c2984.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill_hu_ed085fce3a15b67d.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill_hu_a7a1015be6162fcd.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill_hu_374d6a0ded543e22.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;gpt-image2-ppt-skill 示例&#34;
