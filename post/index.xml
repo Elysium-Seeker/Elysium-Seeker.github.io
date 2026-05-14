@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Mon, 11 May 2026 21:17:03 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 14 May 2026 14:40:41 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>AI PPT 制作工具简析</title>
         <link>https://Elysium-Seeker.github.io/p/ai-ppt-review/</link>
         <pubDate>Mon, 11 May 2026 20:42:47 +0800</pubDate>
@@ -16,7 +16,8 @@
         <description>&lt;img src="https://Elysium-Seeker.github.io/p/ai-ppt-review/cover.png" alt="Featured image of post AI PPT 制作工具简析" /&gt;&lt;p&gt;因为思政课的 PPT 折腾了一个上午加一个半夜，最后还是放弃了，由心善组员取走了这个任务。&lt;/p&gt;
 &lt;p&gt;但总不能把这段时间浪费掉，所以简单写个现在的 AI PPT 制作测评。这里不追求严肃横评，更多是非常主观的使用体验记录：到底哪些东西适合快速出成品，哪些东西只是看着热闹，以及哪些工具在我眼里真的有点东西。&lt;/p&gt;
 &lt;h2 id=&#34;01-gamma&#34;&gt;01 Gamma
-&lt;/h2&gt;&lt;p&gt;先来谈谈我以前最喜欢用的东西：Gamma。&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;先来谈谈我以前最喜欢用的东西：&lt;a class=&#34;link&#34; href=&#34;https://gamma.app/ai-presentation-maker&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Gamma&lt;/a&gt;。&lt;/p&gt;
 &lt;p&gt;作为 AI 设计领域排名前列的工具，它可以一句话生成精美的 PPT：配图丰富、标识详实，一眼看上去极其精致。当然，它也可以基于文档生成内容。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gamma.png&#34;
 	width=&#34;1600&#34;
@@ -79,7 +80,8 @@
 &lt;p&gt;视效大概长这样。和用 C++ 直接写其实也差不多？也是“人上人”。&lt;/p&gt;
 &lt;h2 id=&#34;04-各类神秘-skill&#34;&gt;04 各类神秘 Skill
 &lt;/h2&gt;&lt;p&gt;接下来是各类神秘 skill。&lt;/p&gt;
-&lt;p&gt;在 GPT 的推荐下，我试了 &lt;code&gt;ppt-master&lt;/code&gt;。效果不如想象中好，初版有各种文字误差，而且做出来的东西太简洁了，不符合我的需求。即使我明确说了“想要字多些”，似乎也不是很有用。&lt;/p&gt;
+&lt;p&gt;在 GPT 的推荐下，我试了 &lt;a class=&#34;link&#34; href=&#34;https://github.com/hugohe3/ppt-master&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;&lt;code&gt;ppt-master&lt;/code&gt;&lt;/a&gt;。效果不如想象中好，初版有各种文字误差，而且做出来的东西太简洁了，不符合我的需求。即使我明确说了“想要字多些”，似乎也不是很有用。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/ppt-master.png&#34;
 	width=&#34;1600&#34;
 	height=&#34;900&#34;
@@ -97,7 +99,8 @@
 &lt;p&gt;不过，做出来的东西还算是比 Python 搞的更美观一些。只是格式多了，错漏和要改的部分也变多了。&lt;/p&gt;
 &lt;p&gt;我自己觉得其实不怎么样，顶多 NPC。但是朋友们好像都觉得它做出来的蛮好看的？&lt;/p&gt;
 &lt;h2 id=&#34;05-gpt-image2-ppt-skill&#34;&gt;05 gpt-image2-ppt-skill
-&lt;/h2&gt;&lt;p&gt;最后试了一下 &lt;code&gt;gpt-image2-ppt-skill&lt;/code&gt;。&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;最后试了一下 &lt;a class=&#34;link&#34; href=&#34;https://github.com/JuneYaooo/gpt-image2-ppt-skills&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;&lt;code&gt;gpt-image2-ppt-skill&lt;/code&gt;&lt;/a&gt;。&lt;/p&gt;
 &lt;p&gt;其实我很喜欢这个，但我的朋友们好像都觉得视效一般，呜呜呜。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill.png&#34;
 	width=&#34;1600&#34;
