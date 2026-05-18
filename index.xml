@@ -7,6 +7,149 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright><atom:link href="https://Elysium-Seeker.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Stanford CS153 Frontier Systems | Lesson 1 阅读笔记</title>
+        <link>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-1/</link>
+        <pubDate>Mon, 18 May 2026 15:02:51 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-1/</guid>
+        <description>&lt;p&gt;本来是虚度一个周末后，为了减轻负罪感在周一早上零点打开的。&lt;/p&gt;
+&lt;p&gt;意外地发现很值得听且很有收获，起码远大于营销号了。&lt;/p&gt;
+&lt;p&gt;预计后面每两天上一节并做相关笔记。&lt;/p&gt;
+&lt;p&gt;课程视频：&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=O5PfU_uDhS0&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Stanford CS153 Frontier Systems | Anjney Midha from AMP PBC on Frontier Systems&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;lesson-1-anjney-midha-from-amp-pbc-on-frontier-systems&#34;&gt;Lesson 1 Anjney Midha from AMP PBC on Frontier Systems
+&lt;/h2&gt;&lt;p&gt;前十几分钟的寒暄与介绍直接略过。&lt;/p&gt;
+&lt;p&gt;the bottlenecks of artificial intelligence: context, compute, capital（资本）, and culture.&lt;/p&gt;
+&lt;h2 id=&#34;context&#34;&gt;Context
+&lt;/h2&gt;&lt;p&gt;首先 context。&lt;/p&gt;
+&lt;p&gt;要讲清 context，首先需要明白 RL 的原理。&lt;/p&gt;
+&lt;p&gt;其实可以用非常简单的方式理解：想提高某个系统在指定任务上的能力时，用给予 reward 的方式代替直接教学具体做法。在完成任务时给予 high reward，并在失败时给予 low reward。反向传播并重复即可。&lt;/p&gt;
+&lt;p&gt;在使用 LLM 这类强智能代理进行 RL 时，甚至可能不需要人工进行反向传播。它自己会学习，且随着算力与可供利用的资料增多，其智能也会提升。&lt;/p&gt;
+&lt;p&gt;过往强化学习会在各个领域迅速趋于稳定状态，在超越人类的表现后，由于本身先验推理能力的限制（如各类下棋专用模型），很容易到达平台期。&lt;/p&gt;
+&lt;p&gt;而 LLM 本身有充足的先验知识，所以在 RL 上有出人意料的表现。&lt;/p&gt;
+&lt;p&gt;Anthropic 的初步盈利构想：筹集一些资金，购买一些 compute，用数据增强它，进行 pre-train，然后得到一个足够好的模型，让人们愿意使用它并为它付款，再用得到的资金中的一部分重复这个循环。&lt;/p&gt;
+&lt;h3 id=&#34;context-的定义&#34;&gt;context 的定义
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;能够被验证是否正确及可用的交互环境。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Verifiability&lt;/strong&gt; 的重要性：一个任务能通过 RL 被提升，最重要的就是有 verifiability（可验证性）。可验证才能确定 reward，后文将有更详细的叙述。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;用户的使用与修改数据。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;比如怎么修改模型生成的代码，怎么 git，怎么重新给提示词以达到用户目的，blah blah blah。&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;机密的高价值数据。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在一个领域里，一个团队能在竞争中取得成功的核心，是拥有 unique and defensible access to some context（对某些上下文独特且可防御的权限）。&lt;/p&gt;
+&lt;p&gt;在机密环境下数据不可泄露，所以需要本地部署的模型。&lt;/p&gt;
+&lt;p&gt;目前的 road to AGI / ASI：recursive takeoff。&lt;/p&gt;
+&lt;h2 id=&#34;强化学习的局限性&#34;&gt;强化学习的局限性
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;哲学观点：给定正确的 context，给定足够的 compute，agent could learn everything.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;经验观点（empirical view）：生活是混乱的。在可验证的领域（其实我认为“可量化成果”这样的词更为准确，whatever，就这样吧）很容易有提升，例如 coding；但在其他领域并不那么容易，例如 aesthetic, beauty, and love.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;现有的前沿模型在 creative writing 上的表现是 catastrophic 级别的。&lt;/p&gt;
+&lt;p&gt;所以，DON&amp;rsquo;T SHOW AI-GENERATED DOCUMENT！&lt;/p&gt;
+&lt;p&gt;对于文本：We think, we sit, we write, and we share with each other, even if it&amp;rsquo;s raw.&lt;/p&gt;
+&lt;p&gt;在现在市场还算空白的时间，总有一些前沿领域是只有你能理解和验证的：Because of your obsession, your love, your taste, your sense of beauty, your culture.&lt;/p&gt;
+&lt;p&gt;创业的核心：what is the unique frontier that they can verify for humanity?&lt;/p&gt;
+&lt;h2 id=&#34;scaling&#34;&gt;Scaling
+&lt;/h2&gt;&lt;p&gt;Scaling：模型能力随着计算的增长而可预测地扩展。&lt;/p&gt;
+&lt;p&gt;每次公司推出新模型后，功能出现跳跃，然后收入也随之跳跃。&lt;/p&gt;
+&lt;p&gt;Dollar in, dollar out.&lt;/p&gt;
+&lt;p&gt;大模型公司为了算力投入硬件等硬资产，得到能力更强的模型等软件资产。&lt;/p&gt;
+&lt;p&gt;但硬资产由于低市销率，估值通常只有年入的 3-4 倍。&lt;/p&gt;
+&lt;p&gt;而产出的软件资产由于没有边际成本且有高毛利和高增长，估值通常能到年入的 30-40 倍。&lt;/p&gt;
+&lt;p&gt;所以大模型公司所做的，就是投入 1 美元算力（本质是低估值资产），在 60-90 天的转化后，得到 1 美元的软件服务收入（高估值的资产）。&lt;/p&gt;
+&lt;p&gt;这在资本市场上创造了整整放大 10 倍的价值杠杆。&lt;/p&gt;
+&lt;p&gt;碎碎念：前提是投入的算力确实能换回同样增长级别的软件服务收入。&lt;/p&gt;
+&lt;p&gt;从 chatbot 到 agent，结构的变换提升了数十倍的用量。&lt;/p&gt;
+&lt;p&gt;推理消耗的算力 &amp;amp; multi-agent 可能是未来？&lt;/p&gt;
+&lt;h2 id=&#34;回到-infrastructure&#34;&gt;回到 Infrastructure
+&lt;/h2&gt;&lt;p&gt;主要解释 compute 不是商品。&lt;/p&gt;
+&lt;p&gt;首先是事实：在过去的数年以来，H100 没有降价，反而价格一直在上升。&lt;/p&gt;
+&lt;p&gt;传统的硬件设备都会面临折旧。以前的芯片遵从摩尔定律，每过一段时间都会有更好的新芯片，从而导致旧芯片大幅贬值。所以这类硬件设备被视为沉没成本和负担，公司以租赁算力而非购买芯片来使用算力。&lt;/p&gt;
+&lt;p&gt;而现在的芯片，如前文所说，被购买后可以将硬件价值转化成软件服务价值，且由于顶级 AI 芯片的极度短缺，价格不降反升，成为公司的现金流机器。&lt;/p&gt;
+&lt;p&gt;算力不是贬值的固定资产，而是高收益率的生产机器。&lt;/p&gt;
+&lt;p&gt;现在芯片的经济形势可以与 19 世纪后不安的钢铁作比。工业革命之后钢铁也被需要，于是也是先涨价，直到某一年因为一些微不足道的事泡沫突然崩塌，价格回落到极低点，再到最后稳定。&lt;/p&gt;
+&lt;p&gt;半导体、航运、铀都经历过类似的价格浮动。所以芯片和 AI 也有可能，但人们也希望我们能理想地跳过整个繁荣和萧条的过程。这对任何人来说都不好玩（经济危机）。&lt;/p&gt;
+&lt;p&gt;AI scaling is a combination of massive，需要整合大量物理资源才能产生软件收入。AI 规模的扩展本质是重工业与能源问题。目前人们的目标是让物理世界的扩展速度尽量跟上虚拟世界的进化速度。Till now，算力仍旧稀缺。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Is it something where all of you should be spending your time wondering, should you be making chips? Should you be making more, better, interconnect? Or should you be spending time on distilling your aesthetics, your creativity, your intelligence?&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;算力不是商品的原因&#34;&gt;算力不是商品的原因
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;算力是不可替代的。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;不同厂家，甚至同一厂家的不同型号芯片都不能直接互换，没有标准化，且软件与硬件高度绑定，更换需要软件和硬件层面（机房基础设施）的大量重构。DS 为了适配国产芯片做了大量工作。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;需求、产能和成本无法被标准公式预测。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;由于算力在不同供应商、不同型号之间无法代换，且整个行业还在快速发展，它的需求、大模型的产能和成本是无法被标准公式预测的，而且存在不同时段的各种不稳定性。&lt;/p&gt;
+&lt;p&gt;于是大企业们开始垄断所有芯片，即使他们中的很大一部分由于第一个问题根本就没有开始运转。&lt;/p&gt;
+&lt;p&gt;同样的，无用的 vibe coding 也在浪费算力。&lt;/p&gt;
+&lt;p&gt;为了解决不可替代性和不可预测性的问题，需要：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;标准，just like AC / DC and TCP / IP。商品标准化才能替代，才能省去大量的重构工作。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;执行标准的机构。因为人类不可避免地会在某种程度上出现偏差，需要有人协调才能使标准被大规模接受和采用。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在教科书上，Commodity means a common unit. It needs a standard delivery interface. It needs interconnection and pooling, needs metering, control and settlement. And the buyers can substitute one supplier&amp;rsquo;s unit for another.&lt;/p&gt;
+&lt;p&gt;而算力现在显然不符合这里的要求。&lt;/p&gt;
+&lt;h2 id=&#34;需要思考的问题&#34;&gt;需要思考的问题
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;what will it take to ensure a peaceful transition on compute over the next couple of years?&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;what is your part in this?&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;补充材料&#34;&gt;补充材料
+&lt;/h2&gt;&lt;h3 id=&#34;the-bitter-lesson&#34;&gt;The Bitter Lesson
+&lt;/h3&gt;&lt;p&gt;写得太好了所以补一点。&lt;/p&gt;
+&lt;p&gt;核心思想是：纯堆算力的通用方法，往往比那些神秘的小巧思有效得多。&lt;/p&gt;
+&lt;p&gt;从棋类开始，那些靠人类精心设计的策略就打不过爆搜了。&lt;/p&gt;
+&lt;p&gt;现在更是如此。&lt;/p&gt;
+&lt;p&gt;教训本身：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;AI researchers have often tried to build knowledge into their agents.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;this always helps in the short term, and is personally satisfying to the researcher.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;but in the long run it plateaus and even inhibits further progress.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;breakthrough progress eventually arrives by an opposing approach based on scaling computation by search and learning.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;把小巧思构建进智能体短期有用但长期阻碍发展，而最终的成功往往是纯粹的、基于搜索和学习的 compute scaling。&lt;/p&gt;
+&lt;p&gt;One thing that should be learned from the bitter lesson is the great power of general purpose methods, of methods that continue to scale with increased computation even as the available computation becomes very great. The two methods that seem to scale arbitrarily in this way are search and learning.&lt;/p&gt;
+&lt;p&gt;以及：the actual contents of minds are tremendously, irredeemably complex; we should stop trying to find simple ways to think about the contents of minds.&lt;/p&gt;
+&lt;h3 id=&#34;how-scaling-laws-drive-smarter-more-powerful-ai&#34;&gt;How Scaling Laws Drive Smarter, More Powerful AI
+&lt;/h3&gt;&lt;p&gt;讲解了三种 scaling 及其效果。&lt;/p&gt;
+&lt;p&gt;首先是 Pretraining Scaling。&lt;/p&gt;
+&lt;p&gt;非常传统的砸模型参数、训练数据集和算力大小。&lt;/p&gt;
+&lt;p&gt;根据 Chinchilla Scaling Laws，一味扩大模型参数量或数据是没有用的。更大的模型参数需要更多的数据支撑，反之亦然，从而训练期间需要更多算力，进而可以有预期地提升模型智能。&lt;/p&gt;
+&lt;p&gt;然后是 Post-Training Scaling。&lt;/p&gt;
+&lt;p&gt;在预训练模型的基础上针对特定任务微调。&lt;/p&gt;
+&lt;p&gt;采用包括但不限于 fine-tuning, pruning, quantization, distillation, reinforcement learning and synthetic data augmentation 等方法。（希望我回来看的时候能一个个说出它们分别是什么。）&lt;/p&gt;
+&lt;p&gt;单个 Post-Training Scaling 是相对省算力的，但是考虑到做后训练的总量巨大，对于开源模型来说，后训练阶段所花的总算力可能是预训练的 30x 往上。&lt;/p&gt;
+&lt;p&gt;最后是 Test-Time Scaling。&lt;/p&gt;
+&lt;p&gt;也就是推理模型干的事：在推理过程中分配额外算力，推理完再给答案。&lt;/p&gt;
+&lt;p&gt;方法有很多，不一一列举。比较经典的是思维链和多数投票采样。&lt;/p&gt;
+&lt;p&gt;感觉可以列出大模型增大用户 token 消耗的路径了：从 chatbot 到推理 chatbot 到 agent，严重怀疑工具调用也杀 token，再然后是 OpenClaw 这种巨杀 token 的架构和 multi-agent。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>AI PPT 制作工具简析</title>
         <link>https://Elysium-Seeker.github.io/p/ai-ppt-review/</link>
         <pubDate>Mon, 11 May 2026 20:42:47 +0800</pubDate>
