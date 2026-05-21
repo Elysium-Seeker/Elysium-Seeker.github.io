@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="数字经济通识日常作业的小工具">
-<title>Digital Economy Article Aggregator食用指南</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Mati Staniszewski 关于 ElevenLabs、语音系统与 frontier collaboration 的课堂笔记">
+<title>Stanford CS153 Frontier Systems | Lesson 2 阅读笔记</title>
 
-<link rel='canonical' href='https://Elysium-Seeker.github.io/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/'>
+<link rel='canonical' href='https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-2/'>
 
-<link rel="stylesheet" href="/scss/style.min.829fb4d762832054bf4ccfcc6906b7eb8df8a3d45b00b64b6fc4c539dc19645c.css"><meta property='og:title' content="Digital Economy Article Aggregator食用指南">
-<meta property='og:description' content="数字经济通识日常作业的小工具">
-<meta property='og:url' content='https://Elysium-Seeker.github.io/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/'>
+<link rel="stylesheet" href="/scss/style.min.829fb4d762832054bf4ccfcc6906b7eb8df8a3d45b00b64b6fc4c539dc19645c.css"><meta property='og:title' content="Stanford CS153 Frontier Systems | Lesson 2 阅读笔记">
+<meta property='og:description' content="Mati Staniszewski 关于 ElevenLabs、语音系统与 frontier collaboration 的课堂笔记">
+<meta property='og:url' content='https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-2/'>
 <meta property='og:site_name' content='Elysium-Seeker'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-10-22T09:00:00&#43;08:00'/><meta property='article:modified_time' content='2025-12-16T23:49:23&#43;08:00'/><meta property='og:image' content='https://Elysium-Seeker.github.io/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/image.png' />
-<meta name="twitter:title" content="Digital Economy Article Aggregator食用指南">
-<meta name="twitter:description" content="数字经济通识日常作业的小工具"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://Elysium-Seeker.github.io/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/image.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-05-21T11:52:38&#43;08:00'/><meta property='article:modified_time' content='2026-05-21T11:56:04&#43;08:00'/>
+<meta name="twitter:title" content="Stanford CS153 Frontier Systems | Lesson 2 阅读笔记">
+<meta name="twitter:description" content="Mati Staniszewski 关于 ElevenLabs、语音系统与 frontier collaboration 的课堂笔记">
     <link rel="shortcut icon" href="/favicon.ico" />
 <style>
     :root {
@@ -244,11 +243,13 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#写在前言之前">写在前言之前</a></li>
-    <li><a href="#前言">前言</a></li>
-    <li><a href="#项目介绍">项目介绍</a></li>
-    <li><a href="#开发过程">开发过程</a></li>
-    <li><a href="#后记">后记</a></li>
+    <li><a href="#开场">开场</a></li>
+    <li><a href="#和用户保持闭环">和用户保持闭环</a></li>
+    <li><a href="#elevenlabs-的愿景">ElevenLabs 的愿景</a></li>
+    <li><a href="#语音模型的两种范式">语音模型的两种范式</a></li>
+    <li><a href="#级联系统与融合模型">级联系统与融合模型</a></li>
+    <li><a href="#协作与人">协作与人</a></li>
+    <li><a href="#商业与安全">商业与安全</a></li>
   </ol>
 </nav>
         </div>
@@ -260,24 +261,16 @@
 
 
             <main class="main full-width">
-    <article class="has-image main-article">
+    <article class="main-article">
     <header class="article-header">
-        <div class="article-image">
-            <a href="/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/">
-                <img src="/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/image_hu_8bdabdeb9f252aad.png"
-                        srcset="/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/image_hu_8bdabdeb9f252aad.png 800w, /p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/image_hu_11a18b0909f7ce2e.png 1600w"
-                        width="800" 
-                        height="111" 
-                        loading="lazy"
-                        alt="Featured image of post Digital Economy Article Aggregator食用指南" />
-                
-            </a>
-        </div>
-    
 
     <div class="article-details">
     
     <header class="article-category">
+        
+            <a href="/categories/cs153/" >
+                CS153
+            </a>
         
             <a href="/categories/work/" style="background-color: #708090; color: #fff;">
                 Work
@@ -288,12 +281,12 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/">Digital Economy Article Aggregator食用指南</a>
+            <a href="/p/cs153-frontier-systems-lesson-2/">Stanford CS153 Frontier Systems | Lesson 2 阅读笔记</a>
         </h2>
     
         
         <h3 class="article-subtitle">
-            数字经济通识日常作业的小工具
+            Mati Staniszewski 关于 ElevenLabs、语音系统与 frontier collaboration 的课堂笔记
         </h3>
         
     </div>
@@ -314,7 +307,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">2025-10-22</time>
+                <time class="article-time--published">2026-05-21</time>
             </div>
         
 
@@ -342,7 +335,7 @@
 
 
                 <time>
-                    2025-12-16
+                    2026-05-21
                 </time>
             </div></footer>
     
@@ -364,47 +357,83 @@
 
 
 <section class="article-content">
-    <h2 id="写在前言之前">写在前言之前
-</h2><p>哇断更好久好久了。</p>
-<p>果然周更什么的不太可能。</p>
-<p>最近也是忙的没时间写博客了呜呜呜。</p>
-<p>不过也算是攒了很多可以写的素材~</p>
-<p>后面会写一篇Cyberpunk2077的游记（等一回目之后），一篇蓝信封以及志愿者协会目前的故事，然后会把自家的小斯幽调的足够可爱之后写篇文章介绍的。</p>
-<p>那么先来介绍一些这次的产品吧。</p>
-<p>链接：https://github.com/Elysium-Seeker/Digital-Economy-Article-Aggregator</p>
-<h2 id="前言">前言
-</h2><p>这次的灵感来源是数字经济通识课程的日常作业。</p>
-<p>要求我们每周查找相关领域的权威资料并分享。</p>
-<p>而老师特意表扬的一组里除了资料本身还有信源和摘要。</p>
-<p>再加上自己曾经订阅过一个做推上ai信息收集然后每日整理发到邮箱的有趣项目。</p>
-<p>所以就想着自己做一个类似的简单agent了。</p>
-<h2 id="项目介绍">项目介绍
-</h2><p>这是一个数字经济通识课程的资料查找作业工具。</p>
-<p>可用于查找一周内相关领域的权威文章/论文/报告。</p>
-<p>专注于国家级、国际化的数字经济研究，优先提供学术论文和深度行业报告，并确保中英文文献均衡呈现，为您提供全球化的深度洞察。</p>
-<p>可以限定关键词，关键词的英文同义词也将作为检索词，用于查找相关的外文文献。</p>
-<p>还会提供文章的摘要和信息源，帮助用户速览文章的大致内容与确保内容的权威性。</p>
-<h2 id="开发过程">开发过程
-</h2><p>其实一开始没想着弄这个的。。。</p>
-<p>只是研讨课上想用 gemini 查点资料水掉作业而已。</p>
-<p>结果一时起兴点进了 google ai studio 的 build 页面，突然就有了做个 agent 的想法。</p>
-<p>一开始非常努力的在使用英文描述需求。</p>
-<p>其实效果不错，但太费精力了。（尤其是手机打英文真的痛苦）</p>
-<p>而且最终提交上去的摘要肯定还得是中文。</p>
-<p>于是就加了句 turn the website to Chinese。</p>
-<p>结果 build 用的 agent 直接开始用中文回我了。</p>
-<p>那也就用中文一步步改下去了。</p>
-<p>在纯用自然语言描述的情况下能做出这么精致的一个 agent 还是很体现 gemini 2.5 pro 的实力的。</p>
-<p>不过 bug 也确实是要人一步步催着它修的。</p>
-<p>英文改中文后一个冒号的事故改了好几轮 conversation。</p>
-<p>（事故来源是模型内部提取结构化信息的时候中英文冒号混用无法识别导致一篇文章都找不到。）</p>
-<p>以及现在还是时不时会找到无法访问的一些文章，信源也算是良莠不齐（在努力调prompt了但是效果不算特别理想）。</p>
-<p>但总之作为一个作业工具已经非常合格啦！</p>
-<h2 id="后记">后记
-</h2><p>感觉发现了 ai 助力生活的新大陆。</p>
-<p>算是第一次创作一个自己用的到的 agent。</p>
-<p>开森，要再接再厉哦！</p>
-<p>Update：发现其实自己绕了一大圈工作流程，明明找个周更的稳定信源就可以了搞那么麻烦，属于是第一性原理发力了（，项目也已经删了w，期待由相同思路的后续吧。</p>
+    <p>课程视频：<a class="link" href="https://www.youtube.com/watch?v=vfF011ko89o"  target="_blank" rel="noopener"
+    >Stanford CS153 Frontier Systems | Mati Staniszewski from ElevenLabs on The Future of Voice Systems</a></p>
+<p>这一课的主讲人是 ElevenLabs 的 cofounder。</p>
+<p>说起来之前做 astrbot 的时候还尝试使用过 ElevenLabs。</p>
+<p>效果非常好，可惜价格难以承受。</p>
+<p>这一期应该会记得相对简略一些，感兴趣的内容偏少，我自己也不怎么接触语音。</p>
+<h2 id="开场">开场
+</h2><p>开场时 Mati 先是说公司初创时不用电子邮件。看来讨厌工作邮件是全世界通用的习惯。</p>
+<p>然后这里有个有趣的观点：</p>
+<p>gaming ends up being this petri dish for innovation.</p>
+<p>Some of the hardest infra product design experience problems that are solved in gaming then become leading indicators for the rest of the world.</p>
+<p>简明的中文意思是：游戏中的很多需求和响应，往往会带动前沿领域的发展。</p>
+<p>当然目的是吹捧 Discord 就是了，不过确实说得有道理。</p>
+<p>游戏追求的低延迟、高交互性，还有长期一致性，确实也是前沿领域同时在追求的目标。</p>
+<h2 id="和用户保持闭环">和用户保持闭环
+</h2><p>最好的实现闭环的方法是 as close as possible to the people that are using those tools。也就是与社区合作。</p>
+<p>一方面明晰用户和开发者需求，另一方面找到让社区做出 contribution 的办法。</p>
+<p>社区里的需求和问题，可能就是 6-18 个月后世界各地用户的需求。</p>
+<p>尽可能贴近用户并保持快速的交互循环非常有价值。</p>
+<h2 id="elevenlabs-的愿景">ElevenLabs 的愿景
+</h2><p>ElevenLabs 的愿景：</p>
+<p>The future will be where you can access all types of content in any language with that incredible tonality, incredible emotions.</p>
+<p>针对任何领域深入研究时的两个问题：</p>
+<ol>
+<li>
+<p>是否有足够的产品潜力。</p>
+</li>
+<li>
+<p>是否有实际的用户需求。</p>
+</li>
+</ol>
+<h2 id="语音模型的两种范式">语音模型的两种范式
+</h2><p>语音模型的两种范式：</p>
+<ol>
+<li>
+<p>转译 + LLM 处理文本 + TTS。</p>
+</li>
+<li>
+<p>纯粹的输入语音输出语音。</p>
+</li>
+</ol>
+<p>前者目前较为常见。在目前的技术水平下没有明显的高下之分，前者更稳定但延迟更高，后者更快但效果不稳定。</p>
+<p>开始研究前应先向潜在用户调研需求，以更好地明晰研究方向。</p>
+<p>工业界的启动方式：先从开源和闭源模型中汲取灵感，再从论文中寻找尚未被工业化的技术并加以融合。</p>
+<p>在模型之外，建立平台供创作者和用户获得更好的使用体验也是重要的。</p>
+<h2 id="级联系统与融合模型">级联系统与融合模型
+</h2><p>音频的语义理解（例如情绪）仍是瓶颈。理论上融合类的模型（即上面的第二种范式）在这方面会有更好的表现，但是可靠性不佳；第一种方案也可以在转录的过程中通过一些办法记录下情绪。</p>
+<p>在考虑高智能和可靠性的情况下，级联系统（即第一种范式）仍会是未来几年的主流。</p>
+<p>不显式地显出文本的话，很多工具调用和指令的可靠性都会大打折扣。</p>
+<p>更好的办法是根据需求判断使用哪种类型的模型，或者更偏向哪种多一些。</p>
+<p>两种的融合版本，比如说将 3 级级联系统中的任意相邻两者合并，都是可能的解决方案。</p>
+<p>除了模型训练方法本身外，自有的数据集才是真正的商业护城河。这可以联系到上节课所说的 context。</p>
+<h2 id="协作与人">协作与人
+</h2><p>在同一个领域内不吝帮助同行并共同发展的才是伟大的 leader，互相帮助比竞争更能促进发展。</p>
+<p>you can go further together, especially in a new space like this where often what seems like a competitive project just because the VCs or the business ecosystem is trying to create some nice landscape slide</p>
+<p>有些时候所谓的同行其实并非完全竞争关系，只是被资本的外行人为了让世界看到进步分进同一类而已。</p>
+<p><strong>it&rsquo;s people that are driving a lot of this progress. And collaborations between people is what drives the frontier.</strong></p>
+<p>高自主权小团队的架构可以大幅减少沟通成本并提升效率，前提是人员素质够高。</p>
+<p>人才是重中之重：</p>
+<p>And then really the main bottleneck is, can you bring incredible people that are passionate, that have that level of IQ and EQ, are striving for excellence but stay humble. How do you bring those people that are really keen to innovate and be incredible at their craft?</p>
+<h2 id="商业与安全">商业与安全
+</h2><p>定价时始终考虑为客户提供的价值而不是成本，把所交付价值的十分之一定为价格。</p>
+<p>安全性方面：</p>
+<ol>
+<li>
+<p>为语音添加水印。</p>
+</li>
+<li>
+<p>不要使用语音验证了。。。</p>
+</li>
+</ol>
+<p>不同群体对语音沟通有不同方面，甚至可能截然相反（例如速度快慢）的需求。</p>
+<p>语音合成的公益使用领域：为失声者发声。</p>
+<p>对待中国 AI：竞争与合作并行。在安全性方面（例如添加语音水印）起码要有共识。</p>
+<p>语音 AI 大幅发展后对影视业的变革、各种伦理问题亟待解决，以及关于只使用一个人的声纹而不需要其具体配音的收费方式（）。</p>
+<p>发展方向仍旧任重道远。</p>
+<p>不想具体记了，不是我的领域。。。</p>
 
 </section>
 
@@ -435,7 +464,7 @@
 
 
         <span>
-            最后更新于 2025-12-16
+            最后更新于 2026-05-21
         </span>
     </section></footer>
 
@@ -477,19 +506,6 @@
     <h2 class="section-title">相关文章</h2>
     <div class="related-content">
         <div class="flex article-list--tile">
-            
-                
-<article class="">
-    <a href="/p/cs153-frontier-systems-lesson-2/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 2 阅读笔记</h2>
-        </div>
-    </a>
-</article>
-
             
                 
 <article class="">
@@ -549,6 +565,30 @@
 
         <div class="article-details">
             <h2 class="article-title">图像生成论文阅读笔记</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/">
+        
+        
+            <div class="article-image">
+                <img src="/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/image.ffd526f926416fef5972147c4f7fcba5_hu_d3794725f3ac288e.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post Digital Economy Article Aggregator食用指南"
+                        
+                        data-hash="md5-/9Um&#43;SZBb&#43;9ZchR8T3/LpQ==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Digital Economy Article Aggregator食用指南</h2>
         </div>
     </a>
 </article>

@@ -7,7 +7,92 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Mon, 18 May 2026 15:05:39 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 21 May 2026 11:56:04 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Stanford CS153 Frontier Systems | Lesson 2 阅读笔记</title>
+        <link>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-2/</link>
+        <pubDate>Thu, 21 May 2026 11:52:38 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-2/</guid>
+        <description>&lt;p&gt;课程视频：&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=vfF011ko89o&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Stanford CS153 Frontier Systems | Mati Staniszewski from ElevenLabs on The Future of Voice Systems&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;这一课的主讲人是 ElevenLabs 的 cofounder。&lt;/p&gt;
+&lt;p&gt;说起来之前做 astrbot 的时候还尝试使用过 ElevenLabs。&lt;/p&gt;
+&lt;p&gt;效果非常好，可惜价格难以承受。&lt;/p&gt;
+&lt;p&gt;这一期应该会记得相对简略一些，感兴趣的内容偏少，我自己也不怎么接触语音。&lt;/p&gt;
+&lt;h2 id=&#34;开场&#34;&gt;开场
+&lt;/h2&gt;&lt;p&gt;开场时 Mati 先是说公司初创时不用电子邮件。看来讨厌工作邮件是全世界通用的习惯。&lt;/p&gt;
+&lt;p&gt;然后这里有个有趣的观点：&lt;/p&gt;
+&lt;p&gt;gaming ends up being this petri dish for innovation.&lt;/p&gt;
+&lt;p&gt;Some of the hardest infra product design experience problems that are solved in gaming then become leading indicators for the rest of the world.&lt;/p&gt;
+&lt;p&gt;简明的中文意思是：游戏中的很多需求和响应，往往会带动前沿领域的发展。&lt;/p&gt;
+&lt;p&gt;当然目的是吹捧 Discord 就是了，不过确实说得有道理。&lt;/p&gt;
+&lt;p&gt;游戏追求的低延迟、高交互性，还有长期一致性，确实也是前沿领域同时在追求的目标。&lt;/p&gt;
+&lt;h2 id=&#34;和用户保持闭环&#34;&gt;和用户保持闭环
+&lt;/h2&gt;&lt;p&gt;最好的实现闭环的方法是 as close as possible to the people that are using those tools。也就是与社区合作。&lt;/p&gt;
+&lt;p&gt;一方面明晰用户和开发者需求，另一方面找到让社区做出 contribution 的办法。&lt;/p&gt;
+&lt;p&gt;社区里的需求和问题，可能就是 6-18 个月后世界各地用户的需求。&lt;/p&gt;
+&lt;p&gt;尽可能贴近用户并保持快速的交互循环非常有价值。&lt;/p&gt;
+&lt;h2 id=&#34;elevenlabs-的愿景&#34;&gt;ElevenLabs 的愿景
+&lt;/h2&gt;&lt;p&gt;ElevenLabs 的愿景：&lt;/p&gt;
+&lt;p&gt;The future will be where you can access all types of content in any language with that incredible tonality, incredible emotions.&lt;/p&gt;
+&lt;p&gt;针对任何领域深入研究时的两个问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;是否有足够的产品潜力。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;是否有实际的用户需求。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;语音模型的两种范式&#34;&gt;语音模型的两种范式
+&lt;/h2&gt;&lt;p&gt;语音模型的两种范式：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;转译 + LLM 处理文本 + TTS。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;纯粹的输入语音输出语音。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;前者目前较为常见。在目前的技术水平下没有明显的高下之分，前者更稳定但延迟更高，后者更快但效果不稳定。&lt;/p&gt;
+&lt;p&gt;开始研究前应先向潜在用户调研需求，以更好地明晰研究方向。&lt;/p&gt;
+&lt;p&gt;工业界的启动方式：先从开源和闭源模型中汲取灵感，再从论文中寻找尚未被工业化的技术并加以融合。&lt;/p&gt;
+&lt;p&gt;在模型之外，建立平台供创作者和用户获得更好的使用体验也是重要的。&lt;/p&gt;
+&lt;h2 id=&#34;级联系统与融合模型&#34;&gt;级联系统与融合模型
+&lt;/h2&gt;&lt;p&gt;音频的语义理解（例如情绪）仍是瓶颈。理论上融合类的模型（即上面的第二种范式）在这方面会有更好的表现，但是可靠性不佳；第一种方案也可以在转录的过程中通过一些办法记录下情绪。&lt;/p&gt;
+&lt;p&gt;在考虑高智能和可靠性的情况下，级联系统（即第一种范式）仍会是未来几年的主流。&lt;/p&gt;
+&lt;p&gt;不显式地显出文本的话，很多工具调用和指令的可靠性都会大打折扣。&lt;/p&gt;
+&lt;p&gt;更好的办法是根据需求判断使用哪种类型的模型，或者更偏向哪种多一些。&lt;/p&gt;
+&lt;p&gt;两种的融合版本，比如说将 3 级级联系统中的任意相邻两者合并，都是可能的解决方案。&lt;/p&gt;
+&lt;p&gt;除了模型训练方法本身外，自有的数据集才是真正的商业护城河。这可以联系到上节课所说的 context。&lt;/p&gt;
+&lt;h2 id=&#34;协作与人&#34;&gt;协作与人
+&lt;/h2&gt;&lt;p&gt;在同一个领域内不吝帮助同行并共同发展的才是伟大的 leader，互相帮助比竞争更能促进发展。&lt;/p&gt;
+&lt;p&gt;you can go further together, especially in a new space like this where often what seems like a competitive project just because the VCs or the business ecosystem is trying to create some nice landscape slide&lt;/p&gt;
+&lt;p&gt;有些时候所谓的同行其实并非完全竞争关系，只是被资本的外行人为了让世界看到进步分进同一类而已。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;it&amp;rsquo;s people that are driving a lot of this progress. And collaborations between people is what drives the frontier.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;高自主权小团队的架构可以大幅减少沟通成本并提升效率，前提是人员素质够高。&lt;/p&gt;
+&lt;p&gt;人才是重中之重：&lt;/p&gt;
+&lt;p&gt;And then really the main bottleneck is, can you bring incredible people that are passionate, that have that level of IQ and EQ, are striving for excellence but stay humble. How do you bring those people that are really keen to innovate and be incredible at their craft?&lt;/p&gt;
+&lt;h2 id=&#34;商业与安全&#34;&gt;商业与安全
+&lt;/h2&gt;&lt;p&gt;定价时始终考虑为客户提供的价值而不是成本，把所交付价值的十分之一定为价格。&lt;/p&gt;
+&lt;p&gt;安全性方面：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;为语音添加水印。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;不要使用语音验证了。。。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;不同群体对语音沟通有不同方面，甚至可能截然相反（例如速度快慢）的需求。&lt;/p&gt;
+&lt;p&gt;语音合成的公益使用领域：为失声者发声。&lt;/p&gt;
+&lt;p&gt;对待中国 AI：竞争与合作并行。在安全性方面（例如添加语音水印）起码要有共识。&lt;/p&gt;
+&lt;p&gt;语音 AI 大幅发展后对影视业的变革、各种伦理问题亟待解决，以及关于只使用一个人的声纹而不需要其具体配音的收费方式（）。&lt;/p&gt;
+&lt;p&gt;发展方向仍旧任重道远。&lt;/p&gt;
+&lt;p&gt;不想具体记了，不是我的领域。。。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Stanford CS153 Frontier Systems | Lesson 1 阅读笔记</title>
         <link>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-1/</link>
         <pubDate>Mon, 18 May 2026 15:02:51 +0800</pubDate>
