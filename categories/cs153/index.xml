@@ -7,7 +7,73 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Thu, 21 May 2026 11:56:04 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/categories/cs153/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 03 Jun 2026 16:58:38 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/categories/cs153/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Stanford CS153 Frontier Systems | Lesson 3 阅读笔记</title>
+        <link>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-3/</link>
+        <pubDate>Wed, 03 Jun 2026 16:56:06 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-3/</guid>
+        <description>&lt;p&gt;课程视频：&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=CBaLU0dDEY8&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Stanford CS153 Frontier Systems | Andreas Blattmann from Black Forest Labs on Visual Intelligence&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;这一课的主讲人是 Black Forest Labs 的 Andreas Blattmann，主题是 visual intelligence。整体上仍然围绕 frontier system 展开，不过这一讲更贴近图像、视频、多模态与物理世界之间的关系。&lt;/p&gt;
+&lt;h2 id=&#34;自然表征与非自然表征&#34;&gt;自然表征与非自然表征
+&lt;/h2&gt;&lt;p&gt;自然表征中存在冗余，比如图像或物理世界的潜空间中会有大量重复、相关和可压缩的信息。&lt;/p&gt;
+&lt;p&gt;但在人为产物中，比如文本，这种冗余并不以同样的方式存在。在整个进化过程中，我们一直在减少冗余，并让信息表达变得更高效。&lt;/p&gt;
+&lt;p&gt;学习的过程可以理解为：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;观察。&lt;/li&gt;
+&lt;li&gt;互动。&lt;/li&gt;
+&lt;li&gt;从反馈中修正表征。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;从这个角度看，系统的发展也在从单模态走向多模态。模型不只是生成内容，而是逐渐尝试理解内容与环境之间的关系。&lt;/p&gt;
+&lt;h2 id=&#34;从技术到真实问题&#34;&gt;从技术到真实问题
+&lt;/h2&gt;&lt;p&gt;obviously once you can build the technology, but setting that technology out to solve real world problems will give you the very important data to actually learn from.&lt;/p&gt;
+&lt;p&gt;翻译：显然，一旦你能把技术做出来，把它放到真实世界的问题中去解决问题，才会带来真正重要的、可供学习的数据。&lt;/p&gt;
+&lt;p&gt;这里的核心是：技术本身不是闭环，真实世界中的使用、失败和反馈才是闭环。&lt;/p&gt;
+&lt;p&gt;图像模型的第一个核心能力是角色一致性。对于视觉模型来说，这类一致性并不是单纯的审美问题，而是它能否稳定理解并延续一个对象、人物或场景的基础。&lt;/p&gt;
+&lt;h2 id=&#34;团队与领导力&#34;&gt;团队与领导力
+&lt;/h2&gt;&lt;p&gt;As a new team or as a first time researcher, it can be quite daunting when some lab that has way more resources than you launches something that looks way better. And your first intuition is to go, oh my god, we&amp;rsquo;re [BLEEP]. But you gotta remember that the mark of a good leader is to not panic, keep calm, look at the data, assess the landscape, and then come up with a plan.&lt;/p&gt;
+&lt;p&gt;翻译：作为一个新团队，或者第一次做研究的人，当资源远多于你的实验室发布了看起来强得多的东西时，这会非常吓人。你的第一反应可能是：完了。但你需要记住，优秀领导者的标志是不要慌，保持冷静，看数据，评估整体局势，然后制定计划。&lt;/p&gt;
+&lt;p&gt;it&amp;rsquo;s actually quite straightforward sometimes technically, if you have the right leadership to keep advancing the frontier.&lt;/p&gt;
+&lt;p&gt;翻译：有时候从技术上说，事情其实相当直接，前提是你有合适的领导力持续推动 frontier。&lt;/p&gt;
+&lt;p&gt;这一段挺有意思。很多时候前沿竞争给人的感觉是纯技术差距，但 Andreas 更强调在压力下读数据、判断局势和继续推进的能力。&lt;/p&gt;
+&lt;h2 id=&#34;模型如何学习物理世界&#34;&gt;模型如何学习物理世界
+&lt;/h2&gt;&lt;p&gt;关于模型如何学习与物理世界交互，可以有两种比较直观的路径：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;通过预测视频的下一帧来学习。&lt;/li&gt;
+&lt;li&gt;通过操控机器人，并从真实操作反馈中学习。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这个过程可以简化为：&lt;/p&gt;
+&lt;p&gt;预测 -&amp;gt; 验证 -&amp;gt; 学习。&lt;/p&gt;
+&lt;p&gt;模型需要暴露在物理世界中，同时又要有合适的边界条件。没有边界条件，系统很容易变成不可控的试错；没有真实世界暴露，又很难获得足够有价值的反馈。&lt;/p&gt;
+&lt;p&gt;anytime the answer to the eval question of how do you verify is it depends on the audience or it depends on the person consuming the system.&lt;/p&gt;
+&lt;p&gt;翻译：只要关于“如何验证”的评估问题，答案变成了“取决于受众”或“取决于使用系统的人”，事情就会变得更复杂。&lt;/p&gt;
+&lt;p&gt;这也说明，视觉智能的评估并不像一些封闭任务那样清晰。不同用户、不同场景、不同消费方式，对结果质量的判断可能完全不同。&lt;/p&gt;
+&lt;h2 id=&#34;开源与个性化&#34;&gt;开源与个性化
+&lt;/h2&gt;&lt;p&gt;开源的核心优势在于针对用户定制和微调，尤其是在自定义需求很强的场景里。&lt;/p&gt;
+&lt;p&gt;anywhere you have consumers of a system or customers or the people benefiting from the system wanting more and more personalization and customization of the system for themselves, that&amp;rsquo;s where open models become extraordinarily valuable.&lt;/p&gt;
+&lt;p&gt;翻译：只要系统的消费者、客户，或者受益于系统的人越来越想要个性化和自定义，开源模型就会变得极其有价值。&lt;/p&gt;
+&lt;p&gt;the way you get infrastructure to move stably is you have trusted standards and trusted institutions to enforce them.&lt;/p&gt;
+&lt;p&gt;翻译：让基础设施稳定发展的方式，是拥有可信的标准，以及能够执行这些标准的可信机构。&lt;/p&gt;
+&lt;p&gt;这里可以和前两节课联系起来看：frontier system 不只是模型本身，还包括模型如何被部署、信任、定制、标准化，以及如何被机构和社区共同维护。&lt;/p&gt;
+&lt;h2 id=&#34;diffusion-与步数压缩&#34;&gt;Diffusion 与步数压缩
+&lt;/h2&gt;&lt;p&gt;diffusion 可以通过蒸馏减少步数，从原来的数百步去噪，到现在的 4 步甚至 2 步。&lt;/p&gt;
+&lt;p&gt;这样看，它和 drifting 并没有太大区别：核心都是让模型在更少步骤内逼近可用结果，只是具体技术路径不同。&lt;/p&gt;
+&lt;p&gt;关于商业模式，则可以拆成几个维度：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;不同尺寸。&lt;/li&gt;
+&lt;li&gt;不同速度。&lt;/li&gt;
+&lt;li&gt;不同定价。&lt;/li&gt;
+&lt;li&gt;不同性能。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这些维度放在视觉模型里尤其直观：有些场景要快，有些场景要质量，有些场景要便宜，有些场景要足够可控。&lt;/p&gt;
+&lt;h2 id=&#34;关于-3d&#34;&gt;关于 3D
+&lt;/h2&gt;&lt;p&gt;显式的、带有具体坐标的 3D，并不是那么通用和灵活。&lt;/p&gt;
+&lt;p&gt;更有潜力的方向，是根据感知和互动学习隐式的 3D 表示。这样的表示可能有更好的性能，也更符合未来趋势。&lt;/p&gt;
+&lt;p&gt;换句话说，模型未必需要先拥有一个明确的坐标系，再去理解世界。它也可能在感知、行动和反馈中逐渐形成可用的空间理解。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Stanford CS153 Frontier Systems | Lesson 2 阅读笔记</title>
         <link>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-2/</link>
         <pubDate>Thu, 21 May 2026 11:52:38 +0800</pubDate>

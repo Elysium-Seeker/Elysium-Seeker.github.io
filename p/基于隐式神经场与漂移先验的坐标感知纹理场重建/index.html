@@ -496,91 +496,91 @@ $$<p>实际实现中 $z_0$ 初始化为零向量，以保证重建过程的确�
 </h2><h3 id="61-采样曲线与临界采样率">6.1 采样曲线与临界采样率
 </h3><p>采样曲线覆盖 0.1%–10% patch ratio，评测 PSNR / SSIM / grad_err / $S_2$ / dir_spec_err。结果如下：</p>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: right">采样率</th>
-          <th style="text-align: right">K</th>
-          <th style="text-align: right">PSNR (dB)</th>
-          <th style="text-align: right">SSIM</th>
-          <th style="text-align: right">grad_err</th>
-          <th style="text-align: right">s2_err</th>
-          <th style="text-align: right">dir_spec_err</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: right">0.1%</td>
-          <td style="text-align: right">2</td>
-          <td style="text-align: right">30.787</td>
-          <td style="text-align: right">0.9303</td>
-          <td style="text-align: right">0.0095</td>
-          <td style="text-align: right">0.000855</td>
-          <td style="text-align: right">1.06e-06</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">0.3%</td>
-          <td style="text-align: right">6</td>
-          <td style="text-align: right">31.163</td>
-          <td style="text-align: right">0.9434</td>
-          <td style="text-align: right">0.0076</td>
-          <td style="text-align: right">0.000724</td>
-          <td style="text-align: right">8.62e-07</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">0.5%</td>
-          <td style="text-align: right">9</td>
-          <td style="text-align: right">31.225</td>
-          <td style="text-align: right">0.9449</td>
-          <td style="text-align: right">0.0073</td>
-          <td style="text-align: right">0.000790</td>
-          <td style="text-align: right">7.93e-07</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">1.0%</td>
-          <td style="text-align: right">18</td>
-          <td style="text-align: right">30.573</td>
-          <td style="text-align: right">0.9362</td>
-          <td style="text-align: right">0.0085</td>
-          <td style="text-align: right">0.000895</td>
-          <td style="text-align: right">1.05e-06</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">1.3%</td>
-          <td style="text-align: right">24</td>
-          <td style="text-align: right">31.302</td>
-          <td style="text-align: right">0.9477</td>
-          <td style="text-align: right">0.0069</td>
-          <td style="text-align: right">0.000662</td>
-          <td style="text-align: right">7.99e-07</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">2.0%</td>
-          <td style="text-align: right">37</td>
-          <td style="text-align: right">31.432</td>
-          <td style="text-align: right">0.9507</td>
-          <td style="text-align: right">0.0065</td>
-          <td style="text-align: right">0.000665</td>
-          <td style="text-align: right">7.08e-07</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">5.0%</td>
-          <td style="text-align: right">92</td>
-          <td style="text-align: right">31.287</td>
-          <td style="text-align: right">0.9467</td>
-          <td style="text-align: right">0.0071</td>
-          <td style="text-align: right">0.000735</td>
-          <td style="text-align: right">7.76e-07</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">10.0%</td>
-          <td style="text-align: right">185</td>
-          <td style="text-align: right">31.331</td>
-          <td style="text-align: right">0.9480</td>
-          <td style="text-align: right">0.0069</td>
-          <td style="text-align: right">0.000707</td>
-          <td style="text-align: right">7.59e-07</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: right">采样率</th>
+					<th style="text-align: right">K</th>
+					<th style="text-align: right">PSNR (dB)</th>
+					<th style="text-align: right">SSIM</th>
+					<th style="text-align: right">grad_err</th>
+					<th style="text-align: right">s2_err</th>
+					<th style="text-align: right">dir_spec_err</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: right">0.1%</td>
+					<td style="text-align: right">2</td>
+					<td style="text-align: right">30.787</td>
+					<td style="text-align: right">0.9303</td>
+					<td style="text-align: right">0.0095</td>
+					<td style="text-align: right">0.000855</td>
+					<td style="text-align: right">1.06e-06</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">0.3%</td>
+					<td style="text-align: right">6</td>
+					<td style="text-align: right">31.163</td>
+					<td style="text-align: right">0.9434</td>
+					<td style="text-align: right">0.0076</td>
+					<td style="text-align: right">0.000724</td>
+					<td style="text-align: right">8.62e-07</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">0.5%</td>
+					<td style="text-align: right">9</td>
+					<td style="text-align: right">31.225</td>
+					<td style="text-align: right">0.9449</td>
+					<td style="text-align: right">0.0073</td>
+					<td style="text-align: right">0.000790</td>
+					<td style="text-align: right">7.93e-07</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">1.0%</td>
+					<td style="text-align: right">18</td>
+					<td style="text-align: right">30.573</td>
+					<td style="text-align: right">0.9362</td>
+					<td style="text-align: right">0.0085</td>
+					<td style="text-align: right">0.000895</td>
+					<td style="text-align: right">1.05e-06</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">1.3%</td>
+					<td style="text-align: right">24</td>
+					<td style="text-align: right">31.302</td>
+					<td style="text-align: right">0.9477</td>
+					<td style="text-align: right">0.0069</td>
+					<td style="text-align: right">0.000662</td>
+					<td style="text-align: right">7.99e-07</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">2.0%</td>
+					<td style="text-align: right">37</td>
+					<td style="text-align: right">31.432</td>
+					<td style="text-align: right">0.9507</td>
+					<td style="text-align: right">0.0065</td>
+					<td style="text-align: right">0.000665</td>
+					<td style="text-align: right">7.08e-07</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">5.0%</td>
+					<td style="text-align: right">92</td>
+					<td style="text-align: right">31.287</td>
+					<td style="text-align: right">0.9467</td>
+					<td style="text-align: right">0.0071</td>
+					<td style="text-align: right">0.000735</td>
+					<td style="text-align: right">7.76e-07</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">10.0%</td>
+					<td style="text-align: right">185</td>
+					<td style="text-align: right">31.331</td>
+					<td style="text-align: right">0.9480</td>
+					<td style="text-align: right">0.0069</td>
+					<td style="text-align: right">0.000707</td>
+					<td style="text-align: right">7.59e-07</td>
+			</tr>
+	</tbody>
 </table></div>
 <p>PSNR 在 1.3% 采样率已接近高采样率平台，10% 采样的 PSNR 为 31.331 dB，1.3% 对应 31.302 dB，$\Delta$PSNR = 0.030 dB。该结果支持临界采样率 $r_c\approx1.3%$ 的判断，表明纹理场具有较低的有效自由度与有限带宽特性。</p>
 <p><img src="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/sampling_curve.png"
@@ -598,177 +598,177 @@ $$<p>实际实现中 $z_0$ 初始化为零向量，以保证重建过程的确�
 <h3 id="62-laplacian-与-multi-scale-s_2">6.2 Laplacian 与 Multi-scale $S_2$
 </h3><p>为了更全面评估纹理的结构一致性，进一步补充 Laplacian 与多尺度 $S_2$ 误差：</p>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: right">采样率</th>
-          <th style="text-align: right">K</th>
-          <th style="text-align: right">lap_err</th>
-          <th style="text-align: right">s2_ms_err</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: right">0.1%</td>
-          <td style="text-align: right">2</td>
-          <td style="text-align: right">0.0154</td>
-          <td style="text-align: right">0.001159</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">0.3%</td>
-          <td style="text-align: right">6</td>
-          <td style="text-align: right">0.0113</td>
-          <td style="text-align: right">0.000960</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">0.5%</td>
-          <td style="text-align: right">9</td>
-          <td style="text-align: right">0.0108</td>
-          <td style="text-align: right">0.001022</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">1.0%</td>
-          <td style="text-align: right">18</td>
-          <td style="text-align: right">0.0130</td>
-          <td style="text-align: right">0.001422</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">1.3%</td>
-          <td style="text-align: right">24</td>
-          <td style="text-align: right">0.0098</td>
-          <td style="text-align: right">0.000868</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">2.0%</td>
-          <td style="text-align: right">37</td>
-          <td style="text-align: right">0.0088</td>
-          <td style="text-align: right">0.000854</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">5.0%</td>
-          <td style="text-align: right">92</td>
-          <td style="text-align: right">0.0102</td>
-          <td style="text-align: right">0.000951</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">10.0%</td>
-          <td style="text-align: right">185</td>
-          <td style="text-align: right">0.0097</td>
-          <td style="text-align: right">0.000914</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: right">采样率</th>
+					<th style="text-align: right">K</th>
+					<th style="text-align: right">lap_err</th>
+					<th style="text-align: right">s2_ms_err</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: right">0.1%</td>
+					<td style="text-align: right">2</td>
+					<td style="text-align: right">0.0154</td>
+					<td style="text-align: right">0.001159</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">0.3%</td>
+					<td style="text-align: right">6</td>
+					<td style="text-align: right">0.0113</td>
+					<td style="text-align: right">0.000960</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">0.5%</td>
+					<td style="text-align: right">9</td>
+					<td style="text-align: right">0.0108</td>
+					<td style="text-align: right">0.001022</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">1.0%</td>
+					<td style="text-align: right">18</td>
+					<td style="text-align: right">0.0130</td>
+					<td style="text-align: right">0.001422</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">1.3%</td>
+					<td style="text-align: right">24</td>
+					<td style="text-align: right">0.0098</td>
+					<td style="text-align: right">0.000868</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">2.0%</td>
+					<td style="text-align: right">37</td>
+					<td style="text-align: right">0.0088</td>
+					<td style="text-align: right">0.000854</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">5.0%</td>
+					<td style="text-align: right">92</td>
+					<td style="text-align: right">0.0102</td>
+					<td style="text-align: right">0.000951</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">10.0%</td>
+					<td style="text-align: right">185</td>
+					<td style="text-align: right">0.0097</td>
+					<td style="text-align: right">0.000914</td>
+			</tr>
+	</tbody>
 </table></div>
 <p>在 1.3% 采样率下 lap_err 与 s2_ms_err 同步下降，说明重建不仅在像素层面逼近真实纹理，而且在多尺度结构统计上趋于稳定。</p>
 <h3 id="63-overlap-mae按-k">6.3 Overlap MAE（按 K）
 </h3><p>Overlap MAE 通过比较相邻 patch 重叠区域的像素差异计算，反映拼接一致性：</p>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: right">采样率</th>
-          <th style="text-align: right">K</th>
-          <th style="text-align: right">overlap_v</th>
-          <th style="text-align: right">overlap_h</th>
-          <th style="text-align: right">overlap_mae</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: right">0.1%</td>
-          <td style="text-align: right">2</td>
-          <td style="text-align: right">0.0037</td>
-          <td style="text-align: right">0.0037</td>
-          <td style="text-align: right">0.0037</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">0.3%</td>
-          <td style="text-align: right">6</td>
-          <td style="text-align: right">0.0028</td>
-          <td style="text-align: right">0.0028</td>
-          <td style="text-align: right">0.0028</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">0.5%</td>
-          <td style="text-align: right">9</td>
-          <td style="text-align: right">0.0027</td>
-          <td style="text-align: right">0.0027</td>
-          <td style="text-align: right">0.0027</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">1.0%</td>
-          <td style="text-align: right">18</td>
-          <td style="text-align: right">0.0032</td>
-          <td style="text-align: right">0.0032</td>
-          <td style="text-align: right">0.0032</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">1.3%</td>
-          <td style="text-align: right">24</td>
-          <td style="text-align: right">0.0025</td>
-          <td style="text-align: right">0.0025</td>
-          <td style="text-align: right">0.0025</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">2.0%</td>
-          <td style="text-align: right">37</td>
-          <td style="text-align: right">0.0023</td>
-          <td style="text-align: right">0.0023</td>
-          <td style="text-align: right">0.0023</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">5.0%</td>
-          <td style="text-align: right">92</td>
-          <td style="text-align: right">0.0026</td>
-          <td style="text-align: right">0.0026</td>
-          <td style="text-align: right">0.0026</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">10.0%</td>
-          <td style="text-align: right">185</td>
-          <td style="text-align: right">0.0025</td>
-          <td style="text-align: right">0.0025</td>
-          <td style="text-align: right">0.0025</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: right">采样率</th>
+					<th style="text-align: right">K</th>
+					<th style="text-align: right">overlap_v</th>
+					<th style="text-align: right">overlap_h</th>
+					<th style="text-align: right">overlap_mae</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: right">0.1%</td>
+					<td style="text-align: right">2</td>
+					<td style="text-align: right">0.0037</td>
+					<td style="text-align: right">0.0037</td>
+					<td style="text-align: right">0.0037</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">0.3%</td>
+					<td style="text-align: right">6</td>
+					<td style="text-align: right">0.0028</td>
+					<td style="text-align: right">0.0028</td>
+					<td style="text-align: right">0.0028</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">0.5%</td>
+					<td style="text-align: right">9</td>
+					<td style="text-align: right">0.0027</td>
+					<td style="text-align: right">0.0027</td>
+					<td style="text-align: right">0.0027</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">1.0%</td>
+					<td style="text-align: right">18</td>
+					<td style="text-align: right">0.0032</td>
+					<td style="text-align: right">0.0032</td>
+					<td style="text-align: right">0.0032</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">1.3%</td>
+					<td style="text-align: right">24</td>
+					<td style="text-align: right">0.0025</td>
+					<td style="text-align: right">0.0025</td>
+					<td style="text-align: right">0.0025</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">2.0%</td>
+					<td style="text-align: right">37</td>
+					<td style="text-align: right">0.0023</td>
+					<td style="text-align: right">0.0023</td>
+					<td style="text-align: right">0.0023</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">5.0%</td>
+					<td style="text-align: right">92</td>
+					<td style="text-align: right">0.0026</td>
+					<td style="text-align: right">0.0026</td>
+					<td style="text-align: right">0.0026</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">10.0%</td>
+					<td style="text-align: right">185</td>
+					<td style="text-align: right">0.0025</td>
+					<td style="text-align: right">0.0025</td>
+					<td style="text-align: right">0.0025</td>
+			</tr>
+	</tbody>
 </table></div>
 <p>Overlap MAE 在不同采样率下保持在 $2.3\times10^{-3}$ 到 $3.7\times10^{-3}$ 区间，说明坐标隐式场对拼接一致性具有结构性保障。</p>
 <h3 id="64-非均匀采样鲁棒性k24">6.4 非均匀采样鲁棒性（K=24）
 </h3><p>对比三种采样策略：</p>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th>采样策略</th>
-          <th style="text-align: right">PSNR (dB)</th>
-          <th style="text-align: right">SSIM</th>
-          <th style="text-align: right">grad_err</th>
-          <th style="text-align: right">s2_err</th>
-          <th style="text-align: right">dir_spec_err</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Uniform</td>
-          <td style="text-align: right">31.018</td>
-          <td style="text-align: right">0.9377</td>
-          <td style="text-align: right">0.0084</td>
-          <td style="text-align: right">0.000885</td>
-          <td style="text-align: right">9.14e-07</td>
-      </tr>
-      <tr>
-          <td>Stratified</td>
-          <td style="text-align: right">31.142</td>
-          <td style="text-align: right">0.9423</td>
-          <td style="text-align: right">0.0077</td>
-          <td style="text-align: right">0.000851</td>
-          <td style="text-align: right">8.30e-07</td>
-      </tr>
-      <tr>
-          <td>Half-region</td>
-          <td style="text-align: right">31.360</td>
-          <td style="text-align: right">0.9490</td>
-          <td style="text-align: right">0.0067</td>
-          <td style="text-align: right">0.000714</td>
-          <td style="text-align: right">7.23e-07</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>采样策略</th>
+					<th style="text-align: right">PSNR (dB)</th>
+					<th style="text-align: right">SSIM</th>
+					<th style="text-align: right">grad_err</th>
+					<th style="text-align: right">s2_err</th>
+					<th style="text-align: right">dir_spec_err</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Uniform</td>
+					<td style="text-align: right">31.018</td>
+					<td style="text-align: right">0.9377</td>
+					<td style="text-align: right">0.0084</td>
+					<td style="text-align: right">0.000885</td>
+					<td style="text-align: right">9.14e-07</td>
+			</tr>
+			<tr>
+					<td>Stratified</td>
+					<td style="text-align: right">31.142</td>
+					<td style="text-align: right">0.9423</td>
+					<td style="text-align: right">0.0077</td>
+					<td style="text-align: right">0.000851</td>
+					<td style="text-align: right">8.30e-07</td>
+			</tr>
+			<tr>
+					<td>Half-region</td>
+					<td style="text-align: right">31.360</td>
+					<td style="text-align: right">0.9490</td>
+					<td style="text-align: right">0.0067</td>
+					<td style="text-align: right">0.000714</td>
+					<td style="text-align: right">7.23e-07</td>
+			</tr>
+	</tbody>
 </table></div>
 <p>三种策略在 PSNR 上的差异小于 0.35 dB，说明在相同观测数量下，采样分布对整体重建质量影响有限；Half-region 略优，表明稠密局部观测对重建有一定正向作用。</p>
 <p><img src="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/non_uniform_sampling.png"
@@ -797,42 +797,42 @@ $$<p>实际实现中 $z_0$ 初始化为零向量，以保证重建过程的确�
 <h3 id="66-overlap-ablation不同-stride">6.6 Overlap Ablation（不同 stride）
 </h3><p>为验证重叠密度对临界采样率的影响，设置 stride=64/48/32 的对比实验：</p>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: right">Stride</th>
-          <th style="text-align: right">N</th>
-          <th style="text-align: right">$r_c$ avg</th>
-          <th style="text-align: right">$r_c$ grad</th>
-          <th style="text-align: right">$r_c$ $S_2$</th>
-          <th style="text-align: right">$r_c$ dir</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: right">64</td>
-          <td style="text-align: right">1024</td>
-          <td style="text-align: right">1.0%</td>
-          <td style="text-align: right">1.0%</td>
-          <td style="text-align: right">1.3%</td>
-          <td style="text-align: right">1.3%</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">48</td>
-          <td style="text-align: right">1849</td>
-          <td style="text-align: right">1.0%</td>
-          <td style="text-align: right">1.0%</td>
-          <td style="text-align: right">1.0%</td>
-          <td style="text-align: right">1.0%</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">32</td>
-          <td style="text-align: right">3969</td>
-          <td style="text-align: right">1.0%</td>
-          <td style="text-align: right">1.0%</td>
-          <td style="text-align: right">1.0%</td>
-          <td style="text-align: right">1.0%</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: right">Stride</th>
+					<th style="text-align: right">N</th>
+					<th style="text-align: right">$r_c$ avg</th>
+					<th style="text-align: right">$r_c$ grad</th>
+					<th style="text-align: right">$r_c$ $S_2$</th>
+					<th style="text-align: right">$r_c$ dir</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: right">64</td>
+					<td style="text-align: right">1024</td>
+					<td style="text-align: right">1.0%</td>
+					<td style="text-align: right">1.0%</td>
+					<td style="text-align: right">1.3%</td>
+					<td style="text-align: right">1.3%</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">48</td>
+					<td style="text-align: right">1849</td>
+					<td style="text-align: right">1.0%</td>
+					<td style="text-align: right">1.0%</td>
+					<td style="text-align: right">1.0%</td>
+					<td style="text-align: right">1.0%</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">32</td>
+					<td style="text-align: right">3969</td>
+					<td style="text-align: right">1.0%</td>
+					<td style="text-align: right">1.0%</td>
+					<td style="text-align: right">1.0%</td>
+					<td style="text-align: right">1.0%</td>
+			</tr>
+	</tbody>
 </table></div>
 <p>结果显示 $r_c$ 在不同 stride 下保持稳定，说明临界采样率主要由纹理带宽与有效自由度决定，而非仅由重叠密度主导。以 stride=48、K=24 的重建为例，Overlap MAE = 0.0025（seam_v=0.0025，seam_h=0.0025）[11]。</p>
 <p><img src="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/overlap_ablation.png"
@@ -920,211 +920,211 @@ $$<p>实际实现中 $z_0$ 初始化为零向量，以保证重建过程的确�
 </h3><p>在 $r=1.3%$（K=24）下补充随机种子、观测噪声与 z-inversion 超参数的敏感性评测 [12]。不同随机采样（seed=0/1/2）的结果波动极小，说明重建对采样随机性较稳健。</p>
 <p><strong>随机种子敏感性（mean ± std）</strong></p>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th>指标</th>
-          <th style="text-align: right">结果</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>PSNR (dB)</td>
-          <td style="text-align: right">32.189 ± 0.005</td>
-      </tr>
-      <tr>
-          <td>SSIM</td>
-          <td style="text-align: right">0.9647 ± 0.0003</td>
-      </tr>
-      <tr>
-          <td>grad_err</td>
-          <td style="text-align: right">0.004685 ± 0.000027</td>
-      </tr>
-      <tr>
-          <td>$S_2$ err</td>
-          <td style="text-align: right">0.000374 ± 0.000016</td>
-      </tr>
-      <tr>
-          <td>Overlap MAE</td>
-          <td style="text-align: right">0.001288 ± 0.000018</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>指标</th>
+					<th style="text-align: right">结果</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>PSNR (dB)</td>
+					<td style="text-align: right">32.189 ± 0.005</td>
+			</tr>
+			<tr>
+					<td>SSIM</td>
+					<td style="text-align: right">0.9647 ± 0.0003</td>
+			</tr>
+			<tr>
+					<td>grad_err</td>
+					<td style="text-align: right">0.004685 ± 0.000027</td>
+			</tr>
+			<tr>
+					<td>$S_2$ err</td>
+					<td style="text-align: right">0.000374 ± 0.000016</td>
+			</tr>
+			<tr>
+					<td>Overlap MAE</td>
+					<td style="text-align: right">0.001288 ± 0.000018</td>
+			</tr>
+	</tbody>
 </table></div>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th>指标</th>
-          <th style="text-align: right">结果</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>hist_l1</td>
-          <td style="text-align: right">15.307 ± 0.080</td>
-      </tr>
-      <tr>
-          <td>spec_entropy_diff</td>
-          <td style="text-align: right">0.02335 ± 0.00048</td>
-      </tr>
-      <tr>
-          <td>freq_ratio_l2</td>
-          <td style="text-align: right">$1.80\times10^{-5}$ ± $3.99\times10^{-6}$</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>指标</th>
+					<th style="text-align: right">结果</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>hist_l1</td>
+					<td style="text-align: right">15.307 ± 0.080</td>
+			</tr>
+			<tr>
+					<td>spec_entropy_diff</td>
+					<td style="text-align: right">0.02335 ± 0.00048</td>
+			</tr>
+			<tr>
+					<td>freq_ratio_l2</td>
+					<td style="text-align: right">$1.80\times10^{-5}$ ± $3.99\times10^{-6}$</td>
+			</tr>
+	</tbody>
 </table></div>
 <p><strong>观测噪声鲁棒性（seed=42）</strong></p>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: right">$\sigma$</th>
-          <th style="text-align: right">PSNR</th>
-          <th style="text-align: right">SSIM</th>
-          <th style="text-align: right">grad_err</th>
-          <th style="text-align: right">$S_2$ err</th>
-          <th style="text-align: right">Overlap MAE</th>
-          <th style="text-align: right">hist_l1</th>
-          <th style="text-align: right">spec_entropy_diff</th>
-          <th style="text-align: right">freq_ratio_l2</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: right">0.00</td>
-          <td style="text-align: right">32.078</td>
-          <td style="text-align: right">0.9631</td>
-          <td style="text-align: right">0.004844</td>
-          <td style="text-align: right">0.000310</td>
-          <td style="text-align: right">0.001368</td>
-          <td style="text-align: right">14.912</td>
-          <td style="text-align: right">0.02043</td>
-          <td style="text-align: right">$3.61\times10^{-5}$</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">0.01</td>
-          <td style="text-align: right">32.079</td>
-          <td style="text-align: right">0.9631</td>
-          <td style="text-align: right">0.004842</td>
-          <td style="text-align: right">0.000310</td>
-          <td style="text-align: right">0.001367</td>
-          <td style="text-align: right">14.917</td>
-          <td style="text-align: right">0.02047</td>
-          <td style="text-align: right">$3.59\times10^{-5}$</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">0.02</td>
-          <td style="text-align: right">32.070</td>
-          <td style="text-align: right">0.9630</td>
-          <td style="text-align: right">0.004853</td>
-          <td style="text-align: right">0.000309</td>
-          <td style="text-align: right">0.001373</td>
-          <td style="text-align: right">14.887</td>
-          <td style="text-align: right">0.02025</td>
-          <td style="text-align: right">$3.71\times10^{-5}$</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: right">$\sigma$</th>
+					<th style="text-align: right">PSNR</th>
+					<th style="text-align: right">SSIM</th>
+					<th style="text-align: right">grad_err</th>
+					<th style="text-align: right">$S_2$ err</th>
+					<th style="text-align: right">Overlap MAE</th>
+					<th style="text-align: right">hist_l1</th>
+					<th style="text-align: right">spec_entropy_diff</th>
+					<th style="text-align: right">freq_ratio_l2</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: right">0.00</td>
+					<td style="text-align: right">32.078</td>
+					<td style="text-align: right">0.9631</td>
+					<td style="text-align: right">0.004844</td>
+					<td style="text-align: right">0.000310</td>
+					<td style="text-align: right">0.001368</td>
+					<td style="text-align: right">14.912</td>
+					<td style="text-align: right">0.02043</td>
+					<td style="text-align: right">$3.61\times10^{-5}$</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">0.01</td>
+					<td style="text-align: right">32.079</td>
+					<td style="text-align: right">0.9631</td>
+					<td style="text-align: right">0.004842</td>
+					<td style="text-align: right">0.000310</td>
+					<td style="text-align: right">0.001367</td>
+					<td style="text-align: right">14.917</td>
+					<td style="text-align: right">0.02047</td>
+					<td style="text-align: right">$3.59\times10^{-5}$</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">0.02</td>
+					<td style="text-align: right">32.070</td>
+					<td style="text-align: right">0.9630</td>
+					<td style="text-align: right">0.004853</td>
+					<td style="text-align: right">0.000309</td>
+					<td style="text-align: right">0.001373</td>
+					<td style="text-align: right">14.887</td>
+					<td style="text-align: right">0.02025</td>
+					<td style="text-align: right">$3.71\times10^{-5}$</td>
+			</tr>
+	</tbody>
 </table></div>
 <p>噪声在 $\sigma\le0.02$ 时对重建影响极小，像素误差与频谱/直方图一致性基本保持不变。</p>
 <p><strong>z-inversion 迭代次数敏感性（seed=42）</strong></p>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: right">iters</th>
-          <th style="text-align: right">PSNR</th>
-          <th style="text-align: right">SSIM</th>
-          <th style="text-align: right">grad_err</th>
-          <th style="text-align: right">$S_2$ err</th>
-          <th style="text-align: right">Overlap MAE</th>
-          <th style="text-align: right">hist_l1</th>
-          <th style="text-align: right">spec_entropy_diff</th>
-          <th style="text-align: right">freq_ratio_l2</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: right">200</td>
-          <td style="text-align: right">31.601</td>
-          <td style="text-align: right">0.9554</td>
-          <td style="text-align: right">0.005789</td>
-          <td style="text-align: right">0.000472</td>
-          <td style="text-align: right">0.001870</td>
-          <td style="text-align: right">15.476</td>
-          <td style="text-align: right">0.00872</td>
-          <td style="text-align: right">$1.46\times10^{-4}$</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">500</td>
-          <td style="text-align: right">32.078</td>
-          <td style="text-align: right">0.9631</td>
-          <td style="text-align: right">0.004844</td>
-          <td style="text-align: right">0.000310</td>
-          <td style="text-align: right">0.001368</td>
-          <td style="text-align: right">14.912</td>
-          <td style="text-align: right">0.02043</td>
-          <td style="text-align: right">$3.61\times10^{-5}$</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">800</td>
-          <td style="text-align: right">32.111</td>
-          <td style="text-align: right">0.9640</td>
-          <td style="text-align: right">0.004754</td>
-          <td style="text-align: right">0.000312</td>
-          <td style="text-align: right">0.001328</td>
-          <td style="text-align: right">15.274</td>
-          <td style="text-align: right">0.02240</td>
-          <td style="text-align: right">$2.70\times10^{-5}$</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: right">iters</th>
+					<th style="text-align: right">PSNR</th>
+					<th style="text-align: right">SSIM</th>
+					<th style="text-align: right">grad_err</th>
+					<th style="text-align: right">$S_2$ err</th>
+					<th style="text-align: right">Overlap MAE</th>
+					<th style="text-align: right">hist_l1</th>
+					<th style="text-align: right">spec_entropy_diff</th>
+					<th style="text-align: right">freq_ratio_l2</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: right">200</td>
+					<td style="text-align: right">31.601</td>
+					<td style="text-align: right">0.9554</td>
+					<td style="text-align: right">0.005789</td>
+					<td style="text-align: right">0.000472</td>
+					<td style="text-align: right">0.001870</td>
+					<td style="text-align: right">15.476</td>
+					<td style="text-align: right">0.00872</td>
+					<td style="text-align: right">$1.46\times10^{-4}$</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">500</td>
+					<td style="text-align: right">32.078</td>
+					<td style="text-align: right">0.9631</td>
+					<td style="text-align: right">0.004844</td>
+					<td style="text-align: right">0.000310</td>
+					<td style="text-align: right">0.001368</td>
+					<td style="text-align: right">14.912</td>
+					<td style="text-align: right">0.02043</td>
+					<td style="text-align: right">$3.61\times10^{-5}$</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">800</td>
+					<td style="text-align: right">32.111</td>
+					<td style="text-align: right">0.9640</td>
+					<td style="text-align: right">0.004754</td>
+					<td style="text-align: right">0.000312</td>
+					<td style="text-align: right">0.001328</td>
+					<td style="text-align: right">15.274</td>
+					<td style="text-align: right">0.02240</td>
+					<td style="text-align: right">$2.70\times10^{-5}$</td>
+			</tr>
+	</tbody>
 </table></div>
 <p>迭代次数从 200 提升到 500 后指标明显改善，继续提升到 800 后收益趋于饱和。</p>
 <p><strong>z-inversion 学习率敏感性（seed=42）</strong></p>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: right">lr</th>
-          <th style="text-align: right">PSNR</th>
-          <th style="text-align: right">SSIM</th>
-          <th style="text-align: right">grad_err</th>
-          <th style="text-align: right">$S_2$ err</th>
-          <th style="text-align: right">Overlap MAE</th>
-          <th style="text-align: right">hist_l1</th>
-          <th style="text-align: right">spec_entropy_diff</th>
-          <th style="text-align: right">freq_ratio_l2</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: right">0.005</td>
-          <td style="text-align: right">31.711</td>
-          <td style="text-align: right">0.9574</td>
-          <td style="text-align: right">0.005513</td>
-          <td style="text-align: right">0.000421</td>
-          <td style="text-align: right">0.001713</td>
-          <td style="text-align: right">15.587</td>
-          <td style="text-align: right">0.01090</td>
-          <td style="text-align: right">$1.10\times10^{-4}$</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">0.01</td>
-          <td style="text-align: right">32.078</td>
-          <td style="text-align: right">0.9631</td>
-          <td style="text-align: right">0.004844</td>
-          <td style="text-align: right">0.000310</td>
-          <td style="text-align: right">0.001368</td>
-          <td style="text-align: right">14.912</td>
-          <td style="text-align: right">0.02043</td>
-          <td style="text-align: right">$3.61\times10^{-5}$</td>
-      </tr>
-      <tr>
-          <td style="text-align: right">0.02</td>
-          <td style="text-align: right">32.112</td>
-          <td style="text-align: right">0.9640</td>
-          <td style="text-align: right">0.004754</td>
-          <td style="text-align: right">0.000312</td>
-          <td style="text-align: right">0.001323</td>
-          <td style="text-align: right">15.274</td>
-          <td style="text-align: right">0.02240</td>
-          <td style="text-align: right">$2.70\times10^{-5}$</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: right">lr</th>
+					<th style="text-align: right">PSNR</th>
+					<th style="text-align: right">SSIM</th>
+					<th style="text-align: right">grad_err</th>
+					<th style="text-align: right">$S_2$ err</th>
+					<th style="text-align: right">Overlap MAE</th>
+					<th style="text-align: right">hist_l1</th>
+					<th style="text-align: right">spec_entropy_diff</th>
+					<th style="text-align: right">freq_ratio_l2</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: right">0.005</td>
+					<td style="text-align: right">31.711</td>
+					<td style="text-align: right">0.9574</td>
+					<td style="text-align: right">0.005513</td>
+					<td style="text-align: right">0.000421</td>
+					<td style="text-align: right">0.001713</td>
+					<td style="text-align: right">15.587</td>
+					<td style="text-align: right">0.01090</td>
+					<td style="text-align: right">$1.10\times10^{-4}$</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">0.01</td>
+					<td style="text-align: right">32.078</td>
+					<td style="text-align: right">0.9631</td>
+					<td style="text-align: right">0.004844</td>
+					<td style="text-align: right">0.000310</td>
+					<td style="text-align: right">0.001368</td>
+					<td style="text-align: right">14.912</td>
+					<td style="text-align: right">0.02043</td>
+					<td style="text-align: right">$3.61\times10^{-5}$</td>
+			</tr>
+			<tr>
+					<td style="text-align: right">0.02</td>
+					<td style="text-align: right">32.112</td>
+					<td style="text-align: right">0.9640</td>
+					<td style="text-align: right">0.004754</td>
+					<td style="text-align: right">0.000312</td>
+					<td style="text-align: right">0.001323</td>
+					<td style="text-align: right">15.274</td>
+					<td style="text-align: right">0.02240</td>
+					<td style="text-align: right">$2.70\times10^{-5}$</td>
+			</tr>
+	</tbody>
 </table></div>
 <p>学习率 0.01–0.02 给出更稳定的像素与频谱一致性，过小学习率会导致 z-inversion 收敛不足。</p>
 <hr>
@@ -1224,6 +1224,19 @@ $$<p>实际实现中 $z_0$ 初始化为零向量，以保证重建过程的确�
             
                 
 <article class="">
+    <a href="/p/cs153-frontier-systems-lesson-3/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 3 阅读笔记</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
     <a href="/p/cs153-frontier-systems-lesson-2/">
         
         
@@ -1254,7 +1267,7 @@ $$<p>实际实现中 $z_0$ 初始化为零向量，以保证重建过程的确�
         
         
             <div class="article-image">
-                <img src="/p/ai-ppt-review/cover.feb1c9418b48c65c0203530e76059a05_hu_d4893c96a0cb4eba.png" 
+                <img src="/p/ai-ppt-review/cover.feb1c9418b48c65c0203530e76059a05_hu_6dd7476af2244957.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1280,30 +1293,6 @@ $$<p>实际实现中 $z_0$ 初始化为零向量，以保证重建过程的确�
 
         <div class="article-details">
             <h2 class="article-title">图像生成论文阅读笔记</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="has-image">
-    <a href="/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/">
-        
-        
-            <div class="article-image">
-                <img src="/p/digital-economy-article-aggregator%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/image.ffd526f926416fef5972147c4f7fcba5_hu_d3794725f3ac288e.png" 
-                        width="250" 
-                        height="150" 
-                        loading="lazy"
-                        alt="Featured image of post Digital Economy Article Aggregator食用指南"
-                        
-                        data-hash="md5-/9Um&#43;SZBb&#43;9ZchR8T3/LpQ==">
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Digital Economy Article Aggregator食用指南</h2>
         </div>
     </a>
 </article>

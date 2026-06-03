@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Anjney Midha 关于 context、compute、capital 与 frontier systems 的课堂笔记">
-<title>Stanford CS153 Frontier Systems | Lesson 1 阅读笔记</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Andreas Blattmann 关于 Black Forest Labs、视觉智能与多模态系统的课堂笔记">
+<title>Stanford CS153 Frontier Systems | Lesson 3 阅读笔记</title>
 
-<link rel='canonical' href='https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-1/'>
+<link rel='canonical' href='https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-3/'>
 
-<link rel="stylesheet" href="/scss/style.min.829fb4d762832054bf4ccfcc6906b7eb8df8a3d45b00b64b6fc4c539dc19645c.css"><meta property='og:title' content="Stanford CS153 Frontier Systems | Lesson 1 阅读笔记">
-<meta property='og:description' content="Anjney Midha 关于 context、compute、capital 与 frontier systems 的课堂笔记">
-<meta property='og:url' content='https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-1/'>
+<link rel="stylesheet" href="/scss/style.min.829fb4d762832054bf4ccfcc6906b7eb8df8a3d45b00b64b6fc4c539dc19645c.css"><meta property='og:title' content="Stanford CS153 Frontier Systems | Lesson 3 阅读笔记">
+<meta property='og:description' content="Andreas Blattmann 关于 Black Forest Labs、视觉智能与多模态系统的课堂笔记">
+<meta property='og:url' content='https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-3/'>
 <meta property='og:site_name' content='Elysium-Seeker'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-05-18T15:02:51&#43;08:00'/><meta property='article:modified_time' content='2026-05-18T15:05:39&#43;08:00'/>
-<meta name="twitter:title" content="Stanford CS153 Frontier Systems | Lesson 1 阅读笔记">
-<meta name="twitter:description" content="Anjney Midha 关于 context、compute、capital 与 frontier systems 的课堂笔记">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-06-03T16:56:06&#43;08:00'/><meta property='article:modified_time' content='2026-06-03T16:58:38&#43;08:00'/>
+<meta name="twitter:title" content="Stanford CS153 Frontier Systems | Lesson 3 阅读笔记">
+<meta name="twitter:description" content="Andreas Blattmann 关于 Black Forest Labs、视觉智能与多模态系统的课堂笔记">
     <link rel="shortcut icon" href="/favicon.ico" />
 <style>
     :root {
@@ -243,23 +243,13 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#lesson-1-anjney-midha-from-amp-pbc-on-frontier-systems">Lesson 1 Anjney Midha from AMP PBC on Frontier Systems</a></li>
-    <li><a href="#context">Context</a>
-      <ol>
-        <li><a href="#context-的定义">context 的定义</a></li>
-      </ol>
-    </li>
-    <li><a href="#强化学习的局限性">强化学习的局限性</a></li>
-    <li><a href="#scaling">Scaling</a></li>
-    <li><a href="#回到-infrastructure">回到 Infrastructure</a></li>
-    <li><a href="#算力不是商品的原因">算力不是商品的原因</a></li>
-    <li><a href="#需要思考的问题">需要思考的问题</a></li>
-    <li><a href="#补充材料">补充材料</a>
-      <ol>
-        <li><a href="#the-bitter-lesson">The Bitter Lesson</a></li>
-        <li><a href="#how-scaling-laws-drive-smarter-more-powerful-ai">How Scaling Laws Drive Smarter, More Powerful AI</a></li>
-      </ol>
-    </li>
+    <li><a href="#自然表征与非自然表征">自然表征与非自然表征</a></li>
+    <li><a href="#从技术到真实问题">从技术到真实问题</a></li>
+    <li><a href="#团队与领导力">团队与领导力</a></li>
+    <li><a href="#模型如何学习物理世界">模型如何学习物理世界</a></li>
+    <li><a href="#开源与个性化">开源与个性化</a></li>
+    <li><a href="#diffusion-与步数压缩">Diffusion 与步数压缩</a></li>
+    <li><a href="#关于-3d">关于 3D</a></li>
   </ol>
 </nav>
         </div>
@@ -291,12 +281,12 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/cs153-frontier-systems-lesson-1/">Stanford CS153 Frontier Systems | Lesson 1 阅读笔记</a>
+            <a href="/p/cs153-frontier-systems-lesson-3/">Stanford CS153 Frontier Systems | Lesson 3 阅读笔记</a>
         </h2>
     
         
         <h3 class="article-subtitle">
-            Anjney Midha 关于 context、compute、capital 与 frontier systems 的课堂笔记
+            Andreas Blattmann 关于 Black Forest Labs、视觉智能与多模态系统的课堂笔记
         </h3>
         
     </div>
@@ -317,7 +307,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">2026-05-18</time>
+                <time class="article-time--published">2026-06-03</time>
             </div>
         
 
@@ -332,7 +322,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 7 分钟
+                    阅读时长: 4 分钟
                 </time>
             </div>
         <div class="article-lastmod">
@@ -345,7 +335,7 @@
 
 
                 <time>
-                    2026-05-18
+                    2026-06-03
                 </time>
             </div></footer>
     
@@ -367,141 +357,64 @@
 
 
 <section class="article-content">
-    <p>本来是虚度一个周末后，为了减轻负罪感在周一早上零点打开的。</p>
-<p>意外地发现很值得听且很有收获，起码远大于营销号了。</p>
-<p>预计后面每两天上一节并做相关笔记。</p>
-<p>课程视频：<a class="link" href="https://www.youtube.com/watch?v=O5PfU_uDhS0"  target="_blank" rel="noopener"
-    >Stanford CS153 Frontier Systems | Anjney Midha from AMP PBC on Frontier Systems</a></p>
-<h2 id="lesson-1-anjney-midha-from-amp-pbc-on-frontier-systems">Lesson 1 Anjney Midha from AMP PBC on Frontier Systems
-</h2><p>前十几分钟的寒暄与介绍直接略过。</p>
-<p>the bottlenecks of artificial intelligence: context, compute, capital（资本）, and culture.</p>
-<h2 id="context">Context
-</h2><p>首先 context。</p>
-<p>要讲清 context，首先需要明白 RL 的原理。</p>
-<p>其实可以用非常简单的方式理解：想提高某个系统在指定任务上的能力时，用给予 reward 的方式代替直接教学具体做法。在完成任务时给予 high reward，并在失败时给予 low reward。反向传播并重复即可。</p>
-<p>在使用 LLM 这类强智能代理进行 RL 时，甚至可能不需要人工进行反向传播。它自己会学习，且随着算力与可供利用的资料增多，其智能也会提升。</p>
-<p>过往强化学习会在各个领域迅速趋于稳定状态，在超越人类的表现后，由于本身先验推理能力的限制（如各类下棋专用模型），很容易到达平台期。</p>
-<p>而 LLM 本身有充足的先验知识，所以在 RL 上有出人意料的表现。</p>
-<p>Anthropic 的初步盈利构想：筹集一些资金，购买一些 compute，用数据增强它，进行 pre-train，然后得到一个足够好的模型，让人们愿意使用它并为它付款，再用得到的资金中的一部分重复这个循环。</p>
-<h3 id="context-的定义">context 的定义
-</h3><ol>
-<li>能够被验证是否正确及可用的交互环境。</li>
-</ol>
-<p><strong>Verifiability</strong> 的重要性：一个任务能通过 RL 被提升，最重要的就是有 verifiability（可验证性）。可验证才能确定 reward，后文将有更详细的叙述。</p>
-<ol start="2">
-<li>用户的使用与修改数据。</li>
-</ol>
-<p>比如怎么修改模型生成的代码，怎么 git，怎么重新给提示词以达到用户目的，blah blah blah。</p>
-<ol start="3">
-<li>机密的高价值数据。</li>
-</ol>
-<p>在一个领域里，一个团队能在竞争中取得成功的核心，是拥有 unique and defensible access to some context（对某些上下文独特且可防御的权限）。</p>
-<p>在机密环境下数据不可泄露，所以需要本地部署的模型。</p>
-<p>目前的 road to AGI / ASI：recursive takeoff。</p>
-<h2 id="强化学习的局限性">强化学习的局限性
-</h2><ol>
-<li>
-<p>哲学观点：给定正确的 context，给定足够的 compute，agent could learn everything.</p>
-</li>
-<li>
-<p>经验观点（empirical view）：生活是混乱的。在可验证的领域（其实我认为“可量化成果”这样的词更为准确，whatever，就这样吧）很容易有提升，例如 coding；但在其他领域并不那么容易，例如 aesthetic, beauty, and love.</p>
-</li>
-</ol>
-<p>现有的前沿模型在 creative writing 上的表现是 catastrophic 级别的。</p>
-<p>所以，DON&rsquo;T SHOW AI-GENERATED DOCUMENT！</p>
-<p>对于文本：We think, we sit, we write, and we share with each other, even if it&rsquo;s raw.</p>
-<p>在现在市场还算空白的时间，总有一些前沿领域是只有你能理解和验证的：Because of your obsession, your love, your taste, your sense of beauty, your culture.</p>
-<p>创业的核心：what is the unique frontier that they can verify for humanity?</p>
-<h2 id="scaling">Scaling
-</h2><p>Scaling：模型能力随着计算的增长而可预测地扩展。</p>
-<p>每次公司推出新模型后，功能出现跳跃，然后收入也随之跳跃。</p>
-<p>Dollar in, dollar out.</p>
-<p>大模型公司为了算力投入硬件等硬资产，得到能力更强的模型等软件资产。</p>
-<p>但硬资产由于低市销率，估值通常只有年入的 3-4 倍。</p>
-<p>而产出的软件资产由于没有边际成本且有高毛利和高增长，估值通常能到年入的 30-40 倍。</p>
-<p>所以大模型公司所做的，就是投入 1 美元算力（本质是低估值资产），在 60-90 天的转化后，得到 1 美元的软件服务收入（高估值的资产）。</p>
-<p>这在资本市场上创造了整整放大 10 倍的价值杠杆。</p>
-<p>碎碎念：前提是投入的算力确实能换回同样增长级别的软件服务收入。</p>
-<p>从 chatbot 到 agent，结构的变换提升了数十倍的用量。</p>
-<p>推理消耗的算力 &amp; multi-agent 可能是未来？</p>
-<h2 id="回到-infrastructure">回到 Infrastructure
-</h2><p>主要解释 compute 不是商品。</p>
-<p>首先是事实：在过去的数年以来，H100 没有降价，反而价格一直在上升。</p>
-<p>传统的硬件设备都会面临折旧。以前的芯片遵从摩尔定律，每过一段时间都会有更好的新芯片，从而导致旧芯片大幅贬值。所以这类硬件设备被视为沉没成本和负担，公司以租赁算力而非购买芯片来使用算力。</p>
-<p>而现在的芯片，如前文所说，被购买后可以将硬件价值转化成软件服务价值，且由于顶级 AI 芯片的极度短缺，价格不降反升，成为公司的现金流机器。</p>
-<p>算力不是贬值的固定资产，而是高收益率的生产机器。</p>
-<p>现在芯片的经济形势可以与 19 世纪后不安的钢铁作比。工业革命之后钢铁也被需要，于是也是先涨价，直到某一年因为一些微不足道的事泡沫突然崩塌，价格回落到极低点，再到最后稳定。</p>
-<p>半导体、航运、铀都经历过类似的价格浮动。所以芯片和 AI 也有可能，但人们也希望我们能理想地跳过整个繁荣和萧条的过程。这对任何人来说都不好玩（经济危机）。</p>
-<p>AI scaling is a combination of massive，需要整合大量物理资源才能产生软件收入。AI 规模的扩展本质是重工业与能源问题。目前人们的目标是让物理世界的扩展速度尽量跟上虚拟世界的进化速度。Till now，算力仍旧稀缺。</p>
-<p><strong>Is it something where all of you should be spending your time wondering, should you be making chips? Should you be making more, better, interconnect? Or should you be spending time on distilling your aesthetics, your creativity, your intelligence?</strong></p>
-<h2 id="算力不是商品的原因">算力不是商品的原因
-</h2><ol>
-<li>算力是不可替代的。</li>
-</ol>
-<p>不同厂家，甚至同一厂家的不同型号芯片都不能直接互换，没有标准化，且软件与硬件高度绑定，更换需要软件和硬件层面（机房基础设施）的大量重构。DS 为了适配国产芯片做了大量工作。</p>
-<ol start="2">
-<li>需求、产能和成本无法被标准公式预测。</li>
-</ol>
-<p>由于算力在不同供应商、不同型号之间无法代换，且整个行业还在快速发展，它的需求、大模型的产能和成本是无法被标准公式预测的，而且存在不同时段的各种不稳定性。</p>
-<p>于是大企业们开始垄断所有芯片，即使他们中的很大一部分由于第一个问题根本就没有开始运转。</p>
-<p>同样的，无用的 vibe coding 也在浪费算力。</p>
-<p>为了解决不可替代性和不可预测性的问题，需要：</p>
+    <p>课程视频：<a class="link" href="https://www.youtube.com/watch?v=CBaLU0dDEY8"  target="_blank" rel="noopener"
+    >Stanford CS153 Frontier Systems | Andreas Blattmann from Black Forest Labs on Visual Intelligence</a></p>
+<p>这一课的主讲人是 Black Forest Labs 的 Andreas Blattmann，主题是 visual intelligence。整体上仍然围绕 frontier system 展开，不过这一讲更贴近图像、视频、多模态与物理世界之间的关系。</p>
+<h2 id="自然表征与非自然表征">自然表征与非自然表征
+</h2><p>自然表征中存在冗余，比如图像或物理世界的潜空间中会有大量重复、相关和可压缩的信息。</p>
+<p>但在人为产物中，比如文本，这种冗余并不以同样的方式存在。在整个进化过程中，我们一直在减少冗余，并让信息表达变得更高效。</p>
+<p>学习的过程可以理解为：</p>
 <ol>
-<li>
-<p>标准，just like AC / DC and TCP / IP。商品标准化才能替代，才能省去大量的重构工作。</p>
-</li>
-<li>
-<p>执行标准的机构。因为人类不可避免地会在某种程度上出现偏差，需要有人协调才能使标准被大规模接受和采用。</p>
-</li>
+<li>观察。</li>
+<li>互动。</li>
+<li>从反馈中修正表征。</li>
 </ol>
-<p>在教科书上，Commodity means a common unit. It needs a standard delivery interface. It needs interconnection and pooling, needs metering, control and settlement. And the buyers can substitute one supplier&rsquo;s unit for another.</p>
-<p>而算力现在显然不符合这里的要求。</p>
-<h2 id="需要思考的问题">需要思考的问题
-</h2><ol>
-<li>
-<p>what will it take to ensure a peaceful transition on compute over the next couple of years?</p>
-</li>
-<li>
-<p>what is your part in this?</p>
-</li>
-</ol>
-<h2 id="补充材料">补充材料
-</h2><h3 id="the-bitter-lesson">The Bitter Lesson
-</h3><p>写得太好了所以补一点。</p>
-<p>核心思想是：纯堆算力的通用方法，往往比那些神秘的小巧思有效得多。</p>
-<p>从棋类开始，那些靠人类精心设计的策略就打不过爆搜了。</p>
-<p>现在更是如此。</p>
-<p>教训本身：</p>
+<p>从这个角度看，系统的发展也在从单模态走向多模态。模型不只是生成内容，而是逐渐尝试理解内容与环境之间的关系。</p>
+<h2 id="从技术到真实问题">从技术到真实问题
+</h2><p>obviously once you can build the technology, but setting that technology out to solve real world problems will give you the very important data to actually learn from.</p>
+<p>翻译：显然，一旦你能把技术做出来，把它放到真实世界的问题中去解决问题，才会带来真正重要的、可供学习的数据。</p>
+<p>这里的核心是：技术本身不是闭环，真实世界中的使用、失败和反馈才是闭环。</p>
+<p>图像模型的第一个核心能力是角色一致性。对于视觉模型来说，这类一致性并不是单纯的审美问题，而是它能否稳定理解并延续一个对象、人物或场景的基础。</p>
+<h2 id="团队与领导力">团队与领导力
+</h2><p>As a new team or as a first time researcher, it can be quite daunting when some lab that has way more resources than you launches something that looks way better. And your first intuition is to go, oh my god, we&rsquo;re [BLEEP]. But you gotta remember that the mark of a good leader is to not panic, keep calm, look at the data, assess the landscape, and then come up with a plan.</p>
+<p>翻译：作为一个新团队，或者第一次做研究的人，当资源远多于你的实验室发布了看起来强得多的东西时，这会非常吓人。你的第一反应可能是：完了。但你需要记住，优秀领导者的标志是不要慌，保持冷静，看数据，评估整体局势，然后制定计划。</p>
+<p>it&rsquo;s actually quite straightforward sometimes technically, if you have the right leadership to keep advancing the frontier.</p>
+<p>翻译：有时候从技术上说，事情其实相当直接，前提是你有合适的领导力持续推动 frontier。</p>
+<p>这一段挺有意思。很多时候前沿竞争给人的感觉是纯技术差距，但 Andreas 更强调在压力下读数据、判断局势和继续推进的能力。</p>
+<h2 id="模型如何学习物理世界">模型如何学习物理世界
+</h2><p>关于模型如何学习与物理世界交互，可以有两种比较直观的路径：</p>
 <ol>
-<li>
-<p>AI researchers have often tried to build knowledge into their agents.</p>
-</li>
-<li>
-<p>this always helps in the short term, and is personally satisfying to the researcher.</p>
-</li>
-<li>
-<p>but in the long run it plateaus and even inhibits further progress.</p>
-</li>
-<li>
-<p>breakthrough progress eventually arrives by an opposing approach based on scaling computation by search and learning.</p>
-</li>
+<li>通过预测视频的下一帧来学习。</li>
+<li>通过操控机器人，并从真实操作反馈中学习。</li>
 </ol>
-<p>把小巧思构建进智能体短期有用但长期阻碍发展，而最终的成功往往是纯粹的、基于搜索和学习的 compute scaling。</p>
-<p>One thing that should be learned from the bitter lesson is the great power of general purpose methods, of methods that continue to scale with increased computation even as the available computation becomes very great. The two methods that seem to scale arbitrarily in this way are search and learning.</p>
-<p>以及：the actual contents of minds are tremendously, irredeemably complex; we should stop trying to find simple ways to think about the contents of minds.</p>
-<h3 id="how-scaling-laws-drive-smarter-more-powerful-ai">How Scaling Laws Drive Smarter, More Powerful AI
-</h3><p>讲解了三种 scaling 及其效果。</p>
-<p>首先是 Pretraining Scaling。</p>
-<p>非常传统的砸模型参数、训练数据集和算力大小。</p>
-<p>根据 Chinchilla Scaling Laws，一味扩大模型参数量或数据是没有用的。更大的模型参数需要更多的数据支撑，反之亦然，从而训练期间需要更多算力，进而可以有预期地提升模型智能。</p>
-<p>然后是 Post-Training Scaling。</p>
-<p>在预训练模型的基础上针对特定任务微调。</p>
-<p>采用包括但不限于 fine-tuning, pruning, quantization, distillation, reinforcement learning and synthetic data augmentation 等方法。（希望我回来看的时候能一个个说出它们分别是什么。）</p>
-<p>单个 Post-Training Scaling 是相对省算力的，但是考虑到做后训练的总量巨大，对于开源模型来说，后训练阶段所花的总算力可能是预训练的 30x 往上。</p>
-<p>最后是 Test-Time Scaling。</p>
-<p>也就是推理模型干的事：在推理过程中分配额外算力，推理完再给答案。</p>
-<p>方法有很多，不一一列举。比较经典的是思维链和多数投票采样。</p>
-<p>感觉可以列出大模型增大用户 token 消耗的路径了：从 chatbot 到推理 chatbot 到 agent，严重怀疑工具调用也杀 token，再然后是 OpenClaw 这种巨杀 token 的架构和 multi-agent。</p>
+<p>这个过程可以简化为：</p>
+<p>预测 -&gt; 验证 -&gt; 学习。</p>
+<p>模型需要暴露在物理世界中，同时又要有合适的边界条件。没有边界条件，系统很容易变成不可控的试错；没有真实世界暴露，又很难获得足够有价值的反馈。</p>
+<p>anytime the answer to the eval question of how do you verify is it depends on the audience or it depends on the person consuming the system.</p>
+<p>翻译：只要关于“如何验证”的评估问题，答案变成了“取决于受众”或“取决于使用系统的人”，事情就会变得更复杂。</p>
+<p>这也说明，视觉智能的评估并不像一些封闭任务那样清晰。不同用户、不同场景、不同消费方式，对结果质量的判断可能完全不同。</p>
+<h2 id="开源与个性化">开源与个性化
+</h2><p>开源的核心优势在于针对用户定制和微调，尤其是在自定义需求很强的场景里。</p>
+<p>anywhere you have consumers of a system or customers or the people benefiting from the system wanting more and more personalization and customization of the system for themselves, that&rsquo;s where open models become extraordinarily valuable.</p>
+<p>翻译：只要系统的消费者、客户，或者受益于系统的人越来越想要个性化和自定义，开源模型就会变得极其有价值。</p>
+<p>the way you get infrastructure to move stably is you have trusted standards and trusted institutions to enforce them.</p>
+<p>翻译：让基础设施稳定发展的方式，是拥有可信的标准，以及能够执行这些标准的可信机构。</p>
+<p>这里可以和前两节课联系起来看：frontier system 不只是模型本身，还包括模型如何被部署、信任、定制、标准化，以及如何被机构和社区共同维护。</p>
+<h2 id="diffusion-与步数压缩">Diffusion 与步数压缩
+</h2><p>diffusion 可以通过蒸馏减少步数，从原来的数百步去噪，到现在的 4 步甚至 2 步。</p>
+<p>这样看，它和 drifting 并没有太大区别：核心都是让模型在更少步骤内逼近可用结果，只是具体技术路径不同。</p>
+<p>关于商业模式，则可以拆成几个维度：</p>
+<ol>
+<li>不同尺寸。</li>
+<li>不同速度。</li>
+<li>不同定价。</li>
+<li>不同性能。</li>
+</ol>
+<p>这些维度放在视觉模型里尤其直观：有些场景要快，有些场景要质量，有些场景要便宜，有些场景要足够可控。</p>
+<h2 id="关于-3d">关于 3D
+</h2><p>显式的、带有具体坐标的 3D，并不是那么通用和灵活。</p>
+<p>更有潜力的方向，是根据感知和互动学习隐式的 3D 表示。这样的表示可能有更好的性能，也更符合未来趋势。</p>
+<p>换句话说，模型未必需要先拥有一个明确的坐标系，再去理解世界。它也可能在感知、行动和反馈中逐渐形成可用的空间理解。</p>
 
 </section>
 
@@ -532,7 +445,7 @@
 
 
         <span>
-            最后更新于 2026-05-18
+            最后更新于 2026-06-03
         </span>
     </section></footer>
 
@@ -577,12 +490,12 @@
             
                 
 <article class="">
-    <a href="/p/cs153-frontier-systems-lesson-3/">
+    <a href="/p/cs153-frontier-systems-lesson-2/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 3 阅读笔记</h2>
+            <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 2 阅读笔记</h2>
         </div>
     </a>
 </article>
@@ -590,12 +503,12 @@
             
                 
 <article class="">
-    <a href="/p/cs153-frontier-systems-lesson-2/">
+    <a href="/p/cs153-frontier-systems-lesson-1/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 2 阅读笔记</h2>
+            <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 1 阅读笔记</h2>
         </div>
     </a>
 </article>
