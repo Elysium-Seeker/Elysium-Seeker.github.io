@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="多模态推理模型、视觉交错推理与潜空间推理学习笔记">
+<title>Multimodal Models 学习笔记 Chapter 0</title>
+
+<link rel='canonical' href='https://Elysium-Seeker.github.io/p/multimodal-models-chapter-0/'>
+
+<link rel="stylesheet" href="/scss/style.min.829fb4d762832054bf4ccfcc6906b7eb8df8a3d45b00b64b6fc4c539dc19645c.css"><meta property='og:title' content="Multimodal Models 学习笔记 Chapter 0">
+<meta property='og:description' content="多模态推理模型、视觉交错推理与潜空间推理学习笔记">
+<meta property='og:url' content='https://Elysium-Seeker.github.io/p/multimodal-models-chapter-0/'>
+<meta property='og:site_name' content='Elysium-Seeker'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-07-06T00:00:00&#43;08:00'/><meta property='article:modified_time' content='2026-07-06T13:49:30&#43;08:00'/>
+<meta name="twitter:title" content="Multimodal Models 学习笔记 Chapter 0">
+<meta name="twitter:description" content="多模态推理模型、视觉交错推理与潜空间推理学习笔记">
+    <link rel="shortcut icon" href="/favicon.ico" />
+<style>
+    :root {
+        --article-font-family: "Noto Serif SC", var(--base-font-family);
+		--article-font-size: 1.7rem;
+		--article-line-height: 1.8;
+    }
+</style>
+
+<script>
+		(function () {
+		    const customFont = document.createElement('link');
+		    customFont.href = "https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap";
+		
+		    customFont.type = "text/css";
+		    customFont.rel = "stylesheet";
+		
+		    document.head.appendChild(customFont);
+		}());
+</script>
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/b_bafc54ed2304790292888aa8183afddb_hu_25b25cb3ac2ccae0.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">⭐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Elysium-Seeker</a></h1>
+            <h2 class="site-description">请用一支玫瑰纪念我</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Elysium-Seeker'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E9%93%BE/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友链</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#250504921-perception-reason-think-and-plan-a-survey-on-large-multimodal-reasoning-models">2505.04921: Perception, Reason, Think, and Plan: A Survey on Large Multimodal Reasoning Models</a>
+      <ol>
+        <li><a href="#1-introduction">1. Introduction</a></li>
+        <li><a href="#2-evolving-paradigms">2. Evolving Paradigms</a>
+          <ol>
+            <li><a href="#stage-1-感知驱动的模块化推理---设计特定任务的推理系统">Stage 1. 感知驱动的模块化推理 - 设计特定任务的推理系统</a></li>
+            <li><a href="#stage-2-以语言为中心的短推理---system-1-推理">Stage 2. 以语言为中心的短推理 - System-1 推理</a></li>
+            <li><a href="#stage-3-以语言为中心的长推理---system-2-思考和规划">Stage 3. 以语言为中心的长推理 - System-2 思考和规划</a></li>
+            <li><a href="#stage-4-towards-native-large-multimodal-reasoning-model-prospect">Stage 4: Towards Native Large Multimodal Reasoning Model (Prospect)</a></li>
+          </ol>
+        </li>
+        <li><a href="#3-roadmap-of-multimodal-reasoning-models">3. Roadmap of Multimodal Reasoning Models</a>
+          <ol>
+            <li><a href="#31-stage-1-perception-driven-modular-reasoning---developing-task-specific-reasoning-modules">3.1 Stage 1 Perception Driven Modular Reasoning - Developing Task-Specific Reasoning Modules</a></li>
+            <li><a href="#32-stage-2-language-centric-short-reasoning---system-1-reasoning">3.2 Stage 2 Language-Centric Short Reasoning - System-1 Reasoning</a></li>
+            <li><a href="#33-stage-3-language-centric-long-reasoning---system-2-thinking-and-planning">3.3 Stage 3 Language-Centric Long Reasoning - System-2 Thinking and Planning</a></li>
+          </ol>
+        </li>
+        <li><a href="#4-towards-native-multimodal-reasoning-model">4. Towards Native Multimodal Reasoning Model</a>
+          <ol>
+            <li><a href="#41-experimental-findings">4.1 Experimental Findings</a></li>
+            <li><a href="#42-capability-of-n-lmrms">4.2 Capability of N-LMRMs</a></li>
+            <li><a href="#43-technical-prospects">4.3 Technical Prospects</a></li>
+          </ol>
+        </li>
+        <li><a href="#5-dataset-and-benchmark">5 Dataset and Benchmark</a>
+          <ol>
+            <li><a href="#51-multimodal-understanding">5.1 Multimodal Understanding</a></li>
+            <li><a href="#52-multimodal-generation">5.2 Multimodal Generation</a></li>
+            <li><a href="#53-multimodal-reasoning">5.3 Multimodal Reasoning</a></li>
+            <li><a href="#54-multimodal-planning">5.4 Multimodal Planning</a></li>
+            <li><a href="#55-evaluation-method">5.5 Evaluation Method</a></li>
+          </ol>
+        </li>
+        <li><a href="#6-conclusion">6 Conclusion</a></li>
+      </ol>
+    </li>
+    <li><a href="#260608464-tvi-cot-text-visual-interleaved-chain-of-thought-reasoning-for-multimodal-understanding">2606.08464 TVI-CoT: Text-Visual Interleaved Chain-of-Thought Reasoning for Multimodal Understanding</a></li>
+    <li><a href="#260616122-thinking-with-visual-grounding">2606.16122 Thinking with Visual Grounding</a></li>
+    <li><a href="#260615231-visual-seeker-towards-visual-native-multimodal-agentic-search-via-active-visual-reasoning">2606.15231 Visual-Seeker: Towards Visual-Native Multimodal Agentic Search via Active Visual Reasoning</a></li>
+    <li><a href="#260600562-deeplatent-think-with-images-via-parallel-latent-visual-reasoning">2606.00562 DeepLatent: Think with Images via Parallel Latent Visual Reasoning</a></li>
+    <li><a href="#260601243-unlocking-the-black-box-of-latent-reasoning-an-interpretability-guided-approach-to-intervention">2606.01243 Unlocking the Black Box of Latent Reasoning: An Interpretability-Guided Approach to Intervention</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/work/" style="background-color: #708090; color: #fff;">
+                Work
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/multimodal-models-chapter-0/">Multimodal Models 学习笔记 Chapter 0</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            多模态推理模型、视觉交错推理与潜空间推理学习笔记
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-07-06</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 25 分钟
+                </time>
+            </div>
+        <div class="article-lastmod">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time>
+                    2026-07-06
+                </time>
+            </div></footer>
+    
+
+    
+</div>
+
+</header>
+
+    
+
+
+
+
+
+
+
+
+
+
+<section class="article-content">
+    <p>找了个相对感兴趣些的方向重新开个科研的坑</p>
+<p>希望这次能够一切顺利</p>
+<h2 id="250504921-perception-reason-think-and-plan-a-survey-on-large-multimodal-reasoning-models">2505.04921: Perception, Reason, Think, and Plan: A Survey on Large Multimodal Reasoning Models
+</h2><p>先从综述开始了解一下领域发展吧</p>
+<h3 id="1-introduction">1. Introduction
+</h3><p>大型多模态推理模型（LMRMs）：整合多种数据模态，能展现复杂推理能力。</p>
+<p>限制：泛化能力，推理深度和智能体式行为</p>
+<p>方法演进：</p>
+<ol>
+<li>
+<p>感知驱动的模块化推理，推理隐含在任务专用模块内部</p>
+</li>
+<li>
+<p>以语言为中心的短推理（system-1），多模态推理通过prompt和结构化短思维链涌现</p>
+</li>
+<li>
+<p>以语言为中心的长推理（system-2），其中长时间思考、规划和智能体式行为由扩展推理链与强化学习驱动。</p>
+</li>
+</ol>
+<p><strong>For future:</strong> N-LMRMs: 推理能力从全模态感知、交互和目标驱动认知中原生涌现</p>
+<h3 id="2-evolving-paradigms">2. Evolving Paradigms
+</h3><h4 id="stage-1-感知驱动的模块化推理---设计特定任务的推理系统">Stage 1. 感知驱动的模块化推理 - 设计特定任务的推理系统
+</h4><p>在这个初始阶段，多模态推理能力通过模态化的推理模块开发，早期将推理过程分解为单独的组件：表示、对齐、融合和推理。随着该领域逐渐转向预训练-微调范式，VLM兴起，旨在统一表示对齐和融合的过程。但是这种统一在强调视觉表示和跨模式融合的同时，牺牲了更深入的语言语义建模。推理一般只能做分类，限制了上下文感知和广义推理。以隐式为主。</p>
+<h4 id="stage-2-以语言为中心的短推理---system-1-推理">Stage 2. 以语言为中心的短推理 - System-1 推理
+</h4><p>变成了端到端的整体MLLM，多模态数据投影成token然后直接走LLM输出文本。核心提升空间从感知能力到认知推导能力。由分类范式转向生成范式。推理可以被显式化，通过特定微调和prompt可以让模型生成多模态思维链（MCoT），并据此提高推理能力。但这一阶段的推理仍然是short and reactive。泛化能力弱。</p>
+<h4 id="stage-3-以语言为中心的长推理---system-2-思考和规划">Stage 3. 以语言为中心的长推理 - System-2 思考和规划
+</h4><p>转向 System-2 推理，强调较慢的、深思熟虑的和方法论上结构化的认知过程，将推理视为智能行为本身的核心组成部分。沿着三个关键维度（推理模式、推理范式和学习方法）扩展 MCoT ：LMRM 。</p>
+<p>推理模态：跨模态推理链，用多种信号联合推理。</p>
+<p>推理范式：longer, higher-quality chains and generalized, methodologically guided reasoning strategies</p>
+<p>学习方法：强化学习增强</p>
+<h4 id="stage-4-towards-native-large-multimodal-reasoning-model-prospect">Stage 4: Towards Native Large Multimodal Reasoning Model (Prospect)
+</h4><p>LMRM的限制：过于依赖视觉和语言信号，对其他数据类型的处理相对较弱。在交互式、长期推理和自适应规划方面存在缺陷。与动态环境迭代交互能力不发达。</p>
+<p>展望N-LMRM：在完全端到端的架构中统一多模态理解、生成和代理推理。</p>
+<p>核心能力：</p>
+<ol>
+<li>
+<p>多模态智能体推理：主动交互，学习，做长期规划，动态适应</p>
+</li>
+<li>
+<p>全模态理解和生成推理：异构数据融合，上下文多模态生成，模态无关推理</p>
+</li>
+</ol>
+<h3 id="3-roadmap-of-multimodal-reasoning-models">3. Roadmap of Multimodal Reasoning Models
+</h3><h4 id="31-stage-1-perception-driven-modular-reasoning---developing-task-specific-reasoning-modules">3.1 Stage 1 Perception Driven Modular Reasoning - Developing Task-Specific Reasoning Modules
+</h4><p>限制：数据，网络架构，学习方法</p>
+<p>以 Task-Specific 的推理模型为主，用不同的模块化实现表示、对齐、融合和推理。</p>
+<p>结构为手动设计，任务导向，感知驱动</p>
+<h5 id="311-modular-reasoning-networks">3.1.1 Modular Reasoning Networks
+</h5><p>感知驱动的设计演进：CNN（图）&amp;LSTM（文）-&gt;NMN（动态组装模块）&amp; (HieCoAtt, SAN, UpDn, MCAN)（注意力机制）&amp; (MCB, BAN)（双线性，紧凑&amp;网络化）&amp; (DMN,MAC)（记忆）&amp; (ReasonNet, MuRel)（关系）-&gt;基于Transformer的预训练VLM</p>
+<h5 id="312-vision-language-models-based-modular-reasoning">3.1.2 Vision-Language Models-based Modular Reasoning
+</h5><p>引入Transformer的VLM统一了表示（图像和文字表示成token嵌入隐空间），对齐，融合（Transformer相似token潜空间距离近&amp;自注意力机制）和推理的过程（依靠LLM）、</p>
+<p>三种基于VLM的预训练模块化推理：</p>
+<ol>
+<li>双流架构Dual-Encoder Contrastive Reasoning：图文分开编码（Transformer），然后拉到统一的潜空间，再通过对比学习算相似度拉近/拉远“图文对”之间的距离</li>
+</ol>
+<p>优势：速度快，零样本感知强</p>
+<p>劣势：图文的融合效果欠佳（仅最后实现）推理能力弱</p>
+<ol start="2">
+<li>单流架构Single-Transformer-Backbone Interactive Reasoning：用传统CNN等方法把图转成和文字token相同维度的向量，拼到一起之后直接跑Transformer</li>
+</ol>
+<p>优势：跨模态融合度高（图文之间都给了multi-attention），隐式推理能力强</p>
+<p>劣势：复杂度爆炸，缺乏生成灵活性（双向注意力，没有decoder，通常最后一层只能接线性层做分类等工作）</p>
+<ol start="3">
+<li>基于多模态大语言模型的内隐推理Multimodal LLMs-based Implicit Reasoning：把视觉输入投影到LLM的文本空间中，利用LLM的上下文推理能力处理。</li>
+</ol>
+<p>优势：比前两种强的多的上下文推理能力，架构扩展性强，交互方式自由</p>
+<p>劣势：推理隐式，对齐依赖映射层，缺乏自适应机制</p>
+<h4 id="32-stage-2-language-centric-short-reasoning---system-1-reasoning">3.2 Stage 2 Language-Centric Short Reasoning - System-1 Reasoning
+</h4><p>数据到一定规模之后，MLLM开始涌现推理能力，但主要依赖于隐含的相关性而不是显式的逻辑过程导致其推论通常肤浅。MCoT是一种对显式推理简单但十分有效的方法，通过合并中间推理步骤，MCoT改进了跨模态对齐、知识集成和上下文基础，且不需要额外的监督或重大的架构修改。</p>
+<h5 id="321-prompt-based-mcot">3.2.1 Prompt-based MCoT
+</h5><p>基于提示词的多模态思维链把文本CoT范式扩展到了多模态上下文，可实现跨模态进行逐步推理，提供强大的可解释性且基本不需要额外训练。</p>
+<h5 id="322-structural-reasoning">3.2.2 Structural Reasoning
+</h5><p>结构推理侧重于通过监督训练来学习推理模式。通过集成显式的程序结构，将松散引导的推理转换为标准化的。分阶段的过程。提高了复杂多模态任务的可扩展性、可靠性和效率。（本质微调）</p>
+<ol>
+<li>
+<p>推理依据构建：学习生成原子推理步骤作为可解释的支架（用各种方法在监督训练时让它生成好的推理内容再解答）</p>
+</li>
+<li>
+<p>定义的推理程序：使结构化文本推理方案适应多模态设置（让模型学习结构化的推理架构，或者说推理模版）</p>
+</li>
+<li>
+<p>特定于模态的结构推理：进一步结合模态感知约束和设计，以更好地符合视觉、听觉或具体输入的特征（针对模态做了特殊优化，比如在图上聚焦于特定的与文字语义相关的部分，对图片从粗到细的理解，图片坐标文本化，把音试频信号分时段想办法解耦成单个图片/短声音信号）</p>
+</li>
+</ol>
+<h5 id="323-externally-augmented-reasoning">3.2.3 Externally Augmented Reasoning
+</h5><p>引入先进算法、辅助工具或专家模块弥补模型固有推理能力的限制。这些组件在推理时集成或在训练期间耦合，从而实现更灵活、可扩展和任务专用的推理工作流程。通过将核心推理步骤与基础模型解耦，此类方法支持长程规划、精确基础以及对动态或特定领域信息的访问。</p>
+<ol>
+<li>
+<p>搜索算法增强的 MCoT，它通过各种搜索算法导航推理空间</p>
+<ol>
+<li>
+<p>MM-ToT：用不同的推理路径建图，然后利用类似启发式搜索的办法找最好的推理路径。</p>
+</li>
+<li>
+<p>HoT：把上下文，核心特征，中间推理产物拆解为思想节点，把互有关联的连在一起形成超边，从而在线性基础上实现并行推理</p>
+</li>
+<li>
+<p>AGoT：先用文本构建推理图，再往节点内注入并聚合视觉特征，最后搜索得到推理文本</p>
+</li>
+<li>
+<p>BDoG：multiagent 正反方迭代辩论，主持人综合辩论内容得到最终答案</p>
+</li>
+</ol>
+</li>
+<li>
+<p>基于工具的增强，利用外部语言工具或系统来指导推理执行（链接文本与空间，外挂记忆，生成中间图像，多模态映射到纯文本，算法线索）</p>
+</li>
+<li>
+<p>检索增强推理，将外部来源的相关多模态知识纳入推理路径（RAG知识库）</p>
+</li>
+<li>
+<p>多模态增强，其中包含专门的多模态模块来支持感知驱动的推理。（引入视觉专家处理图像，做当前场景图/提取视觉特征，VISPROG自我迭代）</p>
+</li>
+</ol>
+<h4 id="33-stage-3-language-centric-long-reasoning---system-2-thinking-and-planning">3.3 Stage 3 Language-Centric Long Reasoning - System-2 Thinking and Planning
+</h4><p>虽然结构推理引入了预定义的模式来引导 MLLM 进行更系统的推理，但它仍然受到推理深度浅和适应性有限的限制。为了处理更复杂的多模态任务，最近的工作旨在开发 System-2 式推理。与快速反应策略不同，这种形式的推理是深思熟虑的、组合性的，并由明确的计划指导。通过扩展推理链、将其定位于多模态输入以及使用监督或强化信号进行训练，这些模型开始表现出长视野推理和自适应问题分解。</p>
+<h5 id="331-cross-modal-reasoning">3.3.1 Cross-Modal Reasoning
+</h5><p>跨模态推理目前的发展强调增强多模态信息，下列方法通过利用模型固有的功能或外部工具和算法来实现这种增强。这些方法旨在通过动态合并来自不同模式的补充信息来提高推理准确性和鲁棒性。</p>
+<ol>
+<li>
+<p>External Tools 除了前面3.2.3提到的使用外部工具来促进多模态理解之外。现在有更多的方法探索工具集成直接促进多模态推理。（有点像agent的演进，模型能调用的外界工具越来越丰富了）</p>
+</li>
+<li>
+<p>External Algorithms 将算法或人类认知思维过程转化为明确的执行步骤</p>
+<ol>
+<li>
+<p>FAST： 采用系统切换适配器在快速和慢速思维模式之间动态切换（思考：快与慢）</p>
+</li>
+<li>
+<p>ICoT： 利用注意力驱动选择 (ADS) 来交错视觉和文本推理步骤</p>
+</li>
+<li>
+<p>Image-of-Thought：一步步生成视觉原理图，图像层面的思维链</p>
+</li>
+<li>
+<p>CoTDiffusion：具身智能，让机器人先生成完成任务的过程的每一步的草图，再据此完成物理动作</p>
+</li>
+</ol>
+</li>
+<li>
+<p>Model-Intrinsic Capabilities 通过微调让模型自身实现多模态信息的处理和推理，而不使用外界工具</p>
+</li>
+</ol>
+<h5 id="332-multimodal-o1">3.3.2 Multimodal-O1
+</h5><p>OpenAI o1的兴起引发了人们对大型语言模型的广泛兴趣，CoT微调开始流行。与传统的 CoT 方法相比，CoT 微调通过结合自我反思和纠错机制，增强了模型对开放式问题的推理能力。</p>
+<p>多模态领域的推理范式：</p>
+<p>阶段一：摘要 / 理由（Summary / Rationale）：模型先提炼出问题的核心逻辑骨架。</p>
+<p>阶段二：标题 / 图像描述（Caption）：模型对输入的视觉信息进行针对性的文本转译，用文字“看懂”图里的关键要素。</p>
+<p>阶段三：深入思考（Thinking）：结合前两步的逻辑和视觉线索，进行长文本的 System-2 审慎推导、自我反思与纠错。</p>
+<p>阶段四：最终答案（Answer）：输出精简的最终结论。</p>
+<p>推理阶段引入搜索算法，类似3.2.3.1</p>
+<h5 id="333-multimodal-r1">3.3.3 Multimodal-R1
+</h5><p>强化学习中的DPO近年来被广泛用于增强大型多模态模型的推理能力。</p>
+<p><strong>DPO：</strong> 研究人员首先自建大量的多模态偏好数据集。每条数据包含一个图文问题，以及模型生成的两个回答：一个推理严密（好），一个逻辑有漏洞或包含幻觉（差）。直接利用 DPO 算法在底层进行偏好对齐训练，拉高好回答的概率，压低差回答的概率。</p>
+<p>NMPR在DPO的基础上增加了“质量损失”和传统SFT的“生成损失”，多损失函数结合有效增强了模型的CoT能力。</p>
+<p>Deepseek-R1出后，GRPO算法开始在多模态大型模型中得到广泛应用。</p>
+<p><strong>GRPO：</strong> 让模型一次性对问题产生多个答案，对所有答案打分后，给其中好于平均的正reward，坏于平均的负reward。</p>
+<p>取代AC，解放算力，支持超常思维链，自发涌现“反思”和“顿悟”能力。</p>
+<p>但现有的工作往往仅限于特定任务，并且当前的多模态大型模型尚未能够将从数学等任务中学到的长链思维能力概括为模型的一般能力</p>
+<h3 id="4-towards-native-multimodal-reasoning-model">4. Towards Native Multimodal Reasoning Model
+</h3><p>LMRMs 已经展现出处理复杂任务和长思维链的潜力。然而，它们以语言为中心的架构限制了其在真实世界场景中的效果。具体来说，它们主要依赖视觉和语言模态，因此难以处理和推理交错出现的多样数据类型；同时，在动态环境中进行实时、迭代交互的能力仍然不足。这些限制说明，我们需要一类新的模型，能够支持更广泛的多模态融合和更高级的交互式推理。</p>
+<h4 id="41-experimental-findings">4.1 Experimental Findings
+</h4><p>实验说明，尽管LMRM已经有了很强的推理能力，在解决MMMU和MathVista等复杂问题方面取得了重大进展，但自主解决涵盖多模态问题的能力，以及动态环境的长期交互能力仍未达到在现实中实用的标准。</p>
+<p>在全模态benchmark中，实验结果表明任务需要统一模态理解时，模型性能明显低于单模态条件，且所有模型的性能随着模态数量的增加急剧下降。当前的LMRM尚无法有效处理全模态输入。</p>
+<p>在agent benchmark上，模型性能发展显著，但即使最先进的模型也始终达不到人类水平的可靠性，且难以应对复杂的、开发室的任务。实验结果强调，当前的大型推理模型在长期推理和自适应规划方面仍然存在缺陷，这可能需要特定的调整和架构增强才能演变成真正的本地代理系统。</p>
+<p>目前的模型能通过捕获和利用图像中的微妙线索，在复杂的多模态问题解决中表现出强大的性能。但也存在一些挑战：</p>
+<ol>
+<li>
+<p>语言知识可能会干扰视觉输入（目前已被n-MLLM的架构基本解决）</p>
+</li>
+<li>
+<p>由于工具限制以及编码环境中缺乏互联网访问，文件处理和多媒体创建常常会导致不准确。（目前工具链的发展基本解决该问题）</p>
+</li>
+<li>
+<p>可能在思维过程中编造推理（在RL和对齐中显著增强，但仍待攻坚）</p>
+</li>
+</ol>
+<h4 id="42-capability-of-n-lmrms">4.2 Capability of N-LMRMs
+</h4><p>为了集成跨任何模态的多模态理解、生成和智能式推理而设计，今年已获得井喷式的发展。</p>
+<p>建立在两个主要并行探索的变革能力上：</p>
+<ol>
+<li>
+<p>多模态智能体式推理，通过分层任务分解、实时策略适应和具身学习实现主动、目标驱动的交互。</p>
+<ul>
+<li>核心：动态适应，工具集成（MCP&amp;A2A），可持续式长期交互及推理</li>
+</ul>
+</li>
+<li>
+<p>全模态理解和生成推理，通过统一表示支持无缝跨模态合成和分析，促进异构数据融合和上下文多模态交互。</p>
+<ul>
+<li>核心：离散表示-&gt;实时多模态协作，时间戳对齐，轻量化</li>
+</ul>
+</li>
+</ol>
+<h4 id="43-technical-prospects">4.3 Technical Prospects
+</h4><p>N-LMRMs的技术前景旨在原生统一跨不同数据的理解、生成和推理，从语言和视觉到音频、触觉、传感器读数、时间序列和结构化数据，使我们更接近能够以统一和有凝聚力的方式看、听、说话和行动的系统。</p>
+<p>然而，构建此类 N-LMRM 面临着巨大的挑战。这些模型的架构设计必须能够处理单个系统内的异构模式，通过长的多模态推理链遗传地使用和组合不同的工具，并支持从现实世界的交互中持续学习。</p>
+<p>挑战及可能 solution：</p>
+<ol>
+<li>
+<p>统一表示和跨模态融合：即创建一个能以连贯方式处理和生成不同模态的单一模型架构</p>
+<ul>
+<li>
+<p>solution 1：将所有输入或输出同质化为通用格式并统一处理。</p>
+</li>
+<li>
+<p>solution 2：专家混合(MoE)架构：设计专门针对某些模态的专家（本质还是分开处理）</p>
+</li>
+</ul>
+</li>
+<li>
+<p>交错的多模态长思维链：把单模态的思维链扩展到跨多模态的交错推理，为计算提供一个新的轴</p>
+<ul>
+<li>
+<p>solution 1：通过图像工具在思维链中推理图像（openai-o3/o4）</p>
+</li>
+<li>
+<p>solution 2：RL大法，将RL扩展到更多模态、更长的工具增强推理链和更广泛的集合推理任务的数量</p>
+</li>
+</ul>
+</li>
+<li>
+<p>结合WM，从世界经验中学习和发展，与系统持续交互实现终身学习（通过多维工具把交互转化为结构性体验）</p>
+<ul>
+<li>在线强化学习+离线验证学习-&gt;可转移知识</li>
+</ul>
+</li>
+<li>
+<p>数据合成：目前现有努力大多侧重于单模态或跨模态理解和推理，但综合多模态交互的，在动态环境中实施多步骤规划以及协调多工具调用和并行工具使用的仍比较少见。</p>
+</li>
+</ol>
+<h3 id="5-dataset-and-benchmark">5 Dataset and Benchmark
+</h3><p>主要分为4种类别：理解，生成，推理，规划</p>
+<h4 id="51-multimodal-understanding">5.1 Multimodal Understanding
+</h4><p>模型处理和解释来自多种模态的信息（如视&amp;听数据）的能力，以执行需要理解、推理和生成的任务。</p>
+<h5 id="511-visual-centric-understanding">5.1.1 Visual-Centric Understanding
+</h5><p>通用视觉理解：早期关注自然图像中的对象识别，属性识别和简单的空间推理，以图像-问题-答案三元组为主。重点主要集中在自然图像和基本感知上。最近的数据集，例如ALIGN，旨在解决更复杂的视觉语言任务，如图像文本对齐和多模态表示。前沿的Benchmark则引入了空间推理基准，跨模态推理的复杂查询。数学领域的VideoMathQA则将现实世界教育环境的推理类别：直接问题解决、概念迁移和结构化解释引入其中。</p>
+<p>文档、图表和 OCR 视觉理解：目标集中在定位&amp;解释多模态中的文本信息，图表信息，以及对其中嵌入的文本及标识进行阅读和推理。</p>
+<p>核心要求</p>
+<ol>
+<li>
+<p>OCR与视觉理解的关键集成</p>
+</li>
+<li>
+<p>结合文本和视觉元素的多步骤推理</p>
+</li>
+<li>
+<p>有关文档结构，图标约定或文本布局的特定领域知识</p>
+</li>
+</ol>
+<p>非常强调视觉和文本的相互作用</p>
+<p>此外近期引入了对数字界面（包括 WebUI ， HTML 和各类代码生成）的规划和理解。</p>
+<p>多语言视觉理解：涵盖多种语言的VQA</p>
+<p>特点:</p>
+<ol>
+<li>
+<p>整合多种语言（语系）的问题和注释</p>
+</li>
+<li>
+<p>测试不同文化背景下的视觉理解和语言能力</p>
+</li>
+<li>
+<p>要求模型理解可能具有特定文化解释或参考的视觉概念</p>
+</li>
+</ol>
+<p>近期的新Benchmark还扩展到了涵盖多语言与现实世界的环境内容的推理，以及教育方面的应用。</p>
+<p>视频理解：与静态图像相比，额外增加了时间这一维度，需要模型解决基于时间的理解，涉及跨多个帧的动态视觉特征，他们包括动作、事件和时间关系的注释，并涵盖不同的视频持续时间。</p>
+<p>科学领域，长视频领域，综合视频理解推理领域</p>
+<p>综合基准：支持跨推理、规划和生成任务进行统一评估，并支持与平台无关的、可扩展的 MLLM 功能测试。</p>
+<ol>
+<li>
+<p>评估视觉理解各个方面的多维评估框架，从感知到推理和知识整合，</p>
+</li>
+<li>
+<p>精心设计的问题，旨在探索特定能力并识别弱点，</p>
+</li>
+<li>
+<p>用于跨模型公平比较的标准化评估流水线。与早期的特定任务数据集不同，这些基准测试提供了对模型整体能力的全面衡量。</p>
+</li>
+</ol>
+<h5 id="512-audio-centric-understanding">5.1.2 Audio-Centric Understanding
+</h5><p>评估模型处理、解释和响应各种形式的音频输入（例如语音、环境声音和音乐）的能力。模型对音频数据的理解和交互程度已成为一个重点。</p>
+<p>Speech Understanding：</p>
+<p>主要衡量模型是否能够准确、清晰地理解现实世界中的人类语音。</p>
+<p>现有 Benchmark 主要从几个角度评估语音理解：</p>
+<ol>
+<li>
+<p>语音识别的准确性</p>
+</li>
+<li>
+<p>语音多语言翻译</p>
+</li>
+<li>
+<p>情感识别</p>
+</li>
+</ol>
+<p>Audio Understanding：</p>
+<p>涉及从非人类声音中提取和识别信息，与人类语音相比，环境声音提供了更加复杂多样的信息。</p>
+<ol>
+<li>
+<p>音频字幕（用文字描述听到的声音）</p>
+</li>
+<li>
+<p>音频问答</p>
+</li>
+</ol>
+<p>Music Understanding</p>
+<p>音乐以其结构特征和复杂的变化，已成为音频理解研究的一个重要领域。</p>
+<ol>
+<li>
+<p>模型识别音乐理论元素的能力</p>
+</li>
+<li>
+<p>给整个音乐曲目添加字幕，测试模型理解音乐作品的详细内容和整体结构的能力。</p>
+</li>
+</ol>
+<p>Comprehensive Benchmarks</p>
+<p>新的综合评估标准们：</p>
+<p>不同上下文里理解语音的能力，多种语音/环境音以及人声相关任务（以及互相的结合）</p>
+<h4 id="52-multimodal-generation">5.2 Multimodal Generation
+</h4><p>多模态生成包括跨不同模态生成内容。不仅对创造性应用至关重要，对于模型需要以多模态格式传达其理解或推理结果的任务也至关重要。</p>
+<h5 id="521-cross-modal-generation">5.2.1 Cross-modal Generation
+</h5><p>以A模态输入生成B模态内容，重点关注对齐，连贯性和语义生成</p>
+<p>Text to Image（感觉已经被做烂了）</p>
+<p>文本到图像的生成：复杂描述，高分辨率图像，对齐，</p>
+<p>文本到图像的编辑：基于指令，多轮编辑，高分辨率，创意，精度和连贯性</p>
+<p>条件文本到图像的生成：特定场景结构，多个条件输入，完整性&amp;视觉连贯性&amp;约束一致性</p>
+<p>Text to Video</p>
+<p>常规指标，视频质量和现实世界准确度</p>
+<p>Text to Speech</p>
+<p>LALM 合成数据集（评估文本和音频输出之间的单词错误率和准确性）-&gt;多场景下语音对话能力&amp;对语音风格的评估（例如语调和情感）</p>
+<p>Robotics</p>
+<h5 id="522-joint-multimodal-generation">5.2.2 Joint Multimodal Generation
+</h5><p>跨多种模式同时创建内容，例如生成文本和图像或将文本、音频和视频组合成一个完整的输出。对一致性有高要求。</p>
+<p>Text to Interleaved Image-Text</p>
+<p>上下文相关且视觉上连贯的内容，对齐</p>
+<p>Text to Interleaved Image-Text</p>
+<p>结合跨模态和联合多模态数据来增强多模态生成</p>
+<p>未来发展可能会集中在提高多模态的一致性、适应性和无缝生成上，为动态、多模态内容创建和交互式用户体验开辟新的可能性。</p>
+<h4 id="53-multimodal-reasoning">5.3 Multimodal Reasoning
+</h4><p>要求模型集成来自多种模态的信息。这使他们能够进行推理、解决问题并回答需要更深入理解不同类型数据之间关系的复杂问题。</p>
+<h5 id="531-general-visual-reasoning">5.3.1 General Visual Reasoning
+</h5><p>是最关键的功能之一，要求模型不仅能够感知视觉信息，而且能利用广泛的知识、逻辑演绎和跨各种场景的常识来理解、分析和推理视觉信息。为了严格评估这种能力，广泛的、针对不同方面的基准被开发：VCR（视觉尝试推理）、PhysBench（物理推理）、VideoPhy（视频物理常识）挑战模型应用日常知识来解释视觉情况。</p>
+<p>多模态通用智能基准反映了对更广泛人工智能功能的野心，包括多语言方面，不同学科方面，以人为中心的各类评估。这些Benchmark将视觉推理与其他模式 和任务一起作为关键组成部分。此外，图标和结构化的视觉推理至关重要、</p>
+<p>这些基准的一个关键要素是用于训练和评估模型的数据集：</p>
+<p>SWAG：训练模型来预测视觉场景中可能持续的动作</p>
+<p>LLava-CoT：通过集成大型语言模型来推理视觉常识任务</p>
+<p>CLEVR：对日常物体的合成图像执行复杂的推理</p>
+<p>some others：进一步训练视觉常识推理和多模态对话</p>
+<p>Video-R1-data：推理视频序列中的动态视觉内容</p>
+<p>Visual-CoT：跨各种任务进行视觉理解和推理</p>
+<h5 id="532-domain-specific-reasoning">5.3.2 Domain-specific Reasoning
+</h5><p>数学，机器人（具身），物理（评估物理定律，促进WM）</p>
+<p>特定高价值领域，如知识图谱，推理路径，论文验证</p>
+<h4 id="54-multimodal-planning">5.4 Multimodal Planning
+</h4><p>多模态规划基准对于评估代理在执行复杂的多步骤任务时集成和处理不同输入（例如视觉、文本和交互式数据）的能力至关重要。通过测试计划、推理和适应性，它们提供了智能体能力的全面视图。</p>
+<h5 id="541-gui-navigation">5.4.1 GUI Navigation
+</h5><p>GUI 导航的基准评估代理跨数字界面规划和执行任务的能力，需要强大的视觉语言基础和多步骤推理。</p>
+<p>真实web环境下工作能力。跨网页任务，跨应用任务，多步指令，UI理解，电子商务，真实操作系统环境下文件操作&amp;数据处理。</p>
+<h5 id="542-embodied-and-simulated-environments">5.4.2 Embodied and simulated Environments
+</h5><p>实体和模拟环境强调动态、交互式环境中的规划，其中代理必须适应物理或虚拟世界。</p>
+<p>Minecraft中的多任务基准。视觉语言输入的具身规划，终身学习（机器人视觉定位），人机协作，人机交互</p>
+<p>语言、感知+动作=可概括的任务</p>
+<p>V-MAGE 基于游戏的评估框架，用于评估MLLM在定位、轨迹跟踪和视觉记忆等任务上的性能，提供了一种量化规划能力的新颖方法。</p>
+<p>规划领域的挑战仍然存在，例如长程规划、处理嘈杂的输入以及现实世界的适应性。未来的基准应该侧重于开放世界环境、实时人类反馈和协作规划，特别是在多代理或人类人工智能场景中。解决这些差距将有助于推动智能体的开发，这些智能体能够以更大的灵活性和通用性处理不可预测的现实世界任务。</p>
+<h4 id="55-evaluation-method">5.5 Evaluation Method
+</h4><p>精确/模糊匹配、选项匹配、LLM/MLLM评分、代理评估等。</p>
+<p><strong>Exact/Fuzzy Matching：</strong> 主要用于VQA，根据一定规则匹配并计算得分</p>
+<p><strong>Options Matching：</strong> 简答-&gt;选择题，通过 CircularEval 方法来最小化评估中的随机变化</p>
+<p><strong>LLM/MLLM Scoring：</strong> 大模型给打分</p>
+<p><strong>Agentic Evaluation：</strong> 基于智能体打分，加外置的各类工具，多智能体机制（合作/对抗性评估）</p>
+<h3 id="6-conclusion">6 Conclusion
+</h3><p>当前模型主要采用以语言为中心的推理范式，并已在视觉问答、视觉数学、视频理解等任务中取得出色结果。不过，以视觉为中心的长程推理，例如理解 3D 场景、回答复杂视觉信息检索问题，以及交互式多模态推理，例如动态跨模态对话或迭代反馈循环，仍然是尚未充分发展的前沿方向，需要进一步深入探索。</p>
+<p>N-MLLM是未来的主要发展方向，应具备三类核心能力：</p>
+<ol>
+<li>
+<p>多模态智能体式推理，使系统能够主动与环境交互</p>
+</li>
+<li>
+<p>全模态理解与生成式推理，在视觉、音频、文本等模态之间对齐抽象概念，并在复杂开放世界语境中消解歧义</p>
+</li>
+<li>
+<p>跨模态生成连贯、具备上下文意识的输出</p>
+</li>
+</ol>
+<p>通过推进这些能力，未来模型有望获得更接近人类的情景适应性，弥合孤立任务表现与真实世界通用问题求解之间的差距</p>
+<h2 id="260608464-tvi-cot-text-visual-interleaved-chain-of-thought-reasoning-for-multimodal-understanding">2606.08464 TVI-CoT: Text-Visual Interleaved Chain-of-Thought Reasoning for Multimodal Understanding
+</h2><p>文本图像交错推理，ICoT进阶版</p>
+<p>给定图像和问题，视觉编码器和分词器会生成视觉和文本特征，并输入到大语言模型中。该模型在执行思维链分析的文本推理步骤 和从图像中选择相关视觉特征的视觉推理步骤之间动态交替。每个视觉推理步骤都会关注以当前推理状态为条件的不同图像区域（例如，第一步重点关注 ∠ ​ A ，而第二步则转向 ∠ ​ C ）。这种交错会自适应地继续，直到模型产生 ⟨ Answer ⟩ 。</p>
+<p>创新点在于不需要外部工具进行图像编辑，而是在CoT内动态地重新访问输入图像，从而消除了耗时的外部操作的需要。且通过训练模型使其学习了进一步的视觉推理的部分</p>
+<p>具体来说，在每个文本推理步骤中，模型输出 <code>&lt;think&gt;</code> 然后给出自然语言分析，例如回忆性质，形成假设或进行计算。当模型判断需要视觉证据时，它输出 <code>&lt;look&gt;</code> 来触发视觉推理步骤，此时 grounding module 会根据推理上下文选择一部分视觉特征进入推理。</p>
+<p><strong>关键在于，每次选择的视觉特征可以不同，逐步提取每一阶段所需要的视觉信息。</strong></p>
+<p>这种文本-视觉交替会自适应重复，直到模型生成答案。</p>
+<p>为了可解释性，保留了具有最高注意力权重的top-k个token作为视觉定位集。</p>
+<p>引入了3个控制token：<code>&lt;think&gt;</code>，<code>&lt;look&gt;</code>，<code>&lt;answer&gt;</code>。The control token prediction is performed by the LLM as part of its autoregressive generation。所以模型可以自适应的确定视觉信息的查询。</p>
+<p>结合使用带注释的推理链上的监督学习和鼓励准确视觉注意力的辅助定位损失来训练 TVI-CoT：SFT + λ 辅助定位损失（取 0.1）</p>
+<p>训练数据：Synthetic generation（Gemini合成+Qwen验证） + Grounding augmentation（原有数据集+Gemini定位增强）</p>
+<p>实验：小模型+机制跑BenchMark，数学和高度视觉需求上问题效果尤其好</p>
+<p>交错至关重要，定位监督有一定帮助。自适应&gt;固定交错步骤&gt;纯文本</p>
+<h2 id="260616122-thinking-with-visual-grounding">2606.16122 Thinking with Visual Grounding
+</h2><p>差不多的思路</p>
+<p>给MLLM加上具体视觉证据定位的思考，思考过程中提到具体物品时额外输出定位坐标。</p>
+<p>为实现RL训练额外围绕一个基于SAM3的定位agent 构建了自动数据合成 pipeline 。从视觉问题出发，该pipeline首先获得正确推理轨迹，抽取推理中使用过的视觉对象，用名称和消歧场景上下文表示每个对象，并用游程编码（RLE）mask 对其定位。这些 mask 被用于构造点模式和框模式的带定位推理轨迹，同时相应的定位对象会作为 grounding-aware RL 的结构化监督保留下来。</p>
+<p>设计了一个定位reward可以在训练的过程中确定视觉参考是否合理，支持盒模式和点模式带定位思考。</p>
+<p>通过对照实验，表明带视觉证据定位的思考可以极大地提高计数和空间推理能力。定位奖励为框定位带来了明显的收益，尤其是在空间任务上。此外，点定位对于计数特别有效，并且在空间推理方面与框定位保持竞争力。</p>
+<p>数据来源类似上一篇。基础数据集加合成坐标（By QWen）</p>
+<p>视觉思考的下一步并不只是“想得更久”，而是要把思考绑定到可检查、可监督、可改进的图像证据上。</p>
+<h2 id="260615231-visual-seeker-towards-visual-native-multimodal-agentic-search-via-active-visual-reasoning">2606.15231 Visual-Seeker: Towards Visual-Native Multimodal Agentic Search via Active Visual Reasoning
+</h2><p>深度搜索智能体们为了处理视觉查询以及网页环境中的视觉信息扩展出了多模态能力并配备了MLLM，但是现在的视觉信息还没有被原生的利用，视觉信息往往只作为附属模态出现，限制了模型处理长程视觉推理场景的能力。</p>
+<p>数据问题：现有方法构造的训练数据往往是包含显式语义实体的，会忽略很多环境和背景信息。</p>
+<p>设计问题：现有方法只是单纯的把视觉查询插入prompt，并没有构造依赖视觉证据的搜索轨迹和主动搜集视觉证据的能力</p>
+<p>Visual Seeker：视觉原生多模态深度搜索智能体</p>
+<p>模型能够感知包含多个相互关联实体的复杂真实图像中的细粒度属性，动态执行多跳推理，并在搜索过程中主动收集和整合视觉证据。</p>
+<p>数据合成pipeline：</p>
+<ol>
+<li>
+<p>带有视觉推理过程的真实图像中提取种子实体名称和视觉描述，从而获得复杂图像中的目标实体。这会驱动模型对特定区域进行细粒度视觉感知和搜索，以获得目标实体的语义信息。</p>
+</li>
+<li>
+<p>使用双策略随机游走扩展搜索轨迹的深度和广度</p>
+</li>
+<li>
+<p>使用搜索引擎获取信息丰富的实体图像，并合并包含视觉证据的查询。</p>
+</li>
+</ol>
+<p>我超好多SOTA，看起来确实是非常酷炫的设计</p>
+<p>Method关键点：</p>
+<p>关于训练数据：通过实体识别、过滤和消歧获取具有复杂语义实体的查询图像</p>
+<p>多跳轨迹合成：回溯+循环约束从种子实体开始（非线性与复杂性）QA Generation</p>
+<p>视觉证据注入：为使agent学会主动从网页获取和解释视觉证据，将视觉证据引入合成 VQA 的推理过程中，迫使代理调用工具来搜索图像并执行像素级推理</p>
+<p>有监督微调一个开源轻量模型</p>
+<p>消融：裁剪图片看细节的能力和用图片反向搜索的能力都比较重要</p>
+<h2 id="260600562-deeplatent-think-with-images-via-parallel-latent-visual-reasoning">2606.00562 DeepLatent: Think with Images via Parallel Latent Visual Reasoning
+</h2><p>怎么好像又是一样的思路，大家都喜欢在推理过程中交错视觉特征然后聚焦到图像关键点上来提高推理质量这个办法吗</p>
+<p>哦这个是隐式的，视觉层面的推理过程被省略掉了</p>
+<p>现有思路：</p>
+<p>工具式方法通过外部操作或可执行代码来处理图像。这类方法有效，并且能提供可解释的视觉证据，但它们受限于预定义操作类型，并且通常带来较高推理延迟</p>
+<p>潜空间视觉推理方法则走一条更内生的路线：它们以自回归范式生成潜视觉 token，把中间视觉推理内化为模型能力。然而，在困难 benchmark 上，潜空间方法仍弱于工具式方法，例如在 HRBench 上最高有约 5% 的差距，并且通常需要复杂的潜表示对齐。</p>
+<p>既有工作的潜 token 往往具有较高的 token 间同质性，并且包含的视觉信息有限。我们将这一现象归因于自回归范式中的两类系统性偏差。</p>
+<p>（1）结构错配：图像是连续的二维场，其语义来自空间邻域，而不是单向因果链。强行在展平的一维序列上进行自回归生成，与图像结构相冲突，使潜表示难以捕获空间语义。</p>
+<p>（2）信息源偏移：潜空间视觉推理的目标是从输入图像中得到新的视觉表示。然而在自回归生成中，后续潜表示主要依赖早先的潜 hidden states，而不是图像特征。这会把信息流从“图像到潜表示”偏移为“潜表示到潜表示”。</p>
+<p>此外，这些潜 hidden states 会取代视觉编码器通常生成的视觉特征，它们的分布可能与编码器输出显著不同，从而削弱预训练得到的视觉-语言对齐。</p>
+<p>DeepLatent：一个并行的、受上下文条件约束的潜推理框架</p>
+<p>一，它并行生成所有潜表示，从而消除自回归生成带来的结构错配。</p>
+<p>二，它让每个潜表示都直接定位于图像特征，避免信息源偏移。</p>
+<p>核心：LatentFormer生成潜表示，三个调制嵌入（分别控制尺度、潜分布和图像特征分布）</p>
+<p>训练：</p>
+<p>SFT 第一阶段：交错推理预训练（Interleaved Reasoning）</p>
+<p>SFT 第二阶段：潜空间蒸馏（Latent Distillation）</p>
+<p>RL 阶段：连续空间强化学习（Continuous-Space RL）</p>
+<p>DeepLatent-180K 全新数据集：包括单图像和交错推理样本。后者分为两种主要类型：视觉搜索（例如，裁剪或重新聚焦相关区域）和视觉合成（例如，构建迷宫、拼图的中间状态）。</p>
+<p>现有数据集局限：许多交错样本可以在没有中间图像的情况下得到回答（不为中间视觉推理提供有效的监督），并且当前的视觉搜索数据缺乏足够的分辨率来处理细粒度的细节。</p>
+<p>数据集要求：推理评价，辅助图像验证，必要性过滤</p>
+<p>进步：高分辨率感知，通用多模态理解，视觉推理，视觉思维生成效率</p>
+<p>冻结 LatentFormer 模块、仅调节外层的连续调制参数</p>
+<h2 id="260601243-unlocking-the-black-box-of-latent-reasoning-an-interpretability-guided-approach-to-intervention">2606.01243 Unlocking the Black Box of Latent Reasoning: An Interpretability-Guided Approach to Intervention
+</h2><p>显式CoT的问题：可能非常冗长，造成显著延迟和计算成本；同时，文本本身是复杂计算的低带宽媒介，常包含冗余信息，并更容易产生错误累积。</p>
+<p>潜空间推理：多步推断不再生成中间文本，而是在模型连续 hidden states 中展开。其中 continuous-thought 范式尤其有前景：它使用特殊潜向量在推理步骤之间传递信息，结构简单，并且能与标准解码流程兼容。</p>
+<p>未解决的问题：</p>
+<ol>
+<li>
+<p>可解释性尚未得到充分验证：这些潜向量究竟真的编码了推理过程中的语义步骤，还是只是训练目标产生的副产物？</p>
+</li>
+<li>
+<p>已有研究通常局限于较小规模模型，对该范式在更大模型中的可扩展性和行为了解不足。</p>
+</li>
+</ol>
+<p>Solution of 1.设计了三类互补的可解释性 probe，用来检查它们在推理过程中的结构、内容和因果作用。</p>
+<ol>
+<li>
+<p>通过结构对齐分析，我们发现潜思考向量的几何结构与显式 CoT 理由高度相似，说明二者可能共享表征支架</p>
+</li>
+<li>
+<p>证明一个简单线性映射就能以较高保真度从潜向量中重建文本推理步骤，确认它们是中间推理的压缩而忠实的编码。</p>
+</li>
+<li>
+<p>因果干预实验表明，对这些向量，尤其是早期推理步骤中的向量，进行定向编辑，可以可预测地改变模型最终答案，从而确立它们在推断流程中的功能作用。</p>
+</li>
+</ol>
+<p>因此，在推理过程中按probe识别出的方向投影，就可以在不额外训练的情况下增加模型性能。</p>
+<p>三种Intervention：</p>
+<ol>
+<li>
+<p>语义结构迁移 (Semantic Structure Transport)（推理内容）</p>
+</li>
+<li>
+<p>几何流形对齐 (Geometric Manifold Alignment)（推理方向）</p>
+</li>
+<li>
+<p>关键因果枢纽强化 (Causal Hub Enforcement)（在推理潜变量的关键位置加大干预力度）</p>
+</li>
+</ol>
+<p>实验证明了大规模模型中该范式依旧有效</p>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-07-06
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+	const mainArticleElement = document.querySelector(".main-article");
+        renderMathInElement(mainArticleElement, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/cs153-frontier-systems-lesson-3/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 3 阅读笔记</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cs153-frontier-systems-lesson-2/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 2 阅读笔记</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cs153-frontier-systems-lesson-1/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 1 阅读笔记</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/ai-ppt-review/">
+        
+        
+            <div class="article-image">
+                <img src="/p/ai-ppt-review/cover.feb1c9418b48c65c0203530e76059a05_hu_6dd7476af2244957.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post AI PPT 制作工具简析"
+                        data-key="ai-ppt-review" 
+                        data-hash="md5-/rHJQYtIxlwCA1MOdgWaBQ==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">AI PPT 制作工具简析</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">基于隐式神经场与漂移先验的坐标感知纹理场重建</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 Elysium-Seeker
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+    #TableOfContents > ul, ol {
+        ul, ol {
+            display: none;
+        }
+        .open {
+            display: block;
+        }
+    }
+</style>
+
+<script>
+    function initTocHide() {
+        
+        let toc = document.querySelector(".widget--toc");
+        if (!toc) {
+            return;
+        }
+        
+        window.addEventListener('scroll', function() {
+            
+            let openUl = document.querySelectorAll(".open");
+            if (openUl.length > 0) {
+              openUl.forEach((ul) => {
+                ul.classList.remove("open")
+              })
+            }
+            
+            let currentLi = document.querySelector(".active-class");
+            if (!currentLi) {
+                return
+            }
+            
+            if (currentLi.children.length > 1) {
+                currentLi.children[1].classList.add("open")
+            }
+            
+            let ul = currentLi.parentElement;
+            do {
+                ul.classList.add("open");
+                ul = ul.parentElement.parentElement
+            } while (ul !== undefined && (ul.localName === 'ul' || ul.localName === 'ol'))
+        });
+    }
+    initTocHide()
+</script>
+
+<style>
+    .highlight {
+         
+        max-height: 400px;
+        overflow: hidden;
+    }
+
+    .code-show {
+        max-height: none !important;
+    }
+
+    .code-more-box {
+        width: 100%;
+        padding-top: 78px;
+        background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(#fff));
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+    }
+
+    .code-more-btn {
+        display: block;
+        margin: auto;
+        width: 44px;
+        height: 22px;
+        background: #f0f0f5;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        padding-top: 6px;
+        cursor: pointer;
+    }
+
+    .code-more-img {
+        cursor: pointer !important;
+        display: block;
+        margin: auto;
+        width: 22px;
+        height: 16px;
+    }
+</style>
+
+<script>
+  function initCodeMoreBox() {
+    let codeBlocks = document.querySelectorAll(".highlight");
+    if (!codeBlocks) {
+      return;
+    }
+    codeBlocks.forEach(codeBlock => {
+      
+      if (codeBlock.scrollHeight <= codeBlock.clientHeight) {
+        return;
+      }
+      
+      
+      let codeMoreBox = document.createElement('div');
+      codeMoreBox.classList.add('code-more-box');
+      
+      let codeMoreBtn = document.createElement('span');
+      codeMoreBtn.classList.add('code-more-btn');
+      codeMoreBtn.addEventListener('click', () => {
+        codeBlock.classList.add('code-show');
+        codeMoreBox.style.display = 'none';
+        
+        window.dispatchEvent(new Event('resize'))
+      })
+      
+      let img = document.createElement('img');
+      img.classList.add('code-more-img');
+      img.src = "https://Elysium-Seeker.github.io/icons/codeMore.png"
+      
+      codeMoreBtn.appendChild(img);
+      codeMoreBox.appendChild(codeMoreBtn);
+      codeBlock.appendChild(codeMoreBox)
+    })
+  }
+  
+  initCodeMoreBox();
+</script>
+
+<style>
+    #backTopBtn {
+        display: none;
+        position: fixed;
+        bottom: 30px;
+        z-index: 99;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        background-image: url(https://Elysium-Seeker.github.io/icons/backTop.svg);
+    }
+</style>
+
+<script>
+    
+
+    function initScrollTop() {
+        let rightSideBar = document.querySelector(".right-sidebar");
+        if (!rightSideBar) {
+            return;
+        }
+        
+        let btn = document.createElement("div");
+        btn.id = "backTopBtn";
+        btn.onclick = backToTop
+        rightSideBar.appendChild(btn)
+        
+        window.onscroll = function() {
+            
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+    }
+
+    
+
+    function backToTop(){
+        window.scrollTo({ top: 0, behavior: "smooth" })
+    }
+
+    initScrollTop();
+</script>
+
+<div id="particles-js"></div>
+
+<script src=https://Elysium-Seeker.github.io/background/particles.min.js></script>
+<script>
+  particlesJS.load('particles-js', "https://Elysium-Seeker.github.io/background/particlesjs-config.json", function() {
+    console.log('particles.js loaded - callback');
+  });
+</script>
+
+<style>
+  #particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+  }
+</style>
+
+    </body>
+</html>
