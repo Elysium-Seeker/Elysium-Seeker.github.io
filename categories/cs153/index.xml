@@ -7,7 +7,87 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Wed, 03 Jun 2026 16:58:38 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/categories/cs153/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 26 Jul 2026 14:33:47 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/categories/cs153/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Stanford CS153 Frontier Systems | Lesson 10 阅读笔记</title>
+        <link>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-10/</link>
+        <pubDate>Sun, 26 Jul 2026 13:00:00 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-10/</guid>
+        <description>&lt;p&gt;课程视频：&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=6nUl_w5W9Wk&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Stanford CS153 Frontier Systems | Lesson 10&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;这一课是 Luma AI 的 Amit Jain 来讲 unified intelligence systems。我的感觉是，这节课不太适合写成完整的公司介绍，因为信息太散：有 3D capture，有 video generation，有 Transformer，有 agent，还有一大段创意行业和 Hollywood。&lt;/p&gt;
+&lt;p&gt;所以我这篇先只抓几个我比较在意的点：从 3D 到视频的转向、LLM / VLM / 生成模型之间的差别、多模态 Transformer 的编码问题，以及最后 Q&amp;amp;A 里几个比较有意思的回答。&lt;/p&gt;
+&lt;h2 id=&#34;part-1从-3d-到视频&#34;&gt;Part 1：从 3D 到视频
+&lt;/h2&gt;&lt;p&gt;Luma 一开始并不是直接做文生视频，而是从 3D capture 起步。&lt;/p&gt;
+&lt;p&gt;Amit 在 Apple 做过 LiDAR，也参与过和 Vision Pro 相关的方向，所以他一开始对“下一代计算机如何捕获和理解现实世界”很敏感。再加上 NeRF 出现之后，3D 表示变得可以微分、可以被放进训练循环里优化，于是 Luma 最早的想法就是：让用户用手机捕获大量 3D 数据，然后用这些数据训练世界模型。&lt;/p&gt;
+&lt;p&gt;他们确实做出了 Luma 3D Capture。这个 app 在早期很受欢迎，因为它把 NeRF 和 Gaussian Splats 这类研究技术第一次做成了普通用户能用的产品。也就是说，它不只是 demo，而是一个真的跑起来的 3D data flywheel。&lt;/p&gt;
+&lt;p&gt;但问题是，3D 数据很难规模化。再多人用一个 app 去扫物体，也比不过互联网上已经存在几十年的图片和视频。Amit 这里的判断很简单：模型要围绕数据所在的位置设计，而不是先设计一个看起来很漂亮的算法，再抱怨没有数据。&lt;/p&gt;
+&lt;p&gt;所以 Luma 后来转向视频。视频虽然不是显式 3D，但它有二维空间和一维时间，人可以通过时间线索理解物体、动作和空间关系，模型也可以尝试通过 video 学到 world representation。&lt;/p&gt;
+&lt;p&gt;这一段对我来说最重要的是：从 3D 到 video 不是“降低维度”，而是从一个理论上更完整、但数据规模不够的模态，转向一个更容易规模化、也足够接近真实世界动态的模态。&lt;/p&gt;
+&lt;h2 id=&#34;part-2为什么只做视频还不够&#34;&gt;Part 2：为什么只做视频还不够
+&lt;/h2&gt;&lt;p&gt;Luma 在 2024 年发布 Dream Machine，课里提到前几周就有几百万用户使用。这个产品证明了生成视频本身有很强的吸引力。&lt;/p&gt;
+&lt;p&gt;但 Amit 说，video generation 仍然不够。因为一个视频模型如果只是生成漂亮画面，它仍然不一定理解人类逻辑。比如：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;事件为什么重要？&lt;/li&gt;
+&lt;li&gt;事件顺序应该怎样发展？&lt;/li&gt;
+&lt;li&gt;用户说的修改意图到底指向画面的哪一部分？&lt;/li&gt;
+&lt;li&gt;一个镜头里的动作、物理、时间连续性是否一致？&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这就是他反复讲 unified intelligence 的原因。&lt;/p&gt;
+&lt;p&gt;我理解这里的关键不是“视频模型需要更高清”，而是“视频模型需要更像 LLM 一样可交互”。今天我们用 ChatGPT 时，可以多轮追问、修改、保留上下文、让它解释自己之前的输出。但很多图像 / 视频模型仍然像一次性工具：给 prompt，出结果，不满意就重新抽卡。&lt;/p&gt;
+&lt;p&gt;所以 Luma 想解决的问题是：视觉模型能不能也有上下文、记忆、多轮修改和某种自我检查能力。&lt;/p&gt;
+&lt;h2 id=&#34;part-3llmvlm-和生成模型的区别&#34;&gt;Part 3：LLM、VLM 和生成模型的区别
+&lt;/h2&gt;&lt;p&gt;这一节我最想记的是 Amit 对几类模型的区分。&lt;/p&gt;
+&lt;p&gt;LLM 是语言模型。它能理解文本，也能生成文本。更重要的是，这两件事发生在同一个模型里。它不是先用一个模型理解，再用另一个模型写作。&lt;/p&gt;
+&lt;p&gt;VLM 是 vision-language model。它能看图，也能把图和语言联系起来，但它通常不是生成模型。也就是说，它可以理解图像，却不一定能生成图像。&lt;/p&gt;
+&lt;p&gt;图像 / 视频生成模型，比如 diffusion model，则反过来：它很会生成漂亮像素，但不一定真的理解自己生成了什么。它可能满足局部美感，却不理解复杂指令、空间关系、物理因果和长程一致性。&lt;/p&gt;
+&lt;p&gt;所以现在很多“多模态系统”其实是拼起来的：一个语言塔理解 prompt，一个图像塔生成画面，中间靠 embedding、encoder 或 enhanced prompt 连接。这种方法能用，但理解和生成之间有缝。&lt;/p&gt;
+&lt;p&gt;Luma 的 unified model 想做的是把这些东西尽量放到同一个推理空间里：语言、图像、视频、声音、代码，都先被编码，再交给一个统一的 backbone 去处理。&lt;/p&gt;
+&lt;h2 id=&#34;part-4transformer-的多模态问题&#34;&gt;Part 4：Transformer 的多模态问题
+&lt;/h2&gt;&lt;p&gt;Amit 对 Transformer 的说法比较有意思。他认为 Transformer 本身是很通用的，它不太在乎输入信息来自哪种模态。真正麻烦的地方在 Transformer 前后，也就是 encode 和 decode。&lt;/p&gt;
+&lt;p&gt;文本比较适合离散 token。比如一句话可以被切成 token，然后模型预测下一个 token。&lt;/p&gt;
+&lt;p&gt;但图像、音频、视频更麻烦。图像和音频更接近连续信号，视频还多了时间维度。你要把它们压进模型，就必须决定怎么编码：是离散化，还是连续 embedding？压缩到什么程度？会不会丢掉细节？跨帧一致性怎么保留？&lt;/p&gt;
+&lt;p&gt;所以多模态 Transformer 的难点不只是“把图片也喂给模型”。更难的是：不同模态怎样进入同一个表示空间，并且让模型真的能在这个空间里推理。&lt;/p&gt;
+&lt;p&gt;这里我会想到之前学 LLM 时的 tokenizer。文本 tokenizer 看起来只是前处理，但它其实决定了模型看世界的基本单位。多模态模型也一样，视觉 tokenizer / encoder 可能决定了模型到底是在看“像素”，还是在看“物体、关系和事件”。&lt;/p&gt;
+&lt;h2 id=&#34;part-5ai-factory-和交互数据&#34;&gt;Part 5：AI Factory 和交互数据
+&lt;/h2&gt;&lt;p&gt;Luma 这节课也能接上 CS153 前面讲的 AI factory。&lt;/p&gt;
+&lt;p&gt;他们的数据不只是公开图片和视频，还包括用户怎么使用产品：生成了什么，修改了什么，下载了什么，丢弃了什么，反复尝试了什么。这些交互数据可能比最终成品更重要，因为它们记录了人类如何把一个模糊想法变成可接受的输出。&lt;/p&gt;
+&lt;p&gt;但这种反馈也很噪。比如一个人下载了一个很烂的视频，可能不是因为喜欢，而是想发出去吐槽 AI。那这个行为到底算正反馈还是负反馈？这就说明创意系统里的 preference data 比想象中复杂。&lt;/p&gt;
+&lt;p&gt;另一个问题是敏感数据。大型工作室可能愿意用 Luma，但不会希望自己的项目进入通用训练数据。Amit 的说法是，被标记的项目不会进入训练循环，但系统仍然可以学习用户交互的 traces。也就是不学具体内容，学工作方式。&lt;/p&gt;
+&lt;p&gt;这个点很值得记：未来很多高价值数据可能都不能直接训练，但 workflow trace 仍然可能成为新的学习信号。&lt;/p&gt;
+&lt;h2 id=&#34;part-6agent-和-skills&#34;&gt;Part 6：Agent 和 Skills
+&lt;/h2&gt;&lt;p&gt;后面讲 agent 的部分，我觉得可以不用展开太多。&lt;/p&gt;
+&lt;p&gt;核心就是：如果一个模型要做 end-to-end work，它不能只是生成一个结果，而是要进入一个循环。Amit 用了 REPL 的类比：read、eval、print、loop。创意工作也一样：先生成，看哪里不对，再修改，再生成，再判断。&lt;/p&gt;
+&lt;p&gt;在这个循环里，模型只是底层处理单元。上面还需要 tool harness 和 skills。&lt;/p&gt;
+&lt;p&gt;skills 这个词我觉得很重要。比如 Luma 生成课件 slides，不只是模型自己突然懂了设计，而是有人写了很长的 slide design skill，告诉模型什么是好 slide、什么是坏 slide。换句话说，人类经验被整理成可以复用的技能层。&lt;/p&gt;
+&lt;p&gt;这也解释了为什么“模型变强”不等于“人没有用”。人的判断、审美和领域经验可能会变成 skill，被模型反复调用。&lt;/p&gt;
+&lt;h2 id=&#34;最后的-qa-简记&#34;&gt;最后的 Q&amp;amp;A 简记
+&lt;/h2&gt;&lt;p&gt;Q1：为什么 OpenAI / Sora 没有继续成为视觉生成市场里最强的玩家？&lt;/p&gt;
+&lt;p&gt;Amit 的回答偏组织判断：OpenAI 的核心能力还是 LLM 和 chat。chat 是一个极大规模的产品，要做好已经需要巨大注意力。公司不能同时把所有方向都做到最好。这个回答让我想到，frontier system 的竞争不只是技术，也包括组织 focus。&lt;/p&gt;
+&lt;p&gt;Q2：生成式 AI 会改变 copyright 吗？&lt;/p&gt;
+&lt;p&gt;Amit 的观点是，生成能力和版权问题是正交的。Photoshop 也能画出侵权内容，但法律仍然约束使用者。这个观点可以记录，但我会保留一点怀疑，因为训练数据、平台责任、输出版权这些问题现实中还在变化。&lt;/p&gt;
+&lt;p&gt;Q3：GAN 还有位置吗？Diffusion 会一直主导吗？&lt;/p&gt;
+&lt;p&gt;他说 GAN 仍然有用，尤其在 distillation 和 real-time 系统里，但 GAN 不稳定，也没有展示出 Transformer 那种 scaling。Diffusion 更稳定，但他认为纯 diffusion 的 scaling 也有问题，所以 Luma 在走 hybrid、autoregressive、diffusion 混合路线。&lt;/p&gt;
+&lt;p&gt;Q4：模型越来越强之后，人类创造力在哪里？&lt;/p&gt;
+&lt;p&gt;Amit 的回答是，创造力不是模型自己定义的，而是人类判断出来的。人的作用会更多体现在选择、判断、训练和 skills layer 里。这个回答我比较喜欢，因为它没有陷入“AI 有没有创造力”的空泛争论，而是把问题放回实际系统里。&lt;/p&gt;
+&lt;p&gt;Q5：世界模型和今天 LLM 的差距是什么？&lt;/p&gt;
+&lt;p&gt;他的回答很简单：差距是 intelligence。今天很多图像 / 视频模型只是 beautiful pixel generator。它们没有足够的 context、memory、多轮交互能力，也不理解物理和因果。要让 world model 像 LLM 一样有用，就必须让视觉模型也能记住、理解、迭代和修正。&lt;/p&gt;
+&lt;h2 id=&#34;参考资料&#34;&gt;参考资料
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=6nUl_w5W9Wk&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Stanford CS153 Frontier Systems | Lesson 10&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://lumalabs.ai/news/ray3&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Luma AI launches Ray3&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://lumalabs.ai/news/uni-1-1-api&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Uni-1.1 API: Luma&amp;rsquo;s Unified Intelligence is now in API&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://lumalabs.ai/news/introducing-ray-3-2&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Introducing Ray3.2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://lumalabs.ai/news/luma-runs-production-inference-on-amd-and-tensorwave&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Luma runs production inference on AMD and TensorWave&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
         <title>Stanford CS153 Frontier Systems | Lesson 3 阅读笔记</title>
         <link>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-3/</link>
         <pubDate>Wed, 03 Jun 2026 16:56:06 +0800</pubDate>
