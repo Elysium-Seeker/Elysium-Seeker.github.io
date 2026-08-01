@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Anjney Midha 关于 context、compute、capital 与 frontier systems 的课堂笔记">
-<title>Stanford CS153 Frontier Systems | Lesson 1 阅读笔记</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Amit Jain 关于 Luma、从 3D 到视频、多模态 Transformer 与 Q&A 的课堂笔记">
+<title>Stanford CS153 Frontier Systems | Lesson 4 阅读笔记</title>
 
-<link rel='canonical' href='https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-1/'>
+<link rel='canonical' href='https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-4/'>
 
-<link rel="stylesheet" href="/scss/style.min.829fb4d762832054bf4ccfcc6906b7eb8df8a3d45b00b64b6fc4c539dc19645c.css"><meta property='og:title' content="Stanford CS153 Frontier Systems | Lesson 1 阅读笔记">
-<meta property='og:description' content="Anjney Midha 关于 context、compute、capital 与 frontier systems 的课堂笔记">
-<meta property='og:url' content='https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-1/'>
+<link rel="stylesheet" href="/scss/style.min.829fb4d762832054bf4ccfcc6906b7eb8df8a3d45b00b64b6fc4c539dc19645c.css"><meta property='og:title' content="Stanford CS153 Frontier Systems | Lesson 4 阅读笔记">
+<meta property='og:description' content="Amit Jain 关于 Luma、从 3D 到视频、多模态 Transformer 与 Q&A 的课堂笔记">
+<meta property='og:url' content='https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-4/'>
 <meta property='og:site_name' content='Elysium-Seeker'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-05-18T15:02:51&#43;08:00'/><meta property='article:modified_time' content='2026-05-18T15:05:39&#43;08:00'/>
-<meta name="twitter:title" content="Stanford CS153 Frontier Systems | Lesson 1 阅读笔记">
-<meta name="twitter:description" content="Anjney Midha 关于 context、compute、capital 与 frontier systems 的课堂笔记">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-07-26T13:00:00&#43;08:00'/><meta property='article:modified_time' content='2026-08-01T16:05:54&#43;08:00'/>
+<meta name="twitter:title" content="Stanford CS153 Frontier Systems | Lesson 4 阅读笔记">
+<meta name="twitter:description" content="Amit Jain 关于 Luma、从 3D 到视频、多模态 Transformer 与 Q&A 的课堂笔记">
     <link rel="shortcut icon" href="/favicon.ico" />
 <style>
     :root {
@@ -243,23 +243,14 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#lesson-1-anjney-midha-from-amp-pbc-on-frontier-systems">Lesson 1 Anjney Midha from AMP PBC on Frontier Systems</a></li>
-    <li><a href="#context">Context</a>
-      <ol>
-        <li><a href="#context-的定义">context 的定义</a></li>
-      </ol>
-    </li>
-    <li><a href="#强化学习的局限性">强化学习的局限性</a></li>
-    <li><a href="#scaling">Scaling</a></li>
-    <li><a href="#回到-infrastructure">回到 Infrastructure</a></li>
-    <li><a href="#算力不是商品的原因">算力不是商品的原因</a></li>
-    <li><a href="#需要思考的问题">需要思考的问题</a></li>
-    <li><a href="#补充材料">补充材料</a>
-      <ol>
-        <li><a href="#the-bitter-lesson">The Bitter Lesson</a></li>
-        <li><a href="#how-scaling-laws-drive-smarter-more-powerful-ai">How Scaling Laws Drive Smarter, More Powerful AI</a></li>
-      </ol>
-    </li>
+    <li><a href="#part-1从-3d-到视频">Part 1：从 3D 到视频</a></li>
+    <li><a href="#part-2为什么只做视频还不够">Part 2：为什么只做视频还不够</a></li>
+    <li><a href="#part-3llmvlm-和生成模型的区别">Part 3：LLM、VLM 和生成模型的区别</a></li>
+    <li><a href="#part-4transformer-的多模态问题">Part 4：Transformer 的多模态问题</a></li>
+    <li><a href="#part-5ai-factory-和交互数据">Part 5：AI Factory 和交互数据</a></li>
+    <li><a href="#part-6agent-和-skills">Part 6：Agent 和 Skills</a></li>
+    <li><a href="#最后的-qa-简记">最后的 Q&amp;A 简记</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
   </ol>
 </nav>
         </div>
@@ -291,12 +282,12 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/cs153-frontier-systems-lesson-1/">Stanford CS153 Frontier Systems | Lesson 1 阅读笔记</a>
+            <a href="/p/cs153-frontier-systems-lesson-4/">Stanford CS153 Frontier Systems | Lesson 4 阅读笔记</a>
         </h2>
     
         
         <h3 class="article-subtitle">
-            Anjney Midha 关于 context、compute、capital 与 frontier systems 的课堂笔记
+            Amit Jain 关于 Luma、从 3D 到视频、多模态 Transformer 与 Q&amp;A 的课堂笔记
         </h3>
         
     </div>
@@ -317,7 +308,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">2026-05-18</time>
+                <time class="article-time--published">2026-07-26</time>
             </div>
         
 
@@ -345,7 +336,7 @@
 
 
                 <time>
-                    2026-05-18
+                    2026-08-01
                 </time>
             </div></footer>
     
@@ -367,141 +358,78 @@
 
 
 <section class="article-content">
-    <p>本来是虚度一个周末后，为了减轻负罪感在周一早上零点打开的。</p>
-<p>意外地发现很值得听且很有收获，起码远大于营销号了。</p>
-<p>预计后面每两天上一节并做相关笔记。</p>
-<p>课程视频：<a class="link" href="https://www.youtube.com/watch?v=O5PfU_uDhS0"  target="_blank" rel="noopener"
-    >Stanford CS153 Frontier Systems | Anjney Midha from AMP PBC on Frontier Systems</a></p>
-<h2 id="lesson-1-anjney-midha-from-amp-pbc-on-frontier-systems">Lesson 1 Anjney Midha from AMP PBC on Frontier Systems
-</h2><p>前十几分钟的寒暄与介绍直接略过。</p>
-<p>the bottlenecks of artificial intelligence: context, compute, capital（资本）, and culture.</p>
-<h2 id="context">Context
-</h2><p>首先 context。</p>
-<p>要讲清 context，首先需要明白 RL 的原理。</p>
-<p>其实可以用非常简单的方式理解：想提高某个系统在指定任务上的能力时，用给予 reward 的方式代替直接教学具体做法。在完成任务时给予 high reward，并在失败时给予 low reward。反向传播并重复即可。</p>
-<p>在使用 LLM 这类强智能代理进行 RL 时，甚至可能不需要人工进行反向传播。它自己会学习，且随着算力与可供利用的资料增多，其智能也会提升。</p>
-<p>过往强化学习会在各个领域迅速趋于稳定状态，在超越人类的表现后，由于本身先验推理能力的限制（如各类下棋专用模型），很容易到达平台期。</p>
-<p>而 LLM 本身有充足的先验知识，所以在 RL 上有出人意料的表现。</p>
-<p>Anthropic 的初步盈利构想：筹集一些资金，购买一些 compute，用数据增强它，进行 pre-train，然后得到一个足够好的模型，让人们愿意使用它并为它付款，再用得到的资金中的一部分重复这个循环。</p>
-<h3 id="context-的定义">context 的定义
-</h3><ol>
-<li>能够被验证是否正确及可用的交互环境。</li>
-</ol>
-<p><strong>Verifiability</strong> 的重要性：一个任务能通过 RL 被提升，最重要的就是有 verifiability（可验证性）。可验证才能确定 reward，后文将有更详细的叙述。</p>
-<ol start="2">
-<li>用户的使用与修改数据。</li>
-</ol>
-<p>比如怎么修改模型生成的代码，怎么 git，怎么重新给提示词以达到用户目的，blah blah blah。</p>
-<ol start="3">
-<li>机密的高价值数据。</li>
-</ol>
-<p>在一个领域里，一个团队能在竞争中取得成功的核心，是拥有 unique and defensible access to some context（对某些上下文独特且可防御的权限）。</p>
-<p>在机密环境下数据不可泄露，所以需要本地部署的模型。</p>
-<p>目前的 road to AGI / ASI：recursive takeoff。</p>
-<h2 id="强化学习的局限性">强化学习的局限性
-</h2><ol>
-<li>
-<p>哲学观点：给定正确的 context，给定足够的 compute，agent could learn everything.</p>
-</li>
-<li>
-<p>经验观点（empirical view）：生活是混乱的。在可验证的领域（其实我认为“可量化成果”这样的词更为准确，whatever，就这样吧）很容易有提升，例如 coding；但在其他领域并不那么容易，例如 aesthetic, beauty, and love.</p>
-</li>
-</ol>
-<p>现有的前沿模型在 creative writing 上的表现是 catastrophic 级别的。</p>
-<p>所以，DON&rsquo;T SHOW AI-GENERATED DOCUMENT！</p>
-<p>对于文本：We think, we sit, we write, and we share with each other, even if it&rsquo;s raw.</p>
-<p>在现在市场还算空白的时间，总有一些前沿领域是只有你能理解和验证的：Because of your obsession, your love, your taste, your sense of beauty, your culture.</p>
-<p>创业的核心：what is the unique frontier that they can verify for humanity?</p>
-<h2 id="scaling">Scaling
-</h2><p>Scaling：模型能力随着计算的增长而可预测地扩展。</p>
-<p>每次公司推出新模型后，功能出现跳跃，然后收入也随之跳跃。</p>
-<p>Dollar in, dollar out.</p>
-<p>大模型公司为了算力投入硬件等硬资产，得到能力更强的模型等软件资产。</p>
-<p>但硬资产由于低市销率，估值通常只有年入的 3-4 倍。</p>
-<p>而产出的软件资产由于没有边际成本且有高毛利和高增长，估值通常能到年入的 30-40 倍。</p>
-<p>所以大模型公司所做的，就是投入 1 美元算力（本质是低估值资产），在 60-90 天的转化后，得到 1 美元的软件服务收入（高估值的资产）。</p>
-<p>这在资本市场上创造了整整放大 10 倍的价值杠杆。</p>
-<p>碎碎念：前提是投入的算力确实能换回同样增长级别的软件服务收入。</p>
-<p>从 chatbot 到 agent，结构的变换提升了数十倍的用量。</p>
-<p>推理消耗的算力 &amp; multi-agent 可能是未来？</p>
-<h2 id="回到-infrastructure">回到 Infrastructure
-</h2><p>主要解释 compute 不是商品。</p>
-<p>首先是事实：在过去的数年以来，H100 没有降价，反而价格一直在上升。</p>
-<p>传统的硬件设备都会面临折旧。以前的芯片遵从摩尔定律，每过一段时间都会有更好的新芯片，从而导致旧芯片大幅贬值。所以这类硬件设备被视为沉没成本和负担，公司以租赁算力而非购买芯片来使用算力。</p>
-<p>而现在的芯片，如前文所说，被购买后可以将硬件价值转化成软件服务价值，且由于顶级 AI 芯片的极度短缺，价格不降反升，成为公司的现金流机器。</p>
-<p>算力不是贬值的固定资产，而是高收益率的生产机器。</p>
-<p>现在芯片的经济形势可以与 19 世纪后不安的钢铁作比。工业革命之后钢铁也被需要，于是也是先涨价，直到某一年因为一些微不足道的事泡沫突然崩塌，价格回落到极低点，再到最后稳定。</p>
-<p>半导体、航运、铀都经历过类似的价格浮动。所以芯片和 AI 也有可能，但人们也希望我们能理想地跳过整个繁荣和萧条的过程。这对任何人来说都不好玩（经济危机）。</p>
-<p>AI scaling is a combination of massive，需要整合大量物理资源才能产生软件收入。AI 规模的扩展本质是重工业与能源问题。目前人们的目标是让物理世界的扩展速度尽量跟上虚拟世界的进化速度。Till now，算力仍旧稀缺。</p>
-<p><strong>Is it something where all of you should be spending your time wondering, should you be making chips? Should you be making more, better, interconnect? Or should you be spending time on distilling your aesthetics, your creativity, your intelligence?</strong></p>
-<h2 id="算力不是商品的原因">算力不是商品的原因
-</h2><ol>
-<li>算力是不可替代的。</li>
-</ol>
-<p>不同厂家，甚至同一厂家的不同型号芯片都不能直接互换，没有标准化，且软件与硬件高度绑定，更换需要软件和硬件层面（机房基础设施）的大量重构。DS 为了适配国产芯片做了大量工作。</p>
-<ol start="2">
-<li>需求、产能和成本无法被标准公式预测。</li>
-</ol>
-<p>由于算力在不同供应商、不同型号之间无法代换，且整个行业还在快速发展，它的需求、大模型的产能和成本是无法被标准公式预测的，而且存在不同时段的各种不稳定性。</p>
-<p>于是大企业们开始垄断所有芯片，即使他们中的很大一部分由于第一个问题根本就没有开始运转。</p>
-<p>同样的，无用的 vibe coding 也在浪费算力。</p>
-<p>为了解决不可替代性和不可预测性的问题，需要：</p>
+    <p>课程视频：<a class="link" href="https://www.youtube.com/watch?v=6nUl_w5W9Wk"  target="_blank" rel="noopener"
+    >Stanford CS153 Frontier Systems | Lesson 4</a></p>
+<p>这一课是 Luma AI 的 Amit Jain 来讲 unified intelligence systems。我的感觉是，这节课不太适合写成完整的公司介绍，因为信息太散：有 3D capture，有 video generation，有 Transformer，有 agent，还有一大段创意行业和 Hollywood。</p>
+<p>所以我这篇先只抓几个我比较在意的点：从 3D 到视频的转向、LLM / VLM / 生成模型之间的差别、多模态 Transformer 的编码问题，以及最后 Q&amp;A 里几个比较有意思的回答。</p>
+<h2 id="part-1从-3d-到视频">Part 1：从 3D 到视频
+</h2><p>Luma 一开始并不是直接做文生视频，而是从 3D capture 起步。</p>
+<p>Amit 在 Apple 做过 LiDAR，也参与过和 Vision Pro 相关的方向，所以他一开始对“下一代计算机如何捕获和理解现实世界”很敏感。再加上 NeRF 出现之后，3D 表示变得可以微分、可以被放进训练循环里优化，于是 Luma 最早的想法就是：让用户用手机捕获大量 3D 数据，然后用这些数据训练世界模型。</p>
+<p>他们确实做出了 Luma 3D Capture。这个 app 在早期很受欢迎，因为它把 NeRF 和 Gaussian Splats 这类研究技术第一次做成了普通用户能用的产品。也就是说，它不只是 demo，而是一个真的跑起来的 3D data flywheel。</p>
+<p>但问题是，3D 数据很难规模化。再多人用一个 app 去扫物体，也比不过互联网上已经存在几十年的图片和视频。Amit 这里的判断很简单：模型要围绕数据所在的位置设计，而不是先设计一个看起来很漂亮的算法，再抱怨没有数据。</p>
+<p>所以 Luma 后来转向视频。视频虽然不是显式 3D，但它有二维空间和一维时间，人可以通过时间线索理解物体、动作和空间关系，模型也可以尝试通过 video 学到 world representation。</p>
+<p>这一段对我来说最重要的是：从 3D 到 video 不是“降低维度”，而是从一个理论上更完整、但数据规模不够的模态，转向一个更容易规模化、也足够接近真实世界动态的模态。</p>
+<h2 id="part-2为什么只做视频还不够">Part 2：为什么只做视频还不够
+</h2><p>Luma 在 2024 年发布 Dream Machine，课里提到前几周就有几百万用户使用。这个产品证明了生成视频本身有很强的吸引力。</p>
+<p>但 Amit 说，video generation 仍然不够。因为一个视频模型如果只是生成漂亮画面，它仍然不一定理解人类逻辑。比如：</p>
 <ol>
-<li>
-<p>标准，just like AC / DC and TCP / IP。商品标准化才能替代，才能省去大量的重构工作。</p>
-</li>
-<li>
-<p>执行标准的机构。因为人类不可避免地会在某种程度上出现偏差，需要有人协调才能使标准被大规模接受和采用。</p>
-</li>
+<li>事件为什么重要？</li>
+<li>事件顺序应该怎样发展？</li>
+<li>用户说的修改意图到底指向画面的哪一部分？</li>
+<li>一个镜头里的动作、物理、时间连续性是否一致？</li>
 </ol>
-<p>在教科书上，Commodity means a common unit. It needs a standard delivery interface. It needs interconnection and pooling, needs metering, control and settlement. And the buyers can substitute one supplier&rsquo;s unit for another.</p>
-<p>而算力现在显然不符合这里的要求。</p>
-<h2 id="需要思考的问题">需要思考的问题
+<p>这就是他反复讲 unified intelligence 的原因。</p>
+<p>我理解这里的关键不是“视频模型需要更高清”，而是“视频模型需要更像 LLM 一样可交互”。今天我们用 ChatGPT 时，可以多轮追问、修改、保留上下文、让它解释自己之前的输出。但很多图像 / 视频模型仍然像一次性工具：给 prompt，出结果，不满意就重新抽卡。</p>
+<p>所以 Luma 想解决的问题是：视觉模型能不能也有上下文、记忆、多轮修改和某种自我检查能力。</p>
+<h2 id="part-3llmvlm-和生成模型的区别">Part 3：LLM、VLM 和生成模型的区别
+</h2><p>这一节我最想记的是 Amit 对几类模型的区分。</p>
+<p>LLM 是语言模型。它能理解文本，也能生成文本。更重要的是，这两件事发生在同一个模型里。它不是先用一个模型理解，再用另一个模型写作。</p>
+<p>VLM 是 vision-language model。它能看图，也能把图和语言联系起来，但它通常不是生成模型。也就是说，它可以理解图像，却不一定能生成图像。</p>
+<p>图像 / 视频生成模型，比如 diffusion model，则反过来：它很会生成漂亮像素，但不一定真的理解自己生成了什么。它可能满足局部美感，却不理解复杂指令、空间关系、物理因果和长程一致性。</p>
+<p>所以现在很多“多模态系统”其实是拼起来的：一个语言塔理解 prompt，一个图像塔生成画面，中间靠 embedding、encoder 或 enhanced prompt 连接。这种方法能用，但理解和生成之间有缝。</p>
+<p>Luma 的 unified model 想做的是把这些东西尽量放到同一个推理空间里：语言、图像、视频、声音、代码，都先被编码，再交给一个统一的 backbone 去处理。</p>
+<h2 id="part-4transformer-的多模态问题">Part 4：Transformer 的多模态问题
+</h2><p>Amit 对 Transformer 的说法比较有意思。他认为 Transformer 本身是很通用的，它不太在乎输入信息来自哪种模态。真正麻烦的地方在 Transformer 前后，也就是 encode 和 decode。</p>
+<p>文本比较适合离散 token。比如一句话可以被切成 token，然后模型预测下一个 token。</p>
+<p>但图像、音频、视频更麻烦。图像和音频更接近连续信号，视频还多了时间维度。你要把它们压进模型，就必须决定怎么编码：是离散化，还是连续 embedding？压缩到什么程度？会不会丢掉细节？跨帧一致性怎么保留？</p>
+<p>所以多模态 Transformer 的难点不只是“把图片也喂给模型”。更难的是：不同模态怎样进入同一个表示空间，并且让模型真的能在这个空间里推理。</p>
+<p>这里我会想到之前学 LLM 时的 tokenizer。文本 tokenizer 看起来只是前处理，但它其实决定了模型看世界的基本单位。多模态模型也一样，视觉 tokenizer / encoder 可能决定了模型到底是在看“像素”，还是在看“物体、关系和事件”。</p>
+<h2 id="part-5ai-factory-和交互数据">Part 5：AI Factory 和交互数据
+</h2><p>Luma 这节课也能接上 CS153 前面讲的 AI factory。</p>
+<p>他们的数据不只是公开图片和视频，还包括用户怎么使用产品：生成了什么，修改了什么，下载了什么，丢弃了什么，反复尝试了什么。这些交互数据可能比最终成品更重要，因为它们记录了人类如何把一个模糊想法变成可接受的输出。</p>
+<p>但这种反馈也很噪。比如一个人下载了一个很烂的视频，可能不是因为喜欢，而是想发出去吐槽 AI。那这个行为到底算正反馈还是负反馈？这就说明创意系统里的 preference data 比想象中复杂。</p>
+<p>另一个问题是敏感数据。大型工作室可能愿意用 Luma，但不会希望自己的项目进入通用训练数据。Amit 的说法是，被标记的项目不会进入训练循环，但系统仍然可以学习用户交互的 traces。也就是不学具体内容，学工作方式。</p>
+<p>这个点很值得记：未来很多高价值数据可能都不能直接训练，但 workflow trace 仍然可能成为新的学习信号。</p>
+<h2 id="part-6agent-和-skills">Part 6：Agent 和 Skills
+</h2><p>后面讲 agent 的部分，我觉得可以不用展开太多。</p>
+<p>核心就是：如果一个模型要做 end-to-end work，它不能只是生成一个结果，而是要进入一个循环。Amit 用了 REPL 的类比：read、eval、print、loop。创意工作也一样：先生成，看哪里不对，再修改，再生成，再判断。</p>
+<p>在这个循环里，模型只是底层处理单元。上面还需要 tool harness 和 skills。</p>
+<p>skills 这个词我觉得很重要。比如 Luma 生成课件 slides，不只是模型自己突然懂了设计，而是有人写了很长的 slide design skill，告诉模型什么是好 slide、什么是坏 slide。换句话说，人类经验被整理成可以复用的技能层。</p>
+<p>这也解释了为什么“模型变强”不等于“人没有用”。人的判断、审美和领域经验可能会变成 skill，被模型反复调用。</p>
+<h2 id="最后的-qa-简记">最后的 Q&amp;A 简记
+</h2><p>Q1：为什么 OpenAI / Sora 没有继续成为视觉生成市场里最强的玩家？</p>
+<p>Amit 的回答偏组织判断：OpenAI 的核心能力还是 LLM 和 chat。chat 是一个极大规模的产品，要做好已经需要巨大注意力。公司不能同时把所有方向都做到最好。这个回答让我想到，frontier system 的竞争不只是技术，也包括组织 focus。</p>
+<p>Q2：生成式 AI 会改变 copyright 吗？</p>
+<p>Amit 的观点是，生成能力和版权问题是正交的。Photoshop 也能画出侵权内容，但法律仍然约束使用者。这个观点可以记录，但我会保留一点怀疑，因为训练数据、平台责任、输出版权这些问题现实中还在变化。</p>
+<p>Q3：GAN 还有位置吗？Diffusion 会一直主导吗？</p>
+<p>他说 GAN 仍然有用，尤其在 distillation 和 real-time 系统里，但 GAN 不稳定，也没有展示出 Transformer 那种 scaling。Diffusion 更稳定，但他认为纯 diffusion 的 scaling 也有问题，所以 Luma 在走 hybrid、autoregressive、diffusion 混合路线。</p>
+<p>Q4：模型越来越强之后，人类创造力在哪里？</p>
+<p>Amit 的回答是，创造力不是模型自己定义的，而是人类判断出来的。人的作用会更多体现在选择、判断、训练和 skills layer 里。这个回答我比较喜欢，因为它没有陷入“AI 有没有创造力”的空泛争论，而是把问题放回实际系统里。</p>
+<p>Q5：世界模型和今天 LLM 的差距是什么？</p>
+<p>他的回答很简单：差距是 intelligence。今天很多图像 / 视频模型只是 beautiful pixel generator。它们没有足够的 context、memory、多轮交互能力，也不理解物理和因果。要让 world model 像 LLM 一样有用，就必须让视觉模型也能记住、理解、迭代和修正。</p>
+<h2 id="参考资料">参考资料
 </h2><ol>
-<li>
-<p>what will it take to ensure a peaceful transition on compute over the next couple of years?</p>
-</li>
-<li>
-<p>what is your part in this?</p>
-</li>
+<li><a class="link" href="https://www.youtube.com/watch?v=6nUl_w5W9Wk"  target="_blank" rel="noopener"
+    >Stanford CS153 Frontier Systems | Lesson 4</a></li>
+<li><a class="link" href="https://lumalabs.ai/news/ray3"  target="_blank" rel="noopener"
+    >Luma AI launches Ray3</a></li>
+<li><a class="link" href="https://lumalabs.ai/news/uni-1-1-api"  target="_blank" rel="noopener"
+    >Uni-1.1 API: Luma&rsquo;s Unified Intelligence is now in API</a></li>
+<li><a class="link" href="https://lumalabs.ai/news/introducing-ray-3-2"  target="_blank" rel="noopener"
+    >Introducing Ray3.2</a></li>
+<li><a class="link" href="https://lumalabs.ai/news/luma-runs-production-inference-on-amd-and-tensorwave"  target="_blank" rel="noopener"
+    >Luma runs production inference on AMD and TensorWave</a></li>
 </ol>
-<h2 id="补充材料">补充材料
-</h2><h3 id="the-bitter-lesson">The Bitter Lesson
-</h3><p>写得太好了所以补一点。</p>
-<p>核心思想是：纯堆算力的通用方法，往往比那些神秘的小巧思有效得多。</p>
-<p>从棋类开始，那些靠人类精心设计的策略就打不过爆搜了。</p>
-<p>现在更是如此。</p>
-<p>教训本身：</p>
-<ol>
-<li>
-<p>AI researchers have often tried to build knowledge into their agents.</p>
-</li>
-<li>
-<p>this always helps in the short term, and is personally satisfying to the researcher.</p>
-</li>
-<li>
-<p>but in the long run it plateaus and even inhibits further progress.</p>
-</li>
-<li>
-<p>breakthrough progress eventually arrives by an opposing approach based on scaling computation by search and learning.</p>
-</li>
-</ol>
-<p>把小巧思构建进智能体短期有用但长期阻碍发展，而最终的成功往往是纯粹的、基于搜索和学习的 compute scaling。</p>
-<p>One thing that should be learned from the bitter lesson is the great power of general purpose methods, of methods that continue to scale with increased computation even as the available computation becomes very great. The two methods that seem to scale arbitrarily in this way are search and learning.</p>
-<p>以及：the actual contents of minds are tremendously, irredeemably complex; we should stop trying to find simple ways to think about the contents of minds.</p>
-<h3 id="how-scaling-laws-drive-smarter-more-powerful-ai">How Scaling Laws Drive Smarter, More Powerful AI
-</h3><p>讲解了三种 scaling 及其效果。</p>
-<p>首先是 Pretraining Scaling。</p>
-<p>非常传统的砸模型参数、训练数据集和算力大小。</p>
-<p>根据 Chinchilla Scaling Laws，一味扩大模型参数量或数据是没有用的。更大的模型参数需要更多的数据支撑，反之亦然，从而训练期间需要更多算力，进而可以有预期地提升模型智能。</p>
-<p>然后是 Post-Training Scaling。</p>
-<p>在预训练模型的基础上针对特定任务微调。</p>
-<p>采用包括但不限于 fine-tuning, pruning, quantization, distillation, reinforcement learning and synthetic data augmentation 等方法。（希望我回来看的时候能一个个说出它们分别是什么。）</p>
-<p>单个 Post-Training Scaling 是相对省算力的，但是考虑到做后训练的总量巨大，对于开源模型来说，后训练阶段所花的总算力可能是预训练的 30x 往上。</p>
-<p>最后是 Test-Time Scaling。</p>
-<p>也就是推理模型干的事：在推理过程中分配额外算力，推理完再给答案。</p>
-<p>方法有很多，不一一列举。比较经典的是思维链和多数投票采样。</p>
-<p>感觉可以列出大模型增大用户 token 消耗的路径了：从 chatbot 到推理 chatbot 到 agent，严重怀疑工具调用也杀 token，再然后是 OpenClaw 这种巨杀 token 的架构和 multi-agent。</p>
 
 </section>
 
@@ -532,7 +460,7 @@
 
 
         <span>
-            最后更新于 2026-05-18
+            最后更新于 2026-08-01
         </span>
     </section></footer>
 
@@ -577,19 +505,6 @@
             
                 
 <article class="">
-    <a href="/p/cs153-frontier-systems-lesson-4/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 4 阅读笔记</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
     <a href="/p/cs153-frontier-systems-lesson-3/">
         
         
@@ -609,6 +524,19 @@
 
         <div class="article-details">
             <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 2 阅读笔记</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cs153-frontier-systems-lesson-1/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 1 阅读笔记</h2>
         </div>
     </a>
 </article>

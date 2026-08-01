@@ -7,14 +7,14 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Sun, 26 Jul 2026 14:33:47 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/categories/cs153/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Stanford CS153 Frontier Systems | Lesson 10 阅读笔记</title>
-        <link>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-10/</link>
+        <lastBuildDate>Sat, 01 Aug 2026 16:05:54 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/categories/cs153/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Stanford CS153 Frontier Systems | Lesson 4 阅读笔记</title>
+        <link>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-4/</link>
         <pubDate>Sun, 26 Jul 2026 13:00:00 +0800</pubDate>
         
-        <guid>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-10/</guid>
+        <guid>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-4/</guid>
         <description>&lt;p&gt;课程视频：&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=6nUl_w5W9Wk&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Stanford CS153 Frontier Systems | Lesson 10&lt;/a&gt;&lt;/p&gt;
+    &gt;Stanford CS153 Frontier Systems | Lesson 4&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;这一课是 Luma AI 的 Amit Jain 来讲 unified intelligence systems。我的感觉是，这节课不太适合写成完整的公司介绍，因为信息太散：有 3D capture，有 video generation，有 Transformer，有 agent，还有一大段创意行业和 Hollywood。&lt;/p&gt;
 &lt;p&gt;所以我这篇先只抓几个我比较在意的点：从 3D 到视频的转向、LLM / VLM / 生成模型之间的差别、多模态 Transformer 的编码问题，以及最后 Q&amp;amp;A 里几个比较有意思的回答。&lt;/p&gt;
 &lt;h2 id=&#34;part-1从-3d-到视频&#34;&gt;Part 1：从 3D 到视频
@@ -75,7 +75,7 @@
 &lt;h2 id=&#34;参考资料&#34;&gt;参考资料
 &lt;/h2&gt;&lt;ol&gt;
 &lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=6nUl_w5W9Wk&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Stanford CS153 Frontier Systems | Lesson 10&lt;/a&gt;&lt;/li&gt;
+    &gt;Stanford CS153 Frontier Systems | Lesson 4&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://lumalabs.ai/news/ray3&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Luma AI launches Ray3&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://lumalabs.ai/news/uni-1-1-api&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
