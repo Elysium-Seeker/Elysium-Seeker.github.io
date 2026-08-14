@@ -7,7 +7,194 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Sat, 01 Aug 2026 16:05:54 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/categories/cs153/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 14 Aug 2026 19:25:28 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/categories/cs153/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Stanford CS153 Frontier Systems | Lesson 7 阅读笔记</title>
+        <link>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-7/</link>
+        <pubDate>Fri, 14 Aug 2026 19:10:00 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-7/</guid>
+        <description>&lt;p&gt;课程视频：&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=wisccQYTRQc&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Stanford CS153 Frontier Systems | Lesson 7&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;这一课是 General Matter 的 Scott Nolan 来讲 energy bottlenecks。放在 CS153 里，它很适合接在 compute、AI factory 和 frontier lab 后面看：如果 AI scaling 继续往前走，瓶颈不会停在软件层，也不会永远停在 GPU 层，最后会一路追到电力、数据中心、制造业和电网工程。&lt;/p&gt;
+&lt;p&gt;我会把这节课记成一个上游追踪问题：当我们说 AI 缺 compute 时，compute 自己又缺什么？&lt;/p&gt;
+&lt;h2 id=&#34;part-1ai-factory-的链条&#34;&gt;Part 1：AI Factory 的链条
+&lt;/h2&gt;&lt;p&gt;可以先把 AI factory 写成一条链：&lt;/p&gt;
+&lt;p&gt;Data -&amp;gt; Compute -&amp;gt; Algorithm -&amp;gt; Pre-training -&amp;gt; Foundation Model -&amp;gt; Mid/Post-training -&amp;gt; Deployment / Agents&lt;/p&gt;
+&lt;p&gt;前几节课更多在讲数据、模型、训练和产品循环。这一节提醒我，factory 的更上游还有一层物理基础设施。模型不是在抽象空间里运行的，它最后要落到芯片、机房、散热、电力和建设周期上。&lt;/p&gt;
+&lt;p&gt;所以 compute 是瓶颈，但 electricity 也会成为 compute 的瓶颈。这个判断很关键，因为它把 AI 从“软件行业问题”往外推了一圈。&lt;/p&gt;
+&lt;h2 id=&#34;part-2从-compute-constrained-到-power-constrained&#34;&gt;Part 2：从 compute constrained 到 power constrained
+&lt;/h2&gt;&lt;p&gt;Nolan 的判断是，AI scaling 的近况正在逐渐从 compute constrained 走向 power constrained。&lt;/p&gt;
+&lt;p&gt;过去软件需求增长，大多数时候还是比较线性的。ChatGPT 之后，推理和训练需求被突然拉高，电力需求也跟着激增。AI infrastructure 的建设速度，和传统能源基础设施的建设速度完全不在一个时间尺度上。&lt;/p&gt;
+&lt;p&gt;这意味着：就算 GPU 可以继续买，机房可以继续建，电力接入、输电、变压、冷却和长期稳定供给也会变成新的限制。&lt;/p&gt;
+&lt;h2 id=&#34;part-3不同-layer-的-scaling-speed&#34;&gt;Part 3：不同 layer 的 scaling speed
+&lt;/h2&gt;&lt;p&gt;这节课里我最想记的系统观点是：不同 layer 的 scaling speed 不一样。&lt;/p&gt;
+&lt;p&gt;大概可以这样排：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;软件最快。&lt;/li&gt;
+&lt;li&gt;芯片其次。&lt;/li&gt;
+&lt;li&gt;数据中心再次。&lt;/li&gt;
+&lt;li&gt;传统能源最慢。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;只要需求突然指数增长，最慢的那个 layer 就会变成 bottleneck。这个逻辑和之前几节课很一致：frontier system 的瓶颈不会消失，只会移动。&lt;/p&gt;
+&lt;p&gt;所以如果 AI 继续按现在的规模扩张，它最终就会变成一个能源工业、建筑业、制造业和电网工程共同参与的问题。&lt;/p&gt;
+&lt;h2 id=&#34;part-4让算力靠近能源&#34;&gt;Part 4：让算力靠近能源
+&lt;/h2&gt;&lt;p&gt;这一节还可以和 Bitcoin 的历史放在一起看：&lt;/p&gt;
+&lt;p&gt;Bitcoin -&amp;gt; distributed compute infrastructure -&amp;gt; AI compute infrastructure&lt;/p&gt;
+&lt;p&gt;加密挖矿曾经让一批人学会了怎样寻找廉价能源、部署分布式算力、优化机房和电力成本。AI compute 也可能继承这部分基础设施经验，只是需求变得更大，也更稳定。&lt;/p&gt;
+&lt;p&gt;一个很有意思的反转是：过去常见思路是让能源靠近算力，比如给数据中心找电；未来可能越来越多地变成让算力靠近能源，也就是把训练和推理基础设施部署到能源更容易获得的地方。&lt;/p&gt;
+&lt;h2 id=&#34;part-5baseload-power-和核能&#34;&gt;Part 5：Baseload Power 和核能
+&lt;/h2&gt;&lt;p&gt;AI 不只需要便宜电，还需要稳定电。对于超大规模 AI 基础设施，baseload power 很重要，因为训练集群和推理服务不能长期依赖高度波动的供给。&lt;/p&gt;
+&lt;p&gt;这也是为什么 Nolan 会强调核能。长期看，如果 AI infrastructure 真的继续扩大，核能可能会成为很重要的支撑方式。这里的重点在于理解 AI 的物理约束：稳定、密集、长期、可扩展的电力供给，会变成 frontier AI 的一部分。&lt;/p&gt;
+&lt;h2 id=&#34;part-6怎么用这节课找问题&#34;&gt;Part 6：怎么用这节课找问题
+&lt;/h2&gt;&lt;p&gt;这节课对我最有用的地方，是它给了一个找问题的方法：&lt;/p&gt;
+&lt;p&gt;什么问题非常重要？这个问题现在有没有人在认真解决？如果别人不解决，我有没有特殊能力可以解决？&lt;/p&gt;
+&lt;p&gt;这个问题框架可以从模型层一路往上游追。比如先问：模型为什么不能继续 scale？可能答案是 compute。再问 compute 为什么不能继续 scale？可能答案是 electricity、data center、grid connection、cooling、supply chain。&lt;/p&gt;
+&lt;p&gt;这也是我觉得“实体基础设施复兴”这个说法有意思的原因。AI 不只是 software revolution，它可能会把很多注意力重新推回 physical infrastructure。&lt;/p&gt;
+&lt;h2 id=&#34;参考资料&#34;&gt;参考资料
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=wisccQYTRQc&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Stanford CS153 Frontier Systems | Lesson 7&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>Stanford CS153 Frontier Systems | Lesson 6 阅读笔记</title>
+        <link>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-6/</link>
+        <pubDate>Fri, 14 Aug 2026 19:05:00 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-6/</guid>
+        <description>&lt;p&gt;课程视频：&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=B8NvdfssGac&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Stanford CS153 Frontier Systems | Lesson 6&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;这一课是 Ben Horowitz 来讲 venture capital systems、network effects、capital 和 culture。放在 CS153 里，这节课其实是在补前几节没有展开的两个瓶颈：capital 和 culture。&lt;/p&gt;
+&lt;p&gt;这节课更适合写成系统课：a16z 怎么把 VC 机构做成一个 network effect system？AI 为什么改变资本部署的物理规律？文化怎样从口号落到动作？&lt;/p&gt;
+&lt;h2 id=&#34;part-1a16z-把-vc-做成系统&#34;&gt;Part 1：a16z 把 VC 做成系统
+&lt;/h2&gt;&lt;p&gt;Ben 讲 a16z 创立时，核心判断是 VC 行业原来的系统设计过时了，单靠“更会投项目”不够。&lt;/p&gt;
+&lt;p&gt;传统 VC 更像小团队投资模型。行业默认一年只有很少数公司能达到大规模成功，所以 VC 机构也不需要扩张太多。Ben 和 Marc 的判断是，software eats the world 之后，未来会有更多公司变成 technology companies，也就需要更大规模、更产品化的 VC 机构。&lt;/p&gt;
+&lt;p&gt;所以 a16z 做了几个系统改动：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;经济利益可以共享，但控制权要集中，方便组织重构。&lt;/li&gt;
+&lt;li&gt;投资讨论要保持小房间、高密度，不能变成 30 人 presentation。&lt;/li&gt;
+&lt;li&gt;VC 机构除了给钱，还要给创业者网络、客户、人才、媒体、政策等资源。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;我理解这里的关键是：a16z 把 VC 从一种“资本选择器”做成了“创业者服务平台”。&lt;/p&gt;
+&lt;h2 id=&#34;part-2vc-机构也可以有-network-effects&#34;&gt;Part 2：VC 机构也可以有 network effects
+&lt;/h2&gt;&lt;p&gt;这一课里 network effects 讲得很清楚。&lt;/p&gt;
+&lt;p&gt;互联网让人们第一次认真理解网络效应：网络越大，价值越大。但一个很难的问题是 bootstrapping。电话网络有十亿人时当然有价值，但第一台电话卖给谁？&lt;/p&gt;
+&lt;p&gt;a16z 的做法是把 firm 本身当成网络来建。它试图和硅谷工程师、executives、大公司、潜在客户、媒体、创业者都建立关系。这样创业者拿到的不只有钱，还包括对网络的接入。&lt;/p&gt;
+&lt;p&gt;他们甚至把本来可以作为管理费收入的钱拿去建设这个网络，比如做 briefing center，把大公司带来看 portfolio startups。&lt;/p&gt;
+&lt;p&gt;这个例子挺像前面几节课讲的 data flywheel，只是这里飞轮的核心从数据换成了关系：&lt;/p&gt;
+&lt;p&gt;创业者越多 -&amp;gt; 网络越强 -&amp;gt; 对创业者越有吸引力 -&amp;gt; 更好的创业者进入网络。&lt;/p&gt;
+&lt;h2 id=&#34;part-3ai-改变资本物理&#34;&gt;Part 3：AI 改变资本物理
+&lt;/h2&gt;&lt;p&gt;Ben 说 AI 改变了一个过去很稳定的规律：以前不能简单把钱砸到技术问题上。&lt;/p&gt;
+&lt;p&gt;传统软件里，如果别人领先你两年，你不能靠雇 1000 个工程师直接追回来，因为沟通成本、组织复杂度和工程不可并行性会吞掉效率。&lt;/p&gt;
+&lt;p&gt;但 AI 不一样。现在如果你有足够的 GPU、数据和钱，很多问题确实可以被更直接地推进。也就是说，资本突然变得更像系统输入，而不是单纯的业务资源。&lt;/p&gt;
+&lt;p&gt;这能接上 CS153 的 compute / capital 主题。frontier AI 公司不是普通软件公司，因为它们真的可以把资本转换成训练算力、数据处理、实验规模和产品能力。&lt;/p&gt;
+&lt;p&gt;当然这也意味着竞争门槛变了。过去的壁垒可能是工程团队和软件积累，现在的壁垒可能是资本、算力、数据和 distribution 的组合。&lt;/p&gt;
+&lt;h2 id=&#34;part-4创业想法世界需不需要你&#34;&gt;Part 4：创业想法：世界需不需要你
+&lt;/h2&gt;&lt;p&gt;Ben 对创业 idea 的判断也很直接：先问“这个东西是否需要存在？如果我不做，别人会不会做？”，再问“我能不能做一个公司”。&lt;/p&gt;
+&lt;p&gt;这和 dorm room problem 形成对照。学生很容易只看到自己宿舍、朋友、校园生活里的问题，这些问题不一定不重要，但视野会窄。Ben 没有否定从自己问题出发，重点是先去 solve something。在解决一个真实问题时，你可能会发现一个更大的问题。&lt;/p&gt;
+&lt;p&gt;他举了几个例子：Dropbox 最早是 Drew 自己受不了 USB 文件传输；Meta 最早也没有直接奔着现在的形态去。很多大 idea 是从小问题里长出来的。&lt;/p&gt;
+&lt;p&gt;这个点对我挺有用：比起在脑子里空想“伟大 idea”，更应该先碰一个真实问题。真实问题会把你带到更大的结构里。&lt;/p&gt;
+&lt;h2 id=&#34;part-5文化要落到行动&#34;&gt;Part 5：文化要落到行动
+&lt;/h2&gt;&lt;p&gt;这一节关于 culture 的部分很强。&lt;/p&gt;
+&lt;p&gt;Ben 说 culture is a set of actions, not beliefs。也就是说，文化的重点不在墙上写“我们有 integrity”，而在具体行为：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;要不要来办公室？&lt;/li&gt;
+&lt;li&gt;5 点下班还是继续做？&lt;/li&gt;
+&lt;li&gt;别人问问题，是立刻回复还是一周后回复？&lt;/li&gt;
+&lt;li&gt;是 best idea wins，还是 founder 说了算？&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;如果团队一开始没有把这些行为标准说清楚，后面就会变成政治和互相不满。大家会因为“你为什么这样做”而生气，但其实从来没人定义过标准。&lt;/p&gt;
+&lt;p&gt;这点很适合和 frontier team 放在一起看。越是高压、变化快、资本密集、速度快的团队，越不能只靠抽象价值观维持协作。文化必须落到具体动作上。&lt;/p&gt;
+&lt;p&gt;他还补了一层：culture is often also what you don&amp;rsquo;t do, what you say no to。也就是说，文化不只体现在团队鼓励什么，也体现在它拒绝什么、默认不做什么。&lt;/p&gt;
+&lt;h2 id=&#34;part-6公司需要明确决策权&#34;&gt;Part 6：公司需要明确决策权
+&lt;/h2&gt;&lt;p&gt;Ben 还讲了为什么他不喜欢 co-CEO 或“大家都平等投票”的公司结构。&lt;/p&gt;
+&lt;p&gt;他的观点很简单：公司需要有人 break tie。大家可以讨论，但最后必须有人决定往哪走。如果不喜欢，可以离开。这个说法听起来很强硬，但放在创业公司语境里是有道理的，因为速度和一致性很重要。&lt;/p&gt;
+&lt;p&gt;他也区分了公司和国家。国家必须对坏领导有韧性，所以要分权；公司如果领导不好，最多公司失败。公司可以更集中，国家不能这么搞。&lt;/p&gt;
+&lt;p&gt;我会把这个当作一个强观点记录下来，不一定完全接受，但它确实解释了为什么很多高强度创业团队会强调 founder authority。&lt;/p&gt;
+&lt;h2 id=&#34;最后的-qa-简记&#34;&gt;最后的 Q&amp;amp;A 简记
+&lt;/h2&gt;&lt;p&gt;Q1：如果现在是大学生，应该把精力放在哪里？&lt;/p&gt;
+&lt;p&gt;Ben 说要把 AI 当成像 electricity 一样的新工具集。先搞清楚自己感兴趣的方向，然后 master the new toolset，把它应用到那个方向上。&lt;/p&gt;
+&lt;p&gt;Q2：要不要 drop out？&lt;/p&gt;
+&lt;p&gt;他的回答是因人而异。Zuck drop out 对 Zuck 是对的，但不代表对所有人都对。他说职业建议很难普适，别人给你的建议往往只是适合他自己。&lt;/p&gt;
+&lt;p&gt;Q3：为什么 a16z 要进入政治和政策？&lt;/p&gt;
+&lt;p&gt;Ben 认为 AI、crypto、energy 这些行业需要在 Washington 有声音，否则政策可能把行业直接卡死。这里可以看成 capital system 的外延：前沿系统不只受市场影响，也受政策和监管影响。&lt;/p&gt;
+&lt;p&gt;Q4：Databricks pitch 为什么 memorable？&lt;/p&gt;
+&lt;p&gt;他说 Databricks 的 pitch 很糟，像听不懂的 CS lecture，但背后的人和技术太强。这个回答很好玩，也说明 VC 看的不止是 presentation 美不美，founder 和底层技术更关键。&lt;/p&gt;
+&lt;p&gt;Q5：怎么看 Cluely？&lt;/p&gt;
+&lt;p&gt;Ben 说早期公司不能太早下定论，founder 有原创思考和 breakthrough marketing 就值得继续看。商业里唯一不可原谅的罪是 running out of money。&lt;/p&gt;
+&lt;p&gt;Q6：SaaSpocalypse 真的会毁掉所有 SaaS 吗？&lt;/p&gt;
+&lt;p&gt;他的看法更细：如果一家 SaaS 公司的护城河只是 code 和 UI，那确实危险；但很多公司有复杂渠道、关系、数据、流程和全球服务能力，不会被 Anthropic 之类的模型一键替代。&lt;/p&gt;
+&lt;p&gt;Q7：伟大公司只要赚钱就够了吗？&lt;/p&gt;
+&lt;p&gt;Ben 的回答很明确：如果只是为了赚钱而做生意，那不是他喜欢的公司类型。伟大公司通常还要有某种需要被建出来的理由，这也呼应了前面“世界需不需要你”的创业判断。&lt;/p&gt;
+&lt;p&gt;Q8：现在最被高估的建议是什么？&lt;/p&gt;
+&lt;p&gt;他没有给一个标准答案，但反复强调不能 ignore AI。像当年互联网一样，巨大技术变迁不能被无视。不过他也觉得 AI doom and gloom 被夸大了，最大的风险反而是因为恐惧而过度监管。&lt;/p&gt;
+&lt;h2 id=&#34;参考资料&#34;&gt;参考资料
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=B8NvdfssGac&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Stanford CS153 Frontier Systems | Lesson 6&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>Stanford CS153 Frontier Systems | Lesson 5 阅读笔记</title>
+        <link>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-5/</link>
+        <pubDate>Fri, 14 Aug 2026 19:00:00 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-5/</guid>
+        <description>&lt;p&gt;课程视频：&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=BQrJ4lHAjhc&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Stanford CS153 Frontier Systems | Lesson 5&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;这一课和前几节不太一样。前面更多是在讲 frontier lab、模型、数据、算力和系统循环，这一节换到了 product management。主讲人是 Nikhyl Singhal，他从 Google、Meta、Credit Karma 的经历讲起，最后落到 AI 时代产品角色和职业路径会怎么变。&lt;/p&gt;
+&lt;p&gt;我感觉这节课最适合写成几个非常实际的问题：产品经理到底做什么？AI 之后产品经理会不会消失？学生应该学什么？什么时候应该离开一家公司？&lt;/p&gt;
+&lt;h2 id=&#34;part-1pm-为什么会出现&#34;&gt;Part 1：PM 为什么会出现
+&lt;/h2&gt;&lt;p&gt;Nikhyl 对产品经理的定义很朴素：公司里有一群人负责 build，有一群人负责 sell，中间需要有人把“用户需要什么”和“团队如何构建”连接起来，这就是 product management。&lt;/p&gt;
+&lt;p&gt;但在公司最早期，首要任务通常还轮不到 PM。早期公司最重要的是找 product-market fit。这个阶段更像创始人反复试错，快速实验，直到产品突然有了自然拉力，也就是他说的 sucking sound。&lt;/p&gt;
+&lt;p&gt;PM 更常出现于 PMF 之后。产品开始被用户拉着走，创始人不能再一直随手实验和推翻东西，公司需要稳定性、扩展性、跨团队协调，也要进入 go-to-market 和相邻产品线。这时候 PM / CPO 的价值才变得明显。&lt;/p&gt;
+&lt;p&gt;这也能对应他讲的公司阶段：早期由 founder-led product 快速试错；找到 PMF 后开始建立一致性和弹性；高速增长时引入更多 PM 去 scale 和 expand；成熟大公司里，PM 又要面对 innovator&amp;rsquo;s dilemma，在内部重新做 zero-to-one。&lt;/p&gt;
+&lt;p&gt;我理解这里的重点是：PM 的核心不在“想点子”，更在公司从混沌试错走向规模化时，帮助组织稳定地做正确产品。&lt;/p&gt;
+&lt;h2 id=&#34;part-2hangouts-和真实客户问题&#34;&gt;Part 2：Hangouts 和真实客户问题
+&lt;/h2&gt;&lt;p&gt;他讲 Hangouts 的例子挺有意思。Google 当时想把 Gmail、Android、通信、语音、视频等一堆系统整合成一个统一 app。从公司内部看，这很合理，因为内部有太多 codebase、身份系统和产品线。&lt;/p&gt;
+&lt;p&gt;但用户并不关心这些内部复杂性。&lt;/p&gt;
+&lt;p&gt;WhatsApp 的打法反而更简单：先把 text messaging 做到极其可靠，尤其是在印度和各种网络环境不好的地方跑得很好。等 network 建起来之后，再加 voice 和 video。&lt;/p&gt;
+&lt;p&gt;这个例子可以直接写成一句话：inside-the-building problem 不等于 customer problem。&lt;/p&gt;
+&lt;p&gt;产品里很容易发生这种错觉。团队觉得自己在解决一个巨大复杂问题，但用户只是在问：这个东西是不是解决了我的一个真实痛点？&lt;/p&gt;
+&lt;h2 id=&#34;part-3ai-让-pm-从信息搬运变成-builder&#34;&gt;Part 3：AI 让 PM 从信息搬运变成 builder
+&lt;/h2&gt;&lt;p&gt;这一课里最和 CS153 主线有关的部分，是 AI 怎么改变产品工作。&lt;/p&gt;
+&lt;p&gt;过去很多 PM 的工作其实是 information moving：整理用户反馈、同步销售电话、写文档、做汇报、把信息包装给真正的决策者。Nikhyl 说这种工作很痛苦，因为它是 responsibility without authority。&lt;/p&gt;
+&lt;p&gt;AI 之后，这部分会被压缩得很厉害。现在 agent 可以每天总结客服对话、销售电话、用户投诉、survey 结果，并且按收入影响、实现复杂度、系统一致性来排序。也就是说，过去 PM 花很多时间整理的信息流，现在可以被自动化。&lt;/p&gt;
+&lt;p&gt;FDE 也可以放在这里理解。Forward-Deployed Engineer 既有工程能力，又在客户现场解决问题；它的价值不在多写一份反馈报告，而在把解决问题的过程直接沉淀回产品。&lt;/p&gt;
+&lt;p&gt;但这不代表产品工作消失了。相反，真正稀缺的是 judgment：该不该做？做出来是否有效？是否符合整个系统设计？是否符合品牌和用户场景？&lt;/p&gt;
+&lt;p&gt;所以他认为未来更重要的是 product builder，传统意义上的 product manager 会被重新定义。这个判断我觉得挺有道理。AI 让更多人能直接 build，单纯“组织别人 build”的人会变少，但能判断方向并快速验证的人会更值钱。&lt;/p&gt;
+&lt;h2 id=&#34;part-4skip-和职业路径&#34;&gt;Part 4：Skip 和职业路径
+&lt;/h2&gt;&lt;p&gt;Nikhyl 后来讲了 Skip。Skip 一开始像是给产品人才做 talent agency，服务对象从产品经理扩展到更广义的 product builders。&lt;/p&gt;
+&lt;p&gt;他特别强调 career calculus：不要只想第一份工作，还要想第一份工作如何设置第二份工作。因为技术行业里很多人每 2-3 年就会换一次环境，职业路径更像一串选择，不像一条直线。&lt;/p&gt;
+&lt;p&gt;这个点对学生很实用。刚毕业时，比 title 更重要的可能是这个环境能不能把你往前拉。你是否会被迫学习新东西，是否能接触现代工具，是否能进入增长很快的系统。&lt;/p&gt;
+&lt;p&gt;如果环境本身不增长，你就要靠自己推自己；如果环境增长很快，它会逼你成长。&lt;/p&gt;
+&lt;h2 id=&#34;part-5学生应该学什么&#34;&gt;Part 5：学生应该学什么
+&lt;/h2&gt;&lt;p&gt;给学生的建议里，他讲了三个点。&lt;/p&gt;
+&lt;p&gt;第一，要保持 modern。现在公司面试不一定只看你在哪个大厂待过，而会看你是否真的会用最新工具，是否 hands-on，是否能用 AI 工具快速验证想法。一个在 Google 开会六年的人，可能反而没有一个一直用 Claude Code 做东西的学生现代。&lt;/p&gt;
+&lt;p&gt;第二，要重视连接。Stanford 的同学、朋友、被动关系，长期看可能会带来很多运气和机会。这个建议听起来老套，但他讲得比较诚恳：network 的价值来自长期互相帮助，不能只当成功利社交。&lt;/p&gt;
+&lt;p&gt;第三，要有 systems programming mindset。这里不要求人人都写底层系统，重点是理解系统怎么拼起来、哪些抽象可以叠加、什么时候一个 idea 适合放进某个系统里。&lt;/p&gt;
+&lt;p&gt;我比较喜欢第三点。因为 AI 让“构造东西”的成本下降之后，真正重要的就变成系统判断：这个东西该不该存在？应该放在哪里？和已有系统会不会冲突？&lt;/p&gt;
+&lt;h2 id=&#34;最后的-qa-简记&#34;&gt;最后的 Q&amp;amp;A 简记
+&lt;/h2&gt;&lt;p&gt;Q1：AI 时代 PM 会不会被裁掉？&lt;/p&gt;
+&lt;p&gt;Nikhyl 认为裁员主要打到过去几年因为组织膨胀而出现的“manager-heavy PM”，覆盖的不是所有 PM。那些主要负责协调、汇报、移动信息的人会很危险。但能 build、有判断、懂系统的人反而更重要。&lt;/p&gt;
+&lt;p&gt;Q2：Meta 的 metaverse 失败说明什么？&lt;/p&gt;
+&lt;p&gt;他的看法是，大公司为了寻找下一代平台，有时候会做非常大的长期下注。Meta 想成为下一个平台的 innovator，避免只依赖 Apple / Google 的平台。但大公司也容易陷入 sunk cost fallacy，投了多年之后更难停下。&lt;/p&gt;
+&lt;p&gt;Q3：现代 PM 工作里最该被 AI 替代的是什么？&lt;/p&gt;
+&lt;p&gt;他提到很多组织里的 theatrics：大型会议、slide deck、信息包装、层层 VP 汇报。AI 可以直接接近 ground truth，把真实实验和用户反馈解释清楚，这会减少很多表演性的组织劳动。&lt;/p&gt;
+&lt;p&gt;Q4：社区和 coaching 还有价值吗？&lt;/p&gt;
+&lt;p&gt;他对大规模 coaching / 社区比较悲观。真正稀缺的是高质量、强筛选、低噪声的 peer group；普通 advice 很容易被 ChatGPT 超过。&lt;/p&gt;
+&lt;p&gt;Q5：什么时候应该离开一家公司？&lt;/p&gt;
+&lt;p&gt;他的答案很简单：看 growth。如果环境还在快速拉着你成长，你可以留下；如果你已经 comfortable，学习速度变慢，就该考虑走。这个标准比“待够几年再说”更动态。&lt;/p&gt;
+&lt;h2 id=&#34;参考资料&#34;&gt;参考资料
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=BQrJ4lHAjhc&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Stanford CS153 Frontier Systems | Lesson 5&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
         <title>Stanford CS153 Frontier Systems | Lesson 4 阅读笔记</title>
         <link>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-4/</link>
         <pubDate>Sun, 26 Jul 2026 13:00:00 +0800</pubDate>

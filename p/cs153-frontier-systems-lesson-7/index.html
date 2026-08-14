@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Mati Staniszewski 关于 ElevenLabs、语音系统与 frontier collaboration 的课堂笔记">
-<title>Stanford CS153 Frontier Systems | Lesson 2 阅读笔记</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Scott Nolan 关于 AI infrastructure、energy bottlenecks 与实体基础设施复兴的课堂笔记">
+<title>Stanford CS153 Frontier Systems | Lesson 7 阅读笔记</title>
 
-<link rel='canonical' href='https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-2/'>
+<link rel='canonical' href='https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-7/'>
 
-<link rel="stylesheet" href="/scss/style.min.14391edec1bcf69cbfd0ffc7bcb2ba2d40c8649ce70e16557424e09eb7687faf.css"><meta property='og:title' content="Stanford CS153 Frontier Systems | Lesson 2 阅读笔记">
-<meta property='og:description' content="Mati Staniszewski 关于 ElevenLabs、语音系统与 frontier collaboration 的课堂笔记">
-<meta property='og:url' content='https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-2/'>
+<link rel="stylesheet" href="/scss/style.min.14391edec1bcf69cbfd0ffc7bcb2ba2d40c8649ce70e16557424e09eb7687faf.css"><meta property='og:title' content="Stanford CS153 Frontier Systems | Lesson 7 阅读笔记">
+<meta property='og:description' content="Scott Nolan 关于 AI infrastructure、energy bottlenecks 与实体基础设施复兴的课堂笔记">
+<meta property='og:url' content='https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-7/'>
 <meta property='og:site_name' content='Elysium-Seeker'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-05-21T11:52:38&#43;08:00'/><meta property='article:modified_time' content='2026-05-21T11:56:04&#43;08:00'/>
-<meta name="twitter:title" content="Stanford CS153 Frontier Systems | Lesson 2 阅读笔记">
-<meta name="twitter:description" content="Mati Staniszewski 关于 ElevenLabs、语音系统与 frontier collaboration 的课堂笔记">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-08-14T19:10:00&#43;08:00'/><meta property='article:modified_time' content='2026-08-14T19:25:28&#43;08:00'/>
+<meta name="twitter:title" content="Stanford CS153 Frontier Systems | Lesson 7 阅读笔记">
+<meta name="twitter:description" content="Scott Nolan 关于 AI infrastructure、energy bottlenecks 与实体基础设施复兴的课堂笔记">
     <link rel="shortcut icon" href="/favicon.ico" />
 <style>
     :root {
@@ -243,13 +243,13 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#开场">开场</a></li>
-    <li><a href="#和用户保持闭环">和用户保持闭环</a></li>
-    <li><a href="#elevenlabs-的愿景">ElevenLabs 的愿景</a></li>
-    <li><a href="#语音模型的两种范式">语音模型的两种范式</a></li>
-    <li><a href="#级联系统与融合模型">级联系统与融合模型</a></li>
-    <li><a href="#协作与人">协作与人</a></li>
-    <li><a href="#商业与安全">商业与安全</a></li>
+    <li><a href="#part-1ai-factory-的链条">Part 1：AI Factory 的链条</a></li>
+    <li><a href="#part-2从-compute-constrained-到-power-constrained">Part 2：从 compute constrained 到 power constrained</a></li>
+    <li><a href="#part-3不同-layer-的-scaling-speed">Part 3：不同 layer 的 scaling speed</a></li>
+    <li><a href="#part-4让算力靠近能源">Part 4：让算力靠近能源</a></li>
+    <li><a href="#part-5baseload-power-和核能">Part 5：Baseload Power 和核能</a></li>
+    <li><a href="#part-6怎么用这节课找问题">Part 6：怎么用这节课找问题</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
   </ol>
 </nav>
         </div>
@@ -281,12 +281,12 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/cs153-frontier-systems-lesson-2/">Stanford CS153 Frontier Systems | Lesson 2 阅读笔记</a>
+            <a href="/p/cs153-frontier-systems-lesson-7/">Stanford CS153 Frontier Systems | Lesson 7 阅读笔记</a>
         </h2>
     
         
         <h3 class="article-subtitle">
-            Mati Staniszewski 关于 ElevenLabs、语音系统与 frontier collaboration 的课堂笔记
+            Scott Nolan 关于 AI infrastructure、energy bottlenecks 与实体基础设施复兴的课堂笔记
         </h3>
         
     </div>
@@ -307,7 +307,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">2026-05-21</time>
+                <time class="article-time--published">2026-08-14</time>
             </div>
         
 
@@ -335,7 +335,7 @@
 
 
                 <time>
-                    2026-05-21
+                    2026-08-14
                 </time>
             </div></footer>
     
@@ -357,83 +357,48 @@
 
 
 <section class="article-content">
-    <p>课程视频：<a class="link" href="https://www.youtube.com/watch?v=vfF011ko89o"  target="_blank" rel="noopener"
-    >Stanford CS153 Frontier Systems | Mati Staniszewski from ElevenLabs on The Future of Voice Systems</a></p>
-<p>这一课的主讲人是 ElevenLabs 的 cofounder。</p>
-<p>说起来之前做 astrbot 的时候还尝试使用过 ElevenLabs。</p>
-<p>效果非常好，可惜价格难以承受。</p>
-<p>这一期应该会记得相对简略一些，感兴趣的内容偏少，我自己也不怎么接触语音。</p>
-<h2 id="开场">开场
-</h2><p>开场时 Mati 先是说公司初创时不用电子邮件。看来讨厌工作邮件是全世界通用的习惯。</p>
-<p>然后这里有个有趣的观点：</p>
-<p>gaming ends up being this petri dish for innovation.</p>
-<p>Some of the hardest infra product design experience problems that are solved in gaming then become leading indicators for the rest of the world.</p>
-<p>简明的中文意思是：游戏中的很多需求和响应，往往会带动前沿领域的发展。</p>
-<p>当然目的是吹捧 Discord 就是了，不过确实说得有道理。</p>
-<p>游戏追求的低延迟、高交互性，还有长期一致性，确实也是前沿领域同时在追求的目标。</p>
-<h2 id="和用户保持闭环">和用户保持闭环
-</h2><p>最好的实现闭环的方法是 as close as possible to the people that are using those tools。也就是与社区合作。</p>
-<p>一方面明晰用户和开发者需求，另一方面找到让社区做出 contribution 的办法。</p>
-<p>社区里的需求和问题，可能就是 6-18 个月后世界各地用户的需求。</p>
-<p>尽可能贴近用户并保持快速的交互循环非常有价值。</p>
-<h2 id="elevenlabs-的愿景">ElevenLabs 的愿景
-</h2><p>ElevenLabs 的愿景：</p>
-<p>The future will be where you can access all types of content in any language with that incredible tonality, incredible emotions.</p>
-<p>针对任何领域深入研究时的两个问题：</p>
+    <p>课程视频：<a class="link" href="https://www.youtube.com/watch?v=wisccQYTRQc"  target="_blank" rel="noopener"
+    >Stanford CS153 Frontier Systems | Lesson 7</a></p>
+<p>这一课是 General Matter 的 Scott Nolan 来讲 energy bottlenecks。放在 CS153 里，它很适合接在 compute、AI factory 和 frontier lab 后面看：如果 AI scaling 继续往前走，瓶颈不会停在软件层，也不会永远停在 GPU 层，最后会一路追到电力、数据中心、制造业和电网工程。</p>
+<p>我会把这节课记成一个上游追踪问题：当我们说 AI 缺 compute 时，compute 自己又缺什么？</p>
+<h2 id="part-1ai-factory-的链条">Part 1：AI Factory 的链条
+</h2><p>可以先把 AI factory 写成一条链：</p>
+<p>Data -&gt; Compute -&gt; Algorithm -&gt; Pre-training -&gt; Foundation Model -&gt; Mid/Post-training -&gt; Deployment / Agents</p>
+<p>前几节课更多在讲数据、模型、训练和产品循环。这一节提醒我，factory 的更上游还有一层物理基础设施。模型不是在抽象空间里运行的，它最后要落到芯片、机房、散热、电力和建设周期上。</p>
+<p>所以 compute 是瓶颈，但 electricity 也会成为 compute 的瓶颈。这个判断很关键，因为它把 AI 从“软件行业问题”往外推了一圈。</p>
+<h2 id="part-2从-compute-constrained-到-power-constrained">Part 2：从 compute constrained 到 power constrained
+</h2><p>Nolan 的判断是，AI scaling 的近况正在逐渐从 compute constrained 走向 power constrained。</p>
+<p>过去软件需求增长，大多数时候还是比较线性的。ChatGPT 之后，推理和训练需求被突然拉高，电力需求也跟着激增。AI infrastructure 的建设速度，和传统能源基础设施的建设速度完全不在一个时间尺度上。</p>
+<p>这意味着：就算 GPU 可以继续买，机房可以继续建，电力接入、输电、变压、冷却和长期稳定供给也会变成新的限制。</p>
+<h2 id="part-3不同-layer-的-scaling-speed">Part 3：不同 layer 的 scaling speed
+</h2><p>这节课里我最想记的系统观点是：不同 layer 的 scaling speed 不一样。</p>
+<p>大概可以这样排：</p>
 <ol>
-<li>
-<p>是否有足够的产品潜力。</p>
-</li>
-<li>
-<p>是否有实际的用户需求。</p>
-</li>
+<li>软件最快。</li>
+<li>芯片其次。</li>
+<li>数据中心再次。</li>
+<li>传统能源最慢。</li>
 </ol>
-<h2 id="语音模型的两种范式">语音模型的两种范式
-</h2><p>语音模型的两种范式：</p>
-<ol>
-<li>
-<p>转译 + LLM 处理文本 + TTS。</p>
-</li>
-<li>
-<p>纯粹的输入语音输出语音。</p>
-</li>
+<p>只要需求突然指数增长，最慢的那个 layer 就会变成 bottleneck。这个逻辑和之前几节课很一致：frontier system 的瓶颈不会消失，只会移动。</p>
+<p>所以如果 AI 继续按现在的规模扩张，它最终就会变成一个能源工业、建筑业、制造业和电网工程共同参与的问题。</p>
+<h2 id="part-4让算力靠近能源">Part 4：让算力靠近能源
+</h2><p>这一节还可以和 Bitcoin 的历史放在一起看：</p>
+<p>Bitcoin -&gt; distributed compute infrastructure -&gt; AI compute infrastructure</p>
+<p>加密挖矿曾经让一批人学会了怎样寻找廉价能源、部署分布式算力、优化机房和电力成本。AI compute 也可能继承这部分基础设施经验，只是需求变得更大，也更稳定。</p>
+<p>一个很有意思的反转是：过去常见思路是让能源靠近算力，比如给数据中心找电；未来可能越来越多地变成让算力靠近能源，也就是把训练和推理基础设施部署到能源更容易获得的地方。</p>
+<h2 id="part-5baseload-power-和核能">Part 5：Baseload Power 和核能
+</h2><p>AI 不只需要便宜电，还需要稳定电。对于超大规模 AI 基础设施，baseload power 很重要，因为训练集群和推理服务不能长期依赖高度波动的供给。</p>
+<p>这也是为什么 Nolan 会强调核能。长期看，如果 AI infrastructure 真的继续扩大，核能可能会成为很重要的支撑方式。这里的重点在于理解 AI 的物理约束：稳定、密集、长期、可扩展的电力供给，会变成 frontier AI 的一部分。</p>
+<h2 id="part-6怎么用这节课找问题">Part 6：怎么用这节课找问题
+</h2><p>这节课对我最有用的地方，是它给了一个找问题的方法：</p>
+<p>什么问题非常重要？这个问题现在有没有人在认真解决？如果别人不解决，我有没有特殊能力可以解决？</p>
+<p>这个问题框架可以从模型层一路往上游追。比如先问：模型为什么不能继续 scale？可能答案是 compute。再问 compute 为什么不能继续 scale？可能答案是 electricity、data center、grid connection、cooling、supply chain。</p>
+<p>这也是我觉得“实体基础设施复兴”这个说法有意思的原因。AI 不只是 software revolution，它可能会把很多注意力重新推回 physical infrastructure。</p>
+<h2 id="参考资料">参考资料
+</h2><ol>
+<li><a class="link" href="https://www.youtube.com/watch?v=wisccQYTRQc"  target="_blank" rel="noopener"
+    >Stanford CS153 Frontier Systems | Lesson 7</a></li>
 </ol>
-<p>前者目前较为常见。在目前的技术水平下没有明显的高下之分，前者更稳定但延迟更高，后者更快但效果不稳定。</p>
-<p>开始研究前应先向潜在用户调研需求，以更好地明晰研究方向。</p>
-<p>工业界的启动方式：先从开源和闭源模型中汲取灵感，再从论文中寻找尚未被工业化的技术并加以融合。</p>
-<p>在模型之外，建立平台供创作者和用户获得更好的使用体验也是重要的。</p>
-<h2 id="级联系统与融合模型">级联系统与融合模型
-</h2><p>音频的语义理解（例如情绪）仍是瓶颈。理论上融合类的模型（即上面的第二种范式）在这方面会有更好的表现，但是可靠性不佳；第一种方案也可以在转录的过程中通过一些办法记录下情绪。</p>
-<p>在考虑高智能和可靠性的情况下，级联系统（即第一种范式）仍会是未来几年的主流。</p>
-<p>不显式地显出文本的话，很多工具调用和指令的可靠性都会大打折扣。</p>
-<p>更好的办法是根据需求判断使用哪种类型的模型，或者更偏向哪种多一些。</p>
-<p>两种的融合版本，比如说将 3 级级联系统中的任意相邻两者合并，都是可能的解决方案。</p>
-<p>除了模型训练方法本身外，自有的数据集才是真正的商业护城河。这可以联系到上节课所说的 context。</p>
-<h2 id="协作与人">协作与人
-</h2><p>在同一个领域内不吝帮助同行并共同发展的才是伟大的 leader，互相帮助比竞争更能促进发展。</p>
-<p>you can go further together, especially in a new space like this where often what seems like a competitive project just because the VCs or the business ecosystem is trying to create some nice landscape slide</p>
-<p>有些时候所谓的同行其实并非完全竞争关系，只是被资本的外行人为了让世界看到进步分进同一类而已。</p>
-<p><strong>it&rsquo;s people that are driving a lot of this progress. And collaborations between people is what drives the frontier.</strong></p>
-<p>高自主权小团队的架构可以大幅减少沟通成本并提升效率，前提是人员素质够高。</p>
-<p>人才是重中之重：</p>
-<p>And then really the main bottleneck is, can you bring incredible people that are passionate, that have that level of IQ and EQ, are striving for excellence but stay humble. How do you bring those people that are really keen to innovate and be incredible at their craft?</p>
-<h2 id="商业与安全">商业与安全
-</h2><p>定价时始终考虑为客户提供的价值而不是成本，把所交付价值的十分之一定为价格。</p>
-<p>安全性方面：</p>
-<ol>
-<li>
-<p>为语音添加水印。</p>
-</li>
-<li>
-<p>不要使用语音验证了。。。</p>
-</li>
-</ol>
-<p>不同群体对语音沟通有不同方面，甚至可能截然相反（例如速度快慢）的需求。</p>
-<p>语音合成的公益使用领域：为失声者发声。</p>
-<p>对待中国 AI：竞争与合作并行。在安全性方面（例如添加语音水印）起码要有共识。</p>
-<p>语音 AI 大幅发展后对影视业的变革、各种伦理问题亟待解决，以及关于只使用一个人的声纹而不需要其具体配音的收费方式（）。</p>
-<p>发展方向仍旧任重道远。</p>
-<p>不想具体记了，不是我的领域。。。</p>
 
 </section>
 
@@ -464,7 +429,7 @@
 
 
         <span>
-            最后更新于 2026-05-21
+            最后更新于 2026-08-14
         </span>
     </section></footer>
 
@@ -506,19 +471,6 @@
     <h2 class="section-title">相关文章</h2>
     <div class="related-content">
         <div class="flex article-list--tile">
-            
-                
-<article class="">
-    <a href="/p/cs153-frontier-systems-lesson-7/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 7 阅读笔记</h2>
-        </div>
-    </a>
-</article>
-
             
                 
 <article class="">
@@ -567,6 +519,19 @@
 
         <div class="article-details">
             <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 3 阅读笔记</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cs153-frontier-systems-lesson-2/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 2 阅读笔记</h2>
         </div>
     </a>
 </article>
