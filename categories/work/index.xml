@@ -7,6 +7,1160 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright><atom:link href="https://Elysium-Seeker.github.io/categories/work/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>人工智能的数学原理 | Unit 1：机器学习中的优化模型</title>
+        <link>https://Elysium-Seeker.github.io/p/math-principles-unit-1/</link>
+        <pubDate>Wed, 16 Sep 2026 02:01:15 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/math-principles-unit-1/</guid>
+        <description>&lt;style&gt;
+.article-content .table-wrapper { position: relative; }
+.article-content .table-wrapper table:has(tr &gt; th:nth-child(3)) { min-width: 640px; }
+.article-content .table-wrapper table:has(tr &gt; th:nth-child(4)) { min-width: 720px; }
+.article-content .table-wrapper th:first-child { min-width: 72px; }
+.article-content .table-wrapper td, .article-content .table-wrapper th { word-break: normal; }
+&lt;/style&gt;
+&lt;p&gt;&lt;em&gt;手机上可左右滑动，查看完整的宽表格与长公式。&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;机器学习与最优化&#34;&gt;机器学习与最优化
+&lt;/h2&gt;&lt;p&gt;这里讨论的监督学习任务：根据输入预测输出。&lt;/p&gt;
+$$
+\hat y=h(u,\theta).
+$$&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;符号&lt;/th&gt;
+					&lt;th&gt;含义&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(u\)&lt;/td&gt;
+					&lt;td&gt;输入数据&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(y\)&lt;/td&gt;
+					&lt;td&gt;真实结果&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(\hat y\)&lt;/td&gt;
+					&lt;td&gt;模型的预测结果&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(\theta\)&lt;/td&gt;
+					&lt;td&gt;模型中需要学习的参数&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;训练数据给定，训练时调整的是参数。&lt;/p&gt;
+&lt;p&gt;最优化过程：寻找参数，使训练目标尽可能小。&lt;/p&gt;
+&lt;p&gt;常用训练目标：训练样本的平均损失（拟合数据）＋正则化惩罚（约束参数或模型结构）。&lt;/p&gt;
+&lt;p&gt;两个主要问题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;优化问题&lt;/strong&gt;：怎样找到训练目标较小的参数。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;泛化问题&lt;/strong&gt;：怎样让模型在新数据下仍表现良好。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;向量与矩阵范数&#34;&gt;向量与矩阵范数
+&lt;/h2&gt;&lt;h3 id=&#34;范数性质&#34;&gt;范数性质
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;性质&lt;/th&gt;
+					&lt;th&gt;数学表达&lt;/th&gt;
+					&lt;th&gt;含义&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;正定性&lt;/td&gt;
+					&lt;td&gt;\(\lVert x\rVert\ge0\)，且 \(\lVert x\rVert=0\iff x=0\)&lt;/td&gt;
+					&lt;td&gt;大小非负，只有零向量的大小为零&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;绝对齐次性&lt;/td&gt;
+					&lt;td&gt;\(\lVert\alpha x\rVert=\lvert\alpha\rvert\lVert x\rVert\)&lt;/td&gt;
+					&lt;td&gt;向量乘以 \(\alpha\)，大小变为原来的 \(\lvert\alpha\rvert\) 倍&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;三角不等式&lt;/td&gt;
+					&lt;td&gt;\(\lVert x+y\rVert\le\lVert x\rVert+\lVert y\rVert\)&lt;/td&gt;
+					&lt;td&gt;合成后的大小不超过两者大小之和&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;向量范数&#34;&gt;向量范数
+&lt;/h3&gt;&lt;p&gt;以向量 \(x=(3,-4)^\top\) 为例：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;范数&lt;/th&gt;
+					&lt;th&gt;定义&lt;/th&gt;
+					&lt;th&gt;本例结果&lt;/th&gt;
+					&lt;th&gt;直觉&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(1\) 范数&lt;/td&gt;
+					&lt;td&gt;\(\lVert x\rVert_1=\sum_i\lvert x_i\rvert\)&lt;/td&gt;
+					&lt;td&gt;\(3+4=7\)&lt;/td&gt;
+					&lt;td&gt;所有分量的绝对值相加&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(2\) 范数&lt;/td&gt;
+					&lt;td&gt;\(\lVert x\rVert_2=\sqrt{\sum_i x_i^2}\)&lt;/td&gt;
+					&lt;td&gt;\(\sqrt{9+16}=5\)&lt;/td&gt;
+					&lt;td&gt;通常的欧氏长度&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(\infty\) 范数&lt;/td&gt;
+					&lt;td&gt;\(\lVert x\rVert_\infty=\max_i\lvert x_i\rvert\)&lt;/td&gt;
+					&lt;td&gt;\(\max(3,4)=4\)&lt;/td&gt;
+					&lt;td&gt;最大的分量绝对值&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;有限 \(p\) 的范数定义为：&lt;/p&gt;
+$$
+\lVert x\rVert_p=\left(\sum_i\lvert x_i\rvert^p\right)^{1/p},
+\qquad 1\le p&lt;\infty.
+$$&lt;p&gt;\(\infty\) 范数对应 \(p\to\infty\) 时的极限。&lt;/p&gt;
+&lt;h3 id=&#34;柯西施瓦茨不等式&#34;&gt;柯西–施瓦茨不等式
+&lt;/h3&gt;$$
+\lvert a^\top b\rvert\le\lVert a\rVert_2\lVert b\rVert_2.
+$$&lt;ul&gt;
+&lt;li&gt;左边：两个向量内积的绝对值。&lt;/li&gt;
+&lt;li&gt;右边：两个向量欧氏长度的乘积。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;等号成立当且仅当两个向量线性相关。&lt;/p&gt;
+&lt;h3 id=&#34;矩阵范数&#34;&gt;矩阵范数
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Frobenius 范数：&lt;/strong&gt;&lt;/p&gt;
+$$
+\lVert A\rVert_F=\sqrt{\sum_{i,j}\lvert a_{ij}\rvert^2}.
+$$&lt;p&gt;&lt;strong&gt;向量 \(p\) 范数诱导的矩阵范数：&lt;/strong&gt;&lt;/p&gt;
+$$
+\lVert A\rVert_p
+=\max_{x\ne0}\frac{\lVert Ax\rVert_p}{\lVert x\rVert_p}
+=\max_{\lVert x\rVert_p=1}\lVert Ax\rVert_p.
+$$&lt;p&gt;&lt;strong&gt;常用的矩阵范数&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;名称&lt;/th&gt;
+					&lt;th&gt;计算公式&lt;/th&gt;
+					&lt;th&gt;怎样计算&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;元素绝对值和，课件记为 \(m1\)&lt;/td&gt;
+					&lt;td&gt;\(\lVert A\rVert_{m1}=\sum_{i,j}\lvert a_{ij}\rvert\)&lt;/td&gt;
+					&lt;td&gt;所有元素的绝对值相加&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Frobenius 范数&lt;/td&gt;
+					&lt;td&gt;\(\lVert A\rVert_F=\sqrt{\sum_{i,j}a_{ij}^2}\)&lt;/td&gt;
+					&lt;td&gt;所有元素平方求和，再开根号&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;诱导 \(1\) 范数&lt;/td&gt;
+					&lt;td&gt;\(\lVert A\rVert_1=\max_j\sum_i\lvert a_{ij}\rvert\)&lt;/td&gt;
+					&lt;td&gt;最大列绝对值和&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;诱导 \(\infty\) 范数&lt;/td&gt;
+					&lt;td&gt;\(\lVert A\rVert_\infty=\max_i\sum_j\lvert a_{ij}\rvert\)&lt;/td&gt;
+					&lt;td&gt;最大行绝对值和&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;诱导 \(2\) 范数，又称谱范数&lt;/td&gt;
+					&lt;td&gt;\(\lVert A\rVert_2=\sigma_{\max}(A)\)&lt;/td&gt;
+					&lt;td&gt;最大奇异值&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;核范数&lt;/td&gt;
+					&lt;td&gt;\(\lVert A\rVert_*=\sum_i\sigma_i(A)\)&lt;/td&gt;
+					&lt;td&gt;所有奇异值相加&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;注意：诱导 \(1\) 范数与 \(\infty\) 范数计算的是&lt;strong&gt;列或行的绝对值和&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;矩阵范数的三个关系&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;相容性（次乘性）。&lt;/strong&gt; 对诱导矩阵范数，矩阵维度匹配时有：&lt;/p&gt;
+$$
+\lVert AB\rVert\le\lVert A\rVert\lVert B\rVert.
+$$&lt;p&gt;Frobenius 范数也满足这个不等式。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;矩阵内积。&lt;/strong&gt; 对两个同形状的实矩阵：&lt;/p&gt;
+$$
+\langle A,B\rangle
+=\sum_{i,j}a_{ij}b_{ij}
+=\operatorname{Tr}(AB^\top).
+$$&lt;p&gt;计算方式是对应位置相乘，再求和。\(\operatorname{Tr}\) 表示方阵对角元素之和。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;矩阵的柯西不等式。&lt;/strong&gt;&lt;/p&gt;
+$$
+\lvert\langle A,B\rangle\rvert\le\lVert A\rVert_F\lVert B\rVert_F.
+$$&lt;p&gt;证明诱导 \(1\) 范数和 \(\infty\) 范数的思路：先取上界，再看上界是否能达到。&lt;/p&gt;
+&lt;h3 id=&#34;诱导-1-范数的证明&#34;&gt;诱导 1 范数的证明
+&lt;/h3&gt;&lt;p&gt;设 \(A\in\mathbb R^{m\times n}\)。根据定义，&lt;/p&gt;
+$$
+\lVert A\rVert_1=\max_{\lVert x\rVert_1=1}\lVert Ax\rVert_1.
+$$&lt;p&gt;&lt;strong&gt;第一步：证明任何单位输入都不能超过最大列和。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;对于满足 \(\sum_j|x_j|=1\) 的向量 \(x\)，&lt;/p&gt;
+$$
+\begin{aligned}
+\lVert Ax\rVert_1 &amp;=\sum_i\left|\sum_j a_{ij}x_j\right|\\
+&amp;\le\sum_i\sum_j|a_{ij}|\,|x_j|\\
+&amp;=\sum_j|x_j|\underbrace{\left(\sum_i|a_{ij}|\right)}_{\text{第 }j\text{ 列的绝对值和}}.
+\end{aligned}
+$$&lt;p&gt;令&lt;/p&gt;
+$$
+M=\max_j\sum_i|a_{ij}|.
+$$&lt;p&gt;每一列的绝对值和都不超过 \(M\)，所以&lt;/p&gt;
+$$
+\lVert Ax\rVert_1 \le M\sum_j|x_j| =M.
+$$&lt;p&gt;因此 \(\lVert A\rVert_1\le M\)。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第二步：选择最大那一列，达到上界。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;假设第 \(j_*\) 列的绝对值和最大，取&lt;/p&gt;
+$$
+x=e_{j_*},
+$$&lt;p&gt;即只有第 \(j_*\) 个分量为 \(1\)，其余分量为 \(0\)。&lt;/p&gt;
+&lt;p&gt;这时 \(\lVert x\rVert_1=1\)，而 \(Ax\) 恰好就是 \(A\) 的第 \(j_*\) 列。因此&lt;/p&gt;
+$$
+\lVert Ax\rVert_1=M.
+$$&lt;p&gt;所以&lt;/p&gt;
+$$
+\boxed{\lVert A\rVert_1=\max_j\sum_i|a_{ij}|}.
+$$&lt;p&gt;以矩阵&lt;/p&gt;
+$$
+B=\begin{pmatrix}
+1&amp;-2\\
+3&amp;4
+\end{pmatrix}
+$$&lt;p&gt;为例，其最大列绝对值和为 \(6\)。取&lt;/p&gt;
+$$
+x=\begin{pmatrix}
+0\\
+1
+\end{pmatrix} \quad\Longrightarrow\quad Bx=\begin{pmatrix}
+-2\\
+4
+\end{pmatrix},
+$$&lt;p&gt;就得到&lt;/p&gt;
+$$
+\lVert x\rVert_1=1,\qquad\lVert Bx\rVert_1=6.
+$$&lt;p&gt;&lt;strong&gt;证明入口：矩阵乘向量是各列的加权组合；选取一个坐标向量，就能单独取出一列。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;诱导无穷范数的证明&#34;&gt;诱导无穷范数的证明
+&lt;/h3&gt;&lt;p&gt;根据定义，&lt;/p&gt;
+$$
+\lVert A\rVert_\infty =\max_{\lVert x\rVert_\infty=1}\lVert Ax\rVert_\infty.
+$$&lt;p&gt;这里 \(\lVert x\rVert_\infty=1\) 意味着每个分量都满足 \(|x_j|\le1\)。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第一步：证明上界。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;输出的第 \(i\) 个分量满足&lt;/p&gt;
+$$
+\begin{aligned}
+|(Ax)_i| &amp;=\left|\sum_j a_{ij}x_j\right|\\
+&amp;\le\sum_j|a_{ij}|\,|x_j|\\
+&amp;\le\sum_j|a_{ij}|.
+\end{aligned}
+$$&lt;p&gt;所以&lt;/p&gt;
+$$
+\lVert Ax\rVert_\infty \le\max_i\sum_j|a_{ij}|.
+$$&lt;p&gt;&lt;strong&gt;第二步：调整输入符号，让最大那一行的各项全部相加。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;设第 \(i_*\) 行的绝对值和最大，选择&lt;/p&gt;
+$$
+x_j= \begin{cases}
+1,&amp;a_{i_*j}\ge0,\\
+-1,&amp;a_{i_*j}&lt;0.
+\end{cases}
+$$&lt;p&gt;这样 \(\lVert x\rVert_\infty=1\)，并且&lt;/p&gt;
+$$
+a_{i_*j}x_j=|a_{i_*j}|.
+$$&lt;p&gt;因此&lt;/p&gt;
+$$
+(Ax)_{i_*}=\sum_j|a_{i_*j}|,
+$$&lt;p&gt;达到上界。&lt;/p&gt;
+&lt;p&gt;所以&lt;/p&gt;
+$$
+\boxed{\lVert A\rVert_\infty=\max_i\sum_j|a_{ij}|}.
+$$&lt;p&gt;对矩阵 \(B\)，第二行的绝对值和最大。取&lt;/p&gt;
+$$
+x=\begin{pmatrix}
+1\\
+1
+\end{pmatrix}, \quad Bx=\begin{pmatrix}
+-1\\
+7
+\end{pmatrix},
+$$&lt;p&gt;便有&lt;/p&gt;
+$$
+\lVert x\rVert_\infty=1,\qquad \lVert Bx\rVert_\infty=7.
+$$&lt;p&gt;&lt;strong&gt;证明入口：输出的每个分量对应矩阵的一行；调整输入符号，可以消除这一行求和时的正负抵消。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;svd-分解&#34;&gt;SVD 分解
+&lt;/h3&gt;&lt;p&gt;对于实矩阵 \(A\in\mathbb R^{m\times n}\)，奇异值分解写成&lt;/p&gt;
+$$
+\boxed{A=U\Sigma V^T}.
+$$&lt;p&gt;完整 SVD 中：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;矩阵&lt;/th&gt;
+					&lt;th&gt;内容&lt;/th&gt;
+					&lt;th&gt;作用&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(V\)，大小 \(n\times n\)&lt;/td&gt;
+					&lt;td&gt;列向量是右奇异向量&lt;/td&gt;
+					&lt;td&gt;给出特殊的输入方向&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(\Sigma\)，大小 \(m\times n\)&lt;/td&gt;
+					&lt;td&gt;对角线上是非负奇异值&lt;/td&gt;
+					&lt;td&gt;记录各方向的缩放倍数&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(U\)，大小 \(m\times m\)&lt;/td&gt;
+					&lt;td&gt;列向量是左奇异向量&lt;/td&gt;
+					&lt;td&gt;给出相应的输出方向&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;\(U,V\) 都是正交矩阵。&lt;/p&gt;
+&lt;p&gt;最关键的关系是&lt;/p&gt;
+$$
+\boxed{Av_i=\sigma_i u_i}.
+$$&lt;p&gt;它表示：&lt;strong&gt;沿单位方向 \(v_i\) 输入，输出沿单位方向 \(u_i\)，长度变为 \(\sigma_i\)。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;先在二维情况下看。任意输入可以写成&lt;/p&gt;
+$$
+x=c_1v_1+c_2v_2.
+$$&lt;p&gt;因为 \(v_1,v_2\) 单位正交，&lt;/p&gt;
+$$
+V^Tx=\begin{pmatrix}
+c_1\\
+c_2
+\end{pmatrix}.
+$$&lt;p&gt;接着，&lt;/p&gt;
+$$
+\Sigma V^Tx =\begin{pmatrix}
+\sigma_1c_1\\
+\sigma_2c_2
+\end{pmatrix}.
+$$&lt;p&gt;最后沿输出方向重新组合：&lt;/p&gt;
+$$
+U\Sigma V^Tx =\sigma_1c_1u_1+\sigma_2c_2u_2 =Ax.
+$$&lt;p&gt;所以从右往左读就是：&lt;/p&gt;
+$$
+\boxed{ \text{求输入在特殊方向上的分量} \;\longrightarrow\; \text{分别缩放} \;\longrightarrow\; \text{沿输出方向组合} }.
+$$&lt;h3 id=&#34;svd-的实际计算&#34;&gt;SVD 的实际计算
+&lt;/h3&gt;&lt;p&gt;求 \(A^TA\) → 求特征值与方向 → 开根号 → 算 \(u_i\)&lt;/p&gt;
+&lt;p&gt;换一个计算比较整齐的矩阵为例：&lt;/p&gt;
+$$
+A=\begin{pmatrix}
+3&amp;0\\
+4&amp;5
+\end{pmatrix}.
+$$&lt;p&gt;&lt;strong&gt;① 求 \(A^TA\) 的特征值。&lt;/strong&gt;&lt;/p&gt;
+$$
+A^TA =\begin{pmatrix}
+25&amp;20\\
+20&amp;25
+\end{pmatrix}.
+$$&lt;p&gt;特征方程为&lt;/p&gt;
+$$
+\det(A^TA-\lambda I) =(25-\lambda)^2-400=0.
+$$&lt;p&gt;所以&lt;/p&gt;
+$$
+\lambda_1=45,\qquad\lambda_2=5.
+$$&lt;p&gt;奇异值取非负平方根：&lt;/p&gt;
+$$
+\boxed{\sigma_1=3\sqrt5,\qquad\sigma_2=\sqrt5}.
+$$&lt;p&gt;注意：奇异值是 \(A^\top A\) 的特征值的非负平方根。&lt;/p&gt;
+&lt;p&gt;因此&lt;/p&gt;
+$$
+\Sigma=\begin{pmatrix}
+3\sqrt5&amp;0\\
+0&amp;\sqrt5
+\end{pmatrix}.
+$$&lt;p&gt;&lt;strong&gt;② 求对应的单位特征向量，组成 \(V\)。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;对 \(\lambda_1=45\)，特征方程要求两个分量相等；对 \(\lambda_2=5\)，要求两个分量互为相反数。这是解 \((A^\top A-\lambda I)v=0\) 得到的。&lt;/p&gt;
+&lt;p&gt;单位化后，可以取&lt;/p&gt;
+$$
+v_1=\frac1{\sqrt2}\begin{pmatrix}
+1\\
+1
+\end{pmatrix}, \qquad v_2=\frac1{\sqrt2}\begin{pmatrix}
+1\\
+-1
+\end{pmatrix}.
+$$&lt;p&gt;所以&lt;/p&gt;
+$$
+\boxed{ V=\frac1{\sqrt2} \begin{pmatrix}
+1&amp;1\\
+1&amp;-1
+\end{pmatrix} }.
+$$&lt;p&gt;特征向量的列顺序，要与 \(\Sigma\) 中的奇异值对应。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;③ 用 \(u_i=Av_i/\sigma_i\)，求输出方向。&lt;/strong&gt;&lt;/p&gt;
+$$
+u_1 =\frac{Av_1}{3\sqrt5} =\frac1{\sqrt{10}}\begin{pmatrix}
+1\\
+3
+\end{pmatrix},
+$$$$
+u_2 =\frac{Av_2}{\sqrt5} =\frac1{\sqrt{10}}\begin{pmatrix}
+3\\
+-1
+\end{pmatrix}.
+$$&lt;p&gt;因此&lt;/p&gt;
+$$
+\boxed{ U=\frac1{\sqrt{10}} \begin{pmatrix}
+1&amp;3\\
+3&amp;-1
+\end{pmatrix} }.
+$$&lt;p&gt;&lt;strong&gt;④ 相乘核对。&lt;/strong&gt;&lt;/p&gt;
+$$
+\begin{aligned}
+U\Sigma V^T &amp;=\frac12 \begin{pmatrix}
+3&amp;3\\
+9&amp;-1
+\end{pmatrix} \begin{pmatrix}
+1&amp;1\\
+1&amp;-1
+\end{pmatrix}\\
+&amp;=\begin{pmatrix}
+3&amp;0\\
+4&amp;5
+\end{pmatrix} =A.
+\end{aligned}
+$$&lt;p&gt;本例中奇异值都非零，所以可以直接除以 \(\sigma_i\)。如果 \(\sigma_i=0\)，则 \(Av_i=0\)，这个输入方向被压到了零，不能用除法求对应的 \(u_i\)；完整分解中需要补齐正交基。&lt;/p&gt;
+&lt;h3 id=&#34;svd-与矩阵范数&#34;&gt;SVD 与矩阵范数
+&lt;/h3&gt;&lt;p&gt;正交矩阵 \(U,V\) 保持欧氏长度。整个变换中，长度的改变由 \(\Sigma\) 负责，因此最大放大倍数就是最大的奇异值：&lt;/p&gt;
+$$
+\boxed{\lVert A\rVert_2=\sigma_{\max}(A)}.
+$$&lt;p&gt;同一组奇异值还能计算：&lt;/p&gt;
+$$
+\boxed{ \lVert A\rVert_F=\sqrt{\sum_i\sigma_i^2}, \qquad \lVert A\rVert_*=\sum_i\sigma_i }.
+$$&lt;p&gt;本例中：&lt;/p&gt;
+$$
+\lVert A\rVert_2=3\sqrt5,\qquad \lVert A\rVert_F=\sqrt{50},\qquad \lVert A\rVert_*=4\sqrt5.
+$$&lt;h2 id=&#34;机器学习的优化目标&#34;&gt;机器学习的优化目标
+&lt;/h2&gt;&lt;h3 id=&#34;损失函数&#34;&gt;损失函数
+&lt;/h3&gt;&lt;p&gt;记模型预测为
+&lt;/p&gt;
+$$
+\hat y=h(u,\theta).
+$$&lt;p&gt;
+其中 \(u\) 是输入，\(\theta\) 是待学习参数，\(y\) 是真实结果。&lt;/p&gt;
+&lt;p&gt;四种常用损失：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;损失&lt;/th&gt;
+					&lt;th&gt;公式或规则&lt;/th&gt;
+					&lt;th&gt;主要含义&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(0\)–\(1\) 损失&lt;/td&gt;
+					&lt;td&gt;分对为 \(0\)，分错为 \(1\)&lt;/td&gt;
+					&lt;td&gt;判断分类是否正确&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;平方损失&lt;/td&gt;
+					&lt;td&gt;\((\hat y-y)^2\)&lt;/td&gt;
+					&lt;td&gt;对大误差惩罚更强&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;绝对损失&lt;/td&gt;
+					&lt;td&gt;\(\lvert\hat y-y\rvert\)&lt;/td&gt;
+					&lt;td&gt;按误差幅度进行惩罚&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;对数损失&lt;/td&gt;
+					&lt;td&gt;\(-\log p_y\)&lt;/td&gt;
+					&lt;td&gt;\(p_y\) 是模型赋给真实类别的概率，越大损失越小&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;先选损失函数，再在训练过程中通过调整参数降低损失&lt;/p&gt;
+&lt;p&gt;注意：经验风险取平均时要除以样本数。也可以用损失总和作为优化目标，但加入正则项时要相应调整其系数。&lt;/p&gt;
+&lt;h3 id=&#34;经验风险训练集&#34;&gt;经验风险（训练集）
+&lt;/h3&gt;&lt;p&gt;训练集有 \(N\) 个样本，将各样本的损失求平均：&lt;/p&gt;
+$$
+\widehat R(\theta)
+=\frac1N\sum_{i=1}^N\ell\bigl(h(u_i,\theta),y_i\bigr).
+$$&lt;p&gt;这叫&lt;strong&gt;经验风险&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;寻找使这个平均值最小的参数：&lt;/p&gt;
+$$
+\min_\theta\widehat R(\theta),
+$$&lt;p&gt;就叫&lt;strong&gt;经验风险最小化&lt;/strong&gt;，简称 ERM。&lt;/p&gt;
+&lt;h3 id=&#34;期望风险真实分布&#34;&gt;期望风险（真实分布）
+&lt;/h3&gt;&lt;p&gt;设输入和标签按照真实分布 \(P\) 产生，定义：&lt;/p&gt;
+$$
+R(\theta)=\mathbb E_{(u,y)\sim P}
+\left[\ell\bigl(h(u,\theta),y\bigr)\right].
+$$&lt;p&gt;这叫&lt;strong&gt;期望风险&lt;/strong&gt;，也叫真实风险。&lt;/p&gt;
+&lt;h3 id=&#34;正则项&#34;&gt;正则项
+&lt;/h3&gt;&lt;p&gt;如果只追求训练误差小，模型可能过度适应这批数据。因此，可以加入正则项：&lt;/p&gt;
+$$
+\min_{\theta\in\Theta}
+\left[\widehat R(\theta)+\lambda J(\theta)\right].
+$$&lt;p&gt;这体现了结构风险最小化中对拟合与复杂度进行权衡的思路。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;\(\Theta\)：允许的参数范围。&lt;/li&gt;
+&lt;li&gt;\(J(\theta)\)：对参数或模型的惩罚。&lt;/li&gt;
+&lt;li&gt;\(\lambda\ge0\)：控制惩罚强度。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;泛化误差与误差界&#34;&gt;泛化误差与误差界
+&lt;/h2&gt;&lt;h3 id=&#34;模型术语区分&#34;&gt;模型术语区分
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;符号&lt;/th&gt;
+					&lt;th&gt;在哪里选择&lt;/th&gt;
+					&lt;th&gt;最小化什么&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(h^*\)&lt;/td&gt;
+					&lt;td&gt;理论上考虑的全部模型&lt;/td&gt;
+					&lt;td&gt;真实风险 \(R(h)\)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(h_H^*\)&lt;/td&gt;
+					&lt;td&gt;选定的候选模型集合 \(H\)&lt;/td&gt;
+					&lt;td&gt;真实风险 \(R(h)\)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(\hat h_H\)&lt;/td&gt;
+					&lt;td&gt;同一个候选模型集合 \(H\)&lt;/td&gt;
+					&lt;td&gt;训练风险 \(\widehat R(h)\)&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;实际最优与理论最优差值&#34;&gt;实际最优与理论最优差值
+&lt;/h3&gt;$$
+\begin{aligned}
+R(\hat h_H)-R(h^*)
+={}&amp;\underbrace{R(h_H^*)-R(h^*)}_{\text{近似误差}}\\
+&amp;+\underbrace{R(\hat h_H)-R(h_H^*)}_{\text{估计误差}}.
+\end{aligned}
+$$&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;近似误差&lt;/strong&gt;：候选模型集合的能力限制。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;估计误差&lt;/strong&gt;：有限数据量导致的模型选择误差。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;hoeffding&#34;&gt;Hoeffding
+&lt;/h3&gt;&lt;p&gt;考虑一个在观察训练样本前已固定的模型 \(h\)。如果样本独立同分布，损失位于 \([0,1]\)，那么：
+&lt;/p&gt;
+$$
+\Pr\!\left(\lvert\widehat R(h)-R(h)\rvert\ge\varepsilon\right)
+\le2e^{-2N\varepsilon^2}.
+$$&lt;p&gt;
+\(N\) 为样本数。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;\(\varepsilon\)：允许成绩偏差多大。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;\(\delta\)：允许这个偏差保证失败的概率有多大。&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;统一偏差界&#34;&gt;统一偏差界
+&lt;/h3&gt;&lt;p&gt;设候选模型集合 \(H\) 预先固定且有限，\(K=\lvert H\rvert\) 是候选模型数量。沿用上述独立同分布和有界损失的条件，以至少 \(1-\delta\) 的概率，对所有 \(h\in H\)，同时有&lt;/p&gt;
+$$
+\boxed{ \lvert\widehat R(h)-R(h)\rvert \le \underbrace{\sqrt{\frac{\ln(2K/\delta)}{2N}}}_{\varepsilon} }.
+$$$$
+\boxed{ R(\hat h_H)-R(h_H^*)\le2\varepsilon }.
+$$&lt;p&gt;这里 \(\hat h_H\) 指训练集上的精确经验风险最小化解。它与集合 \(H\) 内真实风险最小的模型，真实风险最多相差 \(2\varepsilon\)。&lt;/p&gt;
+$$
+\boxed{ \text{实际模型距离理论最优的差距} \le \text{近似误差} + 2\varepsilon }.
+$$&lt;p&gt;从 \(\varepsilon=\sqrt{\ln(2K/\delta)/(2N)}\) 可以看出：样本数 \(N\) 增大时，误差界缩小；候选模型数 \(K\) 增大，或者要求失败概率 \(\delta\) 更小时，误差界变大。&lt;/p&gt;
+&lt;h3 id=&#34;过拟合欠拟合偏差与方差&#34;&gt;过拟合、欠拟合、偏差与方差
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;偏差&lt;/strong&gt;：在固定输入处，多次更换训练集并重新训练，平均预测偏离真实目标的程度。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;方差&lt;/strong&gt;：在同一个输入处，这些重新训练出的模型，其预测结果的波动程度。&lt;/p&gt;
+&lt;p&gt;对于平方损失，假设噪声均值为零且与训练过程独立，可以写成：&lt;/p&gt;
+$$
+\boxed{ \text{平均预测平方误差} = \text{偏差}^{2} + \text{方差} + \text{噪声方差} }
+$$&lt;h2 id=&#34;优化问题与收敛&#34;&gt;优化问题与收敛
+&lt;/h2&gt;&lt;h3 id=&#34;基本形式与分类&#34;&gt;基本形式与分类
+&lt;/h3&gt;&lt;p&gt;一个优化问题由决策变量、目标函数和可行域组成：&lt;/p&gt;
+$$
+\min_x f(x),\qquad\text{s.t. }x\in X.
+$$&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;符号&lt;/th&gt;
+					&lt;th&gt;名称&lt;/th&gt;
+					&lt;th&gt;含义&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(x\)&lt;/td&gt;
+					&lt;td&gt;决策变量&lt;/td&gt;
+					&lt;td&gt;要调整、求解的量&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(f(x)\)&lt;/td&gt;
+					&lt;td&gt;目标函数&lt;/td&gt;
+					&lt;td&gt;用来评价方案，希望它尽可能小&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(X\)&lt;/td&gt;
+					&lt;td&gt;可行域&lt;/td&gt;
+					&lt;td&gt;所有满足限制的方案组成的集合&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;s.t.&lt;/td&gt;
+					&lt;td&gt;subject to&lt;/td&gt;
+					&lt;td&gt;满足以下约束条件&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;可行点&lt;/strong&gt;：满足全部约束的点。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;最优解&lt;/strong&gt;：使目标值达到最小的可行点。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;最优值&lt;/strong&gt;：目标函数能达到的最小值；未取到时用下确界描述。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;无约束优化中，通常取 \(X=\mathbb R^n\)。最小化问题不一定存在最优解。&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;类型&lt;/th&gt;
+					&lt;th&gt;识别依据或直观例子&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;线性规划&lt;/td&gt;
+					&lt;td&gt;目标和约束都是线性形式，例如最小化 \(2x_1+3x_2\)，同时满足线性等式或不等式&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;非线性规划&lt;/td&gt;
+					&lt;td&gt;目标或约束中至少一个是非线性的，例如出现平方、乘积等&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;二次规划&lt;/td&gt;
+					&lt;td&gt;目标是二次函数，约束是线性的，例如最小化 \((x-3)^2\)，约束为 \(0\le x\le2\)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;非光滑优化&lt;/td&gt;
+					&lt;td&gt;含有不光滑的函数，例如 \(\lvert x\rvert\) 在 \(x=0\) 处不可导&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;无导数优化&lt;/td&gt;
+					&lt;td&gt;求解时无法直接使用导数，例如只能通过一次仿真得到目标值&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;整数规划&lt;/td&gt;
+					&lt;td&gt;部分或全部变量要求取整数，例如设备数量只能是 \(0,1,2,\ldots\)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;半定规划&lt;/td&gt;
+					&lt;td&gt;变量可以是矩阵，要求矩阵半正定；目标与其余约束具有线性结构&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;稀疏优化&lt;/td&gt;
+					&lt;td&gt;希望解只有少量非零分量，例如让模型只使用少数特征&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;低秩矩阵优化&lt;/td&gt;
+					&lt;td&gt;希望求出的矩阵秩较低，用较少的潜在因素表达数据&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;凸性与局部全局最优&#34;&gt;凸性与局部、全局最优
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;凸集合&lt;/strong&gt;：集合内任取两个点，把它们连起来，整条线段都留在集合内。例如一个实心圆盘。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;凸函数&lt;/strong&gt;：连接函数图像上的任意两点，中间的函数图像都不高于这条连线。例如 \(f(x)=x^2\)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;最小化凸函数，并且可行域是凸集合，就构成凸优化问题。&lt;/p&gt;
+&lt;p&gt;对于凸优化问题，局部最优一定也是全局最优。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;局部最优&lt;/strong&gt;：存在一个足够小的邻域，当前点的目标值不大于其中其他可行点。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;全局最优&lt;/strong&gt;：当前点在整个可行域里最优。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;严格局部最优&lt;/strong&gt;：在某个邻域内，其他可行点的目标值都严格更大。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;目标值收敛到最优值，不一定意味着参数也收敛。&lt;/p&gt;
+&lt;h3 id=&#34;收敛速度&#34;&gt;收敛速度
+&lt;/h3&gt;&lt;p&gt;设迭代点 \(x^k\) 收敛到 \(x^*\)，记误差 \(e_k=\lVert x^k-x^*\rVert\to0\)。下面讨论尚未恰好到达解、误差为正的情形。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;① Q-线性收敛：&lt;/strong&gt; 存在一个固定的 \(q\in(0,1)\)，使得充分大的 \(k\) 满足：&lt;/p&gt;
+$$
+\frac{e_{k+1}}{e_k}\le q.
+$$&lt;p&gt;&lt;strong&gt;② Q-超线性收敛：&lt;/strong&gt;&lt;/p&gt;
+$$
+\frac{e_{k+1}}{e_k}\longrightarrow0.
+$$&lt;p&gt;&lt;strong&gt;③ Q-次线性收敛：&lt;/strong&gt;&lt;/p&gt;
+$$
+\frac{e_{k+1}}{e_k}\longrightarrow1.
+$$&lt;p&gt;&lt;strong&gt;④ Q-二次收敛：&lt;/strong&gt; 存在常数 \(C&gt;0\)，使充分大的 \(k\) 满足：&lt;/p&gt;
+$$
+\frac{e_{k+1}}{e_k^2}\le C,
+$$&lt;p&gt;R-收敛通过一个上界序列控制误差：&lt;/p&gt;
+$$
+0\le e_k\le t_k,\qquad t_k\to0.
+$$&lt;p&gt;如果 \(t_k\) 是 Q-线性收敛的，就称误差至少 R-线性收敛；R-超线性和 R-二次同理。&lt;/p&gt;
+&lt;p&gt;例如 \(e_k\le2^{-k}\)：即使实际误差偶尔反弹，它仍被一个每步减半的上界控制，因此能保证 R-线性收敛。&lt;/p&gt;
+&lt;h3 id=&#34;迭代复杂度&#34;&gt;迭代复杂度
+&lt;/h3&gt;&lt;p&gt;迭代复杂度关注&lt;strong&gt;达到指定精度需要多少次迭代&lt;/strong&gt;。假设已经证明：&lt;/p&gt;
+$$
+f(x^k)-f(x^*)\le\frac{c}{\sqrt{k}}.
+$$&lt;p&gt;为了保证误差不超过 \(\varepsilon\)，只需：&lt;/p&gt;
+$$
+\frac{c}{\sqrt{k}}\le\varepsilon
+\quad\Longleftrightarrow\quad
+k\ge\frac{c^2}{\varepsilon^2}.
+$$&lt;p&gt;所以所需迭代次数的上界为 \(N(\varepsilon)=O(\varepsilon^{-2})\)。例如 \(c=1\)，要求误差不超过 \(0.01\)，这个界保证迭代 \(10000\) 步足够，实际可能更早达到。&lt;/p&gt;
+&lt;h3 id=&#34;停止准则与容差&#34;&gt;停止准则与容差
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;第一类：目标值已经足够接近最优值。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;记最优值为 \(f^*=f(x^*)\)，&lt;/p&gt;
+$$
+\frac{f(x^k)-f^*}{\max\{\lvert f^*\rvert,1\}} \le\varepsilon_1.
+$$&lt;p&gt;&lt;strong&gt;第二类：无约束问题中，梯度已经很小。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;对于可微函数，梯度由各变量方向的偏导数组成：&lt;/p&gt;
+$$
+\lVert\nabla f(x^k)\rVert\le\varepsilon_2.
+$$&lt;p&gt;&lt;strong&gt;第三类：有约束时，还要检查约束是否满足。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;对于不等式约束 \(c_i(x)\le0\)，允许很小的违反量：&lt;/p&gt;
+$$
+c_i(x^k)\le\varepsilon_3.
+$$&lt;p&gt;对于等式约束 \(h_j(x)=0\)，要求：&lt;/p&gt;
+$$
+\lvert h_j(x^k)\rvert\le\varepsilon_4.
+$$&lt;p&gt;&lt;strong&gt;第四类：相邻两步几乎没有变化。&lt;/strong&gt;
+两个常见指标：&lt;/p&gt;
+$$
+\frac{\lVert x^{k+1}-x^k\rVert} {\max\{\lVert x^k\rVert,1\}} \le\varepsilon_5,
+$$$$
+\frac{\lvert f(x^{k+1})-f(x^k)\rvert} {\max\{\lvert f(x^k)\rvert,1\}} \le\varepsilon_6.
+$$&lt;p&gt;分别表示：&lt;strong&gt;参数变化很小、目标值变化很小。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;这些指标用于判断是否停止。梯度小、相邻两步变化小，都不能单独保证非凸问题已经达到全局最优；第一类指标还需要已知最优值或可用的最优值估计。&lt;/p&gt;
+&lt;h2 id=&#34;最小二乘和岭回归&#34;&gt;最小二乘和岭回归
+&lt;/h2&gt;&lt;h3 id=&#34;最小二乘&#34;&gt;最小二乘
+&lt;/h3&gt;&lt;p&gt;假设输入有 \(n\) 个特征，\(u=(u_1,\ldots,u_n)^\top\)。线性回归的预测公式是：&lt;/p&gt;
+$$
+\hat y=w^\top u+b=w_1u_1+\cdots+w_nu_n+b.
+$$&lt;ul&gt;
+&lt;li&gt;\(u\)：已知的输入特征。&lt;/li&gt;
+&lt;li&gt;\(w\)：需要学习的权重。&lt;/li&gt;
+&lt;li&gt;\(b\)：需要学习的偏置，也是截距。&lt;/li&gt;
+&lt;li&gt;\(\hat y\)：模型预测值；\(y\) 是实际观测值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;定义参数向量：&lt;/p&gt;
+$$
+\theta=\begin{pmatrix}
+b\\
+w
+\end{pmatrix}.
+$$&lt;p&gt;然后把每个样本放在数据矩阵的一行，并在第一列补一个 \(1\)，得到增广数据矩阵 \(A\)。&lt;/p&gt;
+&lt;p&gt;这样，所有样本的预测可以一次写成：&lt;/p&gt;
+$$
+\boxed{\hat y=A\theta}.
+$$&lt;p&gt;预测误差组成的向量是：&lt;/p&gt;
+$$
+A\theta-y.
+$$&lt;p&gt;把每个样本的误差平方，再加起来，得到优化目标：&lt;/p&gt;
+$$
+\boxed{ \min_\theta L(\theta) = \lVert A\theta-y\rVert_2^2 = \sum_{i=1}^m(\hat y_i-y_i)^2 }.
+$$&lt;h3 id=&#34;岭回归&#34;&gt;岭回归
+&lt;/h3&gt;&lt;p&gt;岭回归在误差平方和后面，加上参数的平方和：&lt;/p&gt;
+$$
+\boxed{ \min_\theta \lVert A\theta-y\rVert_2^2 +\lambda\lVert\theta\rVert_2^2 }, \qquad \lambda&gt;0.
+$$&lt;p&gt;两个部分分别要求：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;\(\lVert A\theta-y\rVert_2^2\)：预测尽量准确。&lt;/li&gt;
+&lt;li&gt;\(\lambda\lVert\theta\rVert_2^2\)：参数整体不要过大。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这里采用&lt;strong&gt;偏置 \(b\) 也参与正则化&lt;/strong&gt;的写法，因此：&lt;/p&gt;
+$$
+\lVert\theta\rVert_2^2=b^2+\lVert w\rVert_2^2.
+$$&lt;p&gt;求解方式仍然是令梯度为零：&lt;/p&gt;
+$$
+2A^\top(A\theta-y)+2\lambda\theta=0.
+$$&lt;p&gt;于是：&lt;/p&gt;
+$$
+(A^\top A+\lambda I)\theta=A^\top y,
+$$&lt;p&gt;得到：&lt;/p&gt;
+$$
+\boxed{ \theta_{\mathrm{ridge}} =(A^\top A+\lambda I)^{-1}A^\top y }.
+$$&lt;p&gt;它和最小二乘解相比，关键变化就是矩阵中多了一个 &lt;strong&gt;\(\lambda I\)&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;与惩罚形式相对应的标准约束形式是：&lt;/p&gt;
+$$
+\boxed{ \min_\theta\lVert A\theta-y\rVert_2^2, \qquad \text{s.t. }\lVert\theta\rVert_2^2\le\beta }.
+$$&lt;h2 id=&#34;稀疏恢复与-lasso&#34;&gt;稀疏恢复与 LASSO
+&lt;/h2&gt;&lt;h3 id=&#34;基追踪&#34;&gt;基追踪
+&lt;/h3&gt;&lt;p&gt;事先知道真实信号只有少数分量非零时，可以用这条信息筛选解：&lt;/p&gt;
+$$
+\boxed{ \min_x\lVert x\rVert_1,\qquad \text{s.t. }Ax=b }
+$$&lt;p&gt;这叫 &lt;strong&gt;基追踪（basis pursuit）&lt;/strong&gt;。它是凸优化问题，比一般的 \(L_0\) 问题容易处理，并且能促进稀疏性。&lt;/p&gt;
+&lt;h3 id=&#34;允许数据误差lasso&#34;&gt;允许数据误差：LASSO
+&lt;/h3&gt;&lt;p&gt;现实测量可能带有噪声，因此可以允许 \(Ax\) 与 \(b\) 存在差异，用误差项衡量差多少：&lt;/p&gt;
+$$
+\boxed{ \min_x \frac12\lVert Ax-b\rVert_2^2 +\mu\lVert x\rVert_1 }, \qquad \mu&gt;0.
+$$&lt;p&gt;这就是 &lt;strong&gt;LASSO&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第一项：让预测与观测尽量接近。&lt;/li&gt;
+&lt;li&gt;第二项：通过 \(L_1\) 惩罚促进稀疏。&lt;/li&gt;
+&lt;li&gt;\(\mu\)：控制惩罚强度，作用类似前面岭回归中的 \(\lambda\)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;绝对误差通常比平方误差更不容易被少数巨大残差主导。&lt;strong&gt;线性预测公式与损失函数，可以分别选择。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;岭回归与-lasso-的约束形式&#34;&gt;岭回归与 LASSO 的约束形式
+&lt;/h3&gt;&lt;p&gt;岭回归使用平方惩罚：&lt;/p&gt;
+$$
+\min_x\frac12\lVert Ax-b\rVert_2^2+\mu\lVert x\rVert_2^2.
+$$&lt;p&gt;它通过参数平方和限制整体大小；\(\mu&gt;0\) 且全部参数都被惩罚时，这个目标强凸，解唯一。LASSO 将正则项换成 \(\mu\lVert x\rVert_1\)，促进部分参数直接变为零。&lt;/p&gt;
+&lt;p&gt;课件还给出了两种约束形式。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;限制参数大小，尽量拟合数据：&lt;/strong&gt;&lt;/p&gt;
+$$
+\min_x\frac12\lVert Ax-b\rVert_2^2,
+\qquad\text{s.t. }\lVert x\rVert_1\le\sigma.
+$$&lt;p&gt;\(\sigma\) 是参数绝对值总和的预算。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;限制允许的误差，尽量减小参数的 \(L_1\) 范数：&lt;/strong&gt;&lt;/p&gt;
+$$
+\min_x\lVert x\rVert_1,
+\qquad\text{s.t. }\lVert Ax-b\rVert_2\le\nu.
+$$&lt;p&gt;\(\nu\) 是允许的拟合误差。这三种形式都在协调拟合与稀疏性。参数适当对应时，可以得到相同解；不能随意指定 \(\mu,\sigma,\nu\) 就认定它们等价。&lt;/p&gt;
+&lt;h3 id=&#34;lasso-怎样产生零系数&#34;&gt;LASSO 怎样产生零系数？
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;近端梯度法&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;先沿平方损失的梯度更新一步，得到 \(z\)。&lt;/li&gt;
+&lt;li&gt;对 \(z\) 做&lt;strong&gt;软阈值处理&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;软阈值的规则很直观：&lt;strong&gt;绝对值较小的数直接归零，其余数向零缩小一定幅度。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;lasso-的变形希望什么变成零&#34;&gt;LASSO 的变形：希望什么变成零？
+&lt;/h3&gt;&lt;p&gt;这些模型都保留平方损失，主要改动正则项。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;分组 LASSO：希望整组参数变成零。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;例如一个传感器提供多个特征，我们希望判断哪些传感器值得保留，就可以按传感器分组。&lt;/p&gt;
+&lt;p&gt;正则项是：&lt;/p&gt;
+$$
+\mu\sum_{g=1}^{G}\sqrt{n_g}\, \lVert x_{I_g}\rVert_2.
+$$&lt;p&gt;其中 \(I_g\) 表示第 \(g\) 组的下标，\(n_g\) 是该组大小，\(\sqrt{n_g}\) 是课件采用的组大小权重。&lt;/p&gt;
+&lt;p&gt;关键是：&lt;/p&gt;
+$$
+\lVert x_{I_g}\rVert_2=0 \quad\Longleftrightarrow\quad \text{这一组的系数全部为零}.
+$$&lt;p&gt;所以它把筛选单位提升到了“组”。&lt;strong&gt;被保留的组内，仍可能有个别零系数&lt;/strong&gt;，并不要求每个系数都非零。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;稀疏分组 LASSO：既筛组，也筛组内特征。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在分组惩罚之外，再加一项：&lt;/p&gt;
+$$
+\mu_2\lVert x\rVert_1.
+$$&lt;p&gt;分组项促进整组归零；普通 \(L_1\) 项促进单个系数归零。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;变换稀疏：希望变换后的结果变成零。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;有时 \(x\) 本身不稀疏，但经过某种变换 \(F\) 后，\(Fx\) 很稀疏。这时使用：&lt;/p&gt;
+$$
+\mu\lVert Fx\rVert_1.
+$$&lt;p&gt;例如：&lt;/p&gt;
+$$
+x=(3,3,3,5,5).
+$$&lt;p&gt;原向量没有零元素，但相邻差为：&lt;/p&gt;
+$$
+(0,0,2,0).
+$$&lt;p&gt;只有一次变化。因此可以通过惩罚差分，让信号形成&lt;strong&gt;一段一段数值相同的结构&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;融合 LASSO：同时希望数值稀疏、变化也稀疏。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;它使用：&lt;/p&gt;
+$$
+\mu_1\lVert x\rVert_1 + \mu_2\sum_{i=2}^{n}\lvert x_i-x_{i-1}\rvert.
+$$&lt;p&gt;第一项促进部分数值为零；第二项促进相邻数值相等。例如它适合表达“很多位置为零，少数连续区间保持某个水平”的结构。&lt;/p&gt;
+&lt;h2 id=&#34;逻辑回归&#34;&gt;逻辑回归
+&lt;/h2&gt;&lt;p&gt;线性打分 → 转成概率 → 根据真实标签计算损失。&lt;/p&gt;
+&lt;p&gt;沿用课件记号：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;\(a\)：一个样本的特征。&lt;/li&gt;
+&lt;li&gt;\(x\)：待学习的模型参数。&lt;/li&gt;
+&lt;li&gt;\(b\in\{-1,+1\}\)：真实类别标签。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;先计算一个线性分数：&lt;/p&gt;
+$$
+z=a^\top x.
+$$&lt;p&gt;偏置可以像前面一样，通过增广向量并入计算。&lt;/p&gt;
+&lt;p&gt;这个分数可能是任意实数，而概率需要落在 \(0\) 和 \(1\) 之间。因此使用 &lt;strong&gt;Sigmoid 函数&lt;/strong&gt;：&lt;/p&gt;
+$$
+\boxed{\sigma(z)=\frac{1}{1+e^{-z}}}.
+$$&lt;p&gt;逻辑回归假设：&lt;/p&gt;
+$$
+P(b=+1\mid a;x)=\sigma(a^\top x).
+$$&lt;p&gt;负类的概率则是：&lt;/p&gt;
+$$
+P(b=-1\mid a;x)=1-\sigma(z)=\sigma(-z).
+$$&lt;p&gt;因为标签 \(b\) 只有 \(+1\) 和 \(-1\)，所以可以统一写成：&lt;/p&gt;
+$$
+\boxed{P(b\mid a;x)=\sigma(b\,a^\top x)}.
+$$&lt;p&gt;这里计算的是：&lt;strong&gt;模型给真实类别分配了多少概率。&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;\(bz&gt;0\)：预测方向正确。&lt;/li&gt;
+&lt;li&gt;\(bz&lt;0\)：预测方向错误。&lt;/li&gt;
+&lt;li&gt;\(bz\) 越大：模型对真实类别越有信心。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;希望：&lt;strong&gt;模型对训练样本真实类别给出的概率尽可能大。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;取负对数，就得到单个样本的损失：&lt;/p&gt;
+$$
+\boxed{ \ell_i(x) =-\ln P(b_i\mid a_i;x) =\ln\!\left(1+e^{-b_i a_i^\top x}\right) }.
+$$&lt;p&gt;即：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;模型给真实类别的概率越低，损失越大。&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;加上熟悉的正则项：&lt;/p&gt;
+$$
+\boxed{ \min_x \sum_{i=1}^{m}\ln\!\left(1+e^{-b_i a_i^\top x}\right) +\lambda\phi(x) }.
+$$&lt;p&gt;其中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;\(\phi(x)=\lVert x\rVert_2^2\)：限制参数整体大小。&lt;/li&gt;
+&lt;li&gt;\(\phi(x)=\lVert x\rVert_1\)：促进部分系数为零，实现特征选择。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;对新样本计算：&lt;/p&gt;
+$$
+p=\sigma(a^\top x).
+$$&lt;p&gt;采用常见的 \(0.5\) 阈值：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;\(p\ge0.5\)，预测为正类。&lt;/li&gt;
+&lt;li&gt;\(p&lt;0.5\)，预测为负类。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因为 \(\sigma(0)=0.5\)，分类边界就是：&lt;/p&gt;
+$$
+\boxed{a^\top x=0}.
+$$&lt;p&gt;因此，逻辑回归通过 Sigmoid 给出概率，在原始特征空间中的分类边界仍是线性的。&lt;/p&gt;
+&lt;h2 id=&#34;svm支持向量机&#34;&gt;SVM（支持向量机）
+&lt;/h2&gt;&lt;p&gt;分类分数写成：&lt;/p&gt;
+$$
+s_i=a_i^\top x+y.
+$$&lt;p&gt;其中 \(a_i\) 是样本特征，\(x\) 是权重，&lt;strong&gt;这里的 \(y\) 是偏置&lt;/strong&gt;；真实类别记为 \(b_i\in\{-1,+1\}\)。&lt;/p&gt;
+&lt;p&gt;分界面是：&lt;/p&gt;
+$$
+a^\top x+y=0.
+$$&lt;p&gt;在硬间隔 SVM 中，最靠近分界面、位于间隔边界上的样本称为&lt;strong&gt;支持向量&lt;/strong&gt;。它们限制了间隔能有多宽。&lt;/p&gt;
+&lt;p&gt;点到分界面的距离为：&lt;/p&gt;
+$$
+\frac{\lvert a_i^\top x+y\rvert}{\lVert x\rVert_2}.
+$$&lt;p&gt;利用标签 \(b_i\)，分类正确的条件可以统一写成：&lt;/p&gt;
+$$
+b_i(a_i^\top x+y)&gt;0.
+$$&lt;p&gt;与逻辑回归一样，标签乘上分数后，正数表示方向正确。&lt;/p&gt;
+&lt;p&gt;对于线性可分的数据，同时把 \(x,y\) 乘上同一个正数，分界面的位置不会改变。可以将最小的标签乘分数缩放到 \(1\)，于是约束写成：&lt;/p&gt;
+$$
+b_i(a_i^\top x+y)\ge1.
+$$&lt;p&gt;当最近样本在这个约束上取等号时（硬间隔最优解满足这一点），最近样本的几何间隔为：&lt;/p&gt;
+$$
+\frac1{\lVert x\rVert_2}.
+$$&lt;p&gt;于是最大化间隔，就转化成下面的&lt;strong&gt;硬间隔 SVM&lt;/strong&gt;：&lt;/p&gt;
+$$
+\boxed{ \min_{x,y}\frac12\lVert x\rVert_2^2, \qquad \text{s.t. }b_i(a_i^\top x+y)\ge1,\quad\forall i }.
+$$&lt;p&gt;&lt;strong&gt;数据分不开时：允许一些间隔违规&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;现实数据可能有噪声、类别重叠，无法找到满足所有要求的直线。&lt;/p&gt;
+&lt;p&gt;这时对每个样本加入非负的&lt;strong&gt;松弛变量&lt;/strong&gt; \(\xi_i\)：&lt;/p&gt;
+$$
+b_i(a_i^\top x+y)\ge1-\xi_i, \qquad \xi_i\ge0.
+$$&lt;p&gt;\(\xi_i\) 表示我们给这个样本放宽了多少要求。放宽要求需要付出代价，所以目标变成：&lt;/p&gt;
+$$
+\frac12\lVert x\rVert_2^2+\mu\sum_i\xi_i.
+$$&lt;p&gt;这就是&lt;strong&gt;软间隔 SVM&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第一项希望间隔大。&lt;/li&gt;
+&lt;li&gt;第二项希望违反间隔要求的程度小。&lt;/li&gt;
+&lt;li&gt;\(\mu&gt;0\) 控制两者的权衡；越大，就越重视减少违规。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;给定分类分数，满足约束所需的最小松弛量是：&lt;/p&gt;
+$$
+\boxed{ \xi_i=\max\{0,\ 1-b_i(a_i^\top x+y)\} }.
+$$&lt;p&gt;这个表达式叫 &lt;strong&gt;hinge loss（合页损失）&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;软间隔 SVM 可以直接写成：&lt;/p&gt;
+$$
+\boxed{ \min_{x,y} \frac12\lVert x\rVert_2^2 +\mu\sum_{i=1}^{m} \max\{0,\ 1-b_i(a_i^\top x+y)\} }.
+$$&lt;p&gt;逻辑回归希望提高真实类别的概率；SVM 希望样本不仅分对，还满足间隔要求。&lt;/p&gt;
+&lt;h2 id=&#34;低秩矩阵恢复&#34;&gt;低秩矩阵恢复
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;大量评分可以由少数潜在因素近似解释&lt;/strong&gt;，例如对不同题材的偏好。&lt;/p&gt;
+&lt;p&gt;在矩阵上，这体现为&lt;strong&gt;秩比较低&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;核范数路线&#34;&gt;核范数路线
+&lt;/h3&gt;&lt;p&gt;记 \(\Omega\) 为所有已知评分的位置集合。最直接的模型是：&lt;/p&gt;
+$$
+\boxed{ \min_X\operatorname{rank}(X), \qquad \text{s.t. }X_{ij}=M_{ij},\quad(i,j)\in\Omega }.
+$$&lt;p&gt;这和前面的稀疏恢复有对应关系：秩统计非零奇异值的个数，核范数则对奇异值求和。&lt;/p&gt;
+&lt;p&gt;直接最小化秩通常很难，换成核范数以后：&lt;/p&gt;
+$$
+\boxed{ \min_X\lVert X\rVert_*, \qquad \text{s.t. }X_{ij}=M_{ij},\quad(i,j)\in\Omega }
+$$&lt;p&gt;就得到一个凸优化问题。在适当条件下，它能恢复出我们希望的低秩矩阵；观测太少或位置不合适时，仍可能无法唯一恢复。&lt;/p&gt;
+&lt;p&gt;用户评分本身也可能有波动，因此可以将精确匹配改成误差平方和：&lt;/p&gt;
+$$
+\boxed{ \min_X \frac12\sum_{(i,j)\in\Omega}(X_{ij}-M_{ij})^2 +\mu\lVert X\rVert_* }.
+$$&lt;p&gt;这又是熟悉的结构：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;误差项：尽量贴近已知评分。&lt;/li&gt;
+&lt;li&gt;核范数项：促进低秩。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;特别注意，&lt;strong&gt;误差只在已知位置 \(\Omega\) 上计算&lt;/strong&gt;。没评分表示没有观测，不能把它当成真实的 \(0\) 分。&lt;/p&gt;
+&lt;h3 id=&#34;矩阵分解路线&#34;&gt;矩阵分解路线
+&lt;/h3&gt;&lt;p&gt;将待恢复矩阵写成两个小矩阵的乘积：&lt;/p&gt;
+$$
+\boxed{X=LR^\top},
+$$&lt;p&gt;其中：&lt;/p&gt;
+$$
+L\in\mathbb R^{m\times r}, \qquad R\in\mathbb R^{n\times r}, \qquad r\ll\min(m,n).
+$$&lt;p&gt;这样就直接保证：&lt;/p&gt;
+$$
+\operatorname{rank}(X)\le r.
+$$&lt;p&gt;这样存储的参数数量从 \(mn\) 变成：&lt;/p&gt;
+$$
+(m+n)r.
+$$&lt;p&gt;例如一个 \(1000\times1000\) 的矩阵，原本有一百万个数；取 \(r=10\) 后，两个因子只需要两万个数。&lt;/p&gt;
+&lt;p&gt;对应的优化模型是：&lt;/p&gt;
+$$
+\min_{L,R} \sum_{(i,j)\in\Omega} \bigl((LR^\top)_{ij}-M_{ij}\bigr)^2 +\alpha\lVert L\rVert_F^2 +\beta\lVert R\rVert_F^2.
+$$&lt;p&gt;这里的正则项限制两个因子的大小。例如 \(L\) 放大两倍、\(R\) 缩小一半，乘积不变；正则化可以约束这种缩放，但不能消除所有表示上的不唯一性。&lt;/p&gt;
+&lt;p&gt;代价是：&lt;strong&gt;关于 \(L,R\) 的联合问题通常非凸。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;固定其中一个时，另一个对应的是较容易处理的二次问题，因此可以采用交替优化等方法。&lt;/p&gt;
+&lt;h2 id=&#34;深度网络&#34;&gt;深度网络
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;深度学习仍然沿用同一个训练框架&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;前面的线性回归、逻辑回归等模型，都可以写成：&lt;/p&gt;
+$$
+\boxed{ \min_\theta \frac1N\sum_{i=1}^{N} \ell\bigl(f(a_i;\theta),b_i\bigr) +\mu\phi(\theta) }.
+$$&lt;p&gt;其中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;\(f(a_i;\theta)\)：模型的预测。&lt;/li&gt;
+&lt;li&gt;\(\ell\)：衡量预测误差的损失。&lt;/li&gt;
+&lt;li&gt;\(\phi(\theta)\)：正则项。&lt;/li&gt;
+&lt;li&gt;\(\theta\)：所有待学习参数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;深度网络主要改变的是 &lt;strong&gt;\(f\) 的构造方式&lt;/strong&gt;：通过多层函数的复合，表达更复杂的关系。&lt;/p&gt;
+&lt;h3 id=&#34;mlp每层做加权求和激活&#34;&gt;MLP：每层做“加权求和＋激活”
+&lt;/h3&gt;&lt;p&gt;多层感知机 MLP 包括输入层、隐藏层和输出层。&lt;/p&gt;
+&lt;p&gt;一个典型隐藏层的计算是：&lt;/p&gt;
+$$
+z^{(l)}=W^{(l)}h^{(l-1)}+c^{(l)}, \qquad h^{(l)}=t\bigl(z^{(l)}\bigr).
+$$&lt;p&gt;这里：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;\(h^{(l-1)}\)：上一层的输出。&lt;/li&gt;
+&lt;li&gt;\(W^{(l)}\)、\(c^{(l)}\)：这一层的权重和偏置。&lt;/li&gt;
+&lt;li&gt;\(t\)：逐分量作用的激活函数。&lt;/li&gt;
+&lt;li&gt;\(h^{(l)}\)：这一层得到的新表示。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;三种激活函数：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;激活函数&lt;/th&gt;
+					&lt;th&gt;计算方式&lt;/th&gt;
+					&lt;th&gt;直觉&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Sigmoid&lt;/td&gt;
+					&lt;td&gt;\(\frac1{1+e^{-z}}\)&lt;/td&gt;
+					&lt;td&gt;平滑地压到 \((0,1)\)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Heaviside&lt;/td&gt;
+					&lt;td&gt;\(z\ge0\) 输出 \(1\)，否则输出 \(0\)&lt;/td&gt;
+					&lt;td&gt;硬阈值&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;ReLU&lt;/td&gt;
+					&lt;td&gt;\(\max(0,z)\)&lt;/td&gt;
+					&lt;td&gt;负数归零，正数保留&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;例如：&lt;/p&gt;
+$$
+\operatorname{ReLU}(-2,0,3)=(0,0,3).
+$$&lt;p&gt;&lt;strong&gt;为什么需要非线性激活？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;如果各层只有矩阵乘法和偏置，多层计算最终仍能合并成一次 \(Wa+c\)。加入非线性，才能表达更丰富的关系。&lt;/p&gt;
+&lt;h3 id=&#34;cnn用同一个小窗口处理不同位置&#34;&gt;CNN：用同一个小窗口处理不同位置
+&lt;/h3&gt;&lt;p&gt;卷积神经网络的基本操作是：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;取出一小块输入，与卷积核逐元素相乘，再将结果相加；移动窗口，重复计算。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;CNN 的两个关键特点是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;局部连接&lt;/strong&gt;：每次先处理一个小区域。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;权重共享&lt;/strong&gt;：同一个卷积核在不同位置重复使用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;多个卷积核可以得到多张特征图，用于捕捉不同的局部模式。真正训练 CNN 时，卷积核里的数通常也是待学习参数。&lt;/p&gt;
+&lt;p&gt;完整流程：&lt;strong&gt;卷积提取特征 → 下采样缩小空间尺寸 → 全连接层给出分类输出&lt;/strong&gt;。下采样可以理解为对局部区域进行汇总。&lt;/p&gt;
+&lt;h3 id=&#34;反卷积网络把特征转成空间输出&#34;&gt;反卷积网络：把特征转成空间输出
+&lt;/h3&gt;&lt;p&gt;按&lt;strong&gt;编码器—解码器&lt;/strong&gt;理解：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;左侧逐步提取特征、缩小空间尺寸。&lt;/li&gt;
+&lt;li&gt;右侧通过反池化、上采样和卷积类运算，逐步恢复较大的空间输出。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这样可以进行图像重建，或者为图像的各个像素预测类别。&lt;/p&gt;
+&lt;p&gt;其中提到的&lt;strong&gt;转置卷积&lt;/strong&gt;可以学习怎样扩大特征图。虽然常被称为“反卷积”，但它通常不能将某次卷积的输入精确还原。生成网络也可以采用其他结构。&lt;/p&gt;
+&lt;h3 id=&#34;rnn把前面的信息传给后面&#34;&gt;RNN：把前面的信息传给后面
+&lt;/h3&gt;&lt;p&gt;RNN 通常译为&lt;strong&gt;循环神经网络&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;它适合处理有顺序的数据。第 \(t\) 步会同时使用：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当前输入 \(a_t\)。&lt;/li&gt;
+&lt;li&gt;上一步保留下来的状态 \(h_{t-1}\)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;典型计算为：&lt;/p&gt;
+$$
+\boxed{ h_t=g(W_a a_t+W_hh_{t-1}+c) }.
+$$&lt;p&gt;例如处理一句话时，状态可以携带前面词语的信息，帮助理解后续内容。&lt;/p&gt;
+&lt;p&gt;各个时间步的计算单元&lt;strong&gt;共享同一套参数&lt;/strong&gt;。随着输入不断到来，变化的是状态。&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;网络&lt;/th&gt;
+					&lt;th&gt;主要结构特点&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;MLP&lt;/td&gt;
+					&lt;td&gt;多层加权变换与非线性激活&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;CNN&lt;/td&gt;
+					&lt;td&gt;局部连接、空间上的权重共享&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;RNN&lt;/td&gt;
+					&lt;td&gt;状态沿时间传递、时间上的参数共享&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;训练与优化器&#34;&gt;训练与优化器
+&lt;/h3&gt;&lt;p&gt;训练过程可以串成三个步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;前向传播&lt;/strong&gt;：输入经过网络，得到预测并计算损失。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;反向传播&lt;/strong&gt;：利用链式法则，计算各参数的梯度。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;优化器更新&lt;/strong&gt;：根据梯度调整参数。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;例如随机梯度类方法使用：&lt;/p&gt;
+$$
+\boxed{\theta_{k+1}=\theta_k-\eta_k g_k}.
+$$&lt;p&gt;其中 \(g_k\) 可以由随机抽取的样本或小批量数据计算，\(\eta_k\) 是学习率。&lt;/p&gt;
+&lt;p&gt;假设某个参数为 \(2\)，当前梯度为 \(3\)，学习率为 \(0.1\)，更新后就是：&lt;/p&gt;
+$$
+2-0.1\times3=1.7.
+$$&lt;p&gt;课件最后列出的优化器，可以按基本思路理解：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;方法&lt;/th&gt;
+					&lt;th&gt;基本思路&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;SGD&lt;/td&gt;
+					&lt;td&gt;用随机样本或小批量数据估计梯度并更新参数&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Momentum / Nesterov&lt;/td&gt;
+					&lt;td&gt;利用动量累积更新方向，减少来回摆动&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;AdaGrad / RMSProp / AdaDelta&lt;/td&gt;
+					&lt;td&gt;根据历史梯度调整各参数的更新尺度&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Adam / Adamax&lt;/td&gt;
+					&lt;td&gt;结合动量与自适应缩放&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;ASGD&lt;/td&gt;
+					&lt;td&gt;对随机梯度迭代得到的参数进行平均&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+</description>
+        </item>
+        <item>
         <title>Stanford CS153 Frontier Systems | Lesson 7 阅读笔记</title>
         <link>https://Elysium-Seeker.github.io/p/cs153-frontier-systems-lesson-7/</link>
         <pubDate>Fri, 14 Aug 2026 19:10:00 +0800</pubDate>
@@ -1083,7 +2237,7 @@
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gamma.png&#34;
 	width=&#34;1600&#34;
 	height=&#34;900&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gamma_hu_30583f611d10805b.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/gamma_hu_35c669400f885468.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gamma_hu_b960c7784b3a872.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/gamma_hu_61975131e9b7b47c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;Gamma 示例&#34;
@@ -1105,7 +2259,7 @@
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/notebooklm.png&#34;
 	width=&#34;1600&#34;
 	height=&#34;900&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/notebooklm_hu_b4a404ef128aba48.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/notebooklm_hu_51fab4a412b924ea.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/notebooklm_hu_b0c49a9713a39e06.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/notebooklm_hu_423266cac3582ac5.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;NotebookLM 示例&#34;
@@ -1125,7 +2279,7 @@
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/python.png&#34;
 	width=&#34;1600&#34;
 	height=&#34;900&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/python_hu_7505fc7b81e46ec7.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/python_hu_783e33a14882ac2e.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/python_hu_c0776ef57a3bfd9.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/python_hu_ca2511bdf8ab4f3e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;Python 示例&#34;
@@ -1146,7 +2300,7 @@
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/ppt-master.png&#34;
 	width=&#34;1600&#34;
 	height=&#34;900&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/ppt-master_hu_617a4f59dfc8271e.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/ppt-master_hu_a6ea7fad30192082.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/ppt-master_hu_b250db058e7bbd75.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/ppt-master_hu_32df524de74ace05.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;ppt-master 示例&#34;
@@ -1166,7 +2320,7 @@
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill.png&#34;
 	width=&#34;1600&#34;
 	height=&#34;900&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill_hu_a7a1015be6162fcd.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill_hu_374d6a0ded543e22.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill_hu_9be1519c29b1bb8e.png 480w, https://Elysium-Seeker.github.io/p/ai-ppt-review/gpt-image2-ppt-skill_hu_6e711f9694234057.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;gpt-image2-ppt-skill 示例&#34;
@@ -1390,7 +2544,7 @@ $$&lt;p&gt;实际实现中 $z_0$ 初始化为零向量，以保证重建过程�
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/sampling_curve.png&#34;
 	width=&#34;2140&#34;
 	height=&#34;1412&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/sampling_curve_hu_b2314ee48d6aefa2.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/sampling_curve_hu_b65b21b37c381345.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/sampling_curve_hu_9285fb757fe242e5.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/sampling_curve_hu_eb7185ad3b7c5a98.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -1578,7 +2732,7 @@ $$&lt;p&gt;实际实现中 $z_0$ 初始化为零向量，以保证重建过程�
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/non_uniform_sampling.png&#34;
 	width=&#34;2140&#34;
 	height=&#34;714&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/non_uniform_sampling_hu_c882ae9bfb336d34.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/non_uniform_sampling_hu_1c2ec769491a95c1.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/non_uniform_sampling_hu_9f1344a159d31575.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/non_uniform_sampling_hu_7b5978e915c9782c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -1642,7 +2796,7 @@ $$&lt;p&gt;实际实现中 $z_0$ 初始化为零向量，以保证重建过程�
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/overlap_ablation.png&#34;
 	width=&#34;1059&#34;
 	height=&#34;699&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/overlap_ablation_hu_92726db5bb33f082.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/overlap_ablation_hu_5b821612ca123f67.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/overlap_ablation_hu_39195f32504783ab.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/overlap_ablation_hu_d51302a5fc51bd0c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -1662,7 +2816,7 @@ $$&lt;p&gt;实际实现中 $z_0$ 初始化为零向量，以保证重建过程�
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_crops.png&#34;
 	width=&#34;2064&#34;
 	height=&#34;714&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_crops_hu_aee98249d8c5991.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_crops_hu_e50e68cd850b2252.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_crops_hu_caaa526d059b7705.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_crops_hu_e980cb70ec78d6a.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -1674,7 +2828,7 @@ $$&lt;p&gt;实际实现中 $z_0$ 初始化为零向量，以保证重建过程�
 &lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_spectrum.png&#34;
 	width=&#34;1059&#34;
 	height=&#34;696&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_spectrum_hu_3693b77175d3ff83.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_spectrum_hu_840380011eba18b8.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_spectrum_hu_628184903d2fd9f.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/resolution_spectrum_hu_9beee200d1db1c57.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -1695,7 +2849,7 @@ $$&lt;p&gt;实际实现中 $z_0$ 初始化为零向量，以保证重建过程�
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/theory_metrics.png&#34;
 	width=&#34;1780&#34;
 	height=&#34;701&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/theory_metrics_hu_dd57a0b9f9d613dc.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/theory_metrics_hu_bed9e72ad37e4a8b.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/theory_metrics_hu_a5c878ad32e22503.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/theory_metrics_hu_900d55fa8cbc4fe8.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -1709,7 +2863,7 @@ $$&lt;p&gt;实际实现中 $z_0$ 初始化为零向量，以保证重建过程�
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/fig8_s2_spectrum.png&#34;
 	width=&#34;2776&#34;
 	height=&#34;986&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/fig8_s2_spectrum_hu_a44e622f128b7535.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/fig8_s2_spectrum_hu_60e95d92dee7b0db.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/fig8_s2_spectrum_hu_28a52c071498d4bb.png 480w, https://Elysium-Seeker.github.io/p/%E5%9F%BA%E4%BA%8E%E9%9A%90%E5%BC%8F%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E6%BC%82%E7%A7%BB%E5%85%88%E9%AA%8C%E7%9A%84%E5%9D%90%E6%A0%87%E6%84%9F%E7%9F%A5%E7%BA%B9%E7%90%86%E5%9C%BA%E9%87%8D%E5%BB%BA/fig8_s2_spectrum_hu_24f82c78c6ae761c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -2028,7 +3182,7 @@ $$Tanh(x)=\frac{e^x-e^{-x}}{e^x+e^{-x}}$$&lt;p&gt;能把输入值归一化到 $[
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh.png&#34;
 	width=&#34;633&#34;
 	height=&#34;464&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh_hu_3aa00b2459ee8adf.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh_hu_443bdbbcf6d0e8e.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh_hu_42fa2af1b8c6dc73.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/tanh_hu_989f8a062b5fc153.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;$tanh$ 的图像&#34;
@@ -2078,7 +3232,7 @@ $$\sigma(w) \left( ... \right) + \beta(w)$$&lt;p&gt; 赋予其由当前层 $w$ �
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image.png&#34;
 	width=&#34;1024&#34;
 	height=&#34;1024&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image_hu_e7f423b9df7b53ed.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image_hu_43a8f6f162c0e647.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image_hu_cfb13cb990ed3dcf.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image_hu_11a11c2aaf38fa8.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;alt text&#34;
@@ -2091,7 +3245,7 @@ $$\sigma(w) \left( ... \right) + \beta(w)$$&lt;p&gt; 赋予其由当前层 $w$ �
 &gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-1.png&#34;
 	width=&#34;1024&#34;
 	height=&#34;1024&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-1_hu_babac5d76014eb6f.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-1_hu_83c5fcddd197aec5.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-1_hu_b7739d224e1ba4d4.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-1_hu_ad9e7707a54e072b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;alt text&#34;
@@ -2112,7 +3266,7 @@ $$\sigma(w) \left( ... \right) + \beta(w)$$&lt;p&gt; 赋予其由当前层 $w$ �
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-4.png&#34;
 	width=&#34;1024&#34;
 	height=&#34;1024&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-4_hu_de424c1bef12030f.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-4_hu_b70a5904e43ca934.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-4_hu_7882ddbbe9d93831.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-4_hu_934fbe59adb19b29.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;alt text&#34;
@@ -2125,7 +3279,7 @@ $$\sigma(w) \left( ... \right) + \beta(w)$$&lt;p&gt; 赋予其由当前层 $w$ �
 &gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-5.png&#34;
 	width=&#34;1024&#34;
 	height=&#34;1024&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-5_hu_1d1cb0ea17641b81.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-5_hu_d13248a81bcf97e0.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-5_hu_a7fe99e148bf2240.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-5_hu_d954293139608c09.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;alt text&#34;
@@ -2138,7 +3292,7 @@ $$\sigma(w) \left( ... \right) + \beta(w)$$&lt;p&gt; 赋予其由当前层 $w$ �
 &gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-6.png&#34;
 	width=&#34;1024&#34;
 	height=&#34;1024&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-6_hu_57c86d33480ccaa9.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-6_hu_7f4499a81dcf1229.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-6_hu_a4dc46e11621ea74.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-6_hu_6501d7f62e0fd953.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;alt text&#34;
@@ -2204,7 +3358,7 @@ $$\sigma(w) \left( ... \right) + \beta(w)$$&lt;p&gt; 赋予其由当前层 $w$ �
 &lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-7.png&#34;
 	width=&#34;951&#34;
 	height=&#34;230&#34;
-	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-7_hu_6985c5671b71cda5.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-7_hu_6a4b1628e9c56f38.png 1024w&#34;
+	srcset=&#34;https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-7_hu_d4f883dccd7958e.png 480w, https://Elysium-Seeker.github.io/p/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-7_hu_8c81f35bff30af50.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;alt text&#34;
