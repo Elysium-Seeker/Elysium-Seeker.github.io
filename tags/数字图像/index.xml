@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>数字图像 on Elysium-Seeker</title>
+        <link>https://Elysium-Seeker.github.io/tags/%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F/</link>
+        <description>Recent content in 数字图像 on Elysium-Seeker</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Elysium-Seeker</copyright>
+        <lastBuildDate>Thu, 17 Sep 2026 15:49:17 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>计算机视觉 | 第二讲：数字图像基础</title>
+        <link>https://Elysium-Seeker.github.io/p/cv-lecture-2-digital-image-basics/</link>
+        <pubDate>Thu, 17 Sep 2026 15:46:46 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/cv-lecture-2-digital-image-basics/</guid>
+        <description>&lt;style&gt;
+.article-content .table-wrapper { position: relative; }
+.article-content .table-wrapper table:has(tr &gt; th:nth-child(3)) { min-width: 640px; }
+.article-content .table-wrapper table:has(tr &gt; th:nth-child(4)) { min-width: 720px; }
+.article-content .table-wrapper th:first-child { min-width: 72px; }
+.article-content .table-wrapper td, .article-content .table-wrapper th { word-break: normal; }
+.article-content img[src$=&#34;residual-connection.svg&#34;] { width: 360px; max-width: 100%; height: auto; margin: 1.5rem auto; display: block; }
+&lt;/style&gt;
+&lt;p&gt;&lt;em&gt;手机上可左右滑动，查看完整的宽表格与长公式。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;系列笔记：第二讲：数字图像基础 · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-3-deep-neural-networks/&#34; &gt;第三讲：深度神经网络基础&lt;/a&gt; · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-4-image-transforms/&#34; &gt;第四讲：图像变换&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;彩色图像通常使用 RGB 三通道表示。&lt;/p&gt;
+&lt;h2 id=&#34;采样与量化&#34;&gt;采样与量化
+&lt;/h2&gt;&lt;p&gt;把一幅灰度图像写成：&lt;/p&gt;
+$$
+f(x,y).
+$$&lt;p&gt;其中，\(x,y\) 表示&lt;strong&gt;位置&lt;/strong&gt;，\(f(x,y)\) 表示这个位置的&lt;strong&gt;灰度值&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;现实中的位置和亮度可以连续变化，计算机需要用有限个数表示，因此有两个步骤：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;步骤&lt;/th&gt;
+					&lt;th&gt;离散化什么&lt;/th&gt;
+					&lt;th&gt;直观理解&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;采样&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;位置 \(x,y\)&lt;/td&gt;
+					&lt;td&gt;在哪些位置取数&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;量化&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;灰度值 \(f(x,y)\)&lt;/td&gt;
+					&lt;td&gt;取到的数允许分成多少档&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;分辨率&#34;&gt;分辨率
+&lt;/h2&gt;&lt;p&gt;空间分辨率常用图像的像素尺寸表示，例如：&lt;/p&gt;
+$$
+1920\times1080.
+$$&lt;p&gt;它表示横向有 1920 个像素、纵向有 1080 个像素。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;PPI&lt;/strong&gt;：每英寸包含多少像素。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DPI&lt;/strong&gt;：扫描、打印等设备每英寸的采样或输出点数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;位深度与动态范围&#34;&gt;位深度与动态范围
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;位深度&lt;/strong&gt;：如果一个灰度像素用 \(b\) 位二进制数表示，那么可以表示：&lt;/p&gt;
+$$
+\boxed{L=2^b\text{ 个灰度级。}}
+$$&lt;p&gt;&lt;strong&gt;动态范围描述可记录的亮暗跨度。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;HDR 合成：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;短曝光保留亮部细节，长曝光保留暗部细节，再把可靠的信息合起来。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;位深度描述编码有多少档，动态范围描述实际能够兼顾多大的亮暗跨度。&lt;/p&gt;
+&lt;h2 id=&#34;图像的矩阵表示&#34;&gt;图像的矩阵表示
+&lt;/h2&gt;&lt;p&gt;一幅灰度图可以存成一个二维矩阵，每个元素对应一个像素：&lt;/p&gt;
+$$
+I= \begin{bmatrix} 0&amp;128\\
+ 200&amp;255 \end{bmatrix}.
+$$&lt;p&gt;这里分别表示黑、灰、较亮、白。&lt;/p&gt;
+&lt;p&gt;RGB 彩色图可以看成三张同样大小的矩阵，分别记录 R、G、B。因此，常见的数组形式是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;灰度图：\(H\times W\)。&lt;/li&gt;
+&lt;li&gt;RGB 图：\(H\times W\times3\)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;近似灰度转换公式是：&lt;/p&gt;
+$$
+\boxed{Y=0.30R+0.59G+0.11B.}
+$$&lt;h2 id=&#34;图像的基本运算&#34;&gt;图像的基本运算
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;点运算&lt;/strong&gt;保持像素位置不变，输出只取决于这个位置原来的灰度。运算结果超出范围时，要明确怎么处理。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;代数运算&lt;/strong&gt;：两幅图对应位置做加、减、乘、除。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;逻辑运算&lt;/strong&gt;：按区域是否存在进行组合。&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

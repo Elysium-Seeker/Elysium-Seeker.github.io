@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="计算机视觉第三讲笔记：从神经元、卷积、激活与池化，到训练流程、优化器和经典视觉网络。">
+<title>计算机视觉 | 第三讲：深度神经网络基础</title>
+
+<link rel='canonical' href='https://Elysium-Seeker.github.io/p/cv-lecture-3-deep-neural-networks/'>
+
+<link rel="stylesheet" href="/scss/style.min.14391edec1bcf69cbfd0ffc7bcb2ba2d40c8649ce70e16557424e09eb7687faf.css"><meta property='og:title' content="计算机视觉 | 第三讲：深度神经网络基础">
+<meta property='og:description' content="计算机视觉第三讲笔记：从神经元、卷积、激活与池化，到训练流程、优化器和经典视觉网络。">
+<meta property='og:url' content='https://Elysium-Seeker.github.io/p/cv-lecture-3-deep-neural-networks/'>
+<meta property='og:site_name' content='Elysium-Seeker'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='深度学习' /><meta property='article:tag' content='卷积神经网络' /><meta property='article:published_time' content='2026-09-17T15:46:47&#43;08:00'/><meta property='article:modified_time' content='2026-09-17T15:49:17&#43;08:00'/>
+<meta name="twitter:title" content="计算机视觉 | 第三讲：深度神经网络基础">
+<meta name="twitter:description" content="计算机视觉第三讲笔记：从神经元、卷积、激活与池化，到训练流程、优化器和经典视觉网络。">
+    <link rel="shortcut icon" href="/favicon.ico" />
+<style>
+    :root {
+        --article-font-family: "Noto Serif SC", var(--base-font-family);
+		--article-font-size: 1.7rem;
+		--article-line-height: 1.8;
+    }
+</style>
+
+<script>
+		(function () {
+		    const customFont = document.createElement('link');
+		    customFont.href = "https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap";
+		
+		    customFont.type = "text/css";
+		    customFont.rel = "stylesheet";
+		
+		    document.head.appendChild(customFont);
+		}());
+</script>
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/b_bafc54ed2304790292888aa8183afddb_hu_25b25cb3ac2ccae0.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">⭐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Elysium-Seeker</a></h1>
+            <h2 class="site-description">请用一支玫瑰纪念我</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Elysium-Seeker'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E9%93%BE/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友链</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#神经元与-cnn-整体结构">神经元与 CNN 整体结构</a>
+      <ol>
+        <li><a href="#神经元与多层感知机">神经元与多层感知机</a></li>
+        <li><a href="#cnn-的组成">CNN 的组成</a></li>
+      </ol>
+    </li>
+    <li><a href="#卷积">卷积</a>
+      <ol>
+        <li><a href="#局部连接与权值共享">局部连接与权值共享</a></li>
+        <li><a href="#卷积的计算">卷积的计算</a></li>
+        <li><a href="#填充">填充</a></li>
+        <li><a href="#多通道卷积">多通道卷积</a></li>
+      </ol>
+    </li>
+    <li><a href="#激活与池化">激活与池化</a>
+      <ol>
+        <li><a href="#激活函数">激活函数</a></li>
+        <li><a href="#池化">池化</a></li>
+      </ol>
+    </li>
+    <li><a href="#训练与优化">训练与优化</a>
+      <ol>
+        <li><a href="#一次训练迭代">一次训练迭代</a></li>
+        <li><a href="#数据增强">数据增强</a></li>
+        <li><a href="#优化器">优化器</a></li>
+      </ol>
+    </li>
+    <li><a href="#经典网络">经典网络</a>
+      <ol>
+        <li><a href="#alexnet">AlexNet</a></li>
+        <li><a href="#vgg">VGG</a></li>
+        <li><a href="#googlenet">GoogLeNet</a></li>
+        <li><a href="#resnet">ResNet</a></li>
+        <li><a href="#transformer">Transformer</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" >
+                计算机视觉
+            </a>
+        
+            <a href="/categories/work/" style="background-color: #708090; color: #fff;">
+                Work
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/cv-lecture-3-deep-neural-networks/">计算机视觉 | 第三讲：深度神经网络基础</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            计算机视觉第三讲笔记：从神经元、卷积、激活与池化，到训练流程、优化器和经典视觉网络。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-09-17</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 7 分钟
+                </time>
+            </div>
+        <div class="article-lastmod">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time>
+                    2026-09-17
+                </time>
+            </div></footer>
+    
+
+    
+</div>
+
+</header>
+
+    
+
+
+
+
+
+
+
+
+
+
+<section class="article-content">
+    <style>
+.article-content .table-wrapper { position: relative; }
+.article-content .table-wrapper table:has(tr > th:nth-child(3)) { min-width: 640px; }
+.article-content .table-wrapper table:has(tr > th:nth-child(4)) { min-width: 720px; }
+.article-content .table-wrapper th:first-child { min-width: 72px; }
+.article-content .table-wrapper td, .article-content .table-wrapper th { word-break: normal; }
+.article-content img[src$="residual-connection.svg"] { width: 360px; max-width: 100%; height: auto; margin: 1.5rem auto; display: block; }
+</style>
+<p><em>手机上可左右滑动，查看完整的宽表格与长公式。</em></p>
+<p>系列笔记：<a class="link" href="/p/cv-lecture-2-digital-image-basics/" >第二讲：数字图像基础</a> · 第三讲：深度神经网络基础 · <a class="link" href="/p/cv-lecture-4-image-transforms/" >第四讲：图像变换</a></p>
+<h2 id="神经元与-cnn-整体结构">神经元与 CNN 整体结构
+</h2><h3 id="神经元与多层感知机">神经元与多层感知机
+</h3><p>神经网络通过多个相连的计算单元处理信息。</p>
+<p><strong>一个神经元的计算，其实就是“加权求和，再经过激活函数”。</strong></p>
+$$
+z=\sum_{i=1}^{m}w_i x_i-\theta,\qquad y=\phi(z)
+$$<p>其中：</p>
+<ul>
+<li>\(x_i\)：输入，可以是像素值，也可以是上一层的输出。</li>
+<li>\(w_i\)：权重，决定各输入怎样影响结果。</li>
+<li>\(\theta\)：阈值，调整达到什么条件才产生响应。</li>
+<li>\(\phi\)：激活函数，把加权结果转换成输出。</li>
+</ul>
+<p>训练网络的重要工作，就是根据样本调整权重和偏置，让输出更符合正确答案。</p>
+<p>多个神经元按层连接，就构成了多层感知机 MLP。</p>
+<p><strong>全连接</strong>：当前层的每个神经元，都连接上一层的所有神经元。</p>
+<p>输入维度为 \(d\)，输出神经元数量为 \(h\)，全连接层的参数量为：</p>
+$$
+\boxed{dh+h}
+$$<p>（全连接加神经元偏置）</p>
+<h3 id="cnn-的组成">CNN 的组成
+</h3><p><img src="/p/cv-lecture-3-deep-neural-networks/cnn-architecture.png"
+	width="1500"
+	height="844"
+	srcset="/p/cv-lecture-3-deep-neural-networks/cnn-architecture_hu_44e4aff3979c82b7.png 480w, /p/cv-lecture-3-deep-neural-networks/cnn-architecture_hu_86a3fdb8d593997.png 1024w"
+	loading="lazy"
+	
+		alt="CNN 基本结构与 LeNet 特征图尺寸，课件第 21 页"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
+	
+></p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>层</th>
+					<th>作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>输入层</td>
+					<td>接收图像的像素数值</td>
+			</tr>
+			<tr>
+					<td>卷积层</td>
+					<td>根据局部区域的像素，计算特征响应</td>
+			</tr>
+			<tr>
+					<td>激活层</td>
+					<td>引入非线性，使网络能表达复杂关系</td>
+			</tr>
+			<tr>
+					<td>池化层</td>
+					<td>汇总邻域信息，常用于缩小特征图</td>
+			</tr>
+			<tr>
+					<td>全连接层</td>
+					<td>综合前面提取的特征，参与最终分类</td>
+			</tr>
+	</tbody>
+</table></div>
+$$
+6@28\times28
+$$<p>表示 <strong>6 张特征图，每张大小为 \(28\times28\)</strong>。</p>
+<h2 id="卷积">卷积
+</h2><h3 id="局部连接与权值共享">局部连接与权值共享
+</h3><ul>
+<li><strong>局部连接</strong>：一个输出连接哪些输入。</li>
+<li><strong>权值共享</strong>：不同位置是否使用同一组参数。</li>
+</ul>
+<h3 id="卷积的计算">卷积的计算
+</h3><p><strong>卷积的基本动作：让一个小矩阵在图像上滑动，对应元素相乘后求和。</strong></p>
+<p>这个小矩阵叫<strong>卷积核</strong>。例如一个 \(3\times3\) 的核，每次处理图像中的一个 \(3\times3\) 区域，得到一个输出值。</p>
+<p>数学定义：</p>
+$$
+O(x,y)=\sum_u\sum_v G(u,v)I(x-u,y-v)
+$$<p>其中，\(I\) 是输入图像，\(G\) 是卷积核，\(O\) 是输出；求和遍历核覆盖的位置。连续形式把求和换成积分。</p>
+<p>注意里面的 \(x-u,y-v\)：<strong>按照数学卷积的定义，要先把核旋转 \(180^\circ\)，再做对应位置的乘加。</strong></p>
+<p>核因此变成：</p>
+$$
+G= \begin{bmatrix} 1&2&3\\
+ 4&5&6\\
+ 7&8&9 \end{bmatrix} \quad\longrightarrow\quad \widetilde G= \begin{bmatrix} 9&8&7\\
+ 6&5&4\\
+ 3&2&1 \end{bmatrix}
+$$<h3 id="填充">填充
+</h3><p>在不填充时，计算窗口必须完整放进输入图像。</p>
+<p>为了让边缘位置也能参与完整计算，可以在图像外围补像素，这叫 <strong>Padding，填充</strong>。课件介绍了两种：</p>
+<ul>
+<li><strong>常数填充</strong>：外围填固定值，常用 0。</li>
+<li><strong>复制边界</strong>：用最靠近边缘的原像素向外扩展。</li>
+</ul>
+<h3 id="多通道卷积">多通道卷积
+</h3><p>多通道卷积需要先合并各输入通道的计算结果。</p>
+<p>灰度图有一个通道，RGB 图有三个通道。对于这里的普通卷积，一个输出通道的核要覆盖<strong>全部输入通道</strong>。</p>
+<p>因此，对 RGB 输入，一个空间大小为 \(3\times3\) 的核，完整尺寸是：</p>
+$$
+3\times3\times3
+$$<p>前两个 3 表示高、宽，最后一个 3 表示输入通道数。</p>
+<p>计算某一个输出位置时：</p>
+<ol>
+<li>在 R 通道的窗口中乘加；</li>
+<li>在 G、B 通道中分别乘加；</li>
+<li>将三个结果相加，再加一个偏置。</li>
+</ol>
+<p><strong>这一个完整的核，最终产生一个输出通道。</strong></p>
+<p>例：</p>
+$$
+8\times8\times3\text{ 输入} \quad+\quad 4\text{ 个 }3\times3\times3\text{ 的核}
+$$<p>不填充、步长为 1，因此：</p>
+$$
+\text{输出空间尺寸}=8-3+1=6
+$$<p>4 个核产生 4 个输出通道，最终输出是：</p>
+$$
+\boxed{6\times6\times4}
+$$<p>含偏置的参数量为：</p>
+$$
+\boxed{ C_{\text{out}}\bigl(k_hk_wC_{\text{in}}+1\bigr) }
+$$<p>代入本例：</p>
+$$
+4(3\times3\times3+1)=112
+$$<p>这里<strong>不用再乘输出的 \(6\times6\)</strong>，因为这些位置共享参数。</p>
+<h2 id="激活与池化">激活与池化
+</h2><h3 id="激活函数">激活函数
+</h3><p>激活函数让网络能够表达非线性关系。</p>
+<p>常见激活函数：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>函数</th>
+					<th>计算或特征</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Sigmoid</td>
+					<td>\(\sigma(x)=1/(1+e^{-x})\)，输出位于 \(0\) 与 \(1\) 之间</td>
+			</tr>
+			<tr>
+					<td>Tanh</td>
+					<td>输出位于 \(-1\) 与 \(1\) 之间</td>
+			</tr>
+			<tr>
+					<td>ReLU</td>
+					<td>\(\max(0,x)\)，负数变成 0，正数保留</td>
+			</tr>
+			<tr>
+					<td>Leaky ReLU</td>
+					<td>正数保留，负数乘一个较小的正系数</td>
+			</tr>
+	</tbody>
+</table></div>
+<h3 id="池化">池化
+</h3><p><strong>池化把局部区域汇总成一个数。</strong>
+最常见的两种方式：</p>
+<ul>
+<li><strong>最大池化</strong>：取窗口中的最大值。</li>
+<li><strong>平均池化</strong>：取窗口中的平均值。</li>
+</ul>
+<p>普通最大池化、平均池化有几个特点：</p>
+<ul>
+<li><strong>每个通道独立处理，通道数不变。</strong></li>
+<li>通常没有可学习的权重；窗口大小、步长是人为设置的超参数。</li>
+<li>可以缩小空间尺寸、降低后续计算量，同时也会丢失部分细节。</li>
+</ul>
+<p>“下采样”是降低空间采样密度的统称。池化可以用来下采样，步长大于 1 的卷积也可以实现下采样。</p>
+<h2 id="训练与优化">训练与优化
+</h2><h3 id="一次训练迭代">一次训练迭代
+</h3><p>训练，就是利用样本和正确答案调整网络参数。</p>
+<p>用<strong>损失函数</strong>衡量它们的差距：</p>
+$$
+L=\ell(\hat y,y)
+$$<p>训练的目标，就是寻找让训练数据上的平均损失较小的参数。</p>
+<p>一次训练迭代可以理解成四步：</p>
+<ol>
+<li><strong>前向传播</strong>：图片经过网络，得到预测。</li>
+<li><strong>计算损失</strong>：比较预测与标签。</li>
+<li><strong>反向传播</strong>：计算损失对各个参数的梯度。</li>
+<li><strong>参数更新</strong>：优化器根据梯度调整参数。</li>
+</ol>
+<p><strong>反向传播负责算梯度，优化器负责用梯度更新参数。</strong></p>
+<h3 id="数据增强">数据增强
+</h3><p>数据增强让网络见到同类图像的合理变化。</p>
+<p>增强包括缩放、翻转、旋转、亮度或色度变化、添加噪声等。</p>
+<ul>
+<li><strong>变换后，标签仍然应当成立。</strong> 数字 6 大角度旋转后可能更像 9，继续标成 6 就会引入错误监督。</li>
+<li><strong>先划分数据集，再对训练部分增强。</strong> 避免同一张原图及其近似副本分别进入训练集和测试集。</li>
+</ul>
+<p>增强的重点是增加有意义的变化。</p>
+<h3 id="优化器">优化器
+</h3><p>优化器决定怎样根据梯度迈出下一步。</p>
+<p>最基本的梯度下降更新是：</p>
+$$
+\boxed{ \theta_{\text{new}} = \theta_{\text{old}}-\eta\nabla_\theta L }
+$$<p>其中，\(\eta\) 是<strong>学习率</strong>，控制每次更新的步幅。</p>
+<p>例如某个参数为 1，梯度为 \(0.4\)，学习率为 \(0.1\)，更新后：</p>
+$$
+1-0.1\times0.4=0.96
+$$<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>方法</th>
+					<th>核心思路</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>SGD</td>
+					<td>用随机样本的梯度更新参数；实际训练常用小批量版本</td>
+			</tr>
+			<tr>
+					<td>Momentum，动量法</td>
+					<td>保留过去梯度方向的影响，积累持续方向，减轻振荡</td>
+			</tr>
+			<tr>
+					<td>Adam</td>
+					<td>同时统计梯度及梯度平方，为不同参数调整更新步幅</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>Adam 的自适应调整也需要配合学习率设置。学习率太大可能来回跳动，太小则可能收敛缓慢。</p>
+<h2 id="经典网络">经典网络
+</h2><h3 id="alexnet">AlexNet
+</h3><p>AlexNet 把较深的 CNN 成功用于大规模图像分类。课件第 58 页给出的结构是：</p>
+$$
+5\text{ 个卷积层}+3\text{ 个全连接层}=8\text{ 层}
+$$<p>这里按有权重的层计数，池化、激活通常不单独算进去。</p>
+<h3 id="vgg">VGG
+</h3><p>VGG 反复堆叠小卷积核（课件第 59—60 页）。</p>
+<p>它大量使用 \(3\times3\) 卷积，结构比较规整。VGG-16 通常是 13 个卷积层加 3 个全连接层，VGG-19 则是 16 加 3。</p>
+<p>这里认识一下<strong>感受野</strong>：某个输出能够受到原输入中多大范围的影响。</p>
+<p>两个连续、步长为 1 的 \(3\times3\) 卷积，可以覆盖原输入中的 \(5\times5\) 范围。若输入、中间、输出通道数都为 \(C\)，忽略偏置：</p>
+$$
+\text{两个 }3\times3\text{ 卷积的参数量}=18C^2
+$$$$
+\text{一个 }5\times5\text{ 卷积的参数量}=25C^2
+$$<p>所以，堆叠小核能够在获得较大感受野的同时减少参数，还能在层间加入非线性。感受野相同，并不意味着两种结构的计算完全相同。</p>
+<h3 id="googlenet">GoogLeNet
+</h3><p>GoogLeNet 用 Inception 模块并行提取不同尺度的信息（课件第 61 页）。</p>
+<p>同一份输入进入多个分支，例如：</p>
+$$
+1\times1\text{ 卷积},\quad 3\times3\text{ 卷积},\quad 5\times5\text{ 卷积},\quad \text{池化}
+$$<p>各分支关注的邻域范围不同。它们的空间尺寸对齐后，<strong>沿通道方向拼接</strong>。例如 32 通道和 64 通道的结果，可以拼成 96 通道。</p>
+<p>课件右侧的改进结构还使用 \(1\times1\) 卷积：它可以混合、压缩通道，降低后续大卷积核的计算量。课件介绍的 GoogLeNet 版本为 22 层。</p>
+<h3 id="resnet">ResNet
+</h3><p>ResNet 通过残差连接，让较深的网络更容易训练（课件第 62—65 页）。</p>
+<p>普通网络从 20 层增加到 56 层，<strong>训练误差也变高了</strong>。这叫退化问题。</p>
+<p>它与过拟合要分开理解：过拟合通常表现为训练数据上效果很好，未见数据上表现较差；这里更深的网络连训练数据都拟合得更差。</p>
+<p>残差连接把输入直接送到后面，与一个变换分支的结果相加：</p>
+$$
+\boxed{z=F(x)+x}
+$$<p><img src="/p/cv-lecture-3-deep-neural-networks/residual-connection.svg"
+	
+	
+	
+	loading="lazy"
+	
+		alt="ResNet 残差连接：变换分支与输入相加，再经过 ReLU"
+	
+	
+></p>
+<p>例如输入是 2，希望相加后的结果为 2.3，那么分支只需要学出修正量 \(0.3\)。</p>
+<p>这种连接保留了直接传递输入的路径，也给梯度增加了直接传播的路径，有助于优化较深的网络。课件这个残差块在相加后还接了 ReLU，因此完整输出为：</p>
+$$
+y=\operatorname{ReLU}\bigl(F(x)+x\bigr)
+$$<p>相加时，两边的形状必须一致；需要时，可以用卷积调整通道数和空间尺寸。</p>
+<h3 id="transformer">Transformer
+</h3><p>Transformer 通过注意力，让不同位置的信息相互关联。</p>
+<p>用于图像时：</p>
+<ul>
+<li><strong>ViT</strong>：把图像切成小块，每块转换成向量，将图像组织成序列。</li>
+<li><strong>Swin Transformer</strong>：主要在局部窗口中计算注意力，再通过移动窗口让不同窗口之间交换信息。</li>
+</ul>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        
+            <a href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">卷积神经网络</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-09-17
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+	const mainArticleElement = document.querySelector(".main-article");
+        renderMathInElement(mainArticleElement, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/cv-lecture-4-image-transforms/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">计算机视觉 | 第四讲：图像变换</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cv-lecture-2-digital-image-basics/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">计算机视觉 | 第二讲：数字图像基础</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/math-principles-unit-1/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">人工智能的数学原理 | Unit 1：机器学习中的优化模型</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cs153-frontier-systems-lesson-7/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 7 阅读笔记</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cs153-frontier-systems-lesson-6/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Stanford CS153 Frontier Systems | Lesson 6 阅读笔记</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 Elysium-Seeker
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+    #TableOfContents > ul, ol {
+        ul, ol {
+            display: none;
+        }
+        .open {
+            display: block;
+        }
+    }
+</style>
+
+<script>
+    function initTocHide() {
+        
+        let toc = document.querySelector(".widget--toc");
+        if (!toc) {
+            return;
+        }
+        
+        window.addEventListener('scroll', function() {
+            
+            let openUl = document.querySelectorAll(".open");
+            if (openUl.length > 0) {
+              openUl.forEach((ul) => {
+                ul.classList.remove("open")
+              })
+            }
+            
+            let currentLi = document.querySelector(".active-class");
+            if (!currentLi) {
+                return
+            }
+            
+            if (currentLi.children.length > 1) {
+                currentLi.children[1].classList.add("open")
+            }
+            
+            let ul = currentLi.parentElement;
+            do {
+                ul.classList.add("open");
+                ul = ul.parentElement.parentElement
+            } while (ul !== undefined && (ul.localName === 'ul' || ul.localName === 'ol'))
+        });
+    }
+    initTocHide()
+</script>
+
+<style>
+    .highlight {
+         
+        max-height: 400px;
+        overflow: hidden;
+    }
+
+    .code-show {
+        max-height: none !important;
+    }
+
+    .code-more-box {
+        width: 100%;
+        padding-top: 78px;
+        background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(#fff));
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+    }
+
+    .code-more-btn {
+        display: block;
+        margin: auto;
+        width: 44px;
+        height: 22px;
+        background: #f0f0f5;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        padding-top: 6px;
+        cursor: pointer;
+    }
+
+    .code-more-img {
+        cursor: pointer !important;
+        display: block;
+        margin: auto;
+        width: 22px;
+        height: 16px;
+    }
+</style>
+
+<script>
+  function initCodeMoreBox() {
+    let codeBlocks = document.querySelectorAll(".highlight");
+    if (!codeBlocks) {
+      return;
+    }
+    codeBlocks.forEach(codeBlock => {
+      
+      if (codeBlock.scrollHeight <= codeBlock.clientHeight) {
+        return;
+      }
+      
+      
+      let codeMoreBox = document.createElement('div');
+      codeMoreBox.classList.add('code-more-box');
+      
+      let codeMoreBtn = document.createElement('span');
+      codeMoreBtn.classList.add('code-more-btn');
+      codeMoreBtn.addEventListener('click', () => {
+        codeBlock.classList.add('code-show');
+        codeMoreBox.style.display = 'none';
+        
+        window.dispatchEvent(new Event('resize'))
+      })
+      
+      let img = document.createElement('img');
+      img.classList.add('code-more-img');
+      img.src = "https://Elysium-Seeker.github.io/icons/codeMore.png"
+      
+      codeMoreBtn.appendChild(img);
+      codeMoreBox.appendChild(codeMoreBtn);
+      codeBlock.appendChild(codeMoreBox)
+    })
+  }
+  
+  initCodeMoreBox();
+</script>
+
+<style>
+    #backTopBtn {
+        display: none;
+        position: fixed;
+        bottom: 30px;
+        z-index: 99;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        background-image: url(https://Elysium-Seeker.github.io/icons/backTop.svg);
+    }
+</style>
+
+<script>
+    
+
+    function initScrollTop() {
+        let rightSideBar = document.querySelector(".right-sidebar");
+        if (!rightSideBar) {
+            return;
+        }
+        
+        let btn = document.createElement("div");
+        btn.id = "backTopBtn";
+        btn.onclick = backToTop
+        rightSideBar.appendChild(btn)
+        
+        window.onscroll = function() {
+            
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+    }
+
+    
+
+    function backToTop(){
+        window.scrollTo({ top: 0, behavior: "smooth" })
+    }
+
+    initScrollTop();
+</script>
+
+<div id="particles-js"></div>
+
+<script src=https://Elysium-Seeker.github.io/background/particles.min.js></script>
+<script>
+  particlesJS.load('particles-js', "https://Elysium-Seeker.github.io/background/particlesjs-config.json", function() {
+    console.log('particles.js loaded - callback');
+  });
+</script>
+
+<style>
+  #particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+  }
+</style>
+
+    </body>
+</html>

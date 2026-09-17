@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="448" viewBox="0 0 360 448" role="img" aria-labelledby="title desc">
+  <title id="title">ResNet 残差连接</title>
+  <desc id="desc">输入 x 经过变换分支 F(x)，同时沿旁路直接参与相加；相加结果经过 ReLU 得到输出。</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#34516b"/></marker></defs>
+  <rect width="360" height="448" rx="16" fill="#f8fafc"/>
+  <g fill="none" stroke="#34516b" stroke-width="2.4" marker-end="url(#arrow)">
+    <path d="M160 66 V104"/>
+    <path d="M160 154 V204"/>
+    <path d="M160 254 V299"/>
+    <path d="M160 349 V384"/>
+    <path d="M160 83 H303 V229 H253"/>
+  </g>
+  <g stroke="#69849a" stroke-width="1.5">
+    <rect x="68" y="20" width="184" height="46" rx="9" fill="#ffffff"/>
+    <rect x="68" y="105" width="184" height="49" rx="9" fill="#e8f0f7"/>
+    <rect x="68" y="205" width="184" height="49" rx="9" fill="#e8f4ef"/>
+    <rect x="68" y="300" width="184" height="49" rx="9" fill="#e8f0f7"/>
+    <rect x="68" y="385" width="184" height="43" rx="9" fill="#ffffff"/>
+  </g>
+  <g font-family="system-ui, 'Microsoft YaHei', sans-serif" fill="#19334b" font-size="17" text-anchor="middle">
+    <text x="160" y="49">输入 x</text>
+    <text x="160" y="136">变换分支 F(x)</text>
+    <text x="160" y="236">相加：F(x) + x</text>
+    <text x="160" y="331">ReLU</text>
+    <text x="160" y="413">输出</text>
+    <text x="319" y="161">x</text>
+  </g>
+</svg>
