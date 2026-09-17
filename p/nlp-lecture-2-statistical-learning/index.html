@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="从概率、熵、KL 散度和互信息，到最大熵模型、CRF、Viterbi 解码与 BMES 中文分词的学习笔记。">
+<title>自然语言处理 | 第二讲：统计学习基础</title>
+
+<link rel='canonical' href='https://Elysium-Seeker.github.io/p/nlp-lecture-2-statistical-learning/'>
+
+<link rel="stylesheet" href="/scss/style.min.14391edec1bcf69cbfd0ffc7bcb2ba2d40c8649ce70e16557424e09eb7687faf.css"><meta property='og:title' content="自然语言处理 | 第二讲：统计学习基础">
+<meta property='og:description' content="从概率、熵、KL 散度和互信息，到最大熵模型、CRF、Viterbi 解码与 BMES 中文分词的学习笔记。">
+<meta property='og:url' content='https://Elysium-Seeker.github.io/p/nlp-lecture-2-statistical-learning/'>
+<meta property='og:site_name' content='Elysium-Seeker'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='NLP' /><meta property='article:tag' content='统计学习' /><meta property='article:tag' content='信息论' /><meta property='article:published_time' content='2026-09-18T01:22:05&#43;08:00'/><meta property='article:modified_time' content='2026-09-18T01:41:10&#43;08:00'/>
+<meta name="twitter:title" content="自然语言处理 | 第二讲：统计学习基础">
+<meta name="twitter:description" content="从概率、熵、KL 散度和互信息，到最大熵模型、CRF、Viterbi 解码与 BMES 中文分词的学习笔记。">
+    <link rel="shortcut icon" href="/favicon.ico" />
+<style>
+    :root {
+        --article-font-family: "Noto Serif SC", var(--base-font-family);
+		--article-font-size: 1.7rem;
+		--article-line-height: 1.8;
+    }
+</style>
+
+<script>
+		(function () {
+		    const customFont = document.createElement('link');
+		    customFont.href = "https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap";
+		
+		    customFont.type = "text/css";
+		    customFont.rel = "stylesheet";
+		
+		    document.head.appendChild(customFont);
+		}());
+</script>
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/b_bafc54ed2304790292888aa8183afddb_hu_25b25cb3ac2ccae0.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">⭐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Elysium-Seeker</a></h1>
+            <h2 class="site-description">请用一支玫瑰纪念我</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Elysium-Seeker'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E9%93%BE/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友链</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#概率与语言统计">概率与语言统计</a>
+      <ol>
+        <li><a href="#条件概率全概率与贝叶斯公式">条件概率、全概率与贝叶斯公式</a></li>
+        <li><a href="#最大似然估计从观测结果反推参数">最大似然估计：从观测结果反推参数</a></li>
+        <li><a href="#期望与方差">期望与方差</a></li>
+        <li><a href="#随机过程平稳与遍历">随机过程、平稳与遍历</a></li>
+        <li><a href="#齐夫定律与词频长尾">齐夫定律与词频长尾</a></li>
+      </ol>
+    </li>
+    <li><a href="#信息论度量不确定性">信息论：度量不确定性</a>
+      <ol>
+        <li><a href="#自信息与熵">自信息与熵</a></li>
+        <li><a href="#联合熵与条件熵">联合熵与条件熵</a></li>
+        <li><a href="#kl-散度与交叉熵">KL 散度与交叉熵</a></li>
+        <li><a href="#困惑度平均预测难度">困惑度：平均预测难度</a></li>
+        <li><a href="#互信息与-pmi">互信息与 PMI</a></li>
+      </ol>
+    </li>
+    <li><a href="#统计学习">统计学习</a>
+      <ol>
+        <li><a href="#学习信号与基本过程">学习信号与基本过程</a></li>
+        <li><a href="#数据集分工与泛化">数据集分工与泛化</a></li>
+        <li><a href="#生成式与判别式">生成式与判别式</a></li>
+      </ol>
+    </li>
+    <li><a href="#补充推导">补充推导</a>
+      <ol>
+        <li><a href="#为什么样本平均能估计熵">为什么样本平均能估计熵</a></li>
+        <li><a href="#为什么互信息非负">为什么互信息非负</a></li>
+      </ol>
+    </li>
+    <li><a href="#最大熵模型">最大熵模型</a>
+      <ol>
+        <li><a href="#最大熵原则">最大熵原则</a></li>
+        <li><a href="#特征函数与期望约束">特征函数与期望约束</a></li>
+        <li><a href="#从约束得到指数模型">从约束得到指数模型</a></li>
+        <li><a href="#gis广义迭代缩放">GIS：广义迭代缩放</a></li>
+      </ol>
+    </li>
+    <li><a href="#crf联合预测整条标签序列">CRF：联合预测整条标签序列</a>
+      <ol>
+        <li><a href="#序列分数与全局归一化">序列分数与全局归一化</a></li>
+        <li><a href="#crf-的训练目标与梯度">CRF 的训练目标与梯度</a></li>
+      </ol>
+    </li>
+    <li><a href="#viterbi用动态规划寻找最佳路径">Viterbi：用动态规划寻找最佳路径</a></li>
+    <li><a href="#bmes把中文分词转成序列标注">BMES：把中文分词转成序列标注</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" >
+                自然语言处理
+            </a>
+        
+            <a href="/categories/work/" style="background-color: #708090; color: #fff;">
+                Work
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/nlp-lecture-2-statistical-learning/">自然语言处理 | 第二讲：统计学习基础</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            从概率、熵、KL 散度和互信息，到最大熵模型、CRF、Viterbi 解码与 BMES 中文分词的学习笔记。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-09-18</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 11 分钟
+                </time>
+            </div>
+        <div class="article-lastmod">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time>
+                    2026-09-18
+                </time>
+            </div></footer>
+    
+
+    
+</div>
+
+</header>
+
+    
+
+
+
+
+
+
+
+
+
+
+<section class="article-content">
+    <style>
+.article-content .table-wrapper { position: relative; }
+.article-content .table-wrapper table:has(tr > th:nth-child(3)) { min-width: 640px; }
+.article-content .table-wrapper table:has(tr > th:nth-child(4)) { min-width: 720px; }
+.article-content .table-wrapper th:first-child { min-width: 72px; }
+.article-content .table-wrapper td, .article-content .table-wrapper th { word-break: normal; }
+</style>
+<p><em>手机上可左右滑动，查看完整的宽表格与长公式。</em></p>
+<p>系列笔记：<a class="link" href="/p/nlp-lecture-1-introduction/" >第一讲：绪论</a> · 第二讲：统计学习基础</p>
+<p>这一讲从概率与信息量出发，过渡到最大熵模型和 CRF，再用 Viterbi 解码与 BMES 标注完成中文分词。</p>
+<p>以下主要讨论离散随机变量；信息量采用以 2 为底的对数，单位是 bit。涉及参数优化时使用自然对数 \(\ln\)。</p>
+<h2 id="概率与语言统计">概率与语言统计
+</h2><h3 id="条件概率全概率与贝叶斯公式">条件概率、全概率与贝叶斯公式
+</h3><p>条件概率表示：在已经知道 \(B\) 发生的情况下，\(A\) 有多大可能发生。</p>
+$$
+P(A\mid B)=\frac{P(A\cap B)}{P(B)},\qquad P(B)>0
+$$<p>如果 \(B_1,\ldots,B_k\) 是互斥且覆盖全部情况的事件，全概率公式是：</p>
+$$
+P(A)=\sum_iP(A\mid B_i)P(B_i)
+$$<p>贝叶斯公式利用它把条件方向反过来：</p>
+$$
+P(B_i\mid A) =\frac{P(A\mid B_i)P(B_i)} {\sum_jP(A\mid B_j)P(B_j)}
+$$<h3 id="最大似然估计从观测结果反推参数">最大似然估计：从观测结果反推参数
+</h3><p>概率和似然经常使用同一个表达式，但关注点不同：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>视角</th>
+					<th>已知什么</th>
+					<th>想知道什么</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>概率</td>
+					<td>模型参数</td>
+					<td>某种数据出现的可能性</td>
+			</tr>
+			<tr>
+					<td>似然</td>
+					<td>已经观察到的数据</td>
+					<td>哪组参数更能解释这些数据</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>假设独立抛硬币 \(n>0\) 次，正面出现 \(k\) 次，正面概率为 \(p\)。二项分布给出：</p>
+$$
+P(K=k)=\binom nkp^k(1-p)^{n-k}
+$$<p>数据已经固定后，\(\binom nk\) 与参数 \(p\) 无关。最大似然估计就是找一个 \(p\)，让：</p>
+$$
+p^k(1-p)^{n-k}
+$$<p>尽可能大。取对数，把乘法变成加法：</p>
+$$
+\ell(p)=k\ln p+(n-k)\ln(1-p)
+$$<p>当 \(0\lt k\lt n\) 时，对 \(p\) 求导并令其为 0：</p>
+$$
+\ell'(p)=\frac{k}{p}-\frac{n-k}{1-p}=0 \quad\Rightarrow\quad \hat p=\frac{k}{n}
+$$<p>若 \(k=0\) 或 \(k=n\)，最大值分别在边界 \(p=0\) 或 \(p=1\) 处取得，仍满足 \(\hat p=k/n\)。</p>
+<p>对词频也有类似估计：</p>
+$$
+\hat P(w)=\frac{\operatorname{Count}(w)} {\text{总词数}}
+$$<p>问题在于：没见过的词会被估计成概率 0。若句子概率由若干概率相乘得到，一个 0 就会让整句概率变成 0，这也是后面需要<strong>平滑方法</strong>的原因。</p>
+<h3 id="期望与方差">期望与方差
+</h3>$$
+E[X]=\sum_x x p(x)
+$$<p>是概率加权的平均值；</p>
+$$
+\operatorname{Var}(X) =E[(X-E[X])^2] =E[X^2]-E[X]^2
+$$<p>衡量数值围绕平均值的波动。若 \(K\sim\operatorname{Binomial}(n,p)\)，则：</p>
+$$
+E[K]=np,\qquad \operatorname{Var}(K)=np(1-p)
+$$<h3 id="随机过程平稳与遍历">随机过程、平稳与遍历
+</h3><p>一个随机变量描述一个位置的不确定性；一组按时间或位置排列的随机变量：</p>
+$$
+X_1,X_2,\ldots
+$$<p>就可以构成随机过程。对于文本，\(X_t\) 可以表示第 \(t\) 个位置出现的词，一篇实际文章就是观察到的一条序列。</p>
+<p><strong>平稳</strong>关注分布是否随整体位置平移而改变。严格地说，任意有限组位置的联合分布，在这些位置整体平移后保持不变。</p>
+<p>它不要求各个词都一样，也不要求各位置独立。</p>
+<p><strong>遍历</strong>的直觉是：在适当条件下，沿一条足够长的典型序列计算统计平均，可以得到总体平均。</p>
+<p>例如，我们希望用一大段文本里“的”出现的比例，估计总体语言中“的”的概率。</p>
+<p>平稳不保证遍历。考虑这个过程：</p>
+<blockquote>
+<p>开始时抛一次公平硬币，之后永远重复第一次的结果。</p>
+</blockquote>
+<p>整个过程可能是：</p>
+$$
+000000\ldots \quad\text{或}\quad 111111\ldots
+$$<p>每个时刻取 1 的总体概率都是 \(0.5\)，任意有限组位置的联合分布也不随整体平移改变；但任何一条序列的时间平均都只能是 0 或 1，无法得到总体均值 \(0.5\)。</p>
+<p>把语言视为平稳、遍历的随机过程，是一种建模假设。真实文本的分布还会随题材、年代和作者变化。</p>
+<h3 id="齐夫定律与词频长尾">齐夫定律与词频长尾
+</h3><p>把词按出现频率从高到低排序，排名为 \(r\)，频率为 \(f(r)\)，齐夫定律近似表示：</p>
+$$
+f(r)\approx\frac{C}{r}
+$$<p>排名翻倍，频率大致减半。取对数：</p>
+$$
+\log f(r)\approx\log C-\log r
+$$<p>所以，在双对数坐标上，曲线大致接近斜率为 \(-1\) 的直线。</p>
+<p>它描述的是经验规律，不要求每一个词都严格符合。</p>
+<p>对 NLP 的影响是：</p>
+<ul>
+<li>少量高频词贡献了大量出现次数；</li>
+<li>大多数不同的词属于低频词，形成长尾；</li>
+<li>长尾里往往包含人名、地名、专业术语等重要信息。</li>
+</ul>
+<p>因而，“出现次数少”和“没有价值”不能画等号。传统方法可能把低频词合并成 <code>UNK</code>，子词方法则能缓解词表外问题。</p>
+<p>统计时还必须明确：统计的是字、词还是 token，是否统一大小写、是否保留标点。这些选择都会影响曲线。</p>
+<h2 id="信息论度量不确定性">信息论：度量不确定性
+</h2><h3 id="自信息与熵">自信息与熵
+</h3><p>单个事件 \(x\) 的<strong>自信息</strong>是：</p>
+$$
+I(x)=-\log_2p(x)
+$$<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>事件概率</th>
+					<th>自信息</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>\(1\)</td>
+					<td>\(0\) bit</td>
+			</tr>
+			<tr>
+					<td>\(1/2\)</td>
+					<td>\(1\) bit</td>
+			</tr>
+			<tr>
+					<td>\(1/4\)</td>
+					<td>\(2\) bit</td>
+			</tr>
+			<tr>
+					<td>\(1/8\)</td>
+					<td>\(3\) bit</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>越不容易发生的事件，发生时越令人意外，信息量越大。这里衡量的是“意外程度”，并非内容的重要程度。</p>
+<p><strong>熵是自信息的平均值：</strong></p>
+$$
+H(X)=-\sum_xp(x)\log_2p(x)
+$$<p>例如公平硬币：</p>
+$$
+H(X) =-\frac12\log_2\frac12 -\frac12\log_2\frac12 =1\text{ bit}
+$$<p>如果结果事先确定，分布是 \([1,0]\)，熵就是 0。计算中约定 \(0\log0=0\)。</p>
+<p>对有限的 \(K\) 个可能结果：</p>
+$$
+0\le H(X)\le\log_2K
+$$<p>均匀分布达到最大值。例如四个等概率选项的熵为 2 bit。</p>
+<p>一个汉字、一个英文字母、一个词的粒度不同，不能仅凭熵的大小判断哪种语言“信息更多”。</p>
+<h3 id="联合熵与条件熵">联合熵与条件熵
+</h3><p>联合熵描述同时确定 \(X,Y\) 的平均信息量：</p>
+$$
+H(X,Y)=-\sum_{x,y}p(x,y)\log_2p(x,y)
+$$<p>条件熵描述知道 \(X\) 后，\(Y\) 还剩多少不确定性：</p>
+$$
+H(Y\mid X) =-\sum_{x,y}p(x,y)\log_2p(y\mid x)
+$$<p>注意它已经对所有 \(X\) 的情况取了平均。</p>
+<p>因为：</p>
+$$
+p(x,y)=p(x)p(y\mid x)
+$$<p>取对数并求平均，就得到<strong>熵的链式法则</strong>：</p>
+$$
+\boxed{H(X,Y)=H(X)+H(Y\mid X)}
+$$<p>也可以反过来：</p>
+$$
+H(X,Y)=H(Y)+H(X\mid Y)
+$$<p>两个重要性质：</p>
+<p><strong>条件熵通常不对称</strong>，\(H(X\mid Y)\) 和 \(H(Y\mid X)\) 不一定相等。</p>
+<p><strong>平均条件熵不会大于原熵</strong>，即 \(H(X\mid Y)\le H(X)\)，但某个具体条件下的熵可能更大。</p>
+<p>以课件中的联合分布为例，行对应 \(Y\)，列对应 \(X\)：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>\(Y\) 与 \(X\)</th>
+					<th>\(X=1\)</th>
+					<th>\(X=2\)</th>
+					<th>\(X=3\)</th>
+					<th>\(X=4\)</th>
+					<th>\(P(Y)\)</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>\(Y=1\)</td>
+					<td>\(1/8\)</td>
+					<td>\(1/16\)</td>
+					<td>\(1/32\)</td>
+					<td>\(1/32\)</td>
+					<td>\(1/4\)</td>
+			</tr>
+			<tr>
+					<td>\(Y=2\)</td>
+					<td>\(1/16\)</td>
+					<td>\(1/8\)</td>
+					<td>\(1/32\)</td>
+					<td>\(1/32\)</td>
+					<td>\(1/4\)</td>
+			</tr>
+			<tr>
+					<td>\(Y=3\)</td>
+					<td>\(1/16\)</td>
+					<td>\(1/16\)</td>
+					<td>\(1/16\)</td>
+					<td>\(1/16\)</td>
+					<td>\(1/4\)</td>
+			</tr>
+			<tr>
+					<td>\(Y=4\)</td>
+					<td>\(1/4\)</td>
+					<td>\(0\)</td>
+					<td>\(0\)</td>
+					<td>\(0\)</td>
+					<td>\(1/4\)</td>
+			</tr>
+			<tr>
+					<td>\(P(X)\)</td>
+					<td>\(1/2\)</td>
+					<td>\(1/4\)</td>
+					<td>\(1/8\)</td>
+					<td>\(1/8\)</td>
+					<td>\(1\)</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>原来的 \(X\) 分布为 \([1/2,1/4,1/8,1/8]\)，所以 \(H(X)=7/4\) bit。给定 \(Y=3\) 后，将第三行除以 \(P(Y=3)=1/4\)，得到四项均匀分布，故 \(H(X\mid Y=3)=2\) bit，比原熵更大。</p>
+<p>但对全部 \(Y\) 取平均：</p>
+$$
+H(X\mid Y)=\frac14\left(\frac74+\frac74+2+0\right)=\frac{11}{8}\lt\frac74=H(X)
+$$<p>这与“平均条件熵不会增加”完全一致。</p>
+<h3 id="kl-散度与交叉熵">KL 散度与交叉熵
+</h3><p>设真实分布为 \(p\)，模型给出的分布为 \(q\)。</p>
+<p>KL 散度定义为：</p>
+$$
+D_{\mathrm{KL}}(p\|q) =\sum_xp(x)\log_2\frac{p(x)}{q(x)}
+$$<p>可以把它理解成：真实情况服从 \(p\)，却使用 \(q\) 描述时，多付出的平均信息代价。</p>
+<p>它有几个性质：</p>
+<ul>
+<li>非负，\(p=q\) 时为 0；</li>
+<li>通常不对称，\(D(p\|q)\ne D(q\|p)\)；</li>
+<li>若某事件 \(p(x)>0\)，模型却给 \(q(x)=0\)，KL 会变成无穷大。</li>
+</ul>
+<p>所以它叫“散度”，不具备普通距离的全部性质。</p>
+<p>交叉熵是：</p>
+$$
+H(p,q)=-\sum_xp(x)\log_2q(x)
+$$<p>它与熵、KL 的关系为：</p>
+$$
+\boxed{H(p,q)=H(p)+D_{\mathrm{KL}}(p\|q)}
+$$<h3 id="困惑度平均预测难度">困惑度：平均预测难度
+</h3><p>对测试序列 \(x_1,\ldots,x_n\)，模型的平均负对数概率为：</p>
+$$
+\hat H =-\frac1n\sum_{i=1}^{n} \log_2q(x_i\mid x_{\lt i})
+$$<p>困惑度定义为：</p>
+$$
+\boxed{\operatorname{PPL}=2^{\hat H}}
+$$<p>也可以写成：</p>
+$$
+\operatorname{PPL} =\left[\prod_iq(x_i\mid x_{\lt i})\right]^{-1/n}
+$$<p>可以理解成一种<strong>等效的平均选择难度</strong>。如果每一步都在 \(m\) 个等概率选项中预测，困惑度就是 \(m\)。</p>
+<p>比较困惑度时，需要保持测试集、分词或 token 化方式、上下文条件等一致。</p>
+<h3 id="互信息与-pmi">互信息与 PMI
+</h3><p>互信息定义为：</p>
+$$
+I(X;Y)=H(X)-H(X\mid Y)
+$$<p>即：知道 \(Y\) 后，\(X\) 的平均不确定性减少了多少。</p>
+<p>利用链式法则：</p>
+$$
+\boxed{I(X;Y)=H(X)+H(Y)-H(X,Y)}
+$$<p>区分三个概念：单个事件的自信息是 \(-\log_2 p(x)\)，熵是平均自信息，\(I(X;X)\) 是变量与自身的互信息，且 \(I(X;X)=H(X)\)。</p>
+<p><strong>点式互信息 PMI</strong>针对的是某一对具体事件：</p>
+$$
+\operatorname{PMI}(x,y) =\log_2\frac{p(x,y)}{p(x)p(y)}
+$$<p>分母是“假设独立时”的预期共现概率，分子是实际共现概率。</p>
+<p><strong>PMI 可以为负，平均互信息不能为负</strong>。平均互信息是把所有事件对的 PMI 按联合概率加权：</p>
+$$
+I(X;Y)=\sum_{x,y}p(x,y)\operatorname{PMI}(x,y)
+$$<h2 id="统计学习">统计学习
+</h2><h3 id="学习信号与基本过程">学习信号与基本过程
+</h3><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>类型</th>
+					<th>主要学习信号</th>
+					<th>例子</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>监督学习</td>
+					<td>输入及对应标签</td>
+					<td>用已标注评论训练情感分类器</td>
+			</tr>
+			<tr>
+					<td>无监督学习</td>
+					<td>未标注数据中的结构</td>
+					<td>将文章按相似性聚类</td>
+			</tr>
+			<tr>
+					<td>半监督学习</td>
+					<td>少量标签与大量未标注数据</td>
+					<td>利用少量标注扩展分类能力</td>
+			</tr>
+			<tr>
+					<td>强化学习</td>
+					<td>行动后的反馈与累计回报</td>
+					<td>学习游戏中的行动策略</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>基本过程是：</p>
+<p><strong>获得数据 → 确定模型集合 → 确定学习准则 → 优化模型 → 预测新样本。</strong></p>
+<h3 id="数据集分工与泛化">数据集分工与泛化
+</h3><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>数据集</th>
+					<th>用途</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>训练集</td>
+					<td>拟合模型参数</td>
+			</tr>
+			<tr>
+					<td>开发集／验证集</td>
+					<td>选择超参数、比较方案、决定训练何时停止</td>
+			</tr>
+			<tr>
+					<td>测试集</td>
+					<td>最终独立评价</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>过拟合通常表现为过度适应训练数据中的细节和噪声，训练表现好、泛化差；欠拟合则连训练数据中的主要规律也没有充分学到。鲁棒性关注条件发生变化或出现扰动后，性能是否稳定。</p>
+<h3 id="生成式与判别式">生成式与判别式
+</h3><p>主要看建模对象：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>类型</th>
+					<th>主要建模对象</th>
+					<th>典型例子</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>生成式分类</td>
+					<td>\(p(x,y)=p(x\mid y)p(y)\)</td>
+					<td>朴素贝叶斯、HMM</td>
+			</tr>
+			<tr>
+					<td>判别式</td>
+					<td>\(p(y\mid x)\) 或直接学习决策边界</td>
+					<td>最大熵、逻辑回归、SVM、CRF</td>
+			</tr>
+	</tbody>
+</table></div>
+<h2 id="补充推导">补充推导
+</h2><h3 id="为什么样本平均能估计熵">为什么样本平均能估计熵
+</h3><p>先考虑独立同分布的数据：</p>
+$$
+X_1,\ldots,X_n\overset{\mathrm{iid}}{\sim}p
+$$<p>因为联合概率可以分解为乘积：</p>
+$$
+-\frac1n\log_2 p(X_1,\ldots,X_n) =\frac1n\sum_i[-\log_2 p(X_i)]
+$$<p>右边就是一组随机量的样本平均。在期望有限等适用条件下，大数定律告诉我们：</p>
+$$
+\frac1n\sum_i[-\log_2 p(X_i)] \longrightarrow E[-\log_2 p(X)]=H(X)
+$$<p>这解释了：<strong>足够多样本上的平均信息量，可以估计总体熵。</strong></p>
+<p>如果使用模型 \(q\)，相应的平均损失：</p>
+$$
+\frac1n\sum_i[-\log_2 q(X_i)]
+$$<p>在适用条件下趋向：</p>
+$$
+E_{X\sim p}[-\log_2 q(X)]=H(p,q)
+$$<p>对存在依赖的序列，需要考虑平稳、遍历等条件和<strong>熵率</strong>。熵率关注长序列平均每个位置的信息量，不能直接把独立情形的推导套到任意相关序列、任意模型上。</p>
+<h3 id="为什么互信息非负">为什么互信息非负
+</h3><p>因为：</p>
+$$
+I(X;Y) =D_{\mathrm{KL}}\bigl(p(x,y)\|p(x)p(y)\bigr)
+$$<p>只需证明 KL 非负。</p>
+<p>使用不等式 \(\ln z\le z-1\)。先以自然对数定义 \(D_{\mathrm{KL}}^{(e)}\)，则：</p>
+$$
+\begin{aligned} D_{\mathrm{KL}}^{(e)}(p\|q) &=-\sum_{p(x)>0}p(x)\ln\frac{q(x)}{p(x)}\\
+&\ge\sum_{p(x)>0}[p(x)-q(x)]\\
+&\ge0 \end{aligned}
+$$<p>换成以 2 为底，只是乘一个正常数，非负性不变。如果 \(p(x)>0\) 而 \(q(x)=0\)，KL 为无穷大，结论同样成立。</p>
+<p>将 \(q(x,y)\) 取成边缘概率乘积，就得到互信息非负；等号对应两个变量独立。</p>
+<h2 id="最大熵模型">最大熵模型
+</h2><h3 id="最大熵原则">最大熵原则
+</h3><p>最大熵原则是：</p>
+<p><strong>在满足已知统计约束的分布中，选择熵最大的分布。</strong></p>
+<h3 id="特征函数与期望约束">特征函数与期望约束
+</h3><p>用于分类时，输入 \(x\) 表示上下文，标签 \(y\) 表示类别或义项。已知事实通过<strong>特征函数</strong>表达。例如：</p>
+$$
+f_j(x,y)= \begin{cases} 1,&\text{右侧词为“鼓”，且 }y\text{ 为击打乐器义}\\
+0,&\text{其他情况} \end{cases}
+$$<p>用 \(\tilde p(x,y)\) 表示训练数据的经验联合分布，\(\tilde p(x)\) 表示其输入边缘分布。训练数据提供特征出现的经验平均，模型也会预测特征出现的平均。最大熵模型要求二者匹配：</p>
+$$
+\sum_{x,y}\tilde p(x)p(y\mid x)f_j(x,y) = \sum_{x,y}\tilde p(x,y)f_j(x,y)
+$$<p>这里约束的是总体统计，并非要求每个训练样本都被以概率 1 预测正确。</p>
+<h3 id="从约束得到指数模型">从约束得到指数模型
+</h3><p>最大化条件熵，并加入这些约束和概率归一化约束。通过拉格朗日乘子法，对概率求导后可以得到：</p>
+$$
+\ln p(y\mid x) =\sum_j\lambda_jf_j(x,y)+\text{只依赖 }x\text{ 的常数}
+$$<p>指数化，再归一化：</p>
+$$
+\boxed{ p_\lambda(y\mid x)= \frac{\exp\left(\sum_j\lambda_jf_j(x,y)\right)} {\sum_{y'}\exp\left(\sum_j\lambda_jf_j(x,y')\right)} }
+$$<p>这个形式就是：<strong>特征加权打分 → 指数化 → 除以所有类别的总和。</strong></p>
+<p>最大熵原则并不要求预测永远均匀。统计约束足够强时，分布可以非常集中；它限制的是没有证据支持的额外偏好。</p>
+<h3 id="gis广义迭代缩放">GIS：广义迭代缩放
+</h3><p>GIS，即广义迭代缩放，是课件介绍的参数训练方法。其条件包括特征非负，以及每个输入、标签组合的特征和为常数：</p>
+$$
+\sum_jf_j(x,y)=C
+$$<p>若原始特征和不恒定，可以选取不小于所有原始特征和的常数 \(C>0\)，再加入非负修正特征：</p>
+$$
+f_{\mathrm{corr}}(x,y)=C-\sum_jf_j(x,y)
+$$<p>权重更新为：</p>
+$$
+\lambda_j^{\mathrm{new}} = \lambda_j^{\mathrm{old}} +\frac1C \ln\frac{E_{\mathrm{经验}}[f_j]} {E_{\mathrm{模型}}[f_j]}
+$$<p>若经验期望为 \(0.2\)，模型期望为 \(0.1\)，且 \(C=2\)：</p>
+$$
+\Delta\lambda_j =\frac12\ln2 \approx0.3466
+$$<p>模型低估了这个特征的出现程度，于是提高相应权重。反过来，模型期望偏高时，更新方向为负。</p>
+<p>训练过程就是反复计算概率、模型期望并调整权重，直到满足停止条件。GIS 有适用条件，公式中的零期望需要单独处理，不能直接计算 \(\ln 0\)。最大熵模型也可以使用其他优化方法训练。</p>
+<h2 id="crf联合预测整条标签序列">CRF：联合预测整条标签序列
+</h2><h3 id="序列分数与全局归一化">序列分数与全局归一化
+</h3><p>如果给句子中每个字独立打标签，就可能出现结构不一致。CRF 给定整个输入序列 \(X\)，对完整标签序列 \(Y\) 建模：</p>
+$$
+Y^*=\arg\max_YP(Y\mid X)
+$$<p>一般 CRF 使用无向图描述标签关系。在线性链 CRF 中，标签按序排列，给定输入及邻居标签后，满足相应的条件独立关系；<strong>这不要求输入词之间独立</strong>。</p>
+<p>定义整条序列的分数：</p>
+$$
+S(X,Y) =\sum_{t=1}^{T}\sum_j \lambda_jf_j(y_{t-1},y_t,X,t)
+$$<p>再对所有候选标签序列归一化：</p>
+$$
+\boxed{ P(Y\mid X) =\frac{e^{S(X,Y)}}{Z(X)}, \qquad Z(X)=\sum_{Y'}e^{S(X,Y')} }
+$$<p>与逐位置分类相比，区别在于这里比较和归一化的是<strong>整条序列</strong>。</p>
+<p>特征包括：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>特征</th>
+					<th>描述的关系</th>
+					<th>例子</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>状态特征</td>
+					<td>输入与当前位置标签</td>
+					<td>当前字是“京”，标签为词尾</td>
+			</tr>
+			<tr>
+					<td>转移特征</td>
+					<td>相邻标签</td>
+					<td>前一个标签为词首，当前标签为词尾</td>
+			</tr>
+	</tbody>
+</table></div>
+<h3 id="crf-的训练目标与梯度">CRF 的训练目标与梯度
+</h3><p>训练时，希望正确标签序列的概率高。对一个样本，负对数似然加 L2 正则为：</p>
+$$
+L(\lambda) =-S(X,Y)+\ln Z(X) +\frac{\varepsilon}{2}\lVert\lambda\rVert_2^2
+$$<p>令 \(F_j(X,Y)\) 表示第 \(j\) 个特征在整条序列上的累计值，则：</p>
+$$
+\frac{\partial L}{\partial\lambda_j} = E_{P(Y'\mid X)}[F_j(X,Y')] -F_j(X,Y) +\varepsilon\lambda_j
+$$<p>前两项分别是：</p>
+<p><strong>模型平均认为特征应出现多少次 − 正确序列里实际出现多少次。</strong></p>
+<p>忽略正则时，如果模型低估了正确特征，梯度下降就倾向于提高其权重。正则项则约束权重大小。</p>
+<p>虽然候选标签序列很多，线性链结构允许用前向—后向算法计算归一化因子和期望；预测时寻找最高分序列，则使用下面的 Viterbi。</p>
+<h2 id="viterbi用动态规划寻找最佳路径">Viterbi：用动态规划寻找最佳路径
+</h2><p>长度为 \(T\)，每个位置有 \(K\) 个标签，可能的标签序列有：</p>
+$$
+K^T
+$$<p>逐条枚举很贵。逐位置贪心选择又可能错过全局最优。</p>
+<p>Viterbi 的做法是：<strong>对当前位置的每一种结束标签，分别保留到这里的最佳历史。</strong></p>
+<p>定义：</p>
+$$
+\delta_t(b) =\text{到位置 }t\text{、以标签 }b\text{ 结束的最高前缀分数}
+$$<p>递推：</p>
+$$
+\boxed{ \delta_t(b) =\max_a\left[ \delta_{t-1}(a)+s_t(a,b,X) \right] }
+$$<p>同时记录取得最大值的前驱标签。到末尾选最佳终态，再沿前驱回溯完整路径。</p>
+<p>其中 \(s_t(a,b,X)\) 表示第 \(t\) 个位置从标签 \(a\) 到标签 \(b\) 的局部分数；句首用固定起始状态处理。对固定输入 \(X\)，归一化因子 \(Z(X)\) 与候选标签序列无关，因此比较总分就能找到概率最大的序列。</p>
+<p>Viterbi 的时间复杂度为 \(O(TK^2)\)，最后还需要沿前驱回溯。</p>
+<p>这里很容易联想到最长上升子序列（LIS）的动态规划：都按“以什么结尾”划分状态，分别保留最佳历史。经典 LIS 记录以某个元素结尾的最优长度；Viterbi 记录到某个位置、以某个标签结尾的最高分。</p>
+<h2 id="bmes把中文分词转成序列标注">BMES：把中文分词转成序列标注
+</h2><p>给每个字标记它在词里的位置：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>标签</th>
+					<th>含义</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>B</td>
+					<td>多字词的词首</td>
+			</tr>
+			<tr>
+					<td>M</td>
+					<td>多字词的词中</td>
+			</tr>
+			<tr>
+					<td>E</td>
+					<td>多字词的词尾</td>
+			</tr>
+			<tr>
+					<td>S</td>
+					<td>单字词</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>课件用“乒乓球拍卖完了”展示切分歧义。其中一种切分是：</p>
+<blockquote>
+<p>乒乓球／拍卖／完／了</p>
+</blockquote>
+<p>对应标签：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>字</th>
+					<th>乒</th>
+					<th>乓</th>
+					<th>球</th>
+					<th>拍</th>
+					<th>卖</th>
+					<th>完</th>
+					<th>了</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>标签</td>
+					<td>B</td>
+					<td>M</td>
+					<td>E</td>
+					<td>B</td>
+					<td>E</td>
+					<td>S</td>
+					<td>S</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>给定标签后，把 <code>B…E</code> 合并成一个词，<code>S</code> 单独成词，就恢复了分词结果。</p>
+<p>CRF 可以利用当前字、前后字和相邻标签等特征给候选序列打分，再通过 Viterbi 找到最佳标签路径。</p>
+<p>还可以显式约束合法转移：</p>
+$$
+B\rightarrow M/E,\qquad M\rightarrow M/E
+$$$$
+E/S\rightarrow B/S
+$$<p>句首只能是 B 或 S，句尾只能是 E 或 S。</p>
+<p>因此，整个分词过程是：</p>
+<p><strong>标注语料 → 提取字与标签特征 → 学习 CRF 权重 → Viterbi 解码 → 根据 BMES 合并词。</strong></p>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/nlp/">NLP</a>
+        
+            <a href="/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/">统计学习</a>
+        
+            <a href="/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/">信息论</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-09-18
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+	const mainArticleElement = document.querySelector(".main-article");
+        renderMathInElement(mainArticleElement, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/nlp-lecture-1-introduction/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">自然语言处理 | 第一讲：绪论</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cv-lecture-4-image-transforms/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">计算机视觉 | 第四讲：图像变换</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cv-lecture-3-deep-neural-networks/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">计算机视觉 | 第三讲：深度神经网络基础</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cv-lecture-2-digital-image-basics/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">计算机视觉 | 第二讲：数字图像基础</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/math-principles-unit-1/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">人工智能的数学原理 | Unit 1：机器学习中的优化模型</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 Elysium-Seeker
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+    #TableOfContents > ul, ol {
+        ul, ol {
+            display: none;
+        }
+        .open {
+            display: block;
+        }
+    }
+</style>
+
+<script>
+    function initTocHide() {
+        
+        let toc = document.querySelector(".widget--toc");
+        if (!toc) {
+            return;
+        }
+        
+        window.addEventListener('scroll', function() {
+            
+            let openUl = document.querySelectorAll(".open");
+            if (openUl.length > 0) {
+              openUl.forEach((ul) => {
+                ul.classList.remove("open")
+              })
+            }
+            
+            let currentLi = document.querySelector(".active-class");
+            if (!currentLi) {
+                return
+            }
+            
+            if (currentLi.children.length > 1) {
+                currentLi.children[1].classList.add("open")
+            }
+            
+            let ul = currentLi.parentElement;
+            do {
+                ul.classList.add("open");
+                ul = ul.parentElement.parentElement
+            } while (ul !== undefined && (ul.localName === 'ul' || ul.localName === 'ol'))
+        });
+    }
+    initTocHide()
+</script>
+
+<style>
+    .highlight {
+         
+        max-height: 400px;
+        overflow: hidden;
+    }
+
+    .code-show {
+        max-height: none !important;
+    }
+
+    .code-more-box {
+        width: 100%;
+        padding-top: 78px;
+        background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(#fff));
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+    }
+
+    .code-more-btn {
+        display: block;
+        margin: auto;
+        width: 44px;
+        height: 22px;
+        background: #f0f0f5;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        padding-top: 6px;
+        cursor: pointer;
+    }
+
+    .code-more-img {
+        cursor: pointer !important;
+        display: block;
+        margin: auto;
+        width: 22px;
+        height: 16px;
+    }
+</style>
+
+<script>
+  function initCodeMoreBox() {
+    let codeBlocks = document.querySelectorAll(".highlight");
+    if (!codeBlocks) {
+      return;
+    }
+    codeBlocks.forEach(codeBlock => {
+      
+      if (codeBlock.scrollHeight <= codeBlock.clientHeight) {
+        return;
+      }
+      
+      
+      let codeMoreBox = document.createElement('div');
+      codeMoreBox.classList.add('code-more-box');
+      
+      let codeMoreBtn = document.createElement('span');
+      codeMoreBtn.classList.add('code-more-btn');
+      codeMoreBtn.addEventListener('click', () => {
+        codeBlock.classList.add('code-show');
+        codeMoreBox.style.display = 'none';
+        
+        window.dispatchEvent(new Event('resize'))
+      })
+      
+      let img = document.createElement('img');
+      img.classList.add('code-more-img');
+      img.src = "https://Elysium-Seeker.github.io/icons/codeMore.png"
+      
+      codeMoreBtn.appendChild(img);
+      codeMoreBox.appendChild(codeMoreBtn);
+      codeBlock.appendChild(codeMoreBox)
+    })
+  }
+  
+  initCodeMoreBox();
+</script>
+
+<style>
+    #backTopBtn {
+        display: none;
+        position: fixed;
+        bottom: 30px;
+        z-index: 99;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        background-image: url(https://Elysium-Seeker.github.io/icons/backTop.svg);
+    }
+</style>
+
+<script>
+    
+
+    function initScrollTop() {
+        let rightSideBar = document.querySelector(".right-sidebar");
+        if (!rightSideBar) {
+            return;
+        }
+        
+        let btn = document.createElement("div");
+        btn.id = "backTopBtn";
+        btn.onclick = backToTop
+        rightSideBar.appendChild(btn)
+        
+        window.onscroll = function() {
+            
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+    }
+
+    
+
+    function backToTop(){
+        window.scrollTo({ top: 0, behavior: "smooth" })
+    }
+
+    initScrollTop();
+</script>
+
+<div id="particles-js"></div>
+
+<script src=https://Elysium-Seeker.github.io/background/particles.min.js></script>
+<script>
+  particlesJS.load('particles-js', "https://Elysium-Seeker.github.io/background/particlesjs-config.json", function() {
+    console.log('particles.js loaded - callback');
+  });
+</script>
+
+<style>
+  #particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+  }
+</style>
+
+    </body>
+</html>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>自然语言理解 on Elysium-Seeker</title>
+        <link>https://Elysium-Seeker.github.io/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E7%90%86%E8%A7%A3/</link>
+        <description>Recent content in 自然语言理解 on Elysium-Seeker</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Elysium-Seeker</copyright>
+        <lastBuildDate>Fri, 18 Sep 2026 01:41:10 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E7%90%86%E8%A7%A3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>自然语言处理 | 第一讲：绪论</title>
+        <link>https://Elysium-Seeker.github.io/p/nlp-lecture-1-introduction/</link>
+        <pubDate>Thu, 17 Sep 2026 23:14:37 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/nlp-lecture-1-introduction/</guid>
+        <description>&lt;style&gt;
+.article-content .table-wrapper { position: relative; }
+.article-content .table-wrapper table:has(tr &gt; th:nth-child(3)) { min-width: 640px; }
+.article-content .table-wrapper table:has(tr &gt; th:nth-child(4)) { min-width: 720px; }
+.article-content .table-wrapper th:first-child { min-width: 72px; }
+.article-content .table-wrapper td, .article-content .table-wrapper th { word-break: normal; }
+&lt;/style&gt;
+&lt;p&gt;&lt;em&gt;手机上可左右滑动，查看完整的宽表格。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;系列笔记：第一讲：绪论 · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/nlp-lecture-2-statistical-learning/&#34; &gt;第二讲：统计学习基础&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;常见术语&#34;&gt;常见术语
+&lt;/h2&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;缩写&lt;/th&gt;
+					&lt;th&gt;名称&lt;/th&gt;
+					&lt;th&gt;关注重点&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;NLU&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;自然语言理解&lt;/td&gt;
+					&lt;td&gt;语言表达了什么意义、什么意图&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;CL&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;计算语言学&lt;/td&gt;
+					&lt;td&gt;用形式化的计算模型研究语言，较强调基础理论与方法&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;NLP&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;自然语言处理&lt;/td&gt;
+					&lt;td&gt;用计算机分析、理解、转换和生成语言&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;HLT&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;人类语言技术&lt;/td&gt;
+					&lt;td&gt;更宽泛的技术集合，涵盖文本、语音等&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;CIP&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;中文信息处理&lt;/td&gt;
+					&lt;td&gt;以中文，尤其汉语为处理对象&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;nlp-处理哪些任务&#34;&gt;NLP 处理哪些任务
+&lt;/h2&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;任务&lt;/th&gt;
+					&lt;th&gt;例子&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;分类、情感分析&lt;/td&gt;
+					&lt;td&gt;输入一条评论，输出“正面／负面”&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;信息提取&lt;/td&gt;
+					&lt;td&gt;从通知中提取人物、时间、地点&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;信息检索、文字校对&lt;/td&gt;
+					&lt;td&gt;找到相关文档，或指出错别字&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;机器翻译、摘要、问答、写作&lt;/td&gt;
+					&lt;td&gt;输入文字，输出另一段文字&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;语言理解为什么困难&#34;&gt;语言理解为什么困难
+&lt;/h2&gt;&lt;h3 id=&#34;不同层次的歧义&#34;&gt;不同层次的歧义
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;层次&lt;/th&gt;
+					&lt;th&gt;不确定的是什么&lt;/th&gt;
+					&lt;th&gt;例子&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;词法&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;词怎么切分、属于什么词性&lt;/td&gt;
+					&lt;td&gt;“自动化研究所取得的成就”可以理解为“自动化研究所／取得的成就”，也可以是“自动化研究／所取得的成就”&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;句法&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;词之间怎样组合、谁修饰谁&lt;/td&gt;
+					&lt;td&gt;“喜欢乡下的孩子”：&lt;code&gt;喜欢（乡下的孩子）&lt;/code&gt;，或&lt;code&gt;（喜欢乡下）的孩子&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;语义&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;词句表达什么意义&lt;/td&gt;
+					&lt;td&gt;“苹果”可能指水果，也可能指公司&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;语用&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;在当前情境下想表达什么&lt;/td&gt;
+					&lt;td&gt;“夏天能穿多少穿多少”通常劝少穿；换成冬天，通常劝多穿&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;变化常识与跨语言差异&#34;&gt;变化、常识与跨语言差异
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;语言一直在变化。&lt;/strong&gt; 新词、新人名、新用法不断出现，词典无法一次编完。同一个表达也可能有不同用法，例如“高山”既可能指山，也可能是人名。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;理解依赖常识。&lt;/strong&gt; “奖杯放不进箱子，因为它太大了。”我们通常判断“它”指奖杯，这用到了物体与容器大小关系的常识。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;不同语言表达的信息不完全相同。&lt;/strong&gt; 英语 &lt;code&gt;brother&lt;/code&gt; 没有直接区分哥哥和弟弟，翻译成中文时需要上下文提供长幼信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;三条主要技术路线&#34;&gt;三条主要技术路线
+&lt;/h2&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;路线&lt;/th&gt;
+					&lt;th&gt;核心做法&lt;/th&gt;
+					&lt;th&gt;优点与主要困难&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;理性主义：规则方法&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;人编写词典、语法规则和推理过程&lt;/td&gt;
+					&lt;td&gt;步骤容易追踪；规则覆盖和维护很费力&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;经验主义：统计方法&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;从语料中学习语言现象的概率，常结合人工设计的特征&lt;/td&gt;
+					&lt;td&gt;能利用数据；依赖数据质量，容易受领域变化影响&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;连接主义：神经网络方法&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;把语言单位表示成向量，通过训练学习表示和上下文关系&lt;/td&gt;
+					&lt;td&gt;能学习复杂模式；仍依赖训练数据，也会产生错误&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;大模型通常通过预训练获得较广泛的语言能力，再利用提示或进一步训练，让同一模型承担翻译、摘要、问答等多种任务。&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

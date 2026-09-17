@@ -7,6 +7,720 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright><atom:link href="https://Elysium-Seeker.github.io/categories/work/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>自然语言处理 | 第二讲：统计学习基础</title>
+        <link>https://Elysium-Seeker.github.io/p/nlp-lecture-2-statistical-learning/</link>
+        <pubDate>Fri, 18 Sep 2026 01:22:05 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/nlp-lecture-2-statistical-learning/</guid>
+        <description>&lt;style&gt;
+.article-content .table-wrapper { position: relative; }
+.article-content .table-wrapper table:has(tr &gt; th:nth-child(3)) { min-width: 640px; }
+.article-content .table-wrapper table:has(tr &gt; th:nth-child(4)) { min-width: 720px; }
+.article-content .table-wrapper th:first-child { min-width: 72px; }
+.article-content .table-wrapper td, .article-content .table-wrapper th { word-break: normal; }
+&lt;/style&gt;
+&lt;p&gt;&lt;em&gt;手机上可左右滑动，查看完整的宽表格与长公式。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;系列笔记：&lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/nlp-lecture-1-introduction/&#34; &gt;第一讲：绪论&lt;/a&gt; · 第二讲：统计学习基础&lt;/p&gt;
+&lt;p&gt;这一讲从概率与信息量出发，过渡到最大熵模型和 CRF，再用 Viterbi 解码与 BMES 标注完成中文分词。&lt;/p&gt;
+&lt;p&gt;以下主要讨论离散随机变量；信息量采用以 2 为底的对数，单位是 bit。涉及参数优化时使用自然对数 \(\ln\)。&lt;/p&gt;
+&lt;h2 id=&#34;概率与语言统计&#34;&gt;概率与语言统计
+&lt;/h2&gt;&lt;h3 id=&#34;条件概率全概率与贝叶斯公式&#34;&gt;条件概率、全概率与贝叶斯公式
+&lt;/h3&gt;&lt;p&gt;条件概率表示：在已经知道 \(B\) 发生的情况下，\(A\) 有多大可能发生。&lt;/p&gt;
+$$
+P(A\mid B)=\frac{P(A\cap B)}{P(B)},\qquad P(B)&gt;0
+$$&lt;p&gt;如果 \(B_1,\ldots,B_k\) 是互斥且覆盖全部情况的事件，全概率公式是：&lt;/p&gt;
+$$
+P(A)=\sum_iP(A\mid B_i)P(B_i)
+$$&lt;p&gt;贝叶斯公式利用它把条件方向反过来：&lt;/p&gt;
+$$
+P(B_i\mid A) =\frac{P(A\mid B_i)P(B_i)} {\sum_jP(A\mid B_j)P(B_j)}
+$$&lt;h3 id=&#34;最大似然估计从观测结果反推参数&#34;&gt;最大似然估计：从观测结果反推参数
+&lt;/h3&gt;&lt;p&gt;概率和似然经常使用同一个表达式，但关注点不同：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;视角&lt;/th&gt;
+					&lt;th&gt;已知什么&lt;/th&gt;
+					&lt;th&gt;想知道什么&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;概率&lt;/td&gt;
+					&lt;td&gt;模型参数&lt;/td&gt;
+					&lt;td&gt;某种数据出现的可能性&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;似然&lt;/td&gt;
+					&lt;td&gt;已经观察到的数据&lt;/td&gt;
+					&lt;td&gt;哪组参数更能解释这些数据&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;假设独立抛硬币 \(n&gt;0\) 次，正面出现 \(k\) 次，正面概率为 \(p\)。二项分布给出：&lt;/p&gt;
+$$
+P(K=k)=\binom nkp^k(1-p)^{n-k}
+$$&lt;p&gt;数据已经固定后，\(\binom nk\) 与参数 \(p\) 无关。最大似然估计就是找一个 \(p\)，让：&lt;/p&gt;
+$$
+p^k(1-p)^{n-k}
+$$&lt;p&gt;尽可能大。取对数，把乘法变成加法：&lt;/p&gt;
+$$
+\ell(p)=k\ln p+(n-k)\ln(1-p)
+$$&lt;p&gt;当 \(0\lt k\lt n\) 时，对 \(p\) 求导并令其为 0：&lt;/p&gt;
+$$
+\ell&#39;(p)=\frac{k}{p}-\frac{n-k}{1-p}=0 \quad\Rightarrow\quad \hat p=\frac{k}{n}
+$$&lt;p&gt;若 \(k=0\) 或 \(k=n\)，最大值分别在边界 \(p=0\) 或 \(p=1\) 处取得，仍满足 \(\hat p=k/n\)。&lt;/p&gt;
+&lt;p&gt;对词频也有类似估计：&lt;/p&gt;
+$$
+\hat P(w)=\frac{\operatorname{Count}(w)} {\text{总词数}}
+$$&lt;p&gt;问题在于：没见过的词会被估计成概率 0。若句子概率由若干概率相乘得到，一个 0 就会让整句概率变成 0，这也是后面需要&lt;strong&gt;平滑方法&lt;/strong&gt;的原因。&lt;/p&gt;
+&lt;h3 id=&#34;期望与方差&#34;&gt;期望与方差
+&lt;/h3&gt;$$
+E[X]=\sum_x x p(x)
+$$&lt;p&gt;是概率加权的平均值；&lt;/p&gt;
+$$
+\operatorname{Var}(X) =E[(X-E[X])^2] =E[X^2]-E[X]^2
+$$&lt;p&gt;衡量数值围绕平均值的波动。若 \(K\sim\operatorname{Binomial}(n,p)\)，则：&lt;/p&gt;
+$$
+E[K]=np,\qquad \operatorname{Var}(K)=np(1-p)
+$$&lt;h3 id=&#34;随机过程平稳与遍历&#34;&gt;随机过程、平稳与遍历
+&lt;/h3&gt;&lt;p&gt;一个随机变量描述一个位置的不确定性；一组按时间或位置排列的随机变量：&lt;/p&gt;
+$$
+X_1,X_2,\ldots
+$$&lt;p&gt;就可以构成随机过程。对于文本，\(X_t\) 可以表示第 \(t\) 个位置出现的词，一篇实际文章就是观察到的一条序列。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;平稳&lt;/strong&gt;关注分布是否随整体位置平移而改变。严格地说，任意有限组位置的联合分布，在这些位置整体平移后保持不变。&lt;/p&gt;
+&lt;p&gt;它不要求各个词都一样，也不要求各位置独立。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;遍历&lt;/strong&gt;的直觉是：在适当条件下，沿一条足够长的典型序列计算统计平均，可以得到总体平均。&lt;/p&gt;
+&lt;p&gt;例如，我们希望用一大段文本里“的”出现的比例，估计总体语言中“的”的概率。&lt;/p&gt;
+&lt;p&gt;平稳不保证遍历。考虑这个过程：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;开始时抛一次公平硬币，之后永远重复第一次的结果。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;整个过程可能是：&lt;/p&gt;
+$$
+000000\ldots \quad\text{或}\quad 111111\ldots
+$$&lt;p&gt;每个时刻取 1 的总体概率都是 \(0.5\)，任意有限组位置的联合分布也不随整体平移改变；但任何一条序列的时间平均都只能是 0 或 1，无法得到总体均值 \(0.5\)。&lt;/p&gt;
+&lt;p&gt;把语言视为平稳、遍历的随机过程，是一种建模假设。真实文本的分布还会随题材、年代和作者变化。&lt;/p&gt;
+&lt;h3 id=&#34;齐夫定律与词频长尾&#34;&gt;齐夫定律与词频长尾
+&lt;/h3&gt;&lt;p&gt;把词按出现频率从高到低排序，排名为 \(r\)，频率为 \(f(r)\)，齐夫定律近似表示：&lt;/p&gt;
+$$
+f(r)\approx\frac{C}{r}
+$$&lt;p&gt;排名翻倍，频率大致减半。取对数：&lt;/p&gt;
+$$
+\log f(r)\approx\log C-\log r
+$$&lt;p&gt;所以，在双对数坐标上，曲线大致接近斜率为 \(-1\) 的直线。&lt;/p&gt;
+&lt;p&gt;它描述的是经验规律，不要求每一个词都严格符合。&lt;/p&gt;
+&lt;p&gt;对 NLP 的影响是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;少量高频词贡献了大量出现次数；&lt;/li&gt;
+&lt;li&gt;大多数不同的词属于低频词，形成长尾；&lt;/li&gt;
+&lt;li&gt;长尾里往往包含人名、地名、专业术语等重要信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因而，“出现次数少”和“没有价值”不能画等号。传统方法可能把低频词合并成 &lt;code&gt;UNK&lt;/code&gt;，子词方法则能缓解词表外问题。&lt;/p&gt;
+&lt;p&gt;统计时还必须明确：统计的是字、词还是 token，是否统一大小写、是否保留标点。这些选择都会影响曲线。&lt;/p&gt;
+&lt;h2 id=&#34;信息论度量不确定性&#34;&gt;信息论：度量不确定性
+&lt;/h2&gt;&lt;h3 id=&#34;自信息与熵&#34;&gt;自信息与熵
+&lt;/h3&gt;&lt;p&gt;单个事件 \(x\) 的&lt;strong&gt;自信息&lt;/strong&gt;是：&lt;/p&gt;
+$$
+I(x)=-\log_2p(x)
+$$&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;事件概率&lt;/th&gt;
+					&lt;th&gt;自信息&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(1\)&lt;/td&gt;
+					&lt;td&gt;\(0\) bit&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(1/2\)&lt;/td&gt;
+					&lt;td&gt;\(1\) bit&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(1/4\)&lt;/td&gt;
+					&lt;td&gt;\(2\) bit&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(1/8\)&lt;/td&gt;
+					&lt;td&gt;\(3\) bit&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;越不容易发生的事件，发生时越令人意外，信息量越大。这里衡量的是“意外程度”，并非内容的重要程度。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;熵是自信息的平均值：&lt;/strong&gt;&lt;/p&gt;
+$$
+H(X)=-\sum_xp(x)\log_2p(x)
+$$&lt;p&gt;例如公平硬币：&lt;/p&gt;
+$$
+H(X) =-\frac12\log_2\frac12 -\frac12\log_2\frac12 =1\text{ bit}
+$$&lt;p&gt;如果结果事先确定，分布是 \([1,0]\)，熵就是 0。计算中约定 \(0\log0=0\)。&lt;/p&gt;
+&lt;p&gt;对有限的 \(K\) 个可能结果：&lt;/p&gt;
+$$
+0\le H(X)\le\log_2K
+$$&lt;p&gt;均匀分布达到最大值。例如四个等概率选项的熵为 2 bit。&lt;/p&gt;
+&lt;p&gt;一个汉字、一个英文字母、一个词的粒度不同，不能仅凭熵的大小判断哪种语言“信息更多”。&lt;/p&gt;
+&lt;h3 id=&#34;联合熵与条件熵&#34;&gt;联合熵与条件熵
+&lt;/h3&gt;&lt;p&gt;联合熵描述同时确定 \(X,Y\) 的平均信息量：&lt;/p&gt;
+$$
+H(X,Y)=-\sum_{x,y}p(x,y)\log_2p(x,y)
+$$&lt;p&gt;条件熵描述知道 \(X\) 后，\(Y\) 还剩多少不确定性：&lt;/p&gt;
+$$
+H(Y\mid X) =-\sum_{x,y}p(x,y)\log_2p(y\mid x)
+$$&lt;p&gt;注意它已经对所有 \(X\) 的情况取了平均。&lt;/p&gt;
+&lt;p&gt;因为：&lt;/p&gt;
+$$
+p(x,y)=p(x)p(y\mid x)
+$$&lt;p&gt;取对数并求平均，就得到&lt;strong&gt;熵的链式法则&lt;/strong&gt;：&lt;/p&gt;
+$$
+\boxed{H(X,Y)=H(X)+H(Y\mid X)}
+$$&lt;p&gt;也可以反过来：&lt;/p&gt;
+$$
+H(X,Y)=H(Y)+H(X\mid Y)
+$$&lt;p&gt;两个重要性质：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;条件熵通常不对称&lt;/strong&gt;，\(H(X\mid Y)\) 和 \(H(Y\mid X)\) 不一定相等。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;平均条件熵不会大于原熵&lt;/strong&gt;，即 \(H(X\mid Y)\le H(X)\)，但某个具体条件下的熵可能更大。&lt;/p&gt;
+&lt;p&gt;以课件中的联合分布为例，行对应 \(Y\)，列对应 \(X\)：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;\(Y\) 与 \(X\)&lt;/th&gt;
+					&lt;th&gt;\(X=1\)&lt;/th&gt;
+					&lt;th&gt;\(X=2\)&lt;/th&gt;
+					&lt;th&gt;\(X=3\)&lt;/th&gt;
+					&lt;th&gt;\(X=4\)&lt;/th&gt;
+					&lt;th&gt;\(P(Y)\)&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(Y=1\)&lt;/td&gt;
+					&lt;td&gt;\(1/8\)&lt;/td&gt;
+					&lt;td&gt;\(1/16\)&lt;/td&gt;
+					&lt;td&gt;\(1/32\)&lt;/td&gt;
+					&lt;td&gt;\(1/32\)&lt;/td&gt;
+					&lt;td&gt;\(1/4\)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(Y=2\)&lt;/td&gt;
+					&lt;td&gt;\(1/16\)&lt;/td&gt;
+					&lt;td&gt;\(1/8\)&lt;/td&gt;
+					&lt;td&gt;\(1/32\)&lt;/td&gt;
+					&lt;td&gt;\(1/32\)&lt;/td&gt;
+					&lt;td&gt;\(1/4\)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(Y=3\)&lt;/td&gt;
+					&lt;td&gt;\(1/16\)&lt;/td&gt;
+					&lt;td&gt;\(1/16\)&lt;/td&gt;
+					&lt;td&gt;\(1/16\)&lt;/td&gt;
+					&lt;td&gt;\(1/16\)&lt;/td&gt;
+					&lt;td&gt;\(1/4\)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(Y=4\)&lt;/td&gt;
+					&lt;td&gt;\(1/4\)&lt;/td&gt;
+					&lt;td&gt;\(0\)&lt;/td&gt;
+					&lt;td&gt;\(0\)&lt;/td&gt;
+					&lt;td&gt;\(0\)&lt;/td&gt;
+					&lt;td&gt;\(1/4\)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(P(X)\)&lt;/td&gt;
+					&lt;td&gt;\(1/2\)&lt;/td&gt;
+					&lt;td&gt;\(1/4\)&lt;/td&gt;
+					&lt;td&gt;\(1/8\)&lt;/td&gt;
+					&lt;td&gt;\(1/8\)&lt;/td&gt;
+					&lt;td&gt;\(1\)&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;原来的 \(X\) 分布为 \([1/2,1/4,1/8,1/8]\)，所以 \(H(X)=7/4\) bit。给定 \(Y=3\) 后，将第三行除以 \(P(Y=3)=1/4\)，得到四项均匀分布，故 \(H(X\mid Y=3)=2\) bit，比原熵更大。&lt;/p&gt;
+&lt;p&gt;但对全部 \(Y\) 取平均：&lt;/p&gt;
+$$
+H(X\mid Y)=\frac14\left(\frac74+\frac74+2+0\right)=\frac{11}{8}\lt\frac74=H(X)
+$$&lt;p&gt;这与“平均条件熵不会增加”完全一致。&lt;/p&gt;
+&lt;h3 id=&#34;kl-散度与交叉熵&#34;&gt;KL 散度与交叉熵
+&lt;/h3&gt;&lt;p&gt;设真实分布为 \(p\)，模型给出的分布为 \(q\)。&lt;/p&gt;
+&lt;p&gt;KL 散度定义为：&lt;/p&gt;
+$$
+D_{\mathrm{KL}}(p\|q) =\sum_xp(x)\log_2\frac{p(x)}{q(x)}
+$$&lt;p&gt;可以把它理解成：真实情况服从 \(p\)，却使用 \(q\) 描述时，多付出的平均信息代价。&lt;/p&gt;
+&lt;p&gt;它有几个性质：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;非负，\(p=q\) 时为 0；&lt;/li&gt;
+&lt;li&gt;通常不对称，\(D(p\|q)\ne D(q\|p)\)；&lt;/li&gt;
+&lt;li&gt;若某事件 \(p(x)&gt;0\)，模型却给 \(q(x)=0\)，KL 会变成无穷大。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以它叫“散度”，不具备普通距离的全部性质。&lt;/p&gt;
+&lt;p&gt;交叉熵是：&lt;/p&gt;
+$$
+H(p,q)=-\sum_xp(x)\log_2q(x)
+$$&lt;p&gt;它与熵、KL 的关系为：&lt;/p&gt;
+$$
+\boxed{H(p,q)=H(p)+D_{\mathrm{KL}}(p\|q)}
+$$&lt;h3 id=&#34;困惑度平均预测难度&#34;&gt;困惑度：平均预测难度
+&lt;/h3&gt;&lt;p&gt;对测试序列 \(x_1,\ldots,x_n\)，模型的平均负对数概率为：&lt;/p&gt;
+$$
+\hat H =-\frac1n\sum_{i=1}^{n} \log_2q(x_i\mid x_{\lt i})
+$$&lt;p&gt;困惑度定义为：&lt;/p&gt;
+$$
+\boxed{\operatorname{PPL}=2^{\hat H}}
+$$&lt;p&gt;也可以写成：&lt;/p&gt;
+$$
+\operatorname{PPL} =\left[\prod_iq(x_i\mid x_{\lt i})\right]^{-1/n}
+$$&lt;p&gt;可以理解成一种&lt;strong&gt;等效的平均选择难度&lt;/strong&gt;。如果每一步都在 \(m\) 个等概率选项中预测，困惑度就是 \(m\)。&lt;/p&gt;
+&lt;p&gt;比较困惑度时，需要保持测试集、分词或 token 化方式、上下文条件等一致。&lt;/p&gt;
+&lt;h3 id=&#34;互信息与-pmi&#34;&gt;互信息与 PMI
+&lt;/h3&gt;&lt;p&gt;互信息定义为：&lt;/p&gt;
+$$
+I(X;Y)=H(X)-H(X\mid Y)
+$$&lt;p&gt;即：知道 \(Y\) 后，\(X\) 的平均不确定性减少了多少。&lt;/p&gt;
+&lt;p&gt;利用链式法则：&lt;/p&gt;
+$$
+\boxed{I(X;Y)=H(X)+H(Y)-H(X,Y)}
+$$&lt;p&gt;区分三个概念：单个事件的自信息是 \(-\log_2 p(x)\)，熵是平均自信息，\(I(X;X)\) 是变量与自身的互信息，且 \(I(X;X)=H(X)\)。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;点式互信息 PMI&lt;/strong&gt;针对的是某一对具体事件：&lt;/p&gt;
+$$
+\operatorname{PMI}(x,y) =\log_2\frac{p(x,y)}{p(x)p(y)}
+$$&lt;p&gt;分母是“假设独立时”的预期共现概率，分子是实际共现概率。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;PMI 可以为负，平均互信息不能为负&lt;/strong&gt;。平均互信息是把所有事件对的 PMI 按联合概率加权：&lt;/p&gt;
+$$
+I(X;Y)=\sum_{x,y}p(x,y)\operatorname{PMI}(x,y)
+$$&lt;h2 id=&#34;统计学习&#34;&gt;统计学习
+&lt;/h2&gt;&lt;h3 id=&#34;学习信号与基本过程&#34;&gt;学习信号与基本过程
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;类型&lt;/th&gt;
+					&lt;th&gt;主要学习信号&lt;/th&gt;
+					&lt;th&gt;例子&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;监督学习&lt;/td&gt;
+					&lt;td&gt;输入及对应标签&lt;/td&gt;
+					&lt;td&gt;用已标注评论训练情感分类器&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;无监督学习&lt;/td&gt;
+					&lt;td&gt;未标注数据中的结构&lt;/td&gt;
+					&lt;td&gt;将文章按相似性聚类&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;半监督学习&lt;/td&gt;
+					&lt;td&gt;少量标签与大量未标注数据&lt;/td&gt;
+					&lt;td&gt;利用少量标注扩展分类能力&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;强化学习&lt;/td&gt;
+					&lt;td&gt;行动后的反馈与累计回报&lt;/td&gt;
+					&lt;td&gt;学习游戏中的行动策略&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;基本过程是：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;获得数据 → 确定模型集合 → 确定学习准则 → 优化模型 → 预测新样本。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;数据集分工与泛化&#34;&gt;数据集分工与泛化
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;数据集&lt;/th&gt;
+					&lt;th&gt;用途&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;训练集&lt;/td&gt;
+					&lt;td&gt;拟合模型参数&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;开发集／验证集&lt;/td&gt;
+					&lt;td&gt;选择超参数、比较方案、决定训练何时停止&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;测试集&lt;/td&gt;
+					&lt;td&gt;最终独立评价&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;过拟合通常表现为过度适应训练数据中的细节和噪声，训练表现好、泛化差；欠拟合则连训练数据中的主要规律也没有充分学到。鲁棒性关注条件发生变化或出现扰动后，性能是否稳定。&lt;/p&gt;
+&lt;h3 id=&#34;生成式与判别式&#34;&gt;生成式与判别式
+&lt;/h3&gt;&lt;p&gt;主要看建模对象：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;类型&lt;/th&gt;
+					&lt;th&gt;主要建模对象&lt;/th&gt;
+					&lt;th&gt;典型例子&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;生成式分类&lt;/td&gt;
+					&lt;td&gt;\(p(x,y)=p(x\mid y)p(y)\)&lt;/td&gt;
+					&lt;td&gt;朴素贝叶斯、HMM&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;判别式&lt;/td&gt;
+					&lt;td&gt;\(p(y\mid x)\) 或直接学习决策边界&lt;/td&gt;
+					&lt;td&gt;最大熵、逻辑回归、SVM、CRF&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;补充推导&#34;&gt;补充推导
+&lt;/h2&gt;&lt;h3 id=&#34;为什么样本平均能估计熵&#34;&gt;为什么样本平均能估计熵
+&lt;/h3&gt;&lt;p&gt;先考虑独立同分布的数据：&lt;/p&gt;
+$$
+X_1,\ldots,X_n\overset{\mathrm{iid}}{\sim}p
+$$&lt;p&gt;因为联合概率可以分解为乘积：&lt;/p&gt;
+$$
+-\frac1n\log_2 p(X_1,\ldots,X_n) =\frac1n\sum_i[-\log_2 p(X_i)]
+$$&lt;p&gt;右边就是一组随机量的样本平均。在期望有限等适用条件下，大数定律告诉我们：&lt;/p&gt;
+$$
+\frac1n\sum_i[-\log_2 p(X_i)] \longrightarrow E[-\log_2 p(X)]=H(X)
+$$&lt;p&gt;这解释了：&lt;strong&gt;足够多样本上的平均信息量，可以估计总体熵。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;如果使用模型 \(q\)，相应的平均损失：&lt;/p&gt;
+$$
+\frac1n\sum_i[-\log_2 q(X_i)]
+$$&lt;p&gt;在适用条件下趋向：&lt;/p&gt;
+$$
+E_{X\sim p}[-\log_2 q(X)]=H(p,q)
+$$&lt;p&gt;对存在依赖的序列，需要考虑平稳、遍历等条件和&lt;strong&gt;熵率&lt;/strong&gt;。熵率关注长序列平均每个位置的信息量，不能直接把独立情形的推导套到任意相关序列、任意模型上。&lt;/p&gt;
+&lt;h3 id=&#34;为什么互信息非负&#34;&gt;为什么互信息非负
+&lt;/h3&gt;&lt;p&gt;因为：&lt;/p&gt;
+$$
+I(X;Y) =D_{\mathrm{KL}}\bigl(p(x,y)\|p(x)p(y)\bigr)
+$$&lt;p&gt;只需证明 KL 非负。&lt;/p&gt;
+&lt;p&gt;使用不等式 \(\ln z\le z-1\)。先以自然对数定义 \(D_{\mathrm{KL}}^{(e)}\)，则：&lt;/p&gt;
+$$
+\begin{aligned} D_{\mathrm{KL}}^{(e)}(p\|q) &amp;=-\sum_{p(x)&gt;0}p(x)\ln\frac{q(x)}{p(x)}\\
+&amp;\ge\sum_{p(x)&gt;0}[p(x)-q(x)]\\
+&amp;\ge0 \end{aligned}
+$$&lt;p&gt;换成以 2 为底，只是乘一个正常数，非负性不变。如果 \(p(x)&gt;0\) 而 \(q(x)=0\)，KL 为无穷大，结论同样成立。&lt;/p&gt;
+&lt;p&gt;将 \(q(x,y)\) 取成边缘概率乘积，就得到互信息非负；等号对应两个变量独立。&lt;/p&gt;
+&lt;h2 id=&#34;最大熵模型&#34;&gt;最大熵模型
+&lt;/h2&gt;&lt;h3 id=&#34;最大熵原则&#34;&gt;最大熵原则
+&lt;/h3&gt;&lt;p&gt;最大熵原则是：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;在满足已知统计约束的分布中，选择熵最大的分布。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;特征函数与期望约束&#34;&gt;特征函数与期望约束
+&lt;/h3&gt;&lt;p&gt;用于分类时，输入 \(x\) 表示上下文，标签 \(y\) 表示类别或义项。已知事实通过&lt;strong&gt;特征函数&lt;/strong&gt;表达。例如：&lt;/p&gt;
+$$
+f_j(x,y)= \begin{cases} 1,&amp;\text{右侧词为“鼓”，且 }y\text{ 为击打乐器义}\\
+0,&amp;\text{其他情况} \end{cases}
+$$&lt;p&gt;用 \(\tilde p(x,y)\) 表示训练数据的经验联合分布，\(\tilde p(x)\) 表示其输入边缘分布。训练数据提供特征出现的经验平均，模型也会预测特征出现的平均。最大熵模型要求二者匹配：&lt;/p&gt;
+$$
+\sum_{x,y}\tilde p(x)p(y\mid x)f_j(x,y) = \sum_{x,y}\tilde p(x,y)f_j(x,y)
+$$&lt;p&gt;这里约束的是总体统计，并非要求每个训练样本都被以概率 1 预测正确。&lt;/p&gt;
+&lt;h3 id=&#34;从约束得到指数模型&#34;&gt;从约束得到指数模型
+&lt;/h3&gt;&lt;p&gt;最大化条件熵，并加入这些约束和概率归一化约束。通过拉格朗日乘子法，对概率求导后可以得到：&lt;/p&gt;
+$$
+\ln p(y\mid x) =\sum_j\lambda_jf_j(x,y)+\text{只依赖 }x\text{ 的常数}
+$$&lt;p&gt;指数化，再归一化：&lt;/p&gt;
+$$
+\boxed{ p_\lambda(y\mid x)= \frac{\exp\left(\sum_j\lambda_jf_j(x,y)\right)} {\sum_{y&#39;}\exp\left(\sum_j\lambda_jf_j(x,y&#39;)\right)} }
+$$&lt;p&gt;这个形式就是：&lt;strong&gt;特征加权打分 → 指数化 → 除以所有类别的总和。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;最大熵原则并不要求预测永远均匀。统计约束足够强时，分布可以非常集中；它限制的是没有证据支持的额外偏好。&lt;/p&gt;
+&lt;h3 id=&#34;gis广义迭代缩放&#34;&gt;GIS：广义迭代缩放
+&lt;/h3&gt;&lt;p&gt;GIS，即广义迭代缩放，是课件介绍的参数训练方法。其条件包括特征非负，以及每个输入、标签组合的特征和为常数：&lt;/p&gt;
+$$
+\sum_jf_j(x,y)=C
+$$&lt;p&gt;若原始特征和不恒定，可以选取不小于所有原始特征和的常数 \(C&gt;0\)，再加入非负修正特征：&lt;/p&gt;
+$$
+f_{\mathrm{corr}}(x,y)=C-\sum_jf_j(x,y)
+$$&lt;p&gt;权重更新为：&lt;/p&gt;
+$$
+\lambda_j^{\mathrm{new}} = \lambda_j^{\mathrm{old}} +\frac1C \ln\frac{E_{\mathrm{经验}}[f_j]} {E_{\mathrm{模型}}[f_j]}
+$$&lt;p&gt;若经验期望为 \(0.2\)，模型期望为 \(0.1\)，且 \(C=2\)：&lt;/p&gt;
+$$
+\Delta\lambda_j =\frac12\ln2 \approx0.3466
+$$&lt;p&gt;模型低估了这个特征的出现程度，于是提高相应权重。反过来，模型期望偏高时，更新方向为负。&lt;/p&gt;
+&lt;p&gt;训练过程就是反复计算概率、模型期望并调整权重，直到满足停止条件。GIS 有适用条件，公式中的零期望需要单独处理，不能直接计算 \(\ln 0\)。最大熵模型也可以使用其他优化方法训练。&lt;/p&gt;
+&lt;h2 id=&#34;crf联合预测整条标签序列&#34;&gt;CRF：联合预测整条标签序列
+&lt;/h2&gt;&lt;h3 id=&#34;序列分数与全局归一化&#34;&gt;序列分数与全局归一化
+&lt;/h3&gt;&lt;p&gt;如果给句子中每个字独立打标签，就可能出现结构不一致。CRF 给定整个输入序列 \(X\)，对完整标签序列 \(Y\) 建模：&lt;/p&gt;
+$$
+Y^*=\arg\max_YP(Y\mid X)
+$$&lt;p&gt;一般 CRF 使用无向图描述标签关系。在线性链 CRF 中，标签按序排列，给定输入及邻居标签后，满足相应的条件独立关系；&lt;strong&gt;这不要求输入词之间独立&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;定义整条序列的分数：&lt;/p&gt;
+$$
+S(X,Y) =\sum_{t=1}^{T}\sum_j \lambda_jf_j(y_{t-1},y_t,X,t)
+$$&lt;p&gt;再对所有候选标签序列归一化：&lt;/p&gt;
+$$
+\boxed{ P(Y\mid X) =\frac{e^{S(X,Y)}}{Z(X)}, \qquad Z(X)=\sum_{Y&#39;}e^{S(X,Y&#39;)} }
+$$&lt;p&gt;与逐位置分类相比，区别在于这里比较和归一化的是&lt;strong&gt;整条序列&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;特征包括：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;特征&lt;/th&gt;
+					&lt;th&gt;描述的关系&lt;/th&gt;
+					&lt;th&gt;例子&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;状态特征&lt;/td&gt;
+					&lt;td&gt;输入与当前位置标签&lt;/td&gt;
+					&lt;td&gt;当前字是“京”，标签为词尾&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;转移特征&lt;/td&gt;
+					&lt;td&gt;相邻标签&lt;/td&gt;
+					&lt;td&gt;前一个标签为词首，当前标签为词尾&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;crf-的训练目标与梯度&#34;&gt;CRF 的训练目标与梯度
+&lt;/h3&gt;&lt;p&gt;训练时，希望正确标签序列的概率高。对一个样本，负对数似然加 L2 正则为：&lt;/p&gt;
+$$
+L(\lambda) =-S(X,Y)+\ln Z(X) +\frac{\varepsilon}{2}\lVert\lambda\rVert_2^2
+$$&lt;p&gt;令 \(F_j(X,Y)\) 表示第 \(j\) 个特征在整条序列上的累计值，则：&lt;/p&gt;
+$$
+\frac{\partial L}{\partial\lambda_j} = E_{P(Y&#39;\mid X)}[F_j(X,Y&#39;)] -F_j(X,Y) +\varepsilon\lambda_j
+$$&lt;p&gt;前两项分别是：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;模型平均认为特征应出现多少次 − 正确序列里实际出现多少次。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;忽略正则时，如果模型低估了正确特征，梯度下降就倾向于提高其权重。正则项则约束权重大小。&lt;/p&gt;
+&lt;p&gt;虽然候选标签序列很多，线性链结构允许用前向—后向算法计算归一化因子和期望；预测时寻找最高分序列，则使用下面的 Viterbi。&lt;/p&gt;
+&lt;h2 id=&#34;viterbi用动态规划寻找最佳路径&#34;&gt;Viterbi：用动态规划寻找最佳路径
+&lt;/h2&gt;&lt;p&gt;长度为 \(T\)，每个位置有 \(K\) 个标签，可能的标签序列有：&lt;/p&gt;
+$$
+K^T
+$$&lt;p&gt;逐条枚举很贵。逐位置贪心选择又可能错过全局最优。&lt;/p&gt;
+&lt;p&gt;Viterbi 的做法是：&lt;strong&gt;对当前位置的每一种结束标签，分别保留到这里的最佳历史。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;定义：&lt;/p&gt;
+$$
+\delta_t(b) =\text{到位置 }t\text{、以标签 }b\text{ 结束的最高前缀分数}
+$$&lt;p&gt;递推：&lt;/p&gt;
+$$
+\boxed{ \delta_t(b) =\max_a\left[ \delta_{t-1}(a)+s_t(a,b,X) \right] }
+$$&lt;p&gt;同时记录取得最大值的前驱标签。到末尾选最佳终态，再沿前驱回溯完整路径。&lt;/p&gt;
+&lt;p&gt;其中 \(s_t(a,b,X)\) 表示第 \(t\) 个位置从标签 \(a\) 到标签 \(b\) 的局部分数；句首用固定起始状态处理。对固定输入 \(X\)，归一化因子 \(Z(X)\) 与候选标签序列无关，因此比较总分就能找到概率最大的序列。&lt;/p&gt;
+&lt;p&gt;Viterbi 的时间复杂度为 \(O(TK^2)\)，最后还需要沿前驱回溯。&lt;/p&gt;
+&lt;p&gt;这里很容易联想到最长上升子序列（LIS）的动态规划：都按“以什么结尾”划分状态，分别保留最佳历史。经典 LIS 记录以某个元素结尾的最优长度；Viterbi 记录到某个位置、以某个标签结尾的最高分。&lt;/p&gt;
+&lt;h2 id=&#34;bmes把中文分词转成序列标注&#34;&gt;BMES：把中文分词转成序列标注
+&lt;/h2&gt;&lt;p&gt;给每个字标记它在词里的位置：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;标签&lt;/th&gt;
+					&lt;th&gt;含义&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;B&lt;/td&gt;
+					&lt;td&gt;多字词的词首&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;M&lt;/td&gt;
+					&lt;td&gt;多字词的词中&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;E&lt;/td&gt;
+					&lt;td&gt;多字词的词尾&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;S&lt;/td&gt;
+					&lt;td&gt;单字词&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;课件用“乒乓球拍卖完了”展示切分歧义。其中一种切分是：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;乒乓球／拍卖／完／了&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;对应标签：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;字&lt;/th&gt;
+					&lt;th&gt;乒&lt;/th&gt;
+					&lt;th&gt;乓&lt;/th&gt;
+					&lt;th&gt;球&lt;/th&gt;
+					&lt;th&gt;拍&lt;/th&gt;
+					&lt;th&gt;卖&lt;/th&gt;
+					&lt;th&gt;完&lt;/th&gt;
+					&lt;th&gt;了&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;标签&lt;/td&gt;
+					&lt;td&gt;B&lt;/td&gt;
+					&lt;td&gt;M&lt;/td&gt;
+					&lt;td&gt;E&lt;/td&gt;
+					&lt;td&gt;B&lt;/td&gt;
+					&lt;td&gt;E&lt;/td&gt;
+					&lt;td&gt;S&lt;/td&gt;
+					&lt;td&gt;S&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;给定标签后，把 &lt;code&gt;B…E&lt;/code&gt; 合并成一个词，&lt;code&gt;S&lt;/code&gt; 单独成词，就恢复了分词结果。&lt;/p&gt;
+&lt;p&gt;CRF 可以利用当前字、前后字和相邻标签等特征给候选序列打分，再通过 Viterbi 找到最佳标签路径。&lt;/p&gt;
+&lt;p&gt;还可以显式约束合法转移：&lt;/p&gt;
+$$
+B\rightarrow M/E,\qquad M\rightarrow M/E
+$$$$
+E/S\rightarrow B/S
+$$&lt;p&gt;句首只能是 B 或 S，句尾只能是 E 或 S。&lt;/p&gt;
+&lt;p&gt;因此，整个分词过程是：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;标注语料 → 提取字与标签特征 → 学习 CRF 权重 → Viterbi 解码 → 根据 BMES 合并词。&lt;/strong&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>自然语言处理 | 第一讲：绪论</title>
+        <link>https://Elysium-Seeker.github.io/p/nlp-lecture-1-introduction/</link>
+        <pubDate>Thu, 17 Sep 2026 23:14:37 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/nlp-lecture-1-introduction/</guid>
+        <description>&lt;style&gt;
+.article-content .table-wrapper { position: relative; }
+.article-content .table-wrapper table:has(tr &gt; th:nth-child(3)) { min-width: 640px; }
+.article-content .table-wrapper table:has(tr &gt; th:nth-child(4)) { min-width: 720px; }
+.article-content .table-wrapper th:first-child { min-width: 72px; }
+.article-content .table-wrapper td, .article-content .table-wrapper th { word-break: normal; }
+&lt;/style&gt;
+&lt;p&gt;&lt;em&gt;手机上可左右滑动，查看完整的宽表格。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;系列笔记：第一讲：绪论 · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/nlp-lecture-2-statistical-learning/&#34; &gt;第二讲：统计学习基础&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;常见术语&#34;&gt;常见术语
+&lt;/h2&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;缩写&lt;/th&gt;
+					&lt;th&gt;名称&lt;/th&gt;
+					&lt;th&gt;关注重点&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;NLU&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;自然语言理解&lt;/td&gt;
+					&lt;td&gt;语言表达了什么意义、什么意图&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;CL&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;计算语言学&lt;/td&gt;
+					&lt;td&gt;用形式化的计算模型研究语言，较强调基础理论与方法&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;NLP&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;自然语言处理&lt;/td&gt;
+					&lt;td&gt;用计算机分析、理解、转换和生成语言&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;HLT&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;人类语言技术&lt;/td&gt;
+					&lt;td&gt;更宽泛的技术集合，涵盖文本、语音等&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;CIP&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;中文信息处理&lt;/td&gt;
+					&lt;td&gt;以中文，尤其汉语为处理对象&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;nlp-处理哪些任务&#34;&gt;NLP 处理哪些任务
+&lt;/h2&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;任务&lt;/th&gt;
+					&lt;th&gt;例子&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;分类、情感分析&lt;/td&gt;
+					&lt;td&gt;输入一条评论，输出“正面／负面”&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;信息提取&lt;/td&gt;
+					&lt;td&gt;从通知中提取人物、时间、地点&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;信息检索、文字校对&lt;/td&gt;
+					&lt;td&gt;找到相关文档，或指出错别字&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;机器翻译、摘要、问答、写作&lt;/td&gt;
+					&lt;td&gt;输入文字，输出另一段文字&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;语言理解为什么困难&#34;&gt;语言理解为什么困难
+&lt;/h2&gt;&lt;h3 id=&#34;不同层次的歧义&#34;&gt;不同层次的歧义
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;层次&lt;/th&gt;
+					&lt;th&gt;不确定的是什么&lt;/th&gt;
+					&lt;th&gt;例子&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;词法&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;词怎么切分、属于什么词性&lt;/td&gt;
+					&lt;td&gt;“自动化研究所取得的成就”可以理解为“自动化研究所／取得的成就”，也可以是“自动化研究／所取得的成就”&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;句法&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;词之间怎样组合、谁修饰谁&lt;/td&gt;
+					&lt;td&gt;“喜欢乡下的孩子”：&lt;code&gt;喜欢（乡下的孩子）&lt;/code&gt;，或&lt;code&gt;（喜欢乡下）的孩子&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;语义&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;词句表达什么意义&lt;/td&gt;
+					&lt;td&gt;“苹果”可能指水果，也可能指公司&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;语用&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;在当前情境下想表达什么&lt;/td&gt;
+					&lt;td&gt;“夏天能穿多少穿多少”通常劝少穿；换成冬天，通常劝多穿&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;变化常识与跨语言差异&#34;&gt;变化、常识与跨语言差异
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;语言一直在变化。&lt;/strong&gt; 新词、新人名、新用法不断出现，词典无法一次编完。同一个表达也可能有不同用法，例如“高山”既可能指山，也可能是人名。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;理解依赖常识。&lt;/strong&gt; “奖杯放不进箱子，因为它太大了。”我们通常判断“它”指奖杯，这用到了物体与容器大小关系的常识。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;不同语言表达的信息不完全相同。&lt;/strong&gt; 英语 &lt;code&gt;brother&lt;/code&gt; 没有直接区分哥哥和弟弟，翻译成中文时需要上下文提供长幼信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;三条主要技术路线&#34;&gt;三条主要技术路线
+&lt;/h2&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;路线&lt;/th&gt;
+					&lt;th&gt;核心做法&lt;/th&gt;
+					&lt;th&gt;优点与主要困难&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;理性主义：规则方法&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;人编写词典、语法规则和推理过程&lt;/td&gt;
+					&lt;td&gt;步骤容易追踪；规则覆盖和维护很费力&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;经验主义：统计方法&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;从语料中学习语言现象的概率，常结合人工设计的特征&lt;/td&gt;
+					&lt;td&gt;能利用数据；依赖数据质量，容易受领域变化影响&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;连接主义：神经网络方法&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;把语言单位表示成向量，通过训练学习表示和上下文关系&lt;/td&gt;
+					&lt;td&gt;能学习复杂模式；仍依赖训练数据，也会产生错误&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;大模型通常通过预训练获得较广泛的语言能力，再利用提示或进一步训练，让同一模型承担翻译、摘要、问答等多种任务。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>计算机视觉 | 第四讲：图像变换</title>
         <link>https://Elysium-Seeker.github.io/p/cv-lecture-4-image-transforms/</link>
         <pubDate>Thu, 17 Sep 2026 15:46:48 +0800</pubDate>
