@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Thu, 17 Sep 2026 15:49:17 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 21 Sep 2026 23:16:54 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>计算机视觉 | 第三讲：深度神经网络基础</title>
         <link>https://Elysium-Seeker.github.io/p/cv-lecture-3-deep-neural-networks/</link>
         <pubDate>Thu, 17 Sep 2026 15:46:47 +0800</pubDate>
@@ -22,7 +22,7 @@
 .article-content img[src$=&#34;residual-connection.svg&#34;] { width: 360px; max-width: 100%; height: auto; margin: 1.5rem auto; display: block; }
 &lt;/style&gt;
 &lt;p&gt;&lt;em&gt;手机上可左右滑动，查看完整的宽表格与长公式。&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;系列笔记：&lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-2-digital-image-basics/&#34; &gt;第二讲：数字图像基础&lt;/a&gt; · 第三讲：深度神经网络基础 · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-4-image-transforms/&#34; &gt;第四讲：图像变换&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;系列笔记：&lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-2-digital-image-basics/&#34; &gt;第二讲：数字图像基础&lt;/a&gt; · 第三讲：深度神经网络基础 · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-4-image-transforms/&#34; &gt;第四讲：图像变换&lt;/a&gt; · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-5-image-filtering-morphology/&#34; &gt;第五讲：图像滤波与数学形态学&lt;/a&gt; · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-6-image-enhancement/&#34; &gt;第六讲：图像增强&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;神经元与-cnn-整体结构&#34;&gt;神经元与 CNN 整体结构
 &lt;/h2&gt;&lt;h3 id=&#34;神经元与多层感知机&#34;&gt;神经元与多层感知机
 &lt;/h3&gt;&lt;p&gt;神经网络通过多个相连的计算单元处理信息。&lt;/p&gt;

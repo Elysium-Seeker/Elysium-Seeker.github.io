@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="相关与卷积、图像噪声、高斯与双边滤波、频域滤波，以及膨胀、腐蚀、开闭运算等数学形态学方法。">
+<title>计算机视觉 | 第五讲：图像滤波与数学形态学</title>
+
+<link rel='canonical' href='https://Elysium-Seeker.github.io/p/cv-lecture-5-image-filtering-morphology/'>
+
+<link rel="stylesheet" href="/scss/style.min.14391edec1bcf69cbfd0ffc7bcb2ba2d40c8649ce70e16557424e09eb7687faf.css"><meta property='og:title' content="计算机视觉 | 第五讲：图像滤波与数学形态学">
+<meta property='og:description' content="相关与卷积、图像噪声、高斯与双边滤波、频域滤波，以及膨胀、腐蚀、开闭运算等数学形态学方法。">
+<meta property='og:url' content='https://Elysium-Seeker.github.io/p/cv-lecture-5-image-filtering-morphology/'>
+<meta property='og:site_name' content='Elysium-Seeker'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='图像处理' /><meta property='article:tag' content='图像滤波' /><meta property='article:tag' content='数学形态学' /><meta property='article:published_time' content='2026-09-21T23:11:10&#43;08:00'/><meta property='article:modified_time' content='2026-09-21T23:17:30&#43;08:00'/>
+<meta name="twitter:title" content="计算机视觉 | 第五讲：图像滤波与数学形态学">
+<meta name="twitter:description" content="相关与卷积、图像噪声、高斯与双边滤波、频域滤波，以及膨胀、腐蚀、开闭运算等数学形态学方法。">
+    <link rel="shortcut icon" href="/favicon.ico" />
+<style>
+    :root {
+        --article-font-family: "Noto Serif SC", var(--base-font-family);
+		--article-font-size: 1.7rem;
+		--article-line-height: 1.8;
+    }
+</style>
+
+<script>
+		(function () {
+		    const customFont = document.createElement('link');
+		    customFont.href = "https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap";
+		
+		    customFont.type = "text/css";
+		    customFont.rel = "stylesheet";
+		
+		    document.head.appendChild(customFont);
+		}());
+</script>
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/b_bafc54ed2304790292888aa8183afddb_hu_25b25cb3ac2ccae0.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">⭐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Elysium-Seeker</a></h1>
+            <h2 class="site-description">请用一支玫瑰纪念我</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Elysium-Seeker'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E9%93%BE/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友链</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#相关与卷积">相关与卷积</a>
+      <ol>
+        <li><a href="#相关运算">相关运算</a></li>
+        <li><a href="#卷积运算">卷积运算</a></li>
+        <li><a href="#卷积的性质">卷积的性质</a></li>
+        <li><a href="#卷积定理">卷积定理</a></li>
+      </ol>
+    </li>
+    <li><a href="#图像噪声与空间滤波">图像噪声与空间滤波</a>
+      <ol>
+        <li><a href="#常见噪声">常见噪声</a></li>
+        <li><a href="#高斯滤波">高斯滤波</a></li>
+        <li><a href="#双边滤波">双边滤波</a></li>
+      </ol>
+    </li>
+    <li><a href="#频域滤波">频域滤波</a>
+      <ol>
+        <li><a href="#中心化频谱">中心化频谱</a></li>
+        <li><a href="#低通滤波">低通滤波</a></li>
+        <li><a href="#高通滤波">高通滤波</a></li>
+        <li><a href="#带通滤波">带通滤波</a></li>
+        <li><a href="#振铃现象">振铃现象</a></li>
+      </ol>
+    </li>
+    <li><a href="#数学形态学">数学形态学</a>
+      <ol>
+        <li><a href="#前景集合与结构元素">前景集合与结构元素</a></li>
+        <li><a href="#膨胀与腐蚀">膨胀与腐蚀</a>
+          <ol>
+            <li><a href="#膨胀">膨胀</a></li>
+            <li><a href="#腐蚀">腐蚀</a></li>
+          </ol>
+        </li>
+        <li><a href="#开运算先腐蚀再膨胀">开运算：先腐蚀，再膨胀</a></li>
+        <li><a href="#闭运算先膨胀再腐蚀">闭运算：先膨胀，再腐蚀</a></li>
+        <li><a href="#开闭运算的性质">开、闭运算的性质</a></li>
+        <li><a href="#边界提取">边界提取</a></li>
+        <li><a href="#孔洞填充">孔洞填充</a></li>
+        <li><a href="#连通分量提取">连通分量提取</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" >
+                计算机视觉
+            </a>
+        
+            <a href="/categories/work/" style="background-color: #708090; color: #fff;">
+                Work
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/cv-lecture-5-image-filtering-morphology/">计算机视觉 | 第五讲：图像滤波与数学形态学</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            相关与卷积、图像噪声、高斯与双边滤波、频域滤波，以及膨胀、腐蚀、开闭运算等数学形态学方法。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-09-21</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 8 分钟
+                </time>
+            </div>
+        <div class="article-lastmod">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time>
+                    2026-09-21
+                </time>
+            </div></footer>
+    
+
+    
+</div>
+
+</header>
+
+    
+
+
+
+
+
+
+
+
+
+
+<section class="article-content">
+    <style>
+.article-content .table-wrapper { position: relative; }
+.article-content .table-wrapper table:has(tr > th:nth-child(3)) { min-width: 640px; }
+.article-content .table-wrapper table:has(tr > th:nth-child(4)) { min-width: 720px; }
+.article-content .table-wrapper th:first-child { min-width: 72px; }
+.article-content .table-wrapper td, .article-content .table-wrapper th { word-break: normal; }
+.article-content img[src$="vdsr-residual.svg"] { width: 380px; max-width: 100%; height: auto; margin: 1.5rem auto; display: block; }
+</style>
+<p><em>手机上可左右滑动，查看完整的宽表格与长公式。</em></p>
+<p>系列笔记：<a class="link" href="/p/cv-lecture-2-digital-image-basics/" >第二讲：数字图像基础</a> · <a class="link" href="/p/cv-lecture-3-deep-neural-networks/" >第三讲：深度神经网络基础</a> · <a class="link" href="/p/cv-lecture-4-image-transforms/" >第四讲：图像变换</a> · 第五讲：图像滤波与数学形态学 · <a class="link" href="/p/cv-lecture-6-image-enhancement/" >第六讲：图像增强</a></p>
+<h2 id="相关与卷积">相关与卷积
+</h2><h3 id="相关运算">相关运算
+</h3>$$
+O_{\mathrm{corr}}(x,y) =\sum_{u,v}G(u,v)\,I(x+u,y+v)
+$$<ul>
+<li>\(I\) 是输入图像，\(G\) 是小矩阵，也叫核或模板。</li>
+<li>\((x,y)\) 是当前处理的位置。</li>
+<li>\((u,v)\) 是相对当前位置的偏移。</li>
+<li>求和表示把窗口内所有对应乘积加起来。</li>
+</ul>
+<p>相关结果中响应较强的位置，可以帮助定位目标。</p>
+<h3 id="卷积运算">卷积运算
+</h3>$$
+O_{\mathrm{conv}}(x,y) =\sum_{u,v}G(u,v)\,I(x-u,y-v)
+$$<p>和相关相比，公式中的 \(+\) 变成了 \(-\)。落实到矩阵计算上，就是：</p>
+<blockquote>
+<p><strong>相关直接使用原核；卷积先将核旋转 180°，再对应相乘求和</strong>。</p>
+</blockquote>
+<p>注意，旋转 180° 相当于同时上下翻转、左右翻转，<strong>不等于转置</strong>。</p>
+<h3 id="卷积的性质">卷积的性质
+</h3><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>性质</th>
+					<th>公式</th>
+					<th>直观含义</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>交换律</td>
+					<td>\(f*h=h*f\)</td>
+					<td>数学上交换两个卷积对象，结果相同</td>
+			</tr>
+			<tr>
+					<td>分配律</td>
+					<td>\(f*(h+g)=f*h+f*g\)</td>
+					<td>先把核相加再卷积，等于分别卷积后把结果相加</td>
+			</tr>
+			<tr>
+					<td>结合律</td>
+					<td>\((f*h)*g=f*(h*g)\)</td>
+					<td>连续两次卷积，可以先合成一个核</td>
+			</tr>
+			<tr>
+					<td>微分性质</td>
+					<td>\((f*h)'=f'*h=f*h'\)</td>
+					<td>对卷积结果求导，可以转为对其中一个对象求导</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>结合律和微分性质比较容易联系到图像处理。</p>
+<p><strong>先平滑图像，再求图像的变化，可以通过一个“平滑核的导数”直接完成</strong>。</p>
+$$
+\frac{\partial}{\partial x}(f*h) = f*\frac{\partial h}{\partial x}
+$$<h3 id="卷积定理">卷积定理
+</h3><p>设：</p>
+$$
+g=f*h
+$$$$
+F=\mathcal F(f),\qquad H=\mathcal F(h),\qquad G=\mathcal F(g)
+$$<p>卷积定理：</p>
+$$
+\boxed{\mathcal F(f*h)=F\cdot H}
+$$<p><strong>空间域中的卷积，对应频域中的逐点相乘</strong>。</p>
+<p>所以，同一个滤波结果可以有两种计算路径：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>在空间域计算</th>
+					<th>在频域计算</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>用核在图像上滑动、乘加</td>
+					<td>分别变换图像和核，将频谱逐点相乘，再逆变换</td>
+			</tr>
+			<tr>
+					<td>\(g=f*h\)</td>
+					<td>\(g=\mathcal F^{-1}(F\cdot H)\)</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>这里的“逐点相乘”，是同一个频率位置上的两个数相乘，<strong>不是矩阵乘法</strong>：</p>
+$$
+G(u,v)=F(u,v)H(u,v)
+$$<h2 id="图像噪声与空间滤波">图像噪声与空间滤波
+</h2><h3 id="常见噪声">常见噪声
+</h3><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>噪声类型</th>
+					<th>直观表现</th>
+					<th>理解重点</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>高斯噪声</strong></td>
+					<td>像素值受到随机扰动，大多数扰动较小，少数较大</td>
+					<td>噪声值服从正态分布</td>
+			</tr>
+			<tr>
+					<td><strong>椒盐噪声</strong></td>
+					<td>图像中随机出现很亮、很暗的点</td>
+					<td>少量像素突然变成极端值</td>
+			</tr>
+			<tr>
+					<td><strong>泊松噪声</strong></td>
+					<td>光子等计数过程产生随机波动</td>
+					<td>噪声大小与信号强度有关</td>
+			</tr>
+	</tbody>
+</table></div>
+<h3 id="高斯滤波">高斯滤波
+</h3><p>想象一片原本灰度接近的区域：有些像素被噪声推高，有些被拉低。把邻居的信息平均起来，可以减轻这些随机波动。</p>
+<p>高斯滤波采用的是<strong>加权平均</strong>：</p>
+<blockquote>
+<p><strong>近处的像素权重大，远处的像素权重小</strong>。</p>
+</blockquote>
+<p>二维高斯函数为：</p>
+$$
+G(x,y)=\frac{1}{2\pi\sigma^2} \exp\left(-\frac{x^2+y^2}{2\sigma^2}\right)
+$$<ul>
+<li>\(x^2+y^2\)：当前位置到核中心的距离平方，距离越大，权重越小。</li>
+<li>\(\sigma\)：控制权重分布有多宽。</li>
+</ul>
+<p>实际使用时，我们在有限网格上取这些值，再进行归一化，使得：</p>
+$$
+\sum_{u,v}G(u,v)=1
+$$<p>\(\sigma\) 和核大小决定平滑的程度</p>
+<ul>
+<li><strong>\(\sigma\) 较小</strong>：权重集中在中心附近，主要参考较近的像素。</li>
+<li><strong>\(\sigma\) 较大</strong>：权重分布更宽，较远的像素也能产生明显影响。</li>
+</ul>
+<p>核的大小要与 \(\sigma\) 配合。</p>
+<p>根据一维正态分布的 \(3\sigma\) 原则，常用核边长：</p>
+$$
+\boxed{S=2\lceil3\sigma\rceil+1}
+$$<p>平滑越强，会有什么代价？</p>
+<p>压低随机波动，也会削弱真实的细节。对于椒盐噪声，极端值还可能通过平均影响周围像素，通常中值滤波更合适。</p>
+<h3 id="双边滤波">双边滤波
+</h3><p><strong>离我近，而且灰度和我接近，才给它较大的权重</strong>。</p>
+<p>设中心位置为 \(p\)，邻域中的某个位置为 \(q\)，总权重由两项相乘：</p>
+$$
+w(p,q)= \underbrace{ \exp\left(-\frac{\|p-q\|^2}{2\sigma_s^2}\right) }_{\text{空间距离权重}} \underbrace{ \exp\left(-\frac{(I(p)-I(q))^2}{2\sigma_r^2}\right) }_{\text{灰度差权重}}
+$$<p><strong>完整结果仍然是加权平均：</strong></p>
+$$
+\boxed{ \widehat I(p)= \frac{ \sum_{q\in\Omega_p}w(p,q)I(q) }{ \sum_{q\in\Omega_p}w(p,q) } }
+$$<p>其中 \(\Omega_p\) 表示中心像素的邻域。</p>
+<ul>
+<li><strong>\(\sigma_s\)</strong>：在空间上参考多大范围。</li>
+<li><strong>\(\sigma_r\)</strong>：对灰度差有多宽容。越大，越允许不同灰度的像素一起平均，效果越接近高斯滤波；过小则可能连噪声波动也保留下来。</li>
+</ul>
+<h2 id="频域滤波">频域滤波
+</h2><p>傅里叶变换把图像分解成不同频率的成分：</p>
+<ul>
+<li><strong>低频</strong>：灰度变化缓慢，例如大面积平坦区域、整体明暗变化。</li>
+<li><strong>高频</strong>：灰度变化迅速，例如边缘、细纹理，也包括某些噪声。</li>
+</ul>
+<p>频域滤波就是用一个函数 \(H(u,v)\)，调整这些成分：</p>
+$$
+\boxed{G(u,v)=H(u,v)F(u,v)}
+$$<p>再逆变换回图像：</p>
+$$
+g(x,y)=\mathcal F^{-1}\{G(u,v)\}
+$$<p>其中，\(F\) 是原图频谱，\(G\) 是处理后的频谱，\(H\) 是<strong>滤波器的频率响应，也常称为频域掩模</strong>。</p>
+<p>本节使用的是简单的二值掩模：</p>
+$$
+H(u,v)= \begin{cases} 1,&\text{允许该频率通过}\\ 0,&\text{去除该频率} \end{cases}
+$$<p>相乘是在<strong>相同频率位置上逐点相乘</strong>。</p>
+<h3 id="中心化频谱">中心化频谱
+</h3><p>中心化后：</p>
+<ul>
+<li><strong>中心附近是低频</strong>。</li>
+<li><strong>距离中心越远，频率越高</strong>。</li>
+<li><strong>幅度图中越亮的位置，表示对应频率成分的幅值越大</strong>。</li>
+</ul>
+<p>频谱中的位置表示频率；这些频率成分共同作用于整幅图像。因此，保留频谱中心，得到的是低频成分组成的图像。</p>
+<p>把频谱中心设为坐标原点，用 \((u_c,v_c)\) 表示相对中心的坐标，那么频率点到中心的距离为：</p>
+$$
+\boxed{D(u,v)=\sqrt{u_c^2+v_c^2}}
+$$<p>接下来三种滤波器，都可以根据这个距离来定义。</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>滤波器</th>
+					<th>保留条件</th>
+					<th>掩模中允许通过的形状</th>
+					<th>图像效果</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>低通</strong></td>
+					<td>\(D\lt D_0\)</td>
+					<td>中心圆盘</td>
+					<td>平滑、模糊，削弱细节</td>
+			</tr>
+			<tr>
+					<td><strong>高通</strong></td>
+					<td>\(D\gt D_0\)</td>
+					<td>中心圆盘之外</td>
+					<td>突出边缘与细节</td>
+			</tr>
+			<tr>
+					<td><strong>带通</strong></td>
+					<td>\(D_1\lt D\lt D_2\)</td>
+					<td>中间圆环</td>
+					<td>保留某一频率范围的结构</td>
+			</tr>
+	</tbody>
+</table></div>
+<h3 id="低通滤波">低通滤波
+</h3><p>例如玫瑰图像经过低通后，整体形状还在，但花瓣纹理和轮廓变得模糊，因为这些细节需要较高频率来表达。</p>
+<p>阈值的影响是：</p>
+<ul>
+<li>\(D_0\) <strong>变小</strong>：保留的频率更少，通常更模糊。</li>
+<li>\(D_0\) <strong>变大</strong>：允许更多高频通过，保留更多细节。</li>
+</ul>
+<p>上一部分的高斯平滑也具有低通作用。不过，高斯滤波会平滑地衰减高频，课件这里的圆形掩模则是直接截断。</p>
+<h3 id="高通滤波">高通滤波
+</h3><p>结果中，大面积平坦区域被压低，建筑轮廓、窗框、花瓣边缘变得明显。</p>
+<p>这里注意“边缘锐化”：</p>
+<p><strong>单独的高通结果主要是边缘和细节响应</strong>。 若想让原图更清晰，同时保留原图的主体内容，通常把它加回去：</p>
+$$
+\boxed{g_{\text{锐化}}=f+\lambda g_{\text{高通}}}
+$$<p>其中 \(\lambda\) 控制增强程度。</p>
+<p>高通的 \(D_0\) 越大，被去掉的低频和中频越多，留下的成分越偏向细小变化；效果不一定更好，也可能突出噪声。</p>
+<h3 id="带通滤波">带通滤波
+</h3><p>它同时去掉：</p>
+<ul>
+<li>靠近中心的低频；</li>
+<li>很外围的高频。</li>
+</ul>
+<p>留下中间一圈，因此可以突出<strong>某一尺度的纹理或结构</strong>。较粗的结构通常对应较低频率，较细的纹理通常对应较高频率。</p>
+<h3 id="振铃现象">振铃现象
+</h3><p>圆盘、圆环掩模，在边界处从 \(1\) 突然变成 \(0\)。这类理想滤波器容易让图像边缘附近出现一圈圈明暗波纹，称为<strong>振铃现象</strong>。</p>
+<p>低通后的玫瑰轮廓附近，就能看到这种现象。因此，低通后的图像可能同时出现模糊和波纹。</p>
+<h2 id="数学形态学">数学形态学
+</h2><h3 id="前景集合与结构元素">前景集合与结构元素
+</h3><p>先考虑二值图像：</p>
+<ul>
+<li>前景为 \(1\)，表示我们关心的目标。</li>
+<li>背景为 \(0\)。</li>
+<li>所有前景像素的坐标，组成集合 \(A\)。</li>
+</ul>
+<p>例如，一幅图中有三个前景像素，就可以写成：</p>
+$$
+A=\{(2,3),(2,4),(3,4)\}
+$$<p>接下来引入一个小模板，叫作<strong>结构元素 \(B\)</strong>，例如：</p>
+$$
+B_{\text{方形}}= \begin{bmatrix} 1&1&1\\ 1&1&1\\ 1&1&1 \end{bmatrix}, \qquad B_{\text{十字}}= \begin{bmatrix} 0&1&0\\ 1&1&1\\ 0&1&0 \end{bmatrix}
+$$<p>它有三个需要注意的地方：</p>
+<ul>
+<li><strong>形状</strong>：决定检查哪些方向，例如十字形关注上下左右。</li>
+<li><strong>大小</strong>：决定处理多大尺度的结构。</li>
+<li><strong>原点</strong>：决定模板放到当前位置时，怎样与图像对齐，通常选中心。</li>
+</ul>
+<p><strong>只有结构元素中为 \(1\) 的位置参与判断</strong>。 十字形四个角的 \(0\) 不要求图像对应位置也是背景。</p>
+<p>集合符号也很直观：并集是合起来，交集是共同部分，补集是背景，差集是从一个集合中去掉另一个集合。</p>
+<h3 id="膨胀与腐蚀">膨胀与腐蚀
+</h3><h4 id="膨胀">膨胀
+</h4><p>把结构元素的原点依次放到每一个前景点上，将它覆盖的位置合起来，就是膨胀结果：</p>
+$$
+\boxed{A\oplus B=\{a+b\mid a\in A,\ b\in B\}}
+$$<p>例如，图像里只有一个前景点，用中心对齐的 \(3\times3\) 方形结构元素膨胀，就会得到一个 \(3\times3\) 的前景块。</p>
+<p>常见用途是：</p>
+<ul>
+<li>加粗目标。</li>
+<li>连接较小的断口。</li>
+<li>填补较小的空隙。</li>
+</ul>
+<p>采用另一种等价写法：<strong>先将 \(B\) 关于原点反射，再滑动；只要与前景有重叠，就输出 \(1\)</strong>。对于中心对称的方形、十字形，反射前后相同。</p>
+<h4 id="腐蚀">腐蚀
+</h4><p>将 \(B\) 的原点放到位置 \(z\)。如果它所有为 \(1\) 的位置都落在前景中，就保留 \(z\)：</p>
+$$
+\boxed{A\ominus B=\{z\mid B_z\subseteq A\}}
+$$<p>其中 \(B_z\) 表示把结构元素移动到位置 \(z\)。</p>
+<p>例如，一个 \(3\times3\) 实心前景块，用 \(3\times3\) 方形结构元素腐蚀后，只剩中心点。</p>
+<p>常见用途是：</p>
+<ul>
+<li>缩小目标。</li>
+<li>去掉小前景噪点。</li>
+<li>去除细突出物、断开细连接。</li>
+</ul>
+<p><strong>“膨胀只增加、腐蚀只减少”有一个前提：结构元素包含原点</strong>。</p>
+<p>两者的对偶关系：</p>
+$$
+(A\ominus B)^c=A^c\oplus\widehat B
+$$<p>可以理解为：<strong>前景腐蚀后留下的背景，等于原背景用反射结构元素膨胀的结果</strong>。</p>
+<h3 id="开运算先腐蚀再膨胀">开运算：先腐蚀，再膨胀
+</h3>$$
+\boxed{A\circ B=(A\ominus B)\oplus B}
+$$<p>过程是：</p>
+<ol>
+<li>腐蚀时，小噪点、细凸起、窄连接容易消失。</li>
+<li>膨胀时，让保留下来的主体重新扩张。</li>
+</ol>
+<p>小噪点如果在第一步完全消失，第二步就没有对应的前景点让它重新长出来。</p>
+<p>因此，开运算常用于<strong>去除小前景噪点、细凸起，断开窄连接</strong>。</p>
+<h3 id="闭运算先膨胀再腐蚀">闭运算：先膨胀，再腐蚀
+</h3>$$
+\boxed{A\bullet B=(A\oplus B)\ominus B}
+$$<p>过程是：</p>
+<ol>
+<li>膨胀时，较窄的断口被连接，小孔洞被填住。</li>
+<li>腐蚀时，让膨胀后的目标收缩。</li>
+</ol>
+<p>因此，闭运算常用于<strong>连接小断口、填补小孔洞和窄缝</strong>。</p>
+<h3 id="开闭运算的性质">开、闭运算的性质
+</h3><p>第一，开运算的结果包含于原图，闭运算的结果包含原图：</p>
+$$
+A\circ B\subseteq A, \qquad A\subseteq A\bullet B
+$$<p>第二，<strong>用相同结构元素重复操作，结果不再变化</strong>，称为幂等性：</p>
+$$
+(A\circ B)\circ B=A\circ B
+$$$$
+(A\bullet B)\bullet B=A\bullet B
+$$<p>第三，它们保持集合的包含关系：如果原来的目标 \(C\subseteq A\)，分别做相同的开运算或闭运算后，结果仍保持这个包含关系。</p>
+<p>注意，<strong>幂等性不代表开、闭运算可以交换顺序</strong>。</p>
+<h3 id="边界提取">边界提取
+</h3><p>腐蚀会去掉目标靠外的一层。用原图减去腐蚀结果，就能留下这层边界：</p>
+$$
+\boxed{\beta(A)=A\setminus(A\ominus B)}
+$$<h3 id="孔洞填充">孔洞填充
+</h3><p>在孔洞内部选择一个起始点，记作 \(X_0\)。</p>
+<p>每轮先膨胀，再与背景求交：</p>
+$$
+\boxed{X_k=(X_{k-1}\oplus B)\cap A^c}
+$$<p>闭运算填孔受到结构元素尺度的限制；这种种子生长方法可以填充选定的封闭孔洞。</p>
+<h3 id="连通分量提取">连通分量提取
+</h3><p>连通分量就是图像中<strong>彼此连在一起的一块前景</strong>。</p>
+<p>这次把起始点 \(X_0\) 放在目标内部，迭代公式改为：</p>
+$$
+\boxed{X_k=(X_{k-1}\oplus B)\cap A}
+$$<p>与孔洞填充相比，只改变了允许生长的区域：</p>
+<ul>
+<li><strong>孔洞填充与 \(A^c\) 求交</strong>：在背景中生长。</li>
+<li><strong>连通分量提取与 \(A\) 求交</strong>：在前景中生长。</li>
+</ul>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a>
+        
+            <a href="/tags/%E5%9B%BE%E5%83%8F%E6%BB%A4%E6%B3%A2/">图像滤波</a>
+        
+            <a href="/tags/%E6%95%B0%E5%AD%A6%E5%BD%A2%E6%80%81%E5%AD%A6/">数学形态学</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-09-21
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+	const mainArticleElement = document.querySelector(".main-article");
+        renderMathInElement(mainArticleElement, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/cv-lecture-6-image-enhancement/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">计算机视觉 | 第六讲：图像增强</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cv-lecture-4-image-transforms/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">计算机视觉 | 第四讲：图像变换</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cv-lecture-2-digital-image-basics/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">计算机视觉 | 第二讲：数字图像基础</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cv-lecture-3-deep-neural-networks/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">计算机视觉 | 第三讲：深度神经网络基础</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/nlp-lecture-2-statistical-learning/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">自然语言处理 | 第二讲：统计学习基础</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 Elysium-Seeker
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+    #TableOfContents > ul, ol {
+        ul, ol {
+            display: none;
+        }
+        .open {
+            display: block;
+        }
+    }
+</style>
+
+<script>
+    function initTocHide() {
+        
+        let toc = document.querySelector(".widget--toc");
+        if (!toc) {
+            return;
+        }
+        
+        window.addEventListener('scroll', function() {
+            
+            let openUl = document.querySelectorAll(".open");
+            if (openUl.length > 0) {
+              openUl.forEach((ul) => {
+                ul.classList.remove("open")
+              })
+            }
+            
+            let currentLi = document.querySelector(".active-class");
+            if (!currentLi) {
+                return
+            }
+            
+            if (currentLi.children.length > 1) {
+                currentLi.children[1].classList.add("open")
+            }
+            
+            let ul = currentLi.parentElement;
+            do {
+                ul.classList.add("open");
+                ul = ul.parentElement.parentElement
+            } while (ul !== undefined && (ul.localName === 'ul' || ul.localName === 'ol'))
+        });
+    }
+    initTocHide()
+</script>
+
+<style>
+    .highlight {
+         
+        max-height: 400px;
+        overflow: hidden;
+    }
+
+    .code-show {
+        max-height: none !important;
+    }
+
+    .code-more-box {
+        width: 100%;
+        padding-top: 78px;
+        background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(#fff));
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+    }
+
+    .code-more-btn {
+        display: block;
+        margin: auto;
+        width: 44px;
+        height: 22px;
+        background: #f0f0f5;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        padding-top: 6px;
+        cursor: pointer;
+    }
+
+    .code-more-img {
+        cursor: pointer !important;
+        display: block;
+        margin: auto;
+        width: 22px;
+        height: 16px;
+    }
+</style>
+
+<script>
+  function initCodeMoreBox() {
+    let codeBlocks = document.querySelectorAll(".highlight");
+    if (!codeBlocks) {
+      return;
+    }
+    codeBlocks.forEach(codeBlock => {
+      
+      if (codeBlock.scrollHeight <= codeBlock.clientHeight) {
+        return;
+      }
+      
+      
+      let codeMoreBox = document.createElement('div');
+      codeMoreBox.classList.add('code-more-box');
+      
+      let codeMoreBtn = document.createElement('span');
+      codeMoreBtn.classList.add('code-more-btn');
+      codeMoreBtn.addEventListener('click', () => {
+        codeBlock.classList.add('code-show');
+        codeMoreBox.style.display = 'none';
+        
+        window.dispatchEvent(new Event('resize'))
+      })
+      
+      let img = document.createElement('img');
+      img.classList.add('code-more-img');
+      img.src = "https://Elysium-Seeker.github.io/icons/codeMore.png"
+      
+      codeMoreBtn.appendChild(img);
+      codeMoreBox.appendChild(codeMoreBtn);
+      codeBlock.appendChild(codeMoreBox)
+    })
+  }
+  
+  initCodeMoreBox();
+</script>
+
+<style>
+    #backTopBtn {
+        display: none;
+        position: fixed;
+        bottom: 30px;
+        z-index: 99;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        background-image: url(https://Elysium-Seeker.github.io/icons/backTop.svg);
+    }
+</style>
+
+<script>
+    
+
+    function initScrollTop() {
+        let rightSideBar = document.querySelector(".right-sidebar");
+        if (!rightSideBar) {
+            return;
+        }
+        
+        let btn = document.createElement("div");
+        btn.id = "backTopBtn";
+        btn.onclick = backToTop
+        rightSideBar.appendChild(btn)
+        
+        window.onscroll = function() {
+            
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+    }
+
+    
+
+    function backToTop(){
+        window.scrollTo({ top: 0, behavior: "smooth" })
+    }
+
+    initScrollTop();
+</script>
+
+<div id="particles-js"></div>
+
+<script src=https://Elysium-Seeker.github.io/background/particles.min.js></script>
+<script>
+  particlesJS.load('particles-js', "https://Elysium-Seeker.github.io/background/particlesjs-config.json", function() {
+    console.log('particles.js loaded - callback');
+  });
+</script>
+
+<style>
+  #particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+  }
+</style>
+
+    </body>
+</html>

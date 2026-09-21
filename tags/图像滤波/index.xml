@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>图像滤波 on Elysium-Seeker</title>
+        <link>https://Elysium-Seeker.github.io/tags/%E5%9B%BE%E5%83%8F%E6%BB%A4%E6%B3%A2/</link>
+        <description>Recent content in 图像滤波 on Elysium-Seeker</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Elysium-Seeker</copyright>
+        <lastBuildDate>Mon, 21 Sep 2026 23:17:30 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/%E5%9B%BE%E5%83%8F%E6%BB%A4%E6%B3%A2/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>计算机视觉 | 第五讲：图像滤波与数学形态学</title>
+        <link>https://Elysium-Seeker.github.io/p/cv-lecture-5-image-filtering-morphology/</link>
+        <pubDate>Mon, 21 Sep 2026 23:11:10 +0800</pubDate>
+        
+        <guid>https://Elysium-Seeker.github.io/p/cv-lecture-5-image-filtering-morphology/</guid>
+        <description>&lt;style&gt;
+.article-content .table-wrapper { position: relative; }
+.article-content .table-wrapper table:has(tr &gt; th:nth-child(3)) { min-width: 640px; }
+.article-content .table-wrapper table:has(tr &gt; th:nth-child(4)) { min-width: 720px; }
+.article-content .table-wrapper th:first-child { min-width: 72px; }
+.article-content .table-wrapper td, .article-content .table-wrapper th { word-break: normal; }
+.article-content img[src$=&#34;vdsr-residual.svg&#34;] { width: 380px; max-width: 100%; height: auto; margin: 1.5rem auto; display: block; }
+&lt;/style&gt;
+&lt;p&gt;&lt;em&gt;手机上可左右滑动，查看完整的宽表格与长公式。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;系列笔记：&lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-2-digital-image-basics/&#34; &gt;第二讲：数字图像基础&lt;/a&gt; · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-3-deep-neural-networks/&#34; &gt;第三讲：深度神经网络基础&lt;/a&gt; · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-4-image-transforms/&#34; &gt;第四讲：图像变换&lt;/a&gt; · 第五讲：图像滤波与数学形态学 · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-6-image-enhancement/&#34; &gt;第六讲：图像增强&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;相关与卷积&#34;&gt;相关与卷积
+&lt;/h2&gt;&lt;h3 id=&#34;相关运算&#34;&gt;相关运算
+&lt;/h3&gt;$$
+O_{\mathrm{corr}}(x,y) =\sum_{u,v}G(u,v)\,I(x+u,y+v)
+$$&lt;ul&gt;
+&lt;li&gt;\(I\) 是输入图像，\(G\) 是小矩阵，也叫核或模板。&lt;/li&gt;
+&lt;li&gt;\((x,y)\) 是当前处理的位置。&lt;/li&gt;
+&lt;li&gt;\((u,v)\) 是相对当前位置的偏移。&lt;/li&gt;
+&lt;li&gt;求和表示把窗口内所有对应乘积加起来。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;相关结果中响应较强的位置，可以帮助定位目标。&lt;/p&gt;
+&lt;h3 id=&#34;卷积运算&#34;&gt;卷积运算
+&lt;/h3&gt;$$
+O_{\mathrm{conv}}(x,y) =\sum_{u,v}G(u,v)\,I(x-u,y-v)
+$$&lt;p&gt;和相关相比，公式中的 \(+\) 变成了 \(-\)。落实到矩阵计算上，就是：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;相关直接使用原核；卷积先将核旋转 180°，再对应相乘求和&lt;/strong&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;注意，旋转 180° 相当于同时上下翻转、左右翻转，&lt;strong&gt;不等于转置&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;卷积的性质&#34;&gt;卷积的性质
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;性质&lt;/th&gt;
+					&lt;th&gt;公式&lt;/th&gt;
+					&lt;th&gt;直观含义&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;交换律&lt;/td&gt;
+					&lt;td&gt;\(f*h=h*f\)&lt;/td&gt;
+					&lt;td&gt;数学上交换两个卷积对象，结果相同&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;分配律&lt;/td&gt;
+					&lt;td&gt;\(f*(h+g)=f*h+f*g\)&lt;/td&gt;
+					&lt;td&gt;先把核相加再卷积，等于分别卷积后把结果相加&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;结合律&lt;/td&gt;
+					&lt;td&gt;\((f*h)*g=f*(h*g)\)&lt;/td&gt;
+					&lt;td&gt;连续两次卷积，可以先合成一个核&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;微分性质&lt;/td&gt;
+					&lt;td&gt;\((f*h)&#39;=f&#39;*h=f*h&#39;\)&lt;/td&gt;
+					&lt;td&gt;对卷积结果求导，可以转为对其中一个对象求导&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;结合律和微分性质比较容易联系到图像处理。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;先平滑图像，再求图像的变化，可以通过一个“平滑核的导数”直接完成&lt;/strong&gt;。&lt;/p&gt;
+$$
+\frac{\partial}{\partial x}(f*h) = f*\frac{\partial h}{\partial x}
+$$&lt;h3 id=&#34;卷积定理&#34;&gt;卷积定理
+&lt;/h3&gt;&lt;p&gt;设：&lt;/p&gt;
+$$
+g=f*h
+$$$$
+F=\mathcal F(f),\qquad H=\mathcal F(h),\qquad G=\mathcal F(g)
+$$&lt;p&gt;卷积定理：&lt;/p&gt;
+$$
+\boxed{\mathcal F(f*h)=F\cdot H}
+$$&lt;p&gt;&lt;strong&gt;空间域中的卷积，对应频域中的逐点相乘&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;所以，同一个滤波结果可以有两种计算路径：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;在空间域计算&lt;/th&gt;
+					&lt;th&gt;在频域计算&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;用核在图像上滑动、乘加&lt;/td&gt;
+					&lt;td&gt;分别变换图像和核，将频谱逐点相乘，再逆变换&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;\(g=f*h\)&lt;/td&gt;
+					&lt;td&gt;\(g=\mathcal F^{-1}(F\cdot H)\)&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;这里的“逐点相乘”，是同一个频率位置上的两个数相乘，&lt;strong&gt;不是矩阵乘法&lt;/strong&gt;：&lt;/p&gt;
+$$
+G(u,v)=F(u,v)H(u,v)
+$$&lt;h2 id=&#34;图像噪声与空间滤波&#34;&gt;图像噪声与空间滤波
+&lt;/h2&gt;&lt;h3 id=&#34;常见噪声&#34;&gt;常见噪声
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;噪声类型&lt;/th&gt;
+					&lt;th&gt;直观表现&lt;/th&gt;
+					&lt;th&gt;理解重点&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;高斯噪声&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;像素值受到随机扰动，大多数扰动较小，少数较大&lt;/td&gt;
+					&lt;td&gt;噪声值服从正态分布&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;椒盐噪声&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;图像中随机出现很亮、很暗的点&lt;/td&gt;
+					&lt;td&gt;少量像素突然变成极端值&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;泊松噪声&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;光子等计数过程产生随机波动&lt;/td&gt;
+					&lt;td&gt;噪声大小与信号强度有关&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;高斯滤波&#34;&gt;高斯滤波
+&lt;/h3&gt;&lt;p&gt;想象一片原本灰度接近的区域：有些像素被噪声推高，有些被拉低。把邻居的信息平均起来，可以减轻这些随机波动。&lt;/p&gt;
+&lt;p&gt;高斯滤波采用的是&lt;strong&gt;加权平均&lt;/strong&gt;：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;近处的像素权重大，远处的像素权重小&lt;/strong&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;二维高斯函数为：&lt;/p&gt;
+$$
+G(x,y)=\frac{1}{2\pi\sigma^2} \exp\left(-\frac{x^2+y^2}{2\sigma^2}\right)
+$$&lt;ul&gt;
+&lt;li&gt;\(x^2+y^2\)：当前位置到核中心的距离平方，距离越大，权重越小。&lt;/li&gt;
+&lt;li&gt;\(\sigma\)：控制权重分布有多宽。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;实际使用时，我们在有限网格上取这些值，再进行归一化，使得：&lt;/p&gt;
+$$
+\sum_{u,v}G(u,v)=1
+$$&lt;p&gt;\(\sigma\) 和核大小决定平滑的程度&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;\(\sigma\) 较小&lt;/strong&gt;：权重集中在中心附近，主要参考较近的像素。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;\(\sigma\) 较大&lt;/strong&gt;：权重分布更宽，较远的像素也能产生明显影响。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;核的大小要与 \(\sigma\) 配合。&lt;/p&gt;
+&lt;p&gt;根据一维正态分布的 \(3\sigma\) 原则，常用核边长：&lt;/p&gt;
+$$
+\boxed{S=2\lceil3\sigma\rceil+1}
+$$&lt;p&gt;平滑越强，会有什么代价？&lt;/p&gt;
+&lt;p&gt;压低随机波动，也会削弱真实的细节。对于椒盐噪声，极端值还可能通过平均影响周围像素，通常中值滤波更合适。&lt;/p&gt;
+&lt;h3 id=&#34;双边滤波&#34;&gt;双边滤波
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;离我近，而且灰度和我接近，才给它较大的权重&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;设中心位置为 \(p\)，邻域中的某个位置为 \(q\)，总权重由两项相乘：&lt;/p&gt;
+$$
+w(p,q)= \underbrace{ \exp\left(-\frac{\|p-q\|^2}{2\sigma_s^2}\right) }_{\text{空间距离权重}} \underbrace{ \exp\left(-\frac{(I(p)-I(q))^2}{2\sigma_r^2}\right) }_{\text{灰度差权重}}
+$$&lt;p&gt;&lt;strong&gt;完整结果仍然是加权平均：&lt;/strong&gt;&lt;/p&gt;
+$$
+\boxed{ \widehat I(p)= \frac{ \sum_{q\in\Omega_p}w(p,q)I(q) }{ \sum_{q\in\Omega_p}w(p,q) } }
+$$&lt;p&gt;其中 \(\Omega_p\) 表示中心像素的邻域。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;\(\sigma_s\)&lt;/strong&gt;：在空间上参考多大范围。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;\(\sigma_r\)&lt;/strong&gt;：对灰度差有多宽容。越大，越允许不同灰度的像素一起平均，效果越接近高斯滤波；过小则可能连噪声波动也保留下来。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;频域滤波&#34;&gt;频域滤波
+&lt;/h2&gt;&lt;p&gt;傅里叶变换把图像分解成不同频率的成分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;低频&lt;/strong&gt;：灰度变化缓慢，例如大面积平坦区域、整体明暗变化。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;高频&lt;/strong&gt;：灰度变化迅速，例如边缘、细纹理，也包括某些噪声。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;频域滤波就是用一个函数 \(H(u,v)\)，调整这些成分：&lt;/p&gt;
+$$
+\boxed{G(u,v)=H(u,v)F(u,v)}
+$$&lt;p&gt;再逆变换回图像：&lt;/p&gt;
+$$
+g(x,y)=\mathcal F^{-1}\{G(u,v)\}
+$$&lt;p&gt;其中，\(F\) 是原图频谱，\(G\) 是处理后的频谱，\(H\) 是&lt;strong&gt;滤波器的频率响应，也常称为频域掩模&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;本节使用的是简单的二值掩模：&lt;/p&gt;
+$$
+H(u,v)= \begin{cases} 1,&amp;\text{允许该频率通过}\\ 0,&amp;\text{去除该频率} \end{cases}
+$$&lt;p&gt;相乘是在&lt;strong&gt;相同频率位置上逐点相乘&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;中心化频谱&#34;&gt;中心化频谱
+&lt;/h3&gt;&lt;p&gt;中心化后：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;中心附近是低频&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;距离中心越远，频率越高&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;幅度图中越亮的位置，表示对应频率成分的幅值越大&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;频谱中的位置表示频率；这些频率成分共同作用于整幅图像。因此，保留频谱中心，得到的是低频成分组成的图像。&lt;/p&gt;
+&lt;p&gt;把频谱中心设为坐标原点，用 \((u_c,v_c)\) 表示相对中心的坐标，那么频率点到中心的距离为：&lt;/p&gt;
+$$
+\boxed{D(u,v)=\sqrt{u_c^2+v_c^2}}
+$$&lt;p&gt;接下来三种滤波器，都可以根据这个距离来定义。&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;滤波器&lt;/th&gt;
+					&lt;th&gt;保留条件&lt;/th&gt;
+					&lt;th&gt;掩模中允许通过的形状&lt;/th&gt;
+					&lt;th&gt;图像效果&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;低通&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;\(D\lt D_0\)&lt;/td&gt;
+					&lt;td&gt;中心圆盘&lt;/td&gt;
+					&lt;td&gt;平滑、模糊，削弱细节&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;高通&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;\(D\gt D_0\)&lt;/td&gt;
+					&lt;td&gt;中心圆盘之外&lt;/td&gt;
+					&lt;td&gt;突出边缘与细节&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;带通&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;\(D_1\lt D\lt D_2\)&lt;/td&gt;
+					&lt;td&gt;中间圆环&lt;/td&gt;
+					&lt;td&gt;保留某一频率范围的结构&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;低通滤波&#34;&gt;低通滤波
+&lt;/h3&gt;&lt;p&gt;例如玫瑰图像经过低通后，整体形状还在，但花瓣纹理和轮廓变得模糊，因为这些细节需要较高频率来表达。&lt;/p&gt;
+&lt;p&gt;阈值的影响是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;\(D_0\) &lt;strong&gt;变小&lt;/strong&gt;：保留的频率更少，通常更模糊。&lt;/li&gt;
+&lt;li&gt;\(D_0\) &lt;strong&gt;变大&lt;/strong&gt;：允许更多高频通过，保留更多细节。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;上一部分的高斯平滑也具有低通作用。不过，高斯滤波会平滑地衰减高频，课件这里的圆形掩模则是直接截断。&lt;/p&gt;
+&lt;h3 id=&#34;高通滤波&#34;&gt;高通滤波
+&lt;/h3&gt;&lt;p&gt;结果中，大面积平坦区域被压低，建筑轮廓、窗框、花瓣边缘变得明显。&lt;/p&gt;
+&lt;p&gt;这里注意“边缘锐化”：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;单独的高通结果主要是边缘和细节响应&lt;/strong&gt;。 若想让原图更清晰，同时保留原图的主体内容，通常把它加回去：&lt;/p&gt;
+$$
+\boxed{g_{\text{锐化}}=f+\lambda g_{\text{高通}}}
+$$&lt;p&gt;其中 \(\lambda\) 控制增强程度。&lt;/p&gt;
+&lt;p&gt;高通的 \(D_0\) 越大，被去掉的低频和中频越多，留下的成分越偏向细小变化；效果不一定更好，也可能突出噪声。&lt;/p&gt;
+&lt;h3 id=&#34;带通滤波&#34;&gt;带通滤波
+&lt;/h3&gt;&lt;p&gt;它同时去掉：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;靠近中心的低频；&lt;/li&gt;
+&lt;li&gt;很外围的高频。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;留下中间一圈，因此可以突出&lt;strong&gt;某一尺度的纹理或结构&lt;/strong&gt;。较粗的结构通常对应较低频率，较细的纹理通常对应较高频率。&lt;/p&gt;
+&lt;h3 id=&#34;振铃现象&#34;&gt;振铃现象
+&lt;/h3&gt;&lt;p&gt;圆盘、圆环掩模，在边界处从 \(1\) 突然变成 \(0\)。这类理想滤波器容易让图像边缘附近出现一圈圈明暗波纹，称为&lt;strong&gt;振铃现象&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;低通后的玫瑰轮廓附近，就能看到这种现象。因此，低通后的图像可能同时出现模糊和波纹。&lt;/p&gt;
+&lt;h2 id=&#34;数学形态学&#34;&gt;数学形态学
+&lt;/h2&gt;&lt;h3 id=&#34;前景集合与结构元素&#34;&gt;前景集合与结构元素
+&lt;/h3&gt;&lt;p&gt;先考虑二值图像：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;前景为 \(1\)，表示我们关心的目标。&lt;/li&gt;
+&lt;li&gt;背景为 \(0\)。&lt;/li&gt;
+&lt;li&gt;所有前景像素的坐标，组成集合 \(A\)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;例如，一幅图中有三个前景像素，就可以写成：&lt;/p&gt;
+$$
+A=\{(2,3),(2,4),(3,4)\}
+$$&lt;p&gt;接下来引入一个小模板，叫作&lt;strong&gt;结构元素 \(B\)&lt;/strong&gt;，例如：&lt;/p&gt;
+$$
+B_{\text{方形}}= \begin{bmatrix} 1&amp;1&amp;1\\ 1&amp;1&amp;1\\ 1&amp;1&amp;1 \end{bmatrix}, \qquad B_{\text{十字}}= \begin{bmatrix} 0&amp;1&amp;0\\ 1&amp;1&amp;1\\ 0&amp;1&amp;0 \end{bmatrix}
+$$&lt;p&gt;它有三个需要注意的地方：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;形状&lt;/strong&gt;：决定检查哪些方向，例如十字形关注上下左右。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;大小&lt;/strong&gt;：决定处理多大尺度的结构。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;原点&lt;/strong&gt;：决定模板放到当前位置时，怎样与图像对齐，通常选中心。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;只有结构元素中为 \(1\) 的位置参与判断&lt;/strong&gt;。 十字形四个角的 \(0\) 不要求图像对应位置也是背景。&lt;/p&gt;
+&lt;p&gt;集合符号也很直观：并集是合起来，交集是共同部分，补集是背景，差集是从一个集合中去掉另一个集合。&lt;/p&gt;
+&lt;h3 id=&#34;膨胀与腐蚀&#34;&gt;膨胀与腐蚀
+&lt;/h3&gt;&lt;h4 id=&#34;膨胀&#34;&gt;膨胀
+&lt;/h4&gt;&lt;p&gt;把结构元素的原点依次放到每一个前景点上，将它覆盖的位置合起来，就是膨胀结果：&lt;/p&gt;
+$$
+\boxed{A\oplus B=\{a+b\mid a\in A,\ b\in B\}}
+$$&lt;p&gt;例如，图像里只有一个前景点，用中心对齐的 \(3\times3\) 方形结构元素膨胀，就会得到一个 \(3\times3\) 的前景块。&lt;/p&gt;
+&lt;p&gt;常见用途是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;加粗目标。&lt;/li&gt;
+&lt;li&gt;连接较小的断口。&lt;/li&gt;
+&lt;li&gt;填补较小的空隙。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;采用另一种等价写法：&lt;strong&gt;先将 \(B\) 关于原点反射，再滑动；只要与前景有重叠，就输出 \(1\)&lt;/strong&gt;。对于中心对称的方形、十字形，反射前后相同。&lt;/p&gt;
+&lt;h4 id=&#34;腐蚀&#34;&gt;腐蚀
+&lt;/h4&gt;&lt;p&gt;将 \(B\) 的原点放到位置 \(z\)。如果它所有为 \(1\) 的位置都落在前景中，就保留 \(z\)：&lt;/p&gt;
+$$
+\boxed{A\ominus B=\{z\mid B_z\subseteq A\}}
+$$&lt;p&gt;其中 \(B_z\) 表示把结构元素移动到位置 \(z\)。&lt;/p&gt;
+&lt;p&gt;例如，一个 \(3\times3\) 实心前景块，用 \(3\times3\) 方形结构元素腐蚀后，只剩中心点。&lt;/p&gt;
+&lt;p&gt;常见用途是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;缩小目标。&lt;/li&gt;
+&lt;li&gt;去掉小前景噪点。&lt;/li&gt;
+&lt;li&gt;去除细突出物、断开细连接。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;“膨胀只增加、腐蚀只减少”有一个前提：结构元素包含原点&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;两者的对偶关系：&lt;/p&gt;
+$$
+(A\ominus B)^c=A^c\oplus\widehat B
+$$&lt;p&gt;可以理解为：&lt;strong&gt;前景腐蚀后留下的背景，等于原背景用反射结构元素膨胀的结果&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;开运算先腐蚀再膨胀&#34;&gt;开运算：先腐蚀，再膨胀
+&lt;/h3&gt;$$
+\boxed{A\circ B=(A\ominus B)\oplus B}
+$$&lt;p&gt;过程是：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;腐蚀时，小噪点、细凸起、窄连接容易消失。&lt;/li&gt;
+&lt;li&gt;膨胀时，让保留下来的主体重新扩张。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;小噪点如果在第一步完全消失，第二步就没有对应的前景点让它重新长出来。&lt;/p&gt;
+&lt;p&gt;因此，开运算常用于&lt;strong&gt;去除小前景噪点、细凸起，断开窄连接&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;闭运算先膨胀再腐蚀&#34;&gt;闭运算：先膨胀，再腐蚀
+&lt;/h3&gt;$$
+\boxed{A\bullet B=(A\oplus B)\ominus B}
+$$&lt;p&gt;过程是：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;膨胀时，较窄的断口被连接，小孔洞被填住。&lt;/li&gt;
+&lt;li&gt;腐蚀时，让膨胀后的目标收缩。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;因此，闭运算常用于&lt;strong&gt;连接小断口、填补小孔洞和窄缝&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;开闭运算的性质&#34;&gt;开、闭运算的性质
+&lt;/h3&gt;&lt;p&gt;第一，开运算的结果包含于原图，闭运算的结果包含原图：&lt;/p&gt;
+$$
+A\circ B\subseteq A, \qquad A\subseteq A\bullet B
+$$&lt;p&gt;第二，&lt;strong&gt;用相同结构元素重复操作，结果不再变化&lt;/strong&gt;，称为幂等性：&lt;/p&gt;
+$$
+(A\circ B)\circ B=A\circ B
+$$$$
+(A\bullet B)\bullet B=A\bullet B
+$$&lt;p&gt;第三，它们保持集合的包含关系：如果原来的目标 \(C\subseteq A\)，分别做相同的开运算或闭运算后，结果仍保持这个包含关系。&lt;/p&gt;
+&lt;p&gt;注意，&lt;strong&gt;幂等性不代表开、闭运算可以交换顺序&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;边界提取&#34;&gt;边界提取
+&lt;/h3&gt;&lt;p&gt;腐蚀会去掉目标靠外的一层。用原图减去腐蚀结果，就能留下这层边界：&lt;/p&gt;
+$$
+\boxed{\beta(A)=A\setminus(A\ominus B)}
+$$&lt;h3 id=&#34;孔洞填充&#34;&gt;孔洞填充
+&lt;/h3&gt;&lt;p&gt;在孔洞内部选择一个起始点，记作 \(X_0\)。&lt;/p&gt;
+&lt;p&gt;每轮先膨胀，再与背景求交：&lt;/p&gt;
+$$
+\boxed{X_k=(X_{k-1}\oplus B)\cap A^c}
+$$&lt;p&gt;闭运算填孔受到结构元素尺度的限制；这种种子生长方法可以填充选定的封闭孔洞。&lt;/p&gt;
+&lt;h3 id=&#34;连通分量提取&#34;&gt;连通分量提取
+&lt;/h3&gt;&lt;p&gt;连通分量就是图像中&lt;strong&gt;彼此连在一起的一块前景&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;这次把起始点 \(X_0\) 放在目标内部，迭代公式改为：&lt;/p&gt;
+$$
+\boxed{X_k=(X_{k-1}\oplus B)\cap A}
+$$&lt;p&gt;与孔洞填充相比，只改变了允许生长的区域：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;孔洞填充与 \(A^c\) 求交&lt;/strong&gt;：在背景中生长。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;连通分量提取与 \(A\) 求交&lt;/strong&gt;：在前景中生长。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

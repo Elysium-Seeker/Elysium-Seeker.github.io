@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="直方图均衡化与匹配、空间平滑和梯度锐化、Butterworth 滤波，以及残差超分辨率与多尺度去模糊。">
+<title>计算机视觉 | 第六讲：图像增强</title>
+
+<link rel='canonical' href='https://Elysium-Seeker.github.io/p/cv-lecture-6-image-enhancement/'>
+
+<link rel="stylesheet" href="/scss/style.min.14391edec1bcf69cbfd0ffc7bcb2ba2d40c8649ce70e16557424e09eb7687faf.css"><meta property='og:title' content="计算机视觉 | 第六讲：图像增强">
+<meta property='og:description' content="直方图均衡化与匹配、空间平滑和梯度锐化、Butterworth 滤波，以及残差超分辨率与多尺度去模糊。">
+<meta property='og:url' content='https://Elysium-Seeker.github.io/p/cv-lecture-6-image-enhancement/'>
+<meta property='og:site_name' content='Elysium-Seeker'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='图像处理' /><meta property='article:tag' content='图像增强' /><meta property='article:tag' content='深度学习' /><meta property='article:published_time' content='2026-09-21T23:11:10&#43;08:00'/><meta property='article:modified_time' content='2026-09-21T23:16:54&#43;08:00'/>
+<meta name="twitter:title" content="计算机视觉 | 第六讲：图像增强">
+<meta name="twitter:description" content="直方图均衡化与匹配、空间平滑和梯度锐化、Butterworth 滤波，以及残差超分辨率与多尺度去模糊。">
+    <link rel="shortcut icon" href="/favicon.ico" />
+<style>
+    :root {
+        --article-font-family: "Noto Serif SC", var(--base-font-family);
+		--article-font-size: 1.7rem;
+		--article-line-height: 1.8;
+    }
+</style>
+
+<script>
+		(function () {
+		    const customFont = document.createElement('link');
+		    customFont.href = "https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap";
+		
+		    customFont.type = "text/css";
+		    customFont.rel = "stylesheet";
+		
+		    document.head.appendChild(customFont);
+		}());
+</script>
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/b_bafc54ed2304790292888aa8183afddb_hu_25b25cb3ac2ccae0.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">⭐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Elysium-Seeker</a></h1>
+            <h2 class="site-description">请用一支玫瑰纪念我</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Elysium-Seeker'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E9%93%BE/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友链</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#直方图处理">直方图处理</a>
+      <ol>
+        <li><a href="#灰度直方图">灰度直方图</a></li>
+        <li><a href="#直方图均衡化">直方图均衡化</a>
+          <ol>
+            <li><a href="#全局与局部均衡化">全局与局部均衡化</a></li>
+          </ol>
+        </li>
+        <li><a href="#直方图匹配">直方图匹配</a></li>
+      </ol>
+    </li>
+    <li><a href="#空间平滑">空间平滑</a>
+      <ol>
+        <li><a href="#均值滤波">均值滤波</a></li>
+        <li><a href="#超限像素平滑">超限像素平滑</a></li>
+        <li><a href="#k-近邻平滑">K 近邻平滑</a></li>
+        <li><a href="#最大均匀性平滑">最大均匀性平滑</a></li>
+        <li><a href="#中值滤波">中值滤波</a></li>
+      </ol>
+    </li>
+    <li><a href="#空间锐化">空间锐化</a>
+      <ol>
+        <li><a href="#梯度与差分">梯度与差分</a></li>
+        <li><a href="#roberts-算子">Roberts 算子</a></li>
+        <li><a href="#prewitt-与-sobel-算子">Prewitt 与 Sobel 算子</a>
+          <ol>
+            <li><a href="#prewitt-算子">Prewitt 算子</a></li>
+            <li><a href="#sobel-算子">Sobel 算子</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#频域增强">频域增强</a>
+      <ol>
+        <li><a href="#频域滤波的流程">频域滤波的流程</a></li>
+        <li><a href="#理想低通滤波器">理想低通滤波器</a></li>
+        <li><a href="#butterworth-低通滤波器">Butterworth 低通滤波器</a></li>
+        <li><a href="#高通滤波器">高通滤波器</a>
+          <ol>
+            <li><a href="#理想高通-ihpf">理想高通 IHPF</a></li>
+            <li><a href="#butterworth-高通-bhpf">Butterworth 高通 BHPF</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#基于深度学习的图像增强">基于深度学习的图像增强</a>
+      <ol>
+        <li><a href="#成对训练与均方误差">成对训练与均方误差</a></li>
+        <li><a href="#vdsr残差超分辨率">VDSR：残差超分辨率</a></li>
+        <li><a href="#多尺度去模糊">多尺度去模糊</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" >
+                计算机视觉
+            </a>
+        
+            <a href="/categories/work/" style="background-color: #708090; color: #fff;">
+                Work
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/cv-lecture-6-image-enhancement/">计算机视觉 | 第六讲：图像增强</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            直方图均衡化与匹配、空间平滑和梯度锐化、Butterworth 滤波，以及残差超分辨率与多尺度去模糊。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-09-21</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 10 分钟
+                </time>
+            </div>
+        <div class="article-lastmod">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time>
+                    2026-09-21
+                </time>
+            </div></footer>
+    
+
+    
+</div>
+
+</header>
+
+    
+
+
+
+
+
+
+
+
+
+
+<section class="article-content">
+    <style>
+.article-content .table-wrapper { position: relative; }
+.article-content .table-wrapper table:has(tr > th:nth-child(3)) { min-width: 640px; }
+.article-content .table-wrapper table:has(tr > th:nth-child(4)) { min-width: 720px; }
+.article-content .table-wrapper th:first-child { min-width: 72px; }
+.article-content .table-wrapper td, .article-content .table-wrapper th { word-break: normal; }
+.article-content img[src$="vdsr-residual.svg"] { width: 380px; max-width: 100%; height: auto; margin: 1.5rem auto; display: block; }
+</style>
+<p><em>手机上可左右滑动，查看完整的宽表格与长公式。</em></p>
+<p>系列笔记：<a class="link" href="/p/cv-lecture-2-digital-image-basics/" >第二讲：数字图像基础</a> · <a class="link" href="/p/cv-lecture-3-deep-neural-networks/" >第三讲：深度神经网络基础</a> · <a class="link" href="/p/cv-lecture-4-image-transforms/" >第四讲：图像变换</a> · <a class="link" href="/p/cv-lecture-5-image-filtering-morphology/" >第五讲：图像滤波与数学形态学</a> · 第六讲：图像增强</p>
+<p>目的：让我们关心的内容更容易观察或分析。</p>
+<p>方法：直接处理像素的<strong>空域方法</strong>，处理频谱的<strong>频域方法</strong>，以及从数据中学习的<strong>深度学习方法</strong>。</p>
+<h2 id="直方图处理">直方图处理
+</h2><h3 id="灰度直方图">灰度直方图
+</h3><p>灰度直方图统计每个灰度值出现的次数。</p>
+<p>对于一幅 8 位灰度图：</p>
+<ul>
+<li>横轴是灰度值 \(0\sim255\)。</li>
+<li>纵轴是对应灰度的像素数量。</li>
+</ul>
+<p>如果灰度为 \(r_k\) 的像素有 \(n_k\) 个，全图共有 \(N\) 个像素，那么归一化直方图为：</p>
+$$
+p(r_k)=\frac{n_k}{N}
+$$<p>它表示：随机选一个像素，灰度为 \(r_k\) 的比例是多少。</p>
+<h3 id="直方图均衡化">直方图均衡化
+</h3><p>假设一幅图的大多数像素都挤在 \(100\sim120\) 之间，明暗差别很小，看起来容易发灰。</p>
+<p>直方图均衡化希望建立一个灰度映射，把这些灰度分布展开，改善对比度。</p>
+<p>核心工具是<strong>累计分布函数，CDF</strong>：</p>
+$$
+\boxed{ T(r_k)=\sum_{i=0}^{k}p(r_i) }
+$$<p>它的含义是：</p>
+<blockquote>
+<p><strong>灰度不超过 \(r_k\) 的像素，占整幅图的多少？</strong></p>
+</blockquote>
+<p>离散下计算：</p>
+$$
+p(r_k)=\frac{n_k}{N}
+$$$$
+c_k=\sum_{i=0}^{k}p(r_i)
+$$$$
+\boxed{ s_k=\operatorname{round}\bigl((L-1)c_k\bigr) }
+$$<p>离散灰度和量化会使输出直方图未必完全均匀。</p>
+<h4 id="全局与局部均衡化">全局与局部均衡化
+</h4><p>前面的方法统计整幅图，得到一张统一的映射表，称为<strong>全局直方图均衡化</strong>。</p>
+<p>它适合调整整体对比度，但可能照顾不到很小的局部区域。</p>
+<p>例如，画面主体很亮，角落里有一个很小的暗区域。暗区域的像素数量少，对全局直方图影响不大，均衡化后里面的细节可能仍然不明显。</p>
+<p><strong>局部均衡化</strong>则在每个位置附近建立一个小窗口：</p>
+<ol>
+<li>统计窗口内的直方图。</li>
+<li>计算窗口内的 CDF。</li>
+<li>用得到的映射修改窗口中心像素。</li>
+<li>移动窗口，继续处理。</li>
+</ol>
+<p>因此，同样的原始灰度，在不同位置可能得到不同的新值。</p>
+<p>它能突出局部细节，但也可能放大局部噪声。</p>
+<h3 id="直方图匹配">直方图匹配
+</h3><p>设：</p>
+<ul>
+<li>原图的累计分布函数为 \(T(r)\)。</li>
+<li>目标的累计分布函数为 \(G(z)\)。</li>
+</ul>
+<p>希望变换前后对应灰度的累计比例一致：</p>
+$$
+G(z)=T(r)
+$$<p>所以：</p>
+$$
+\boxed{z=G^{-1}\bigl(T(r)\bigr)}
+$$<p>实际步骤就是：</p>
+<ol>
+<li>计算原图 CDF。</li>
+<li>计算目标 CDF。</li>
+<li>对每个原灰度，寻找目标 CDF 中最接近的累计值。</li>
+<li>建立映射表，逐像素替换。</li>
+</ol>
+<h2 id="空间平滑">空间平滑
+</h2><h3 id="均值滤波">均值滤波
+</h3><p>设当前位置为 \(p\)，邻域为 \(\Omega_p\)，均值滤波为：</p>
+$$
+\boxed{ g(p)=\frac{1}{|\Omega_p|} \sum_{q\in\Omega_p}f(q) }
+$$<p>例如，使用 \(3\times3\) 窗口，就把里面 9 个像素相加，再除以 9。</p>
+<p>它和第五讲的高斯滤波都通过加权平均实现平滑：</p>
+<ul>
+<li><strong>均值滤波</strong>：窗口内各像素权重相同。</li>
+<li><strong>高斯滤波</strong>：靠近中心的像素权重较大。</li>
+</ul>
+<p>这些权重固定的求和操作属于<strong>线性滤波</strong>。后面涉及阈值判断、按灰度选邻居、取中值的方法，通常属于非线性滤波。</p>
+<p>窗口大小需要在抑制噪声和保留细节之间取舍。</p>
+<h3 id="超限像素平滑">超限像素平滑
+</h3><p>中心像素与邻域均值相差太大时，用均值替换；差异不大时，保留原值。</p>
+<p>设邻域均值为 \(\bar f(p)\)，阈值为 \(T\)：</p>
+$$
+\boxed{ g(p)= \begin{cases} \bar f(p),&|f(p)-\bar f(p)|\gt T\\ f(p),&\text{其他情况} \end{cases} }
+$$<h3 id="k-近邻平滑">K 近邻平滑
+</h3><p>这个方法改变的是<strong>参与平均的像素</strong>。</p>
+<p>先在窗口内比较：</p>
+$$
+|f(q)-f(p)|
+$$<p>也就是各像素与中心像素的灰度差，再选出差异最小的 \(K\) 个求平均。</p>
+<p>这里的“近”指的是<strong>灰度接近</strong>。</p>
+<h3 id="最大均匀性平滑">最大均匀性平滑
+</h3><p>K 近邻选择单个像素；这里则在多个候选区域中，选择<strong>内部灰度最一致的区域</strong>。</p>
+<p>“均匀程度”可以用灰度方差衡量：</p>
+$$
+v_j= \frac{1}{|R_j|} \sum_{q\in R_j} \bigl(f(q)-\mu_j\bigr)^2
+$$<p>其中：</p>
+<ul>
+<li>\(R_j\) 是第 \(j\) 个候选区域。</li>
+<li>\(\mu_j\) 是该区域的灰度均值。</li>
+<li>方差越小，区域内各像素越接近。</li>
+</ul>
+<p>计算过程就是：</p>
+<ol>
+<li>计算每个候选区域的均值和方差。</li>
+<li>找出方差最小的区域。</li>
+<li>用这个区域的均值替换中心像素。</li>
+</ol>
+<h3 id="中值滤波">中值滤波
+</h3><p>中值滤波把窗口内的像素值排序，用排序后的中间值替换中心像素：</p>
+$$
+\boxed{ g(p)=\operatorname{median} \{f(q):q\in\Omega_p\} }
+$$<h2 id="空间锐化">空间锐化
+</h2><p>差分可以把边缘的位置突出出来。</p>
+<h3 id="梯度与差分">梯度与差分
+</h3><p>约定 \(x\) 向右、\(y\) 向下。图像 \(f(x,y)\) 的梯度为：</p>
+$$
+\nabla f= \begin{bmatrix} G_x\\ G_y \end{bmatrix} = \begin{bmatrix} \frac{\partial f}{\partial x}\\ \frac{\partial f}{\partial y} \end{bmatrix}
+$$<p>其中：</p>
+<ul>
+<li>\(G_x\)：水平方向上的灰度变化。</li>
+<li>\(G_y\)：竖直方向上的灰度变化。</li>
+</ul>
+<p>数字图像的坐标是离散的，课件用相邻像素的差近似偏导数：</p>
+$$
+G_x=f(x+1,y)-f(x,y)
+$$$$
+G_y=f(x,y+1)-f(x,y)
+$$<p>对应的模板就是：</p>
+$$
+\begin{bmatrix}-1&1\end{bmatrix}, \qquad \begin{bmatrix}-1\\1\end{bmatrix}
+$$<p>计算出两个方向的响应后，可以合成<strong>梯度幅值</strong>：</p>
+$$
+M(x,y)=\sqrt{G_x^2+G_y^2}
+$$<p>它表示这个位置的灰度变化有多强。为了简化计算，也常用：</p>
+$$
+M(x,y)\approx |G_x|+|G_y|
+$$<p>这里取平方或绝对值，是为了同时保留“从暗到亮”和“从亮到暗”的变化。</p>
+<h3 id="roberts-算子">Roberts 算子
+</h3>$$
+R_1= \begin{bmatrix} -1&0\\ 0&1 \end{bmatrix}, \qquad R_2= \begin{bmatrix} 0&-1\\ 1&0 \end{bmatrix}
+$$<p>对一个 \(2\times2\) 邻域：</p>
+$$
+\begin{bmatrix} a&b\\ c&d \end{bmatrix}
+$$<p>两个响应分别是：</p>
+$$
+r_1=d-a,\qquad r_2=c-b
+$$<p>也就是两条对角线上的像素分别相减。需要综合两个方向时，可以计算：</p>
+$$
+M_R=\sqrt{r_1^2+r_2^2}
+$$<p><strong>Roberts 的特点是模板小、计算简单，但缺少邻域平滑，对噪声比较敏感</strong>。</p>
+<h3 id="prewitt-与-sobel-算子">Prewitt 与 Sobel 算子
+</h3><h4 id="prewitt-算子">Prewitt 算子
+</h4><p>它的两个基本模板是：</p>
+$$
+P_x= \begin{bmatrix} -1&0&1\\ -1&0&1\\ -1&0&1 \end{bmatrix}, \qquad P_y= \begin{bmatrix} -1&-1&-1\\ 0&0&0\\ 1&1&1 \end{bmatrix}
+$$<p>先看 \(P_x\)：它在每一行都计算“右边减左边”，再把三行结果相加：</p>
+$$
+G_x= (\text{右上}-\text{左上}) +(\text{右中}-\text{左中}) +(\text{右下}-\text{左下})
+$$<p>这样就综合了附近三行的信息。忽略整体比例系数，可以理解为：<strong>横向做差，纵向平均</strong>。</p>
+<p>同理，\(P_y\) 是纵向做差、横向平均。</p>
+<h4 id="sobel-算子">Sobel 算子
+</h4>$$
+S_x= \begin{bmatrix} -1&0&1\\ -2&0&2\\ -1&0&1 \end{bmatrix}, \qquad S_y= \begin{bmatrix} -1&-2&-1\\ 0&0&0\\ 1&2&1 \end{bmatrix}
+$$<p>看 \(S_x\) 的计算：</p>
+$$
+G_x= (\text{右上}-\text{左上}) +2(\text{右中}-\text{左中}) +(\text{右下}-\text{左下})
+$$<p>与 Prewitt 相比，<strong>中间一行的差分权重变成了 \(2\)</strong>。</p>
+<p>这两个算子的关系可以记成：</p>
+$$
+\text{Prewitt 的平滑权重：}[1,\ 1,\ 1]
+$$$$
+\text{Sobel 的平滑权重：}[1,\ 2,\ 1]
+$$$$
+\text{灰度变化小}\Rightarrow\text{响应小}
+$$$$
+\text{灰度变化大}\Rightarrow\text{响应大}
+$$<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>算子</th>
+					<th>模板大小</th>
+					<th>主要思路</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Roberts</td>
+					<td>\(2\times2\)</td>
+					<td>对角像素直接做差</td>
+			</tr>
+			<tr>
+					<td>Prewitt</td>
+					<td>\(3\times3\)</td>
+					<td>差分结合等权平滑</td>
+			</tr>
+			<tr>
+					<td>Sobel</td>
+					<td>\(3\times3\)</td>
+					<td>差分结合加权平滑，权重为 \(1,2,1\)</td>
+			</tr>
+	</tbody>
+</table></div>
+<h2 id="频域增强">频域增强
+</h2><h3 id="频域滤波的流程">频域滤波的流程
+</h3><p>先快速回顾：</p>
+<ul>
+<li><strong>低频</strong>对应缓慢变化的灰度、大范围的明暗结构。</li>
+<li><strong>高频</strong>对应快速变化的灰度，包括边缘、细节，也可能包含噪声。</li>
+</ul>
+<p>课件中的处理流程为：</p>
+$$
+f(x,y) \xrightarrow{\mathrm{DFT}} F(u,v) \xrightarrow{\times H(u,v)} G(u,v) \xrightarrow{\mathrm{IDFT}} g(x,y)
+$$<p>其中：</p>
+$$
+G(u,v)=H(u,v)F(u,v)
+$$<p>\(H(u,v)\) 决定每个频率保留多少：</p>
+<ul>
+<li>\(H=1\)：完整保留。</li>
+<li>\(H=0\)：完全去掉。</li>
+<li>\(H=0.2\)：频域系数的幅度保留为原来的 \(20\%\)。</li>
+</ul>
+<p>下面的滤波器都根据<strong>频率点到零频位置的距离</strong>来设置权重。以频谱中心为坐标原点时：</p>
+$$
+D(u,v)=\sqrt{u^2+v^2}
+$$<p>\(D\) 越小，频率越低；\(D\) 越大，频率越高。这里的距离是在<strong>频谱中</strong>计算的。</p>
+<h3 id="理想低通滤波器">理想低通滤波器
+</h3><p>理想低通滤波器，简称 <strong>ILPF</strong>：</p>
+$$
+H_{\mathrm{ILP}}(u,v)= \begin{cases} 1,&D(u,v)\le D_0\\ 0,&D(u,v)\gt D_0 \end{cases}
+$$<p>\(D_0\) 就是<strong>截止频率</strong>。</p>
+<p>在中心化的二维频谱中，它相当于一个圆形窗口：圆内保留，圆外去掉。</p>
+<p>例如 \(D_0=20\)，距离中心为 \(10\) 的频率可以通过，距离为 \(30\) 的频率就被去掉。</p>
+<p><strong>截止频率怎样影响图像？</strong></p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>调整</th>
+					<th>保留的频率</th>
+					<th>图像效果</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>\(D_0\) 减小</td>
+					<td>更少，只保留更低的频率</td>
+					<td>平滑更强，细节损失更多</td>
+			</tr>
+			<tr>
+					<td>\(D_0\) 增大</td>
+					<td>更多，包括更多高频</td>
+					<td>细节保留更多，高频噪声也可能留下</td>
+			</tr>
+	</tbody>
+</table></div>
+<p><strong>理想低通还有一个问题：振铃</strong>。</p>
+<p>它在截止位置突然从 \(1\) 跳到 \(0\)。这种频域中的硬截断会使空间域响应出现振荡，表现为边缘附近的明暗波纹。课件中人物轮廓附近就能看到这种现象。</p>
+<h3 id="butterworth-低通滤波器">Butterworth 低通滤波器
+</h3><p>巴特沃斯低通滤波器，简称 <strong>BLPF</strong>：</p>
+$$
+H_{\mathrm{BLP}}(u,v) = \frac{1}{ 1+\left(\frac{D(u,v)}{D_0}\right)^{2n} }
+$$<p>需要理解两个参数：</p>
+<ul>
+<li><strong>\(D_0\)：决定过渡发生的位置</strong>。</li>
+<li><strong>\(n\)：决定过渡的陡峭程度，称为阶数</strong>。</li>
+</ul>
+<p>先看一个固定结论：当 \(D=D_0\) 时，</p>
+$$
+H(D_0)=\frac{1}{1+1^{2n}}=\frac12
+$$<p>所以，<strong>无论阶数是多少，Butterworth 在截止频率处都保留一半幅度</strong>。</p>
+<p>再算一个例子。设 \(D_0=20、n=2\)，对于 \(D=40\)：</p>
+$$
+H(40) = \frac{1}{1+(40/20)^4} = \frac{1}{17} \approx0.059
+$$<p>这个频率的幅度只保留约 \(5.9\%\)，受到了明显抑制。</p>
+<p><strong>阶数增大时会怎样？</strong></p>
+<p>在截止位置以内，响应更接近 \(1\)；在截止位置以外，响应更接近 \(0\)。因此：</p>
+$$
+n\uparrow \quad\Longrightarrow\quad \text{过渡更陡，更接近理想低通}
+$$<h3 id="高通滤波器">高通滤波器
+</h3><p>对应的高通与低通之间有一个很方便的关系：</p>
+$$
+\boxed{H_{\mathrm{HP}}=1-H_{\mathrm{LP}}}
+$$<p>低通保留得多的频率，高通就保留得少。</p>
+<h4 id="理想高通-ihpf">理想高通 IHPF
+</h4>$$
+H_{\mathrm{IHP}}(u,v)= \begin{cases} 0,&D(u,v)\le D_0\\ 1,&D(u,v)\gt D_0 \end{cases}
+$$<p>在中心化频谱中，就是去掉中间的圆，保留圆外部分。</p>
+<h4 id="butterworth-高通-bhpf">Butterworth 高通 BHPF
+</h4>$$
+H_{\mathrm{BHP}}(u,v) = \frac{1}{ 1+\left(\frac{D_0}{D(u,v)}\right)^{2n} }, \qquad D(u,v)\gt 0
+$$<p>零频处单独定义为：</p>
+$$
+H_{\mathrm{BHP}}(0)=0
+$$<p>记公式时，可以对照分式的位置：</p>
+$$
+\text{低通：}\frac{D}{D_0} \qquad \text{高通：}\frac{D_0}{D}
+$$<p>检查极限也能帮助理解：对高通来说，频率越接近零，通过比例越小；频率很高时，通过比例接近 \(1\)。</p>
+<p><strong>高通的 \(D_0\) 增大，意味着被抑制的频率范围扩大，更多低频和中频成分被去掉</strong>。 不能直接把它理解成“图像会更清晰”。</p>
+<p>高通抑制了包含平均亮度在内的低频成分，输出往往主要剩下边缘和纹理。</p>
+<p>如果希望在保留原图内容的同时突出细节，可以把适量高通响应加回原图：</p>
+$$
+g(x,y)=f(x,y)+\lambda h_{\mathrm{HP}}(x,y)
+$$<p>其中：</p>
+<ul>
+<li>\(f\)：原图。</li>
+<li>\(h_{\mathrm{HP}}\)：高通滤波得到的细节响应。</li>
+<li>\(\lambda\)：增强强度。</li>
+</ul>
+<p>原图提供整体内容，高通响应补充边缘和细节。由于高频中也可能含有噪声，增强强度过大时，噪声和边缘伪影也可能更明显。</p>
+<h2 id="基于深度学习的图像增强">基于深度学习的图像增强
+</h2><h3 id="成对训练与均方误差">成对训练与均方误差
+</h3><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>任务</th>
+					<th>输入</th>
+					<th>希望得到的输出</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>超分辨率</td>
+					<td>低分辨率图像</td>
+					<td>高分辨率图像</td>
+			</tr>
+			<tr>
+					<td>去模糊</td>
+					<td>模糊图像</td>
+					<td>清晰图像</td>
+			</tr>
+			<tr>
+					<td>去噪</td>
+					<td>含噪图像</td>
+					<td>干净图像</td>
+			</tr>
+			<tr>
+					<td>去雾</td>
+					<td>有雾图像</td>
+					<td>更清晰的无雾图像</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>这些任务都可以表示为：</p>
+$$
+\hat y=F_\theta(x)
+$$<p>其中，\(x\) 是输入图像，\(F_\theta\) 是神经网络，\(\hat y\) 是预测结果。</p>
+<p>训练时，准备输入图像 \(x\) 和对应的目标图像 \(y\)，让预测结果尽量接近目标。课件采用的是<strong>均方误差 MSE</strong>：</p>
+$$
+\mathcal L_{\mathrm{MSE}} = \frac1P\sum_{i=1}^{P}(\hat y_i-y_i)^2
+$$<p>\(P\) 表示参与比较的像素值总数。计算过程就是：<strong>对应位置相减、平方，再取平均</strong>。</p>
+<p>例如，两个目标像素为 \([100,150]\)，预测为 \([98,154]\)：</p>
+$$
+\mathcal L = \frac{(98-100)^2+(154-150)^2}{2} =10
+$$<p>训练通过反向传播调整网络参数，减小这种误差。训练完成后，使用模型时只需要输入待增强图像。</p>
+<h3 id="vdsr残差超分辨率">VDSR：残差超分辨率
+</h3><p>先理解超分辨率的困难：把图像尺寸放大比较容易，但放大后还需要恢复更清楚的边缘和纹理。</p>
+<p>VDSR 的处理分为三步。</p>
+<p><strong>第一步：插值上采样</strong>。</p>
+<p>先把低分辨率图像放大到目标尺寸，得到：</p>
+$$
+x_{\mathrm{ILR}}
+$$<p>ILR 就是 <em>interpolated low-resolution</em>，即经过插值的低分辨率图像。它已经具有目标尺寸，但细节仍可能模糊。</p>
+<p><strong>第二步：预测需要补上的差值</strong>。</p>
+<p>清晰目标与插值图像之间的差为：</p>
+$$
+r=y-x_{\mathrm{ILR}}
+$$<p>这个差值称为<strong>残差</strong>。卷积网络学习预测它：</p>
+$$
+\hat r=R_\theta(x_{\mathrm{ILR}})
+$$<p><strong>第三步：把预测残差加回插值图像</strong>。</p>
+$$
+\boxed{\hat y=x_{\mathrm{ILR}}+\hat r}
+$$<p><img src="/p/cv-lecture-6-image-enhancement/vdsr-residual.svg"
+	
+	
+	
+	loading="lazy"
+	
+		alt="VDSR 残差学习：插值图像与网络预测残差逐像素相加"
+	
+	
+></p>
+<p>例如，插值后某个像素为 \(120\)，清晰目标为 \(132\)，需要补上的残差就是：</p>
+$$
+132-120=12
+$$<p>如果网络预测残差为 \(10\)，最终输出就是：</p>
+$$
+120+10=130
+$$<p><strong>残差学习让网络集中学习插值结果还需要哪些修正</strong>。</p>
+<h3 id="多尺度去模糊">多尺度去模糊
+</h3><p><strong>由粗到细的多尺度网络</strong></p>
+<p>直觉上，图像缩小后，同一段模糊拖影覆盖的像素范围也会缩小。可以先在小尺度上恢复大致结构，再到更大的尺度处理细节。</p>
+<p>课件用三个分辨率说明过程：</p>
+$$
+64\times64 \longrightarrow 128\times128 \longrightarrow 256\times256
+$$<p>具体如下：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>阶段</th>
+					<th>网络输入</th>
+					<th>网络输出</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>粗糙层</td>
+					<td>\(64\times64\) 模糊图像</td>
+					<td>\(64\times64\) 去模糊预测</td>
+			</tr>
+			<tr>
+					<td>精细层 1</td>
+					<td>上一级结果放大到 \(128\times128\)，与本尺度模糊图像拼接</td>
+					<td>\(128\times128\) 去模糊预测</td>
+			</tr>
+			<tr>
+					<td>精细层 2</td>
+					<td>上一级结果放大到 \(256\times256\)，与本尺度模糊图像拼接</td>
+					<td>\(256\times256\) 最终预测</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>这里有两个重点。</p>
+<p><strong>① 每一级都结合本尺度的原始模糊图像</strong>。</p>
+<p>上一级的预测提供已经恢复的大致结构，本尺度的模糊图像则提供更丰富的图像信息。两者共同帮助网络继续细化。</p>
+<p><strong>② 拼接发生在通道维度</strong>。</p>
+<p>以两张 RGB 图像为例，它们的尺寸都是：</p>
+$$
+128\times128\times3
+$$<p>沿通道维度拼接后，得到：</p>
+$$
+128\times128\times6
+$$<p>长宽保持不变，通道数从 \(3\) 变为 \(6\)。</p>
+<p><strong>训练时，三个尺度都计算损失</strong>。</p>
+<p>每一级输出都与<strong>相同尺度的清晰目标图像</strong>比较。按课件的表述，总损失是三个尺度 MSE 的平均：</p>
+$$
+\mathcal L = \frac13 \left( \mathcal L_{64} + \mathcal L_{128} + \mathcal L_{256} \right)
+$$<p>这样，中间阶段也会受到监督，逐步产生更好的去模糊结果。</p>
+<p>第 58 页是效果展示，可以重点观察局部放大图中的文字轮廓、面部和物体边缘。</p>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a>
+        
+            <a href="/tags/%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/">图像增强</a>
+        
+            <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-09-21
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+	const mainArticleElement = document.querySelector(".main-article");
+        renderMathInElement(mainArticleElement, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/cv-lecture-5-image-filtering-morphology/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">计算机视觉 | 第五讲：图像滤波与数学形态学</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cv-lecture-4-image-transforms/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">计算机视觉 | 第四讲：图像变换</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cv-lecture-3-deep-neural-networks/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">计算机视觉 | 第三讲：深度神经网络基础</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/cv-lecture-2-digital-image-basics/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">计算机视觉 | 第二讲：数字图像基础</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/nlp-lecture-2-statistical-learning/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">自然语言处理 | 第二讲：统计学习基础</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 Elysium-Seeker
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+    #TableOfContents > ul, ol {
+        ul, ol {
+            display: none;
+        }
+        .open {
+            display: block;
+        }
+    }
+</style>
+
+<script>
+    function initTocHide() {
+        
+        let toc = document.querySelector(".widget--toc");
+        if (!toc) {
+            return;
+        }
+        
+        window.addEventListener('scroll', function() {
+            
+            let openUl = document.querySelectorAll(".open");
+            if (openUl.length > 0) {
+              openUl.forEach((ul) => {
+                ul.classList.remove("open")
+              })
+            }
+            
+            let currentLi = document.querySelector(".active-class");
+            if (!currentLi) {
+                return
+            }
+            
+            if (currentLi.children.length > 1) {
+                currentLi.children[1].classList.add("open")
+            }
+            
+            let ul = currentLi.parentElement;
+            do {
+                ul.classList.add("open");
+                ul = ul.parentElement.parentElement
+            } while (ul !== undefined && (ul.localName === 'ul' || ul.localName === 'ol'))
+        });
+    }
+    initTocHide()
+</script>
+
+<style>
+    .highlight {
+         
+        max-height: 400px;
+        overflow: hidden;
+    }
+
+    .code-show {
+        max-height: none !important;
+    }
+
+    .code-more-box {
+        width: 100%;
+        padding-top: 78px;
+        background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(#fff));
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+    }
+
+    .code-more-btn {
+        display: block;
+        margin: auto;
+        width: 44px;
+        height: 22px;
+        background: #f0f0f5;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        padding-top: 6px;
+        cursor: pointer;
+    }
+
+    .code-more-img {
+        cursor: pointer !important;
+        display: block;
+        margin: auto;
+        width: 22px;
+        height: 16px;
+    }
+</style>
+
+<script>
+  function initCodeMoreBox() {
+    let codeBlocks = document.querySelectorAll(".highlight");
+    if (!codeBlocks) {
+      return;
+    }
+    codeBlocks.forEach(codeBlock => {
+      
+      if (codeBlock.scrollHeight <= codeBlock.clientHeight) {
+        return;
+      }
+      
+      
+      let codeMoreBox = document.createElement('div');
+      codeMoreBox.classList.add('code-more-box');
+      
+      let codeMoreBtn = document.createElement('span');
+      codeMoreBtn.classList.add('code-more-btn');
+      codeMoreBtn.addEventListener('click', () => {
+        codeBlock.classList.add('code-show');
+        codeMoreBox.style.display = 'none';
+        
+        window.dispatchEvent(new Event('resize'))
+      })
+      
+      let img = document.createElement('img');
+      img.classList.add('code-more-img');
+      img.src = "https://Elysium-Seeker.github.io/icons/codeMore.png"
+      
+      codeMoreBtn.appendChild(img);
+      codeMoreBox.appendChild(codeMoreBtn);
+      codeBlock.appendChild(codeMoreBox)
+    })
+  }
+  
+  initCodeMoreBox();
+</script>
+
+<style>
+    #backTopBtn {
+        display: none;
+        position: fixed;
+        bottom: 30px;
+        z-index: 99;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        background-image: url(https://Elysium-Seeker.github.io/icons/backTop.svg);
+    }
+</style>
+
+<script>
+    
+
+    function initScrollTop() {
+        let rightSideBar = document.querySelector(".right-sidebar");
+        if (!rightSideBar) {
+            return;
+        }
+        
+        let btn = document.createElement("div");
+        btn.id = "backTopBtn";
+        btn.onclick = backToTop
+        rightSideBar.appendChild(btn)
+        
+        window.onscroll = function() {
+            
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+    }
+
+    
+
+    function backToTop(){
+        window.scrollTo({ top: 0, behavior: "smooth" })
+    }
+
+    initScrollTop();
+</script>
+
+<div id="particles-js"></div>
+
+<script src=https://Elysium-Seeker.github.io/background/particles.min.js></script>
+<script>
+  particlesJS.load('particles-js', "https://Elysium-Seeker.github.io/background/particlesjs-config.json", function() {
+    console.log('particles.js loaded - callback');
+  });
+</script>
+
+<style>
+  #particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+  }
+</style>
+
+    </body>
+</html>

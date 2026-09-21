@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Thu, 17 Sep 2026 15:49:17 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 21 Sep 2026 23:16:54 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>计算机视觉 | 第四讲：图像变换</title>
         <link>https://Elysium-Seeker.github.io/p/cv-lecture-4-image-transforms/</link>
         <pubDate>Thu, 17 Sep 2026 15:46:48 +0800</pubDate>
@@ -22,7 +22,7 @@
 .article-content img[src$=&#34;residual-connection.svg&#34;] { width: 360px; max-width: 100%; height: auto; margin: 1.5rem auto; display: block; }
 &lt;/style&gt;
 &lt;p&gt;&lt;em&gt;手机上可左右滑动，查看完整的宽表格与长公式。&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;系列笔记：&lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-2-digital-image-basics/&#34; &gt;第二讲：数字图像基础&lt;/a&gt; · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-3-deep-neural-networks/&#34; &gt;第三讲：深度神经网络基础&lt;/a&gt; · 第四讲：图像变换&lt;/p&gt;
+&lt;p&gt;系列笔记：&lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-2-digital-image-basics/&#34; &gt;第二讲：数字图像基础&lt;/a&gt; · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-3-deep-neural-networks/&#34; &gt;第三讲：深度神经网络基础&lt;/a&gt; · 第四讲：图像变换 · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-5-image-filtering-morphology/&#34; &gt;第五讲：图像滤波与数学形态学&lt;/a&gt; · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-6-image-enhancement/&#34; &gt;第六讲：图像增强&lt;/a&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;几何变换&lt;/strong&gt;：改变图像内容的位置，例如平移、旋转。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;灰度变换&lt;/strong&gt;：改变像素亮度，例如提亮、调整对比度。&lt;/li&gt;
