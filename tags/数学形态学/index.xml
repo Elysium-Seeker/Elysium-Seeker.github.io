@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Mon, 21 Sep 2026 23:17:30 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/%E6%95%B0%E5%AD%A6%E5%BD%A2%E6%80%81%E5%AD%A6/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 21 Sep 2026 23:52:33 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/%E6%95%B0%E5%AD%A6%E5%BD%A2%E6%80%81%E5%AD%A6/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>计算机视觉 | 第五讲：图像滤波与数学形态学</title>
         <link>https://Elysium-Seeker.github.io/p/cv-lecture-5-image-filtering-morphology/</link>
         <pubDate>Mon, 21 Sep 2026 23:11:10 +0800</pubDate>
@@ -74,17 +74,14 @@ $$&lt;p&gt;和相关相比，公式中的 \(+\) 变成了 \(-\)。落实到矩�
 			&lt;/tr&gt;
 	&lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;结合律和微分性质比较容易联系到图像处理。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;先平滑图像，再求图像的变化，可以通过一个“平滑核的导数”直接完成&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;结合微分性质，&lt;strong&gt;先平滑图像再求导，可以直接用“平滑核的导数”与图像卷积&lt;/strong&gt;：&lt;/p&gt;
 $$
 \frac{\partial}{\partial x}(f*h) = f*\frac{\partial h}{\partial x}
 $$&lt;h3 id=&#34;卷积定理&#34;&gt;卷积定理
-&lt;/h3&gt;&lt;p&gt;设：&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;设 \(g=f*h\)，三者的傅里叶变换分别为：&lt;/p&gt;
 $$
-g=f*h
-$$$$
 F=\mathcal F(f),\qquad H=\mathcal F(h),\qquad G=\mathcal F(g)
-$$&lt;p&gt;卷积定理：&lt;/p&gt;
+$$&lt;p&gt;则有：&lt;/p&gt;
 $$
 \boxed{\mathcal F(f*h)=F\cdot H}
 $$&lt;p&gt;&lt;strong&gt;空间域中的卷积，对应频域中的逐点相乘&lt;/strong&gt;。&lt;/p&gt;
@@ -154,23 +151,21 @@ $$&lt;ul&gt;
 &lt;p&gt;实际使用时，我们在有限网格上取这些值，再进行归一化，使得：&lt;/p&gt;
 $$
 \sum_{u,v}G(u,v)=1
-$$&lt;p&gt;\(\sigma\) 和核大小决定平滑的程度&lt;/p&gt;
+$$&lt;p&gt;\(\sigma\) 和核大小共同决定平滑程度：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;\(\sigma\) 较小&lt;/strong&gt;：权重集中在中心附近，主要参考较近的像素。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;\(\sigma\) 较大&lt;/strong&gt;：权重分布更宽，较远的像素也能产生明显影响。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;核的大小要与 \(\sigma\) 配合。&lt;/p&gt;
-&lt;p&gt;根据一维正态分布的 \(3\sigma\) 原则，常用核边长：&lt;/p&gt;
+&lt;p&gt;核大小要与 \(\sigma\) 配合。根据一维正态分布的 \(3\sigma\) 原则，常用核边长：&lt;/p&gt;
 $$
 \boxed{S=2\lceil3\sigma\rceil+1}
-$$&lt;p&gt;平滑越强，会有什么代价？&lt;/p&gt;
-&lt;p&gt;压低随机波动，也会削弱真实的细节。对于椒盐噪声，极端值还可能通过平均影响周围像素，通常中值滤波更合适。&lt;/p&gt;
+$$&lt;p&gt;平滑在压低随机波动的同时，也会削弱真实细节。对于椒盐噪声，极端值还可能通过平均影响周围像素，通常中值滤波更合适。&lt;/p&gt;
 &lt;h3 id=&#34;双边滤波&#34;&gt;双边滤波
 &lt;/h3&gt;&lt;p&gt;&lt;strong&gt;离我近，而且灰度和我接近，才给它较大的权重&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;设中心位置为 \(p\)，邻域中的某个位置为 \(q\)，总权重由两项相乘：&lt;/p&gt;
 $$
 w(p,q)= \underbrace{ \exp\left(-\frac{\|p-q\|^2}{2\sigma_s^2}\right) }_{\text{空间距离权重}} \underbrace{ \exp\left(-\frac{(I(p)-I(q))^2}{2\sigma_r^2}\right) }_{\text{灰度差权重}}
-$$&lt;p&gt;&lt;strong&gt;完整结果仍然是加权平均：&lt;/strong&gt;&lt;/p&gt;
+$$&lt;p&gt;对权重归一化后，得到加权平均结果：&lt;/p&gt;
 $$
 \boxed{ \widehat I(p)= \frac{ \sum_{q\in\Omega_p}w(p,q)I(q) }{ \sum_{q\in\Omega_p}w(p,q) } }
 $$&lt;p&gt;其中 \(\Omega_p\) 表示中心像素的邻域。&lt;/p&gt;
@@ -244,11 +239,10 @@ $$&lt;p&gt;接下来三种滤波器，都可以根据这个距离来定义。&lt
 &lt;li&gt;\(D_0\) &lt;strong&gt;变小&lt;/strong&gt;：保留的频率更少，通常更模糊。&lt;/li&gt;
 &lt;li&gt;\(D_0\) &lt;strong&gt;变大&lt;/strong&gt;：允许更多高频通过，保留更多细节。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;上一部分的高斯平滑也具有低通作用。不过，高斯滤波会平滑地衰减高频，课件这里的圆形掩模则是直接截断。&lt;/p&gt;
+&lt;p&gt;高斯平滑也具有低通作用。不过，高斯滤波会平滑地衰减高频，理想低通的圆形掩模则是直接截断。&lt;/p&gt;
 &lt;h3 id=&#34;高通滤波&#34;&gt;高通滤波
 &lt;/h3&gt;&lt;p&gt;结果中，大面积平坦区域被压低，建筑轮廓、窗框、花瓣边缘变得明显。&lt;/p&gt;
-&lt;p&gt;这里注意“边缘锐化”：&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;单独的高通结果主要是边缘和细节响应&lt;/strong&gt;。 若想让原图更清晰，同时保留原图的主体内容，通常把它加回去：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;单独的高通结果主要是边缘和细节响应&lt;/strong&gt;。若想保留原图主体并增强细节，通常将高通结果加回原图：&lt;/p&gt;
 $$
 \boxed{g_{\text{锐化}}=f+\lambda g_{\text{高通}}}
 $$&lt;p&gt;其中 \(\lambda\) 控制增强程度。&lt;/p&gt;
@@ -262,7 +256,7 @@ $$&lt;p&gt;其中 \(\lambda\) 控制增强程度。&lt;/p&gt;
 &lt;p&gt;留下中间一圈，因此可以突出&lt;strong&gt;某一尺度的纹理或结构&lt;/strong&gt;。较粗的结构通常对应较低频率，较细的纹理通常对应较高频率。&lt;/p&gt;
 &lt;h3 id=&#34;振铃现象&#34;&gt;振铃现象
 &lt;/h3&gt;&lt;p&gt;圆盘、圆环掩模，在边界处从 \(1\) 突然变成 \(0\)。这类理想滤波器容易让图像边缘附近出现一圈圈明暗波纹，称为&lt;strong&gt;振铃现象&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;低通后的玫瑰轮廓附近，就能看到这种现象。因此，低通后的图像可能同时出现模糊和波纹。&lt;/p&gt;
+&lt;p&gt;因此，理想低通后的图像可能同时出现模糊和波纹。&lt;/p&gt;
 &lt;h2 id=&#34;数学形态学&#34;&gt;数学形态学
 &lt;/h2&gt;&lt;h3 id=&#34;前景集合与结构元素&#34;&gt;前景集合与结构元素
 &lt;/h3&gt;&lt;p&gt;先考虑二值图像：&lt;/p&gt;
@@ -283,7 +277,7 @@ $$&lt;p&gt;它有三个需要注意的地方：&lt;/p&gt;
 &lt;li&gt;&lt;strong&gt;大小&lt;/strong&gt;：决定处理多大尺度的结构。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;原点&lt;/strong&gt;：决定模板放到当前位置时，怎样与图像对齐，通常选中心。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;只有结构元素中为 \(1\) 的位置参与判断&lt;/strong&gt;。 十字形四个角的 \(0\) 不要求图像对应位置也是背景。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;只有结构元素中为 \(1\) 的位置参与判断&lt;/strong&gt;。十字形四个角的 \(0\) 不要求图像对应位置也是背景。&lt;/p&gt;
 &lt;p&gt;集合符号也很直观：并集是合起来，交集是共同部分，补集是背景，差集是从一个集合中去掉另一个集合。&lt;/p&gt;
 &lt;h3 id=&#34;膨胀与腐蚀&#34;&gt;膨胀与腐蚀
 &lt;/h3&gt;&lt;h4 id=&#34;膨胀&#34;&gt;膨胀
@@ -335,32 +329,34 @@ $$&lt;p&gt;过程是：&lt;/p&gt;
 &lt;/ol&gt;
 &lt;p&gt;因此，闭运算常用于&lt;strong&gt;连接小断口、填补小孔洞和窄缝&lt;/strong&gt;。&lt;/p&gt;
 &lt;h3 id=&#34;开闭运算的性质&#34;&gt;开、闭运算的性质
-&lt;/h3&gt;&lt;p&gt;第一，开运算的结果包含于原图，闭运算的结果包含原图：&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;包含关系&lt;/strong&gt;：开运算的结果包含于原图，闭运算的结果包含原图：&lt;/p&gt;
 $$
 A\circ B\subseteq A, \qquad A\subseteq A\bullet B
-$$&lt;p&gt;第二，&lt;strong&gt;用相同结构元素重复操作，结果不再变化&lt;/strong&gt;，称为幂等性：&lt;/p&gt;
+$$&lt;p&gt;&lt;strong&gt;幂等性&lt;/strong&gt;：用相同结构元素重复操作，结果不再变化：&lt;/p&gt;
 $$
 (A\circ B)\circ B=A\circ B
 $$$$
 (A\bullet B)\bullet B=A\bullet B
-$$&lt;p&gt;第三，它们保持集合的包含关系：如果原来的目标 \(C\subseteq A\)，分别做相同的开运算或闭运算后，结果仍保持这个包含关系。&lt;/p&gt;
+$$&lt;p&gt;&lt;strong&gt;单调性&lt;/strong&gt;：如果原来的目标 \(C\subseteq A\)，分别做相同的开运算或闭运算后，结果仍保持这个包含关系。&lt;/p&gt;
 &lt;p&gt;注意，&lt;strong&gt;幂等性不代表开、闭运算可以交换顺序&lt;/strong&gt;。&lt;/p&gt;
 &lt;h3 id=&#34;边界提取&#34;&gt;边界提取
 &lt;/h3&gt;&lt;p&gt;腐蚀会去掉目标靠外的一层。用原图减去腐蚀结果，就能留下这层边界：&lt;/p&gt;
 $$
 \boxed{\beta(A)=A\setminus(A\ominus B)}
 $$&lt;h3 id=&#34;孔洞填充&#34;&gt;孔洞填充
-&lt;/h3&gt;&lt;p&gt;在孔洞内部选择一个起始点，记作 \(X_0\)。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;在孔洞内部选择一个起始点，包含该点的初始集合记作 \(X_0\)。&lt;/p&gt;
 &lt;p&gt;每轮先膨胀，再与背景求交：&lt;/p&gt;
 $$
 \boxed{X_k=(X_{k-1}\oplus B)\cap A^c}
-$$&lt;p&gt;闭运算填孔受到结构元素尺度的限制；这种种子生长方法可以填充选定的封闭孔洞。&lt;/p&gt;
+$$&lt;p&gt;当 \(X_k=X_{k-1}\) 时停止。此时 \(X_k\) 是生长得到的孔洞区域，填充后的图像为 \(A\cup X_k\)。&lt;/p&gt;
+&lt;p&gt;闭运算填孔受到结构元素尺度的限制；这种种子生长方法可以填充选定的封闭孔洞。&lt;/p&gt;
 &lt;h3 id=&#34;连通分量提取&#34;&gt;连通分量提取
 &lt;/h3&gt;&lt;p&gt;连通分量就是图像中&lt;strong&gt;彼此连在一起的一块前景&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;这次把起始点 \(X_0\) 放在目标内部，迭代公式改为：&lt;/p&gt;
+&lt;p&gt;把起始点选在目标内部，初始集合仍记为 \(X_0\)，迭代公式为：&lt;/p&gt;
 $$
 \boxed{X_k=(X_{k-1}\oplus B)\cap A}
-$$&lt;p&gt;与孔洞填充相比，只改变了允许生长的区域：&lt;/p&gt;
+$$&lt;p&gt;当 \(X_k=X_{k-1}\) 时停止，得到的 \(X_k\) 就是包含起始点的连通分量。&lt;/p&gt;
+&lt;p&gt;与孔洞填充相比，只改变了允许生长的区域：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;孔洞填充与 \(A^c\) 求交&lt;/strong&gt;：在背景中生长。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;连通分量提取与 \(A\) 求交&lt;/strong&gt;：在前景中生长。&lt;/li&gt;

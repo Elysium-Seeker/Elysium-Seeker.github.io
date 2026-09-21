@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Mon, 21 Sep 2026 23:16:54 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 21 Sep 2026 23:52:33 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>计算机视觉 | 第四讲：图像变换</title>
         <link>https://Elysium-Seeker.github.io/p/cv-lecture-4-image-transforms/</link>
         <pubDate>Thu, 17 Sep 2026 15:46:48 +0800</pubDate>
@@ -46,10 +46,7 @@ $$&lt;p&gt;仍然描述二维位置，但此时可以用矩阵乘法表示几何
 $$
 (2,3,1)\sim(4,6,2)
 $$&lt;p&gt;因为将前两个分量除以第三个分量，都得到 \((2,3)\)。&lt;/p&gt;
-&lt;p&gt;因此，变换后如果得到：&lt;/p&gt;
-$$
-(u,v,w),\qquad w\ne0
-$$&lt;p&gt;实际二维坐标就是：&lt;/p&gt;
+&lt;p&gt;因此，变换后若得到 \((u,v,w)\)，且 \(w\ne0\)，实际二维坐标为：&lt;/p&gt;
 $$
 \boxed{x&#39;=\frac{u}{w},\qquad y&#39;=\frac{v}{w}}
 $$&lt;h3 id=&#34;镜像&#34;&gt;镜像
@@ -85,7 +82,7 @@ y\\
 1\end{bmatrix} = \begin{bmatrix}x+t_x\\
 y+t_y\\
 1\end{bmatrix}
-$$&lt;p&gt;有 &lt;strong&gt;2 个自由度&lt;/strong&gt;。&lt;/p&gt;
+$$&lt;p&gt;两个平移量 \(t_x,t_y\) 对应 &lt;strong&gt;2 个自由度&lt;/strong&gt;。&lt;/p&gt;
 &lt;h3 id=&#34;旋转与欧氏变换&#34;&gt;旋转与欧氏变换
 &lt;/h3&gt;&lt;p&gt;旋转需要同时确定角度、方向和旋转中心。&lt;/p&gt;
 &lt;p&gt;在我们采用的 \(y\) 向下坐标中，画面上逆时针旋转 \(\theta\)：&lt;/p&gt;
@@ -133,11 +130,12 @@ y&#39;\\
  0&amp;0&amp;1 \end{bmatrix} \begin{bmatrix} x\\
 y\\
 1 \end{bmatrix}
-$$&lt;p&gt;展开就是：&lt;/p&gt;
+$$&lt;p&gt;展开为：&lt;/p&gt;
 $$
-x&#39;=a_{11}x+a_{12}y+t_x
-$$$$
-y&#39;=a_{21}x+a_{22}y+t_y
+\begin{aligned}
+x&#39;&amp;=a_{11}x+a_{12}y+t_x\\
+y&#39;&amp;=a_{21}x+a_{22}y+t_y
+\end{aligned}
 $$&lt;p&gt;前两行有 6 个独立参数，因此有 &lt;strong&gt;6 个自由度&lt;/strong&gt;。平移、旋转、缩放、镜像、剪切及其组合，都可以放进这个形式。&lt;/p&gt;
 &lt;p&gt;对于非退化的仿射变换：&lt;/p&gt;
 &lt;ul&gt;
@@ -147,14 +145,14 @@ $$&lt;p&gt;前两行有 6 个独立参数，因此有 &lt;strong&gt;6 个自由�
 &lt;li&gt;长度、角度一般会改变。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;射影变换&#34;&gt;射影变换
-&lt;/h3&gt;&lt;p&gt;射影变换进一步允许透视效果，平行线可以在画面中汇聚。&lt;/p&gt;
-&lt;p&gt;平面射影变换，也称单应变换，图像处理中常用于透视校正。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;射影变换进一步允许透视效果，平行线可以在画面中汇聚。平面射影变换也称单应变换，常用于透视校正。&lt;/p&gt;
 &lt;p&gt;它使用可逆的 \(3\times3\) 矩阵：&lt;/p&gt;
 $$
 H= \begin{bmatrix} h_{11}&amp;h_{12}&amp;h_{13}\\
  h_{21}&amp;h_{22}&amp;h_{23}\\
  h_{31}&amp;h_{32}&amp;h_{33} \end{bmatrix}
-$$&lt;p&gt;与仿射矩阵相比，最后一行也可以变化。矩阵乘完以后，必须进行齐次归一化：&lt;/p&gt;
+$$&lt;p&gt;矩阵整体乘以非零倍数表示同一变换，因此 9 个元素对应 &lt;strong&gt;8 个自由度&lt;/strong&gt;。与仿射矩阵相比，最后一行也可以变化。&lt;/p&gt;
+&lt;p&gt;矩阵乘完以后，必须进行齐次归一化。在分母非零的位置：&lt;/p&gt;
 $$
 \boxed{ x&#39;= \frac{h_{11}x+h_{12}y+h_{13}} {h_{31}x+h_{32}y+h_{33}} }
 $$$$
@@ -224,10 +222,11 @@ $$&lt;p&gt;特别留意：&lt;strong&gt;横纵不同比例的缩放通常属于�
 $$
 I&#39;(x,y)=T\bigl(I(x,y)\bigr)
 $$&lt;h3 id=&#34;线性变换&#34;&gt;线性变换
-&lt;/h3&gt;&lt;p&gt;用乘法调整灰度差，用加法平移灰度。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;用乘法调整灰度差，用加法平移灰度：&lt;/p&gt;
 $$
 \boxed{I&#39;=aI+b}
-$$&lt;h3 id=&#34;对数变换&#34;&gt;对数变换
+$$&lt;p&gt;其中，\(a\) 控制灰度差的缩放，\(b\) 控制整体亮度偏移。&lt;/p&gt;
+&lt;h3 id=&#34;对数变换&#34;&gt;对数变换
 &lt;/h3&gt;&lt;p&gt;对数变换让较大的灰度值增长得越来越慢。&lt;/p&gt;
 $$
 \boxed{I&#39;=b+c\log(1+I)}
@@ -270,8 +269,7 @@ $$&lt;p&gt;线性变换的斜率固定，各个灰度区间按相同倍率调整
 &lt;/ul&gt;
 &lt;h3 id=&#34;傅里叶变换&#34;&gt;傅里叶变换
 &lt;/h3&gt;&lt;p&gt;&lt;del&gt;去死吧为什么还要学这个我恨死傅里叶变换Z变换各种神秘变换了&lt;/del&gt;&lt;/p&gt;
-&lt;p&gt;基本思想就是：&lt;strong&gt;把图像表示成不同频率的波的叠加，计算每一种成分占多少。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;输入是一整段信号，输出是它在各个频率上的系数。&lt;/p&gt;
+&lt;p&gt;傅里叶变换的基本思想是：&lt;strong&gt;把图像表示成不同频率的波的叠加，计算每一种成分占多少&lt;/strong&gt;。以一行图像为例，输入是一整段信号，输出是它在各个频率上的系数。&lt;/p&gt;
 &lt;p&gt;假设一行图像有 8 个像素，傅里叶变换会拿一些预先确定的波形去分解它。频谱前几个下标的含义是：&lt;/p&gt;
 &lt;table&gt;
 	&lt;thead&gt;
@@ -295,7 +293,7 @@ $$&lt;p&gt;线性变换的斜率固定，各个灰度区间按相同倍率调整
 			&lt;/tr&gt;
 	&lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;所以：&lt;/p&gt;
+&lt;p&gt;因此，需要区分像素位置和频率位置：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;\(f(1)\)：到&lt;strong&gt;第 1 号像素位置&lt;/strong&gt;，查看灰度。&lt;/li&gt;
 &lt;li&gt;\(F(1)\)：到&lt;strong&gt;第 1 号频率位置&lt;/strong&gt;，查看这个频率成分的系数。&lt;/li&gt;
@@ -355,16 +353,14 @@ $$&lt;p&gt;这里：&lt;/p&gt;
 &lt;li&gt;\(j\) 是虚数单位，满足 \(j^2=-1\)。&lt;/li&gt;
 &lt;li&gt;根据欧拉公式，\(e^{-j\theta}=\cos\theta-j\sin\theta\)。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;正变换：&lt;strong&gt;用不同频率的正弦、余弦波去和原信号比较，计算对应的系数。&lt;/strong&gt;
-逆变换再用这些系数把各个波叠加回来。&lt;/p&gt;
-&lt;p&gt;一个矩形信号也需要很多频率成分共同组成。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;正变换计算各频率成分的系数，逆变换用这些系数把各个波叠加回来&lt;/strong&gt;。即使是矩形信号，也需要许多频率成分共同组成。&lt;/p&gt;
 &lt;p&gt;正实数的相位为 \(0\)，负实数的相位为 \(\pi\)（模 \(2\pi\)），零的相位没有定义。当 \(F(u)\) 为实数时，它可以有正有负，而幅度 \(|F(u)|\) 始终非负。&lt;/p&gt;
 &lt;h3 id=&#34;离散傅里叶变换-dft&#34;&gt;离散傅里叶变换 DFT
 &lt;/h3&gt;&lt;p&gt;计算机中的数据是有限个采样值，因此把积分换成求和。对于长度为 \(M\) 的序列：&lt;/p&gt;
 $$
 \begin{aligned} F(m)&amp;=\sum_{n=0}^{M-1}f(n)e^{-j2\pi mn/M}\\[4pt]
  f(n)&amp;=\frac1M\sum_{m=0}^{M-1}F(m)e^{+j2\pi mn/M} \end{aligned}
-$$&lt;p&gt;按照这里采用的约定，记住两个差别：&lt;/p&gt;
+$$&lt;p&gt;按照这里采用的约定，正、逆变换有两个差别：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;正变换指数是负号，逆变换指数是正号。&lt;/li&gt;
 &lt;li&gt;逆变换前面有归一化系数 \(1/M\)。&lt;/li&gt;
@@ -386,19 +382,15 @@ $$&lt;p&gt;所以，在这套归一化约定下，&lt;strong&gt;平均灰度等�
 &lt;/h3&gt;&lt;p&gt;将零频移到中心（&lt;code&gt;fftshift&lt;/code&gt;）后，频谱图中心是零频，附近是低频，向外对应更高的频率。原始 DFT 数组的零频位于索引 \((0,0)\)。&lt;/p&gt;
 &lt;h2 id=&#34;频域变换的应用&#34;&gt;频域变换的应用
 &lt;/h2&gt;&lt;h3 id=&#34;图像压缩&#34;&gt;图像压缩
-&lt;/h3&gt;&lt;p&gt;舍弃幅度较小的频率成分。&lt;/p&gt;
-&lt;p&gt;频率系数的幅度 \(|F(u,v)|\) 表示这个成分有多强。这里采用的压缩方法是：&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;频率系数的幅度 \(|F(u,v)|\) 表示这个成分有多强。课件中的压缩方法通过舍弃幅度较小的成分，为后续编码创造条件：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;对图像做 DFT。&lt;/li&gt;
 &lt;li&gt;将幅度小于阈值的系数置零，其他系数保留。&lt;/li&gt;
 &lt;li&gt;通过 IDFT，观察舍弃这些成分后的重建图像。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;例如，几个频率成分的幅度分别是：&lt;/p&gt;
-$$
-100,\quad20,\quad2,\quad0.5
-$$&lt;p&gt;若阈值设为 \(5\)，就保留前两个成分，把后两个系数置零。保留时要保留对应的&lt;strong&gt;完整复数系数，包括幅度和相位&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;例如，几个频率成分的幅度为 \(100,20,2,0.5\)，阈值设为 \(5\)，就保留前两个成分，把后两个系数置零。保留时应保留对应的&lt;strong&gt;完整复数系数，包括幅度和相位&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;这样做的依据是：单个小幅度成分对重建的贡献较小，舍弃一部分后，图像可能仍然比较接近原图。但舍弃得越多，失真通常也越明显。课件第 41 页右侧的示例中，毛发、衣服等纹理已经明显模糊。&lt;/p&gt;
-&lt;p&gt;两个重点：&lt;/p&gt;
+&lt;p&gt;需要注意：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;筛选依据是幅度大小。&lt;/strong&gt; 一个高频成分也可能幅度很大，一个低频成分也可能幅度很小。&lt;/li&gt;
 &lt;li&gt;系数置零为后续压缩创造条件；真正减少存储空间还需要编码。把同尺寸数组里的数值改成零，数组占用不会自动减少。&lt;/li&gt;
@@ -454,11 +446,11 @@ $$&lt;p&gt;其中，\(F\) 是原频谱，\(H\) 是滤波器，\(G\) 是处理后
 &lt;li&gt;帽檐、头发、人物边界等位置变化较快，包含高频成分，会更突出。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;因此，右侧结果看起来像一张边缘图：大部分平滑区域较暗，边界和纹理留下来。&lt;/p&gt;
-&lt;p&gt;补充一个实用理解：如果希望得到整体更清晰的照片，可以把提取出的高频细节加回原图：&lt;/p&gt;
+&lt;p&gt;如果希望保留原图内容并突出细节，可以把提取出的高频响应加回原图：&lt;/p&gt;
 $$
 g=f+\lambda f_{\mathrm{high}},\qquad \lambda\gt 0
 $$&lt;p&gt;其中，\(f_{\mathrm{high}}\) 是高通得到的细节，\(\lambda\) 控制增强程度。这是常见的&lt;strong&gt;锐化&lt;/strong&gt;思路。&lt;/p&gt;
-&lt;p&gt;同样，高频噪声也可能被一起增强，所以增强程度需要适当。&lt;/p&gt;
+&lt;p&gt;高频噪声也可能被一起增强，所以增强程度需要适当。&lt;/p&gt;
 &lt;h3 id=&#34;三种操作的比较&#34;&gt;三种操作的比较
 &lt;/h3&gt;&lt;table&gt;
 	&lt;thead&gt;

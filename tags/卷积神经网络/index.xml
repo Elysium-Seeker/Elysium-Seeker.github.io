@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Mon, 21 Sep 2026 23:16:54 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 21 Sep 2026 23:52:33 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>计算机视觉 | 第三讲：深度神经网络基础</title>
         <link>https://Elysium-Seeker.github.io/p/cv-lecture-3-deep-neural-networks/</link>
         <pubDate>Thu, 17 Sep 2026 15:46:47 +0800</pubDate>
@@ -25,8 +25,7 @@
 &lt;p&gt;系列笔记：&lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-2-digital-image-basics/&#34; &gt;第二讲：数字图像基础&lt;/a&gt; · 第三讲：深度神经网络基础 · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-4-image-transforms/&#34; &gt;第四讲：图像变换&lt;/a&gt; · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-5-image-filtering-morphology/&#34; &gt;第五讲：图像滤波与数学形态学&lt;/a&gt; · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-6-image-enhancement/&#34; &gt;第六讲：图像增强&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;神经元与-cnn-整体结构&#34;&gt;神经元与 CNN 整体结构
 &lt;/h2&gt;&lt;h3 id=&#34;神经元与多层感知机&#34;&gt;神经元与多层感知机
-&lt;/h3&gt;&lt;p&gt;神经网络通过多个相连的计算单元处理信息。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;一个神经元的计算，其实就是“加权求和，再经过激活函数”。&lt;/strong&gt;&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;神经网络通过多个相连的计算单元处理信息。&lt;strong&gt;一个神经元先加权求和，再经过激活函数&lt;/strong&gt;：&lt;/p&gt;
 $$
 z=\sum_{i=1}^{m}w_i x_i-\theta,\qquad y=\phi(z)
 $$&lt;p&gt;其中：&lt;/p&gt;
@@ -36,13 +35,13 @@ $$&lt;p&gt;其中：&lt;/p&gt;
 &lt;li&gt;\(\theta\)：阈值，调整达到什么条件才产生响应。&lt;/li&gt;
 &lt;li&gt;\(\phi\)：激活函数，把加权结果转换成输出。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;训练网络的重要工作，就是根据样本调整权重和偏置，让输出更符合正确答案。&lt;/p&gt;
+&lt;p&gt;也可以把减去阈值写成加上偏置，即 \(b=-\theta\)。训练时根据样本调整权重和偏置，让输出更符合正确答案。&lt;/p&gt;
 &lt;p&gt;多个神经元按层连接，就构成了多层感知机 MLP。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;全连接&lt;/strong&gt;：当前层的每个神经元，都连接上一层的所有神经元。&lt;/p&gt;
 &lt;p&gt;输入维度为 \(d\)，输出神经元数量为 \(h\)，全连接层的参数量为：&lt;/p&gt;
 $$
 \boxed{dh+h}
-$$&lt;p&gt;（全连接加神经元偏置）&lt;/p&gt;
+$$&lt;p&gt;其中，\(dh\) 是连接权重的数量，\(h\) 是偏置的数量。&lt;/p&gt;
 &lt;h3 id=&#34;cnn-的组成&#34;&gt;CNN 的组成
 &lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-3-deep-neural-networks/cnn-architecture.png&#34;
 	width=&#34;1500&#34;
@@ -88,14 +87,12 @@ $$&lt;p&gt;（全连接加神经元偏置）&lt;/p&gt;
 			&lt;/tr&gt;
 	&lt;/tbody&gt;
 &lt;/table&gt;
-$$
-6@28\times28
-$$&lt;p&gt;表示 &lt;strong&gt;6 张特征图，每张大小为 \(28\times28\)&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;图中的 \(6@28\times28\) 表示 &lt;strong&gt;6 张特征图，每张大小为 \(28\times28\)&lt;/strong&gt;。&lt;/p&gt;
 &lt;h2 id=&#34;卷积&#34;&gt;卷积
 &lt;/h2&gt;&lt;h3 id=&#34;局部连接与权值共享&#34;&gt;局部连接与权值共享
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;局部连接&lt;/strong&gt;：一个输出连接哪些输入。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;权值共享&lt;/strong&gt;：不同位置是否使用同一组参数。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;局部连接&lt;/strong&gt;：每个输出只连接上一层的一个局部区域。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;权值共享&lt;/strong&gt;：同一卷积核在不同空间位置使用同一组参数。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;卷积的计算&#34;&gt;卷积的计算
 &lt;/h3&gt;&lt;p&gt;&lt;strong&gt;卷积的基本动作：让一个小矩阵在图像上滑动，对应元素相乘后求和。&lt;/strong&gt;&lt;/p&gt;
@@ -133,10 +130,7 @@ $$&lt;p&gt;前两个 3 表示高、宽，最后一个 3 表示输入通道数。
 &lt;li&gt;将三个结果相加，再加一个偏置。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;&lt;strong&gt;这一个完整的核，最终产生一个输出通道。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;例：&lt;/p&gt;
-$$
-8\times8\times3\text{ 输入} \quad+\quad 4\text{ 个 }3\times3\times3\text{ 的核}
-$$&lt;p&gt;不填充、步长为 1，因此：&lt;/p&gt;
+&lt;p&gt;例如，输入尺寸为 \(8\times8\times3\)，使用 4 个 \(3\times3\times3\) 的核，不填充、步长为 1：&lt;/p&gt;
 $$
 \text{输出空间尺寸}=8-3+1=6
 $$&lt;p&gt;4 个核产生 4 个输出通道，最终输出是：&lt;/p&gt;
@@ -145,7 +139,8 @@ $$
 $$&lt;p&gt;含偏置的参数量为：&lt;/p&gt;
 $$
 \boxed{ C_{\text{out}}\bigl(k_hk_wC_{\text{in}}+1\bigr) }
-$$&lt;p&gt;代入本例：&lt;/p&gt;
+$$&lt;p&gt;其中，\(C_{\text{in}}\)、\(C_{\text{out}}\) 分别是输入、输出通道数，\(k_h,k_w\) 是核的高、宽。&lt;/p&gt;
+&lt;p&gt;代入本例：&lt;/p&gt;
 $$
 4(3\times3\times3+1)=112
 $$&lt;p&gt;这里&lt;strong&gt;不用再乘输出的 \(6\times6\)&lt;/strong&gt;，因为这些位置共享参数。&lt;/p&gt;
@@ -180,8 +175,7 @@ $$&lt;p&gt;这里&lt;strong&gt;不用再乘输出的 \(6\times6\)&lt;/strong&gt;
 	&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;h3 id=&#34;池化&#34;&gt;池化
-&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;池化把局部区域汇总成一个数。&lt;/strong&gt;
-最常见的两种方式：&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;池化把局部区域汇总成一个数&lt;/strong&gt;，最常见的两种方式是：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;最大池化&lt;/strong&gt;：取窗口中的最大值。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;平均池化&lt;/strong&gt;：取窗口中的平均值。&lt;/li&gt;
@@ -195,8 +189,7 @@ $$&lt;p&gt;这里&lt;strong&gt;不用再乘输出的 \(6\times6\)&lt;/strong&gt;
 &lt;p&gt;“下采样”是降低空间采样密度的统称。池化可以用来下采样，步长大于 1 的卷积也可以实现下采样。&lt;/p&gt;
 &lt;h2 id=&#34;训练与优化&#34;&gt;训练与优化
 &lt;/h2&gt;&lt;h3 id=&#34;一次训练迭代&#34;&gt;一次训练迭代
-&lt;/h3&gt;&lt;p&gt;训练，就是利用样本和正确答案调整网络参数。&lt;/p&gt;
-&lt;p&gt;用&lt;strong&gt;损失函数&lt;/strong&gt;衡量它们的差距：&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;本讲的监督训练利用样本和标签调整网络参数，用&lt;strong&gt;损失函数&lt;/strong&gt;衡量预测 \(\hat y\) 与标签 \(y\) 的差距：&lt;/p&gt;
 $$
 L=\ell(\hat y,y)
 $$&lt;p&gt;训练的目标，就是寻找让训练数据上的平均损失较小的参数。&lt;/p&gt;
@@ -209,19 +202,16 @@ $$&lt;p&gt;训练的目标，就是寻找让训练数据上的平均损失较小
 &lt;/ol&gt;
 &lt;p&gt;&lt;strong&gt;反向传播负责算梯度，优化器负责用梯度更新参数。&lt;/strong&gt;&lt;/p&gt;
 &lt;h3 id=&#34;数据增强&#34;&gt;数据增强
-&lt;/h3&gt;&lt;p&gt;数据增强让网络见到同类图像的合理变化。&lt;/p&gt;
-&lt;p&gt;增强包括缩放、翻转、旋转、亮度或色度变化、添加噪声等。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;数据增强让网络见到同类图像的合理变化，包括缩放、翻转、旋转、亮度或色度变化、添加噪声等。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;变换后，标签仍然应当成立。&lt;/strong&gt; 数字 6 大角度旋转后可能更像 9，继续标成 6 就会引入错误监督。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;先划分数据集，再对训练部分增强。&lt;/strong&gt; 避免同一张原图及其近似副本分别进入训练集和测试集。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;增强的重点是增加有意义的变化。&lt;/p&gt;
 &lt;h3 id=&#34;优化器&#34;&gt;优化器
-&lt;/h3&gt;&lt;p&gt;优化器决定怎样根据梯度迈出下一步。&lt;/p&gt;
-&lt;p&gt;最基本的梯度下降更新是：&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;优化器决定怎样根据梯度更新参数。最基本的梯度下降更新为：&lt;/p&gt;
 $$
 \boxed{ \theta_{\text{new}} = \theta_{\text{old}}-\eta\nabla_\theta L }
-$$&lt;p&gt;其中，\(\eta\) 是&lt;strong&gt;学习率&lt;/strong&gt;，控制每次更新的步幅。&lt;/p&gt;
+$$&lt;p&gt;这里的 \(\theta\) 表示待优化的参数，\(\eta\) 是&lt;strong&gt;学习率&lt;/strong&gt;，控制每次更新的步幅。&lt;/p&gt;
 &lt;p&gt;例如某个参数为 1，梯度为 \(0.4\)，学习率为 \(0.1\)，更新后：&lt;/p&gt;
 $$
 1-0.1\times0.4=0.96
@@ -257,23 +247,22 @@ $$&lt;p&gt;这里按有权重的层计数，池化、激活通常不单独算进
 &lt;h3 id=&#34;vgg&#34;&gt;VGG
 &lt;/h3&gt;&lt;p&gt;VGG 反复堆叠小卷积核（课件第 59—60 页）。&lt;/p&gt;
 &lt;p&gt;它大量使用 \(3\times3\) 卷积，结构比较规整。VGG-16 通常是 13 个卷积层加 3 个全连接层，VGG-19 则是 16 加 3。&lt;/p&gt;
-&lt;p&gt;这里认识一下&lt;strong&gt;感受野&lt;/strong&gt;：某个输出能够受到原输入中多大范围的影响。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;感受野&lt;/strong&gt;表示某个输出能够受到原输入中多大范围的影响。&lt;/p&gt;
 &lt;p&gt;两个连续、步长为 1 的 \(3\times3\) 卷积，可以覆盖原输入中的 \(5\times5\) 范围。若输入、中间、输出通道数都为 \(C\)，忽略偏置：&lt;/p&gt;
 $$
-\text{两个 }3\times3\text{ 卷积的参数量}=18C^2
-$$$$
-\text{一个 }5\times5\text{ 卷积的参数量}=25C^2
+\begin{aligned}
+\text{两个 }3\times3\text{ 卷积的参数量}&amp;=18C^2\\
+\text{一个 }5\times5\text{ 卷积的参数量}&amp;=25C^2
+\end{aligned}
 $$&lt;p&gt;所以，堆叠小核能够在获得较大感受野的同时减少参数，还能在层间加入非线性。感受野相同，并不意味着两种结构的计算完全相同。&lt;/p&gt;
 &lt;h3 id=&#34;googlenet&#34;&gt;GoogLeNet
 &lt;/h3&gt;&lt;p&gt;GoogLeNet 用 Inception 模块并行提取不同尺度的信息（课件第 61 页）。&lt;/p&gt;
-&lt;p&gt;同一份输入进入多个分支，例如：&lt;/p&gt;
-$$
-1\times1\text{ 卷积},\quad 3\times3\text{ 卷积},\quad 5\times5\text{ 卷积},\quad \text{池化}
-$$&lt;p&gt;各分支关注的邻域范围不同。它们的空间尺寸对齐后，&lt;strong&gt;沿通道方向拼接&lt;/strong&gt;。例如 32 通道和 64 通道的结果，可以拼成 96 通道。&lt;/p&gt;
-&lt;p&gt;课件右侧的改进结构还使用 \(1\times1\) 卷积：它可以混合、压缩通道，降低后续大卷积核的计算量。课件介绍的 GoogLeNet 版本为 22 层。&lt;/p&gt;
+&lt;p&gt;同一份输入进入多个分支，例如 \(1\times1\)、\(3\times3\)、\(5\times5\) 卷积，以及池化分支。&lt;/p&gt;
+&lt;p&gt;各分支关注的邻域范围不同。它们的空间尺寸对齐后，&lt;strong&gt;沿通道方向拼接&lt;/strong&gt;。例如 32 通道和 64 通道的结果，可以拼成 96 通道。&lt;/p&gt;
+&lt;p&gt;Inception 的改进结构还使用 \(1\times1\) 卷积混合、压缩通道，降低后续大卷积核的计算量。课件介绍的 GoogLeNet 版本为 22 层。&lt;/p&gt;
 &lt;h3 id=&#34;resnet&#34;&gt;ResNet
 &lt;/h3&gt;&lt;p&gt;ResNet 通过残差连接，让较深的网络更容易训练（课件第 62—65 页）。&lt;/p&gt;
-&lt;p&gt;普通网络从 20 层增加到 56 层，&lt;strong&gt;训练误差也变高了&lt;/strong&gt;。这叫退化问题。&lt;/p&gt;
+&lt;p&gt;课件中的普通网络从 20 层增加到 56 层后，&lt;strong&gt;训练误差也变高了&lt;/strong&gt;，这叫退化问题。&lt;/p&gt;
 &lt;p&gt;它与过拟合要分开理解：过拟合通常表现为训练数据上效果很好，未见数据上表现较差；这里更深的网络连训练数据都拟合得更差。&lt;/p&gt;
 &lt;p&gt;残差连接把输入直接送到后面，与一个变换分支的结果相加：&lt;/p&gt;
 $$
@@ -289,7 +278,7 @@ $$&lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-3-deep
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;例如输入是 2，希望相加后的结果为 2.3，那么分支只需要学出修正量 \(0.3\)。&lt;/p&gt;
-&lt;p&gt;这种连接保留了直接传递输入的路径，也给梯度增加了直接传播的路径，有助于优化较深的网络。课件这个残差块在相加后还接了 ReLU，因此完整输出为：&lt;/p&gt;
+&lt;p&gt;这种连接保留了直接传递输入的路径，也给梯度增加了直接传播的路径，有助于优化较深的网络。图示残差块在相加后还接了 ReLU，因此完整输出为：&lt;/p&gt;
 $$
 y=\operatorname{ReLU}\bigl(F(x)+x\bigr)
 $$&lt;p&gt;相加时，两边的形状必须一致；需要时，可以用卷积调整通道数和空间尺寸。&lt;/p&gt;

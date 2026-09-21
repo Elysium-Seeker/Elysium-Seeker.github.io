@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Elysium-Seeker</copyright>
-        <lastBuildDate>Mon, 21 Sep 2026 23:16:54 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 21 Sep 2026 23:52:33 +0800</lastBuildDate><atom:link href="https://Elysium-Seeker.github.io/tags/%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>计算机视觉 | 第六讲：图像增强</title>
         <link>https://Elysium-Seeker.github.io/p/cv-lecture-6-image-enhancement/</link>
         <pubDate>Mon, 21 Sep 2026 23:11:10 +0800</pubDate>
@@ -23,8 +23,7 @@
 &lt;/style&gt;
 &lt;p&gt;&lt;em&gt;手机上可左右滑动，查看完整的宽表格与长公式。&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;系列笔记：&lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-2-digital-image-basics/&#34; &gt;第二讲：数字图像基础&lt;/a&gt; · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-3-deep-neural-networks/&#34; &gt;第三讲：深度神经网络基础&lt;/a&gt; · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-4-image-transforms/&#34; &gt;第四讲：图像变换&lt;/a&gt; · &lt;a class=&#34;link&#34; href=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-5-image-filtering-morphology/&#34; &gt;第五讲：图像滤波与数学形态学&lt;/a&gt; · 第六讲：图像增强&lt;/p&gt;
-&lt;p&gt;目的：让我们关心的内容更容易观察或分析。&lt;/p&gt;
-&lt;p&gt;方法：直接处理像素的&lt;strong&gt;空域方法&lt;/strong&gt;，处理频谱的&lt;strong&gt;频域方法&lt;/strong&gt;，以及从数据中学习的&lt;strong&gt;深度学习方法&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;图像增强的目的是让我们关心的内容更容易观察或分析。常见方法包括直接处理像素的&lt;strong&gt;空域方法&lt;/strong&gt;、处理频谱的&lt;strong&gt;频域方法&lt;/strong&gt;，以及从数据中学习的&lt;strong&gt;深度学习方法&lt;/strong&gt;。&lt;/p&gt;
 &lt;h2 id=&#34;直方图处理&#34;&gt;直方图处理
 &lt;/h2&gt;&lt;h3 id=&#34;灰度直方图&#34;&gt;灰度直方图
 &lt;/h3&gt;&lt;p&gt;灰度直方图统计每个灰度值出现的次数。&lt;/p&gt;
@@ -36,28 +35,24 @@
 &lt;p&gt;如果灰度为 \(r_k\) 的像素有 \(n_k\) 个，全图共有 \(N\) 个像素，那么归一化直方图为：&lt;/p&gt;
 $$
 p(r_k)=\frac{n_k}{N}
-$$&lt;p&gt;它表示：随机选一个像素，灰度为 \(r_k\) 的比例是多少。&lt;/p&gt;
+$$&lt;p&gt;它表示全图中灰度为 \(r_k\) 的像素所占的比例。&lt;/p&gt;
 &lt;h3 id=&#34;直方图均衡化&#34;&gt;直方图均衡化
 &lt;/h3&gt;&lt;p&gt;假设一幅图的大多数像素都挤在 \(100\sim120\) 之间，明暗差别很小，看起来容易发灰。&lt;/p&gt;
 &lt;p&gt;直方图均衡化希望建立一个灰度映射，把这些灰度分布展开，改善对比度。&lt;/p&gt;
 &lt;p&gt;核心工具是&lt;strong&gt;累计分布函数，CDF&lt;/strong&gt;：&lt;/p&gt;
 $$
 \boxed{ T(r_k)=\sum_{i=0}^{k}p(r_i) }
-$$&lt;p&gt;它的含义是：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;灰度不超过 \(r_k\) 的像素，占整幅图的多少？&lt;/strong&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;离散下计算：&lt;/p&gt;
+$$&lt;p&gt;它表示&lt;strong&gt;灰度不超过 \(r_k\) 的像素占整幅图的比例&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;离散情况下，先统计各灰度的比例，再累加并映射到输出灰度：&lt;/p&gt;
 $$
-p(r_k)=\frac{n_k}{N}
-$$$$
-c_k=\sum_{i=0}^{k}p(r_i)
-$$$$
-\boxed{ s_k=\operatorname{round}\bigl((L-1)c_k\bigr) }
-$$&lt;p&gt;离散灰度和量化会使输出直方图未必完全均匀。&lt;/p&gt;
+\begin{aligned}
+p(r_k)&amp;=\frac{n_k}{N}\\
+c_k&amp;=\sum_{i=0}^{k}p(r_i)\\
+s_k&amp;=\operatorname{round}\bigl((L-1)c_k\bigr)
+\end{aligned}
+$$&lt;p&gt;其中，\(L\) 为灰度级数，8 位灰度图中 \(L=256\)。由于灰度离散且映射需要量化，输出直方图未必完全均匀。&lt;/p&gt;
 &lt;h4 id=&#34;全局与局部均衡化&#34;&gt;全局与局部均衡化
-&lt;/h4&gt;&lt;p&gt;前面的方法统计整幅图，得到一张统一的映射表，称为&lt;strong&gt;全局直方图均衡化&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;它适合调整整体对比度，但可能照顾不到很小的局部区域。&lt;/p&gt;
+&lt;/h4&gt;&lt;p&gt;统计整幅图、使用一张统一映射表的方法称为&lt;strong&gt;全局直方图均衡化&lt;/strong&gt;。它适合调整整体对比度，但可能照顾不到很小的局部区域。&lt;/p&gt;
 &lt;p&gt;例如，画面主体很亮，角落里有一个很小的暗区域。暗区域的像素数量少，对全局直方图影响不大，均衡化后里面的细节可能仍然不明显。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;局部均衡化&lt;/strong&gt;则在每个位置附近建立一个小窗口：&lt;/p&gt;
 &lt;ol&gt;
@@ -66,10 +61,9 @@ $$&lt;p&gt;离散灰度和量化会使输出直方图未必完全均匀。&lt;/p
 &lt;li&gt;用得到的映射修改窗口中心像素。&lt;/li&gt;
 &lt;li&gt;移动窗口，继续处理。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;因此，同样的原始灰度，在不同位置可能得到不同的新值。&lt;/p&gt;
-&lt;p&gt;它能突出局部细节，但也可能放大局部噪声。&lt;/p&gt;
+&lt;p&gt;因此，同样的原始灰度在不同位置可能得到不同的新值。局部均衡化能突出局部细节，但也可能放大局部噪声。&lt;/p&gt;
 &lt;h3 id=&#34;直方图匹配&#34;&gt;直方图匹配
-&lt;/h3&gt;&lt;p&gt;设：&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;直方图匹配希望将原图调整到指定的灰度分布。设：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;原图的累计分布函数为 \(T(r)\)。&lt;/li&gt;
 &lt;li&gt;目标的累计分布函数为 \(G(z)\)。&lt;/li&gt;
@@ -106,12 +100,7 @@ $$&lt;p&gt;例如，使用 \(3\times3\) 窗口，就把里面 9 个像素相加�
 $$
 \boxed{ g(p)= \begin{cases} \bar f(p),&amp;|f(p)-\bar f(p)|\gt T\\ f(p),&amp;\text{其他情况} \end{cases} }
 $$&lt;h3 id=&#34;k-近邻平滑&#34;&gt;K 近邻平滑
-&lt;/h3&gt;&lt;p&gt;这个方法改变的是&lt;strong&gt;参与平均的像素&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;先在窗口内比较：&lt;/p&gt;
-$$
-|f(q)-f(p)|
-$$&lt;p&gt;也就是各像素与中心像素的灰度差，再选出差异最小的 \(K\) 个求平均。&lt;/p&gt;
-&lt;p&gt;这里的“近”指的是&lt;strong&gt;灰度接近&lt;/strong&gt;。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;K 近邻平滑改变的是&lt;strong&gt;参与平均的像素&lt;/strong&gt;：在窗口内比较各像素与中心像素的灰度差 \(|f(q)-f(p)|\)，选出差异最小的 \(K\) 个求平均。这里的“近”指的是&lt;strong&gt;灰度接近&lt;/strong&gt;。&lt;/p&gt;
 &lt;h3 id=&#34;最大均匀性平滑&#34;&gt;最大均匀性平滑
 &lt;/h3&gt;&lt;p&gt;K 近邻选择单个像素；这里则在多个候选区域中，选择&lt;strong&gt;内部灰度最一致的区域&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;“均匀程度”可以用灰度方差衡量：&lt;/p&gt;
@@ -133,16 +122,17 @@ $$&lt;p&gt;其中：&lt;/p&gt;
 &lt;/h3&gt;&lt;p&gt;中值滤波把窗口内的像素值排序，用排序后的中间值替换中心像素：&lt;/p&gt;
 $$
 \boxed{ g(p)=\operatorname{median} \{f(q):q\in\Omega_p\} }
-$$&lt;h2 id=&#34;空间锐化&#34;&gt;空间锐化
-&lt;/h2&gt;&lt;p&gt;差分可以把边缘的位置突出出来。&lt;/p&gt;
+$$&lt;p&gt;它对椒盐噪声较有效，但窗口过大仍可能损失细节。&lt;/p&gt;
+&lt;h2 id=&#34;空间锐化&#34;&gt;空间锐化
+&lt;/h2&gt;&lt;p&gt;空间锐化通过强调灰度变化来突出边缘，常用差分来近似导数。&lt;/p&gt;
 &lt;h3 id=&#34;梯度与差分&#34;&gt;梯度与差分
 &lt;/h3&gt;&lt;p&gt;约定 \(x\) 向右、\(y\) 向下。图像 \(f(x,y)\) 的梯度为：&lt;/p&gt;
 $$
 \nabla f= \begin{bmatrix} G_x\\ G_y \end{bmatrix} = \begin{bmatrix} \frac{\partial f}{\partial x}\\ \frac{\partial f}{\partial y} \end{bmatrix}
 $$&lt;p&gt;其中：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;\(G_x\)：水平方向上的灰度变化。&lt;/li&gt;
-&lt;li&gt;\(G_y\)：竖直方向上的灰度变化。&lt;/li&gt;
+&lt;li&gt;\(G_x\)：水平方向上的灰度变化，对竖直边缘响应明显。&lt;/li&gt;
+&lt;li&gt;\(G_y\)：竖直方向上的灰度变化，对水平边缘响应明显。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;数字图像的坐标是离散的，课件用相邻像素的差近似偏导数：&lt;/p&gt;
 $$
@@ -174,10 +164,10 @@ M_R=\sqrt{r_1^2+r_2^2}
 $$&lt;p&gt;&lt;strong&gt;Roberts 的特点是模板小、计算简单，但缺少邻域平滑，对噪声比较敏感&lt;/strong&gt;。&lt;/p&gt;
 &lt;h3 id=&#34;prewitt-与-sobel-算子&#34;&gt;Prewitt 与 Sobel 算子
 &lt;/h3&gt;&lt;h4 id=&#34;prewitt-算子&#34;&gt;Prewitt 算子
-&lt;/h4&gt;&lt;p&gt;它的两个基本模板是：&lt;/p&gt;
+&lt;/h4&gt;&lt;p&gt;Prewitt 使用两个 \(3\times3\) 模板：&lt;/p&gt;
 $$
 P_x= \begin{bmatrix} -1&amp;0&amp;1\\ -1&amp;0&amp;1\\ -1&amp;0&amp;1 \end{bmatrix}, \qquad P_y= \begin{bmatrix} -1&amp;-1&amp;-1\\ 0&amp;0&amp;0\\ 1&amp;1&amp;1 \end{bmatrix}
-$$&lt;p&gt;先看 \(P_x\)：它在每一行都计算“右边减左边”，再把三行结果相加：&lt;/p&gt;
+$$&lt;p&gt;\(P_x\) 在每一行都计算“右边减左边”，再把三行结果相加：&lt;/p&gt;
 $$
 G_x= (\text{右上}-\text{左上}) +(\text{右中}-\text{左中}) +(\text{右下}-\text{左下})
 $$&lt;p&gt;这样就综合了附近三行的信息。忽略整体比例系数，可以理解为：&lt;strong&gt;横向做差，纵向平均&lt;/strong&gt;。&lt;/p&gt;
@@ -185,20 +175,12 @@ $$&lt;p&gt;这样就综合了附近三行的信息。忽略整体比例系数，
 &lt;h4 id=&#34;sobel-算子&#34;&gt;Sobel 算子
 &lt;/h4&gt;$$
 S_x= \begin{bmatrix} -1&amp;0&amp;1\\ -2&amp;0&amp;2\\ -1&amp;0&amp;1 \end{bmatrix}, \qquad S_y= \begin{bmatrix} -1&amp;-2&amp;-1\\ 0&amp;0&amp;0\\ 1&amp;2&amp;1 \end{bmatrix}
-$$&lt;p&gt;看 \(S_x\) 的计算：&lt;/p&gt;
+$$&lt;p&gt;\(S_x\) 的计算为：&lt;/p&gt;
 $$
 G_x= (\text{右上}-\text{左上}) +2(\text{右中}-\text{左中}) +(\text{右下}-\text{左下})
 $$&lt;p&gt;与 Prewitt 相比，&lt;strong&gt;中间一行的差分权重变成了 \(2\)&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;这两个算子的关系可以记成：&lt;/p&gt;
-$$
-\text{Prewitt 的平滑权重：}[1,\ 1,\ 1]
-$$$$
-\text{Sobel 的平滑权重：}[1,\ 2,\ 1]
-$$$$
-\text{灰度变化小}\Rightarrow\text{响应小}
-$$$$
-\text{灰度变化大}\Rightarrow\text{响应大}
-$$&lt;table&gt;
+&lt;p&gt;两者的区别在于平滑权重：Prewitt 为 \([1,1,1]\)，Sobel 为 \([1,2,1]\)。灰度变化越明显，梯度响应通常越大。&lt;/p&gt;
+&lt;table&gt;
 	&lt;thead&gt;
 			&lt;tr&gt;
 					&lt;th&gt;算子&lt;/th&gt;
@@ -226,8 +208,7 @@ $$&lt;table&gt;
 &lt;/table&gt;
 &lt;h2 id=&#34;频域增强&#34;&gt;频域增强
 &lt;/h2&gt;&lt;h3 id=&#34;频域滤波的流程&#34;&gt;频域滤波的流程
-&lt;/h3&gt;&lt;p&gt;先快速回顾：&lt;/p&gt;
-&lt;ul&gt;
+&lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;低频&lt;/strong&gt;对应缓慢变化的灰度、大范围的明暗结构。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;高频&lt;/strong&gt;对应快速变化的灰度，包括边缘、细节，也可能包含噪声。&lt;/li&gt;
 &lt;/ul&gt;
@@ -254,7 +235,7 @@ H_{\mathrm{ILP}}(u,v)= \begin{cases} 1,&amp;D(u,v)\le D_0\\ 0,&amp;D(u,v)\gt D_0
 $$&lt;p&gt;\(D_0\) 就是&lt;strong&gt;截止频率&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;在中心化的二维频谱中，它相当于一个圆形窗口：圆内保留，圆外去掉。&lt;/p&gt;
 &lt;p&gt;例如 \(D_0=20\)，距离中心为 \(10\) 的频率可以通过，距离为 \(30\) 的频率就被去掉。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;截止频率怎样影响图像？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;截止频率的影响&lt;/strong&gt;：&lt;/p&gt;
 &lt;table&gt;
 	&lt;thead&gt;
 			&lt;tr&gt;
@@ -276,8 +257,7 @@ $$&lt;p&gt;\(D_0\) 就是&lt;strong&gt;截止频率&lt;/strong&gt;。&lt;/p&gt;
 			&lt;/tr&gt;
 	&lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;strong&gt;理想低通还有一个问题：振铃&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;它在截止位置突然从 \(1\) 跳到 \(0\)。这种频域中的硬截断会使空间域响应出现振荡，表现为边缘附近的明暗波纹。课件中人物轮廓附近就能看到这种现象。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;振铃现象&lt;/strong&gt;：理想低通在截止位置突然从 \(1\) 跳到 \(0\)。这种频域中的硬截断会使空间域响应出现振荡，表现为边缘附近的明暗波纹。&lt;/p&gt;
 &lt;h3 id=&#34;butterworth-低通滤波器&#34;&gt;Butterworth 低通滤波器
 &lt;/h3&gt;&lt;p&gt;巴特沃斯低通滤波器，简称 &lt;strong&gt;BLPF&lt;/strong&gt;：&lt;/p&gt;
 $$
@@ -287,20 +267,19 @@ $$&lt;p&gt;需要理解两个参数：&lt;/p&gt;
 &lt;li&gt;&lt;strong&gt;\(D_0\)：决定过渡发生的位置&lt;/strong&gt;。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;\(n\)：决定过渡的陡峭程度，称为阶数&lt;/strong&gt;。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;先看一个固定结论：当 \(D=D_0\) 时，&lt;/p&gt;
+&lt;p&gt;当 \(D=D_0\) 时，&lt;/p&gt;
 $$
 H(D_0)=\frac{1}{1+1^{2n}}=\frac12
 $$&lt;p&gt;所以，&lt;strong&gt;无论阶数是多少，Butterworth 在截止频率处都保留一半幅度&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;再算一个例子。设 \(D_0=20、n=2\)，对于 \(D=40\)：&lt;/p&gt;
+&lt;p&gt;例如，设 \(D_0=20\)、\(n=2\)，对于 \(D=40\)：&lt;/p&gt;
 $$
 H(40) = \frac{1}{1+(40/20)^4} = \frac{1}{17} \approx0.059
 $$&lt;p&gt;这个频率的幅度只保留约 \(5.9\%\)，受到了明显抑制。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;阶数增大时会怎样？&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;在截止位置以内，响应更接近 \(1\)；在截止位置以外，响应更接近 \(0\)。因此：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;阶数增大&lt;/strong&gt;时，在截止位置以内，响应更接近 \(1\)；在截止位置以外，响应更接近 \(0\)。因此：&lt;/p&gt;
 $$
 n\uparrow \quad\Longrightarrow\quad \text{过渡更陡，更接近理想低通}
 $$&lt;h3 id=&#34;高通滤波器&#34;&gt;高通滤波器
-&lt;/h3&gt;&lt;p&gt;对应的高通与低通之间有一个很方便的关系：&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;对应的高通与低通满足：&lt;/p&gt;
 $$
 \boxed{H_{\mathrm{HP}}=1-H_{\mathrm{LP}}}
 $$&lt;p&gt;低通保留得多的频率，高通就保留得少。&lt;/p&gt;
@@ -318,7 +297,7 @@ $$&lt;p&gt;记公式时，可以对照分式的位置：&lt;/p&gt;
 $$
 \text{低通：}\frac{D}{D_0} \qquad \text{高通：}\frac{D_0}{D}
 $$&lt;p&gt;检查极限也能帮助理解：对高通来说，频率越接近零，通过比例越小；频率很高时，通过比例接近 \(1\)。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;高通的 \(D_0\) 增大，意味着被抑制的频率范围扩大，更多低频和中频成分被去掉&lt;/strong&gt;。 不能直接把它理解成“图像会更清晰”。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;高通的 \(D_0\) 增大，意味着被抑制的频率范围扩大，更多低频和中频成分被去掉&lt;/strong&gt;。不能直接把它理解成“图像会更清晰”。&lt;/p&gt;
 &lt;p&gt;高通抑制了包含平均亮度在内的低频成分，输出往往主要剩下边缘和纹理。&lt;/p&gt;
 &lt;p&gt;如果希望在保留原图内容的同时突出细节，可以把适量高通响应加回原图：&lt;/p&gt;
 $$
@@ -376,13 +355,10 @@ $$
 \mathcal L = \frac{(98-100)^2+(154-150)^2}{2} =10
 $$&lt;p&gt;训练通过反向传播调整网络参数，减小这种误差。训练完成后，使用模型时只需要输入待增强图像。&lt;/p&gt;
 &lt;h3 id=&#34;vdsr残差超分辨率&#34;&gt;VDSR：残差超分辨率
-&lt;/h3&gt;&lt;p&gt;先理解超分辨率的困难：把图像尺寸放大比较容易，但放大后还需要恢复更清楚的边缘和纹理。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;超分辨率除了放大图像尺寸，还需要恢复更清楚的边缘和纹理。&lt;/p&gt;
 &lt;p&gt;VDSR 的处理分为三步。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;第一步：插值上采样&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;先把低分辨率图像放大到目标尺寸，得到：&lt;/p&gt;
-$$
-x_{\mathrm{ILR}}
-$$&lt;p&gt;ILR 就是 &lt;em&gt;interpolated low-resolution&lt;/em&gt;，即经过插值的低分辨率图像。它已经具有目标尺寸，但细节仍可能模糊。&lt;/p&gt;
+&lt;p&gt;先把低分辨率图像放大到目标尺寸，得到 \(x_{\mathrm{ILR}}\)。ILR 是 &lt;em&gt;interpolated low-resolution&lt;/em&gt;，即经过插值的低分辨率图像。它已经具有目标尺寸，但细节仍可能模糊。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;第二步：预测需要补上的差值&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;清晰目标与插值图像之间的差为：&lt;/p&gt;
 $$
@@ -403,21 +379,14 @@ $$&lt;p&gt;&lt;img src=&#34;https://Elysium-Seeker.github.io/p/cv-lecture-6-imag
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;例如，插值后某个像素为 \(120\)，清晰目标为 \(132\)，需要补上的残差就是：&lt;/p&gt;
-$$
-132-120=12
-$$&lt;p&gt;如果网络预测残差为 \(10\)，最终输出就是：&lt;/p&gt;
-$$
-120+10=130
-$$&lt;p&gt;&lt;strong&gt;残差学习让网络集中学习插值结果还需要哪些修正&lt;/strong&gt;。&lt;/p&gt;
-&lt;h3 id=&#34;多尺度去模糊&#34;&gt;多尺度去模糊
-&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;由粗到细的多尺度网络&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;直觉上，图像缩小后，同一段模糊拖影覆盖的像素范围也会缩小。可以先在小尺度上恢复大致结构，再到更大的尺度处理细节。&lt;/p&gt;
+&lt;p&gt;例如，插值后某个像素为 \(120\)，清晰目标为 \(132\)，需要补上的残差为 \(132-120=12\)。如果网络预测残差为 \(10\)，最终输出就是 \(120+10=130\)。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;残差学习让网络集中学习插值结果还需要哪些修正&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;多尺度去模糊由粗到细&#34;&gt;多尺度去模糊：由粗到细
+&lt;/h3&gt;&lt;p&gt;直觉上，图像缩小后，同一段模糊拖影覆盖的像素范围也会缩小。可以先在小尺度上恢复大致结构，再到更大的尺度处理细节。&lt;/p&gt;
 &lt;p&gt;课件用三个分辨率说明过程：&lt;/p&gt;
 $$
 64\times64 \longrightarrow 128\times128 \longrightarrow 256\times256
-$$&lt;p&gt;具体如下：&lt;/p&gt;
-&lt;table&gt;
+$$&lt;table&gt;
 	&lt;thead&gt;
 			&lt;tr&gt;
 					&lt;th&gt;阶段&lt;/th&gt;
@@ -443,23 +412,12 @@ $$&lt;p&gt;具体如下：&lt;/p&gt;
 			&lt;/tr&gt;
 	&lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;这里有两个重点。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;① 每一级都结合本尺度的原始模糊图像&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;上一级的预测提供已经恢复的大致结构，本尺度的模糊图像则提供更丰富的图像信息。两者共同帮助网络继续细化。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;② 拼接发生在通道维度&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;以两张 RGB 图像为例，它们的尺寸都是：&lt;/p&gt;
-$$
-128\times128\times3
-$$&lt;p&gt;沿通道维度拼接后，得到：&lt;/p&gt;
-$$
-128\times128\times6
-$$&lt;p&gt;长宽保持不变，通道数从 \(3\) 变为 \(6\)。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;训练时，三个尺度都计算损失&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;每一级输出都与&lt;strong&gt;相同尺度的清晰目标图像&lt;/strong&gt;比较。按课件的表述，总损失是三个尺度 MSE 的平均：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;每一级都结合本尺度的原始模糊图像&lt;/strong&gt;。上一级的预测提供已经恢复的大致结构，本尺度的模糊图像则提供更丰富的图像信息，两者共同帮助网络继续细化。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;拼接发生在通道维度&lt;/strong&gt;。例如，两张尺寸均为 \(128\times128\times3\) 的 RGB 图像，拼接后得到 \(128\times128\times6\)。长宽保持不变，通道数从 \(3\) 变为 \(6\)。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;训练时，三个尺度都计算损失&lt;/strong&gt;。每一级输出都与相同尺度的清晰目标图像比较，总损失是三个尺度 MSE 的平均：&lt;/p&gt;
 $$
 \mathcal L = \frac13 \left( \mathcal L_{64} + \mathcal L_{128} + \mathcal L_{256} \right)
 $$&lt;p&gt;这样，中间阶段也会受到监督，逐步产生更好的去模糊结果。&lt;/p&gt;
-&lt;p&gt;第 58 页是效果展示，可以重点观察局部放大图中的文字轮廓、面部和物体边缘。&lt;/p&gt;
 </description>
         </item>
         
